@@ -184,6 +184,26 @@ admonition title. Anchor naming convention used in this repo:
 - `rem-<chapter>-<section>-<n>` for remarks
 - `ex-<chapter>-<section>-<n>` for examples
 
+**On-screen numbering** is driven by the anchor: `docs/javascripts/numbering.js`
+reads `<a id="def-1-2-3"></a>` and displays the admonition as "1.2.3 Definition
+…". The anchor is the single source of truth for the number — keep it
+canonical, and if you ever renumber, update the anchor (and every reference to
+it).
+
+**Cross-references** are ordinary markdown anchor links, and the number you
+type is exactly what readers see on screen:
+
+- same page: `[Def 1.2.2](#def-1-2-2)`
+- same course, another file: `[Def 1.2.2](general-topology.md#def-1-2-2)`
+- another course: `[Cor 2.6.3](../algebra-analysis/set-theory.md#cor-2-6-3)`
+
+Cross-file links keep the `.md` extension so mkdocs resolves them.
+
+> Files **without** anchors (e.g. `probability/random-variables.md` and
+> several `mathematical-logic/` pages) fall back to the CSS per-section
+> counter and cannot be cross-referenced this way — add anchors if you want
+> them numbered and linkable.
+
 ---
 
 ## 4. Other formatting gotchas
@@ -246,6 +266,6 @@ mkdocs serve   # http://127.0.0.1:8000
 | Block math (own paragraph, **not** inside a list) | `$$ ... $$` — blank line before **and** after; none before the closing `$$` |
 | Definition / Theorem / Lemma / etc. | `!!! <kind> "Title"` then 4-space-indented body |
 | Collapsible proof | `??? proof "Proof"` |
-| Cross-reference | `[Label](other-file.md#anchor-id)` |
+| Cross-reference | `[Def 1.2.2](#def-1-2-2)` same page · `[Def 1.2.2](general-topology.md#def-1-2-2)` cross-file · `[Cor 2.6.3](../algebra-analysis/set-theory.md#cor-2-6-3)` another course |
 | Numbered anchor | `<a id="def-1-2-3"></a>` right after admonition title |
 

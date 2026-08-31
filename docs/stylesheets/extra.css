@@ -5,13 +5,13 @@
    ===================================================================== */
 
 :root {
-  /* Latin: SF Pro / Segoe UI / Inter family.  Chinese: PingFang SC →
-     Microsoft YaHei → Noto Sans CJK.  This is roughly the OI-wiki stack
-     but with Inter as the first choice where available. */
+  /* Latin: OI-wiki's system stack — SF Pro on macOS (thinner, cleaner),
+     Helvetica/Arial elsewhere.  Chinese: PingFang SC → Microsoft YaHei →
+     Noto Sans CJK. */
   --mn-text-font:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Helvetica Neue", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
   --mn-code-font:
     "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Consolas,
     "Liberation Mono", "Courier New", monospace;
@@ -270,10 +270,148 @@
    ===================================================================== */
 [data-md-color-scheme="slate"] {
   --mn-text-font:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Helvetica Neue", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
 }
 [data-md-color-scheme="slate"] .md-typeset {
   -webkit-font-smoothing: antialiased;
 }
+
+/* =====================================================================
+   Homepage hero.
+   ===================================================================== */
+.md-typeset .hero {
+  position: relative;
+  text-align: center;
+  padding: 3em 1.5em 2.2em;
+  margin-bottom: 2em;
+  border-radius: 14px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background:
+    radial-gradient(1100px 400px at 50% -120px, rgba(0, 150, 136, 0.10), transparent 70%);
+}
+.md-typeset .hero h1 {
+  font-size: 2.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.3em;
+}
+.md-typeset .hero h1 + p {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--md-default-fg-color--light);
+  max-width: 40em;
+  margin: 0 auto 1.2em;
+}
+.md-typeset .hero .md-button {
+  margin: 0.2em 0.3em;
+}
+
+/* =====================================================================
+   Left sidebar — OI-wiki style.  Course names are the only
+   .md-nav__container items here (they carry the collapsible header), so
+   they are the "topmost" entries:
+   - course name: gray when inactive, theme teal when active;
+   - sub-page entries: keep the Material default (near-black inactive,
+     teal active).
+   ===================================================================== */
+.md-sidebar--primary .md-nav__link.md-nav__container,
+.md-sidebar--primary .md-nav__container .md-nav__link {
+  color: var(--md-default-fg-color--light);
+}
+.md-sidebar--primary .md-nav__item--active > .md-nav__link.md-nav__container,
+.md-sidebar--primary .md-nav__item--active .md-nav__container .md-nav__link {
+  color: var(--md-typeset-a-color);
+}
+
+/* hide the lonely "首页" nav link from the sidebar (the top-bar tab stays) */
+.md-sidebar--primary .md-nav__item:has(> .md-nav__link[href="."]) {
+  display: none;
+}
+
+/* =====================================================================
+   Anchor-driven numbering: admonitions that carry an <a id="..."> anchor
+   are numbered by numbering.js (chapter.section.order). Suppress the CSS
+   per-section counter for them so numbers are not duplicated. Admonitions
+   without an anchor keep the per-section counter fallback above.
+   ===================================================================== */
+.md-typeset .admonition:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                            a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                            a[id^="ex-"], a[id^="prf-"]),
+.md-typeset details:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                        a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                        a[id^="ex-"], a[id^="prf-"]) {
+  counter-increment: none;
+}
+.md-typeset .admonition:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                            a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                            a[id^="ex-"], a[id^="prf-"]) > .admonition-title::before,
+.md-typeset details:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                        a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                        a[id^="ex-"], a[id^="prf-"]) > summary::before {
+  /* Restore the Material icon in the title slot (the CSS counter was removed
+     above, but the 2rem icon-slot padding remains — a clean icon fills it). */
+  content: "";
+}
+
+/* per-type icon glyph + colour (matches the .mn-thm-num colours below) */
+.md-typeset .admonition.definition:has(a[id^="def-"]) > .admonition-title::before,
+.md-typeset details.definition:has(a[id^="def-"]) > summary::before {
+  background-color: #2962ff;
+  -webkit-mask-image: var(--md-admonition-icon--note);
+  mask-image: var(--md-admonition-icon--note);
+}
+.md-typeset .admonition.theorem:has(a[id^="thm-"]) > .admonition-title::before,
+.md-typeset details.theorem:has(a[id^="thm-"]) > summary::before {
+  background-color: #6200ee;
+  -webkit-mask-image: var(--md-admonition-icon--tip);
+  mask-image: var(--md-admonition-icon--tip);
+}
+.md-typeset .admonition.lemma:has(a[id^="lem-"]) > .admonition-title::before,
+.md-typeset details.lemma:has(a[id^="lem-"]) > summary::before {
+  background-color: #00897b;
+  -webkit-mask-image: var(--md-admonition-icon--abstract);
+  mask-image: var(--md-admonition-icon--abstract);
+}
+.md-typeset .admonition.proposition:has(a[id^="prop-"]) > .admonition-title::before,
+.md-typeset details.proposition:has(a[id^="prop-"]) > summary::before {
+  background-color: #2e7d32;
+  -webkit-mask-image: var(--md-admonition-icon--info);
+  mask-image: var(--md-admonition-icon--info);
+}
+.md-typeset .admonition.corollary:has(a[id^="cor-"]) > .admonition-title::before,
+.md-typeset details.corollary:has(a[id^="cor-"]) > summary::before {
+  background-color: #e65100;
+  -webkit-mask-image: var(--md-admonition-icon--success);
+  mask-image: var(--md-admonition-icon--success);
+}
+.md-typeset .admonition.remark:has(a[id^="rem-"]) > .admonition-title::before,
+.md-typeset details.remark:has(a[id^="rem-"]) > summary::before {
+  background-color: #455a64;
+  -webkit-mask-image: var(--md-admonition-icon--question);
+  mask-image: var(--md-admonition-icon--question);
+}
+.md-typeset .admonition.example:has(a[id^="ex-"]) > .admonition-title::before,
+.md-typeset details.example:has(a[id^="ex-"]) > summary::before {
+  background-color: #2962ff;
+  -webkit-mask-image: var(--md-admonition-icon--example);
+  mask-image: var(--md-admonition-icon--example);
+}
+
+/* number injected by numbering.js, coloured per admonition type */
+.md-typeset .mn-thm-num { font-weight: 700; }
+.md-typeset .admonition.definition .mn-thm-num,
+.md-typeset details.definition .mn-thm-num     { color: #2962ff; }
+.md-typeset .admonition.theorem .mn-thm-num,
+.md-typeset details.theorem .mn-thm-num         { color: #6200ee; }
+.md-typeset .admonition.lemma .mn-thm-num,
+.md-typeset details.lemma .mn-thm-num           { color: #00897b; }
+.md-typeset .admonition.proposition .mn-thm-num,
+.md-typeset details.proposition .mn-thm-num     { color: #2e7d32; }
+.md-typeset .admonition.corollary .mn-thm-num,
+.md-typeset details.corollary .mn-thm-num       { color: #e65100; }
+.md-typeset .admonition.remark .mn-thm-num,
+.md-typeset details.remark .mn-thm-num          { color: #455a64; font-style: italic; }
+.md-typeset .admonition.example .mn-thm-num,
+.md-typeset details.example .mn-thm-num          { color: #2962ff; }

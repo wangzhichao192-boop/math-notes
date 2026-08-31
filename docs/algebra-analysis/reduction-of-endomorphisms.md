@@ -27,11 +27,33 @@ semisimple + nilpotent). Everything rests on the structure theory of
 
 !!! proposition "Proposition (Prime and maximal ideals in a PID)"
     <a id="prop-re-1-3"></a>
+
     1. If $a \in R$ is irreducible then the principal ideal $aR$ is
        maximal.
+
     2. If $R$ is a PID and $aR$ is prime, then $a$ is irreducible.
+
     3. Every prime ideal is contained in a maximal ideal (Zorn's
        lemma).
+
+??? proof "Proof (Prime and maximal ideals in a PID)"
+    1. Suppose $aR \subsetneq J \subsetneq R$ for an ideal $J$. Since
+       $R$ is a PID, $J = bR$ for some $b \in R$. The inclusion
+       $aR \subseteq bR$ gives $a = bc$ for some $c \in R$. Since
+       $a$ is irreducible, $b$ is a unit (in which case $J = R$,
+       contradiction) or $c$ is a unit, i.e. $bR = aR$ (so
+       $J = aR$, contradiction). Hence no such $J$ exists; $aR$ is
+       maximal.
+    2. Suppose $a = bc$ with $b, c \in R \setminus R^\times$. Since
+       $a \in aR$ and $aR$ is prime, $bc \in aR$ forces $b \in aR$ or
+       $c \in aR$. Say $b = ad$, then $a = adc$, so $dc = 1$, i.e.
+       $c$ is a unit, contradiction.
+    3. Zorn's lemma applied to the set of ideals $J$ with
+       $I \subseteq J \subsetneq R$, ordered by inclusion, gives a
+       maximal element: the union of a chain is an ideal contained
+       in $R$, and a union of ideals properly containing $I$ that
+       stays in $R$ has an upper bound (itself or $R$). The maximal
+       element is a maximal ideal containing $I$.
 
 !!! definition "Definition (Noetherian)"
     <a id="def-re-1-4"></a>
@@ -67,6 +89,8 @@ semisimple + nilpotent). Everything rests on the structure theory of
     relation $p_1 \cdots p_{n-1} = \lambda' q_1 \cdots q_{m-1}$ has
     $n - 1$ factors on the left; by the induction hypothesis $n = m$
     and (up to a unit) the factors match.
+
+!!! proposition "Proposition (GCD and LCM from prime factorisations)"
     <a id="prop-re-1-6"></a>
     For polynomials $F_1, \ldots, F_n$ in $K[T]$ and any monic
     irreducible $P$,
@@ -109,16 +133,36 @@ semisimple + nilpotent). Everything rests on the structure theory of
     <a id="thm-re-2-2"></a>
     $P_\varphi(\varphi) = 0$ in $\mathrm{End}_K(V)$.
 
-    **Proof.** View $V$ as a $K[T]$-module via $F \cdot x = F(\varphi)(x)$.
+??? proof "Proof (Cayley–Hamilton)"
+    View $V$ as a $K[T]$-module via $F \cdot x = F(\varphi)(x)$.
     Then $K[T] \otimes_K V$ is a free $K[T]$-module with basis
-    $1 \otimes e_i$. The endomorphism $T \otimes \mathrm{Id} - 1 \otimes
-    \varphi$ of $K[T] \otimes V$ factors as
-    $(T - \varphi) \circ (T - \varphi)^{\mathrm{adj}}$ where
-    $(T - \varphi)^{\mathrm{adj}}$ is the adjugate. Applied to
-    $1 \otimes x \in K[T] \otimes V$, this yields
-    $P_\varphi(T) \otimes x = (T - \varphi)(\xi)$ for some $\xi$;
-    mapping back to $V$ kills $(T - \varphi)(\xi)$ and gives
-    $P_\varphi(\varphi)(x) = 0$.
+    $1 \otimes e_i$ (Prop 6-2-2). The endomorphism $T \otimes \mathrm{Id} -
+    1 \otimes \varphi$ of $K[T] \otimes V$ is the
+    $K[T]$-linearisation of $T - \varphi$. By the adjugate identity
+    (applied to the matrix $T \cdot \mathrm{Id} - \varphi$ over the
+    commutative ring $K[T]$), it factors as
+    $(T - \varphi) \circ (T - \varphi)^{\mathrm{adj}}$, with
+    $(T - \varphi)^{\mathrm{adj}} \in M_n(K[T])$ and
+    $(T - \varphi)(T - \varphi)^{\mathrm{adj}} = P_\varphi(T) \,
+    \mathrm{Id}$ (the matrix identity $A \cdot \mathrm{adj}(A) = \det(A)
+    \mathrm{Id}$). Now
+    $P_\varphi(T) \otimes x = (T - \varphi)((T - \varphi)^{\mathrm{adj}}
+    (1 \otimes x))$ for any $x \in V$. Map back to $V$ via
+    $K[T] \otimes V \to V$, $F(T) \otimes y \mapsto F(\varphi)(y)$.
+    The map is $K[T]$-linear, so the image of
+    $(T - \varphi)(\xi)$ vanishes: this is exactly
+    $T \cdot F(\varphi)(y) - \varphi(F(\varphi)(y)) = 0$ (i.e. the
+    left side of $P_\varphi(\varphi)(y) = 0$). Hence
+    $P_\varphi(\varphi)(y) = 0$ for all $y$, i.e.
+    $P_\varphi(\varphi) = 0$.
+
+!!! proposition "Proposition (Adjugate identity: $A \cdot \mathrm{adj}(A) = \det(A) \mathrm{Id}$)"
+    <a id="prop-re-2-3"></a>
+    For any square matrix $A \in M_n(R)$ over a commutative ring $R$,
+    $$A \cdot \mathrm{adj}(A) \;=\; \mathrm{adj}(A) \cdot A \;=\;
+    \det(A)\, \mathrm{Id}_n,$$
+    where $\mathrm{adj}(A)_{ij} = (-1)^{i+j} \det(A^{(j,i)})$ is the
+    classical adjugate (cofactor transpose).
 
 ??? proof "Proof (Adjugate identity)"
     For $A \in M_n(K)$, $A \cdot \mathrm{adj}(A) = \det(A) \mathrm{Id}$. Apply
@@ -137,10 +181,22 @@ semisimple + nilpotent). Everything rests on the structure theory of
     P_r$. Equivalently, there is a basis in which the matrix of $\varphi$
     is block-diagonal with companion matrices of the $P_i$.
 
-    **Proof (sketch).** The $K[T]$-module $V$ has invariant factors
-    obtained from a Smith normal form of the map $T \cdot \mathrm{Id} -
-    \varphi : K[T]^n \to K[T]^n$. The structure theorem for finitely
-    generated modules over a PID yields the direct sum of cyclic modules.
+??? proof "Proof (Rational canonical form, sketch)"
+    View $V$ as a $K[T]$-module via $T \cdot v = \varphi(v)$. Since
+    $K[T]$ is a PID and $V$ is finitely generated (dim $V = n$),
+    the structure theorem for modules over a PID gives a direct-sum
+    decomposition $V \cong K[T]/(P_1) \oplus \cdots \oplus K[T]/(P_r)$
+    with $P_1 \mid P_2 \mid \cdots \mid P_r$ non-zero polynomials (the
+    **invariant factors**). Each summand $K[T]/(P_i)$ is a cyclic
+    $K[T]$-module generated by some $v_i$ with annihilator $(P_i)$,
+    i.e. $V_i = K[T] v_i$ is $\varphi$-cyclic of minimal polynomial
+    $P_i$. The matrix of $\varphi$ in the basis $(v_i, T v_i, T^2 v_i,
+    \ldots, T^{\deg P_i - 1} v_i)$ is the companion matrix of $P_i$.
+    Block-diagonally, this gives the rational canonical form.
+    **Smith normal form argument.** Alternatively, fix a basis of $V$
+    and view $T \mathrm{Id} - \varphi \in M_n(K[T])$. Reduce by elementary
+    row and column operations (over $K[T]$, which is a PID) to the
+    Smith form, which exhibits the invariant factors on the diagonal.
 
 !!! definition "Definition (Elementary divisors, minimal / characteristic polynomial)"
     <a id="def-re-3-2"></a>
@@ -157,6 +213,18 @@ semisimple + nilpotent). Everything rests on the structure theory of
     $\mu_\varphi \mid P_\varphi$ and $P_\varphi$ annihilates $\varphi$;
     $\mu_\varphi$ is the lcm of the invariant factors and the largest
     power of each irreducible appearing among them.
+
+??? proof "Proof (Cayley–Hamilton and minimal polynomial)"
+    By Thm 6.3.1, $P_\varphi$ annihilates $\varphi$ (Cayley–Hamilton).
+    By definition $\mu_\varphi$ is the monic generator of the
+    annihilator ideal $\{\mu : \mu(\varphi) = 0\}$, so $\mu_\varphi \mid
+    P_\varphi$ (since $P_\varphi(\varphi) = 0$).
+    The characteristic polynomial is the product of the invariant
+    factors (its roots are the eigenvalues counted with multiplicity),
+    and the minimal polynomial is the lcm of the invariant factors
+    (the largest $K[T]$-submodule of $K[T]^n$ that kills all of
+    $V$); equivalently, the largest power of each irreducible
+    appearing in the elementary divisors.
 
 ## Dunford Decomposition
 

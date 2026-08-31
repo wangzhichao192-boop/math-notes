@@ -12,7 +12,7 @@ calibrated through examples and exercises (which we omit).
     A **statement** (or **proposition**) is a declarative sentence that has a
     well-defined truth value: it is either **true** or **false**, but not both.
 
-!!! example "+ "$2 + 2 = 4$""
+!!! example "Example"
     <a id="ex-1-1-2"></a>
 
     + "$2 + 2 = 4$" is a true statement.
@@ -39,7 +39,7 @@ Let $P$ and $Q$ denote statements.
     true. The **disjunction** $P \lor Q$ is true exactly when at least one of
     $P, Q$ is true.
 
-!!! example ""It rains and I carry an umbrella""
+!!! example "Example"
     <a id="ex-1-2-3"></a>
     "It rains and I carry an umbrella" is the conjunction of
     "It rains" and "I carry an umbrella".

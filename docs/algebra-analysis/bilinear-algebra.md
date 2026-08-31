@@ -125,11 +125,19 @@ $(\dim V_+, \dim V_-, \dim V_0)$.
     that is **not isotropic** ($\varphi(x, x) \neq 0$ for some $x$).
     There is a basis $(e_i)$ of $V$ that is $\varphi$-orthogonal.
 
-    **Proof (sketch).** Induction on $\dim V$. Pick $e_1$ with
-    $\varphi(e_1, e_1) \neq 0$. The linear form
-    $\ell_{e_1}(x) = \varphi(e_1, x)$ is non-zero hence surjective, so
-    $W = \ker \ell_{e_1}$ has codimension $1$. Apply the induction
-    hypothesis to the restriction of $\varphi$ to $W$.
+??? proof "Proof (Orthogonal basis for non-isotropic forms)"
+    Induction on $\dim V$. The case $\dim V = 0$ is trivial.
+    If $\varphi = 0$ then any basis is orthogonal. Otherwise there is
+    $e_1 \in V$ with $\varphi(e_1, e_1) \neq 0$ (the form is
+    non-isotropic). The linear form $\ell_{e_1} : V \to K$,
+    $x \mapsto \varphi(e_1, x)$ is non-zero hence surjective (since
+    $K$ is a field), so $W := \ker \ell_{e_1}$ has codimension $1$.
+    Note $e_1 \notin W$ (since $\ell_{e_1}(e_1) = \varphi(e_1, e_1)
+    \neq 0$). Apply the induction hypothesis to the restriction
+    $\varphi|_{W \times W}$: there is a $\varphi$-orthogonal basis
+    $(e_2, \ldots, e_n)$ of $W$. By construction, $\ell_{e_1}(e_i) =
+    0$ for $i \geq 2$, i.e. $\varphi(e_1, e_i) = 0$. So
+    $(e_1, \ldots, e_n)$ is a $\varphi$-orthogonal basis of $V$.
 
 !!! proposition "Proposition (Canonical form over a field with $1/2 \in K$)"
     <a id="prop-bl-3-4"></a>
@@ -238,17 +246,27 @@ $(\dim V_+, \dim V_-, \dim V_0)$.
     admits a Sylvester decomposition. The dimensions
     $\dim V_+$, $\dim V_-$ and $\dim V_0$ are invariants of the form.
 
-    **Proof (existence).** Take an orthogonal basis $(\alpha_i)$ of
-    $V^\vee$ and write $q(x) = \sum \lambda_i \alpha_i(x)^2$. Define
-    $V_+, V_-, V_0$ by the signs of the $\lambda_i$.
-
-    **Proof (uniqueness).** If $V = V_+ \oplus V_- \oplus V_0$ and
-    $V = W_+ \oplus W_- \oplus V_0$ are two Sylvester decompositions,
-    then $q|_{V_- \oplus V_0}$ is negative semi-definite and
-    $q|_{W_+}$ is positive definite, so
-    $(V_- \oplus V_0) \cap W_+ = \{0\}$ and
-    $\dim W_+ \leq \dim V - \dim(V_- \oplus V_0) = \dim V_+$. Symmetric
-    argument gives the reverse inequality.
+??? proof "Proof (Sylvester's law of inertia)"
+    **Existence.** By Prop 3-3-3, take an orthogonal basis
+    $(\alpha_i)_{i=1}^{r}$ of $V^\vee$ and write
+    $q(x) = \sum_{i=1}^{r} \lambda_i \alpha_i(x)^2$. Define
+    $V_+ = \bigoplus_{\lambda_i > 0} K e_i$, $V_- = \bigoplus_{\lambda_i
+    < 0} K e_i$, $V_0 = \bigoplus_{\lambda_i = 0} K e_i$ (where
+    $(e_i)$ is the basis of $V$ dual to $(\alpha_i)$). Then
+    $q|_{V_+}$ is positive definite, $q|_{V_-}$ is negative definite,
+    $q|_{V_0} = 0$, and $V = V_+ \oplus V_- \oplus V_0$.
+    **Uniqueness.** Suppose $V = V_+ \oplus V_- \oplus V_0$ and
+    $V = W_+ \oplus W_- \oplus W_0$ are two Sylvester decompositions.
+    Then $q|_{V_- \oplus V_0}$ is negative semi-definite (a sum of
+    $\leq 0$ forms) and $q|_{W_+}$ is positive definite. If $x \in
+    (V_- \oplus V_0) \cap W_+$, then $q(x) \leq 0$ and $q(x) \geq 0$,
+    so $q(x) = 0$, forcing $x = 0$ (by Lem 4-2-2 since $q$ is
+    semidefinite on $V_- \oplus V_0$). Hence the intersection is
+    $\{0\}$, and
+    $\dim W_+ \leq \dim V - \dim(V_- \oplus V_0) = \dim V_+$.
+    The symmetric argument with $-q$ gives $\dim W_- \leq \dim V_-$
+    and $\dim V_+ \leq \dim W_+$, so $\dim W_+ = \dim V_+$. Hence
+    $\dim V_0 = \dim V - \dim V_+ - \dim V_- = \dim W_0$.
 
 !!! proposition "Proposition (Direct sum criterion)"
     <a id="prop-bl-4-6"></a>

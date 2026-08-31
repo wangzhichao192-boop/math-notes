@@ -49,10 +49,29 @@ formula closes the chapter.
     3. For $b \in U$, there is an open $V \subseteq U$ around $e$ with
        $b \ast V \ast \iota(b) \subseteq U$.
 
-    **Idea.** Use the continuity of $\phi(x, y) = x \ast \iota(y)$ at
-    $(e, e)$ to find $V_1 \times V_2 \subseteq \phi^{-1}(U)$, then set
-    $V = V_1 \cap V_2 \cap \iota(V_1 \cap V_2)$. The other claims are
-    applications of the homeomorphism $L_a$ or $R_a$.
+??? proof "Proof (Symmetric neighbourhoods)"
+    (1) The map $\phi : G \times G \to G$, $\phi(x, y) = x \ast \iota(y)$,
+    is continuous (by the topological-group axiom) and satisfies
+    $\phi(e, e) = e$. Hence $\phi^{-1}(U)$ is an open neighbourhood of
+    $(e, e)$, and there exist open neighbourhoods $V_1, V_2$ of $e$ with
+    $V_1 \times V_2 \subseteq \phi^{-1}(U)$. Set $W = V_1 \cap V_2$
+    and $V = W \cap \iota(W)$. Then $V$ is open (intersection of opens)
+    and symmetric ($V = \iota(V)$). For $x, y \in V$ we have
+    $x \in W \subseteq V_1$ and $\iota(y) \in \iota(W) \subseteq V_2$
+    (since $\iota$ is a homeomorphism and $\iota(W) \subseteq V_2$
+    by $\iota(V_2) = \iota(\iota(V_2)) \supseteq W$ via the choice
+    $V_2 \supseteq W$). So $(x, \iota(y)) \in V_1 \times V_2$ and
+    $\phi(x, \iota(y)) = x \ast y \in U$, i.e. $V \ast V \subseteq U$.
+    (2) Set $V = L_{\iota(a)}(U) \cap R_{\iota(a)}(U) \cap U$, an open
+    neighbourhood of $e$ (since $a \in U$ implies
+    $\iota(a) \ast a = e \in L_{\iota(a)}(U)$ and $a \ast \iota(a) = e
+    \in R_{\iota(a)}(U)$). Then
+    $a \ast V = L_a(V) \subseteq L_a(L_{\iota(a)}(U)) = U$, and
+    $V \ast a = R_a(V) \subseteq R_a(R_{\iota(a)}(U)) = U$.
+    (3) Similarly $V = R_b(L_{\iota(b)}(U)) \cap U$ is an open
+    neighbourhood of $e$ (since $b \ast \iota(b) = e \in V$) and
+    $b \ast V \ast \iota(b) = L_b R_b L_{\iota(b)} R_{\iota(b)}(U)
+    \subseteq U$.
 
 ## Locally Compact Hausdorff Spaces
 
@@ -68,6 +87,19 @@ formula closes the chapter.
     compact subset inside an open set. There is a continuous function
     $f : X \to [0, 1]$ with $f|_K = 1$ and $\mathrm{supp}(f) \subseteq U$.
 
+??? proof "Proof (Urysohn for locally compact Hausdorff)"
+    Embed $K$ in a relatively compact open $V$ with $\bar V \subseteq U$:
+    cover $K$ by relatively compact open neighbourhoods (use local
+    compactness at each $x \in K$) and extract a finite subcover $V_1,
+    \ldots, V_n$; set $V = V_1 \cup \cdots \cup V_n$, so $\bar V$ is
+    compact and $\bar V \subseteq U$. Now apply the standard Urysohn
+    lemma for normal spaces to the closed set $K$ inside the open set
+    $V$ (the subspace $\bar V$ is compact Hausdorff, hence normal; the
+    extension theorem applies). Get $f : \bar V \to [0, 1]$ with
+    $f|_K = 1$ and $\mathrm{supp}(f) \subseteq V$. Extend $f$ by $0$
+    outside $V$ to get $f : X \to [0, 1]$ with $\mathrm{supp}(f)
+    \subseteq \bar V \subseteq U$ and $f|_K = 1$.
+
 !!! definition "Definition (Locally compact group)"
     <a id="def-hm-2-3"></a>
     A **locally compact group** is a topological group that is
@@ -80,6 +112,17 @@ formula closes the chapter.
     $Y$ is Hausdorff iff the graph of the corresponding equivalence
     relation is closed in $X \times X$. Combined with Prop. 5.1.4,
     $\pi \times \pi$ is also open when $\pi$ is open.
+
+??? proof "Proof (Quotient map and Hausdorff)"
+    Let $\Delta_Y = \{(y, y) : y \in Y\} \subseteq Y \times Y$ be the
+    diagonal. The graph of the equivalence relation is
+    $\Gamma = (\pi \times \pi)^{-1}(\Delta_Y)$, which is closed if
+    $\Delta_Y$ is closed and $\pi \times \pi$ is continuous.
+    Conversely, if $\pi \times \pi$ is open (which holds when
+    $\pi$ is open, by Prop 5.1.4 (2) applied to the constant
+    family) and $\Gamma$ is closed, then
+    $(Y \times Y) \setminus \Delta_Y = (\pi \times \pi)(\Gamma^c)$ is
+    open in $Y \times Y$, so $Y$ is Hausdorff.
 
 ## Radon Measure
 
@@ -107,6 +150,22 @@ formula closes the chapter.
     Conversely, every such measure arises from a Radon measure on
     $C_c(X)$ via $\mu(f) = \int_X f\, d\mu^\ast$.
 
+??? proof "Proof (Riesz–Markov, sketch)"
+    **Existence.** Define an outer measure on all subsets of $X$ by
+    $\mu^\ast(E) = \inf\{\sum_n \mu(f_n) : f_n \in C_c(X), f_n \geq 0,
+    \sum_n f_n \geq \mathbf{1}_E\}$ (Carathéodory's outer measure
+    associated to $\mu$). By Urysohn-type approximation, this outer
+    measure is regular: for any open $U$, $\mu^\ast(U) = \sup_K \mu^\ast(K)$
+    over compact $K \subseteq U$ (inner regularity), and for any
+    Borel $E$, $\mu^\ast(E) = \inf_U \mu^\ast(U)$ over open $U \supseteq
+    E$ (outer regularity). The resulting measure on the $\sigma$-algebra
+    of Carathéodory-measurable sets contains the Borel $\sigma$-algebra.
+    **Uniqueness.** If $\mu^\ast, \nu^\ast$ are two such measures agreeing
+    on $C_c(X)$, then for every compact $K$ and open $U \supseteq K$,
+    approximate $\mathbf{1}_K$ by functions in $C_c(U)$ via Urysohn to
+    get $\mu^\ast(K) = \nu^\ast(K)$. The regularity extends the
+    equality to all Borel sets.
+
 !!! definition "Definition (Invariant functionals)"
     <a id="def-hm-3-3"></a>
     A Radon measure $\mu$ on a locally compact group $G$ is
@@ -118,7 +177,7 @@ formula closes the chapter.
 ## Haar Measure
 
 ??? proof "Proof (Existence of Haar measure)"
-    **Existence (sketch).** Fix $f_0 \in C_c(G)$ with $f_0 \geq 0$,
+    Fix $f_0 \in C_c(G)$ with $f_0 \geq 0$,
     $f_0 \not\equiv 0$. For $f \in C_c(G)$ define the linear functional
     $I_f : C_c(G) \to \mathbb{R}$ by
     $I_f(\varphi) := \int_G \varphi(x) f(x)\, dx / \int_G \varphi(x)

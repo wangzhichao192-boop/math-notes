@@ -29,6 +29,25 @@ theorem, the classical Stokes theorem, and the divergence theorem.
     sends $f \in \mathrm{Hom}_K(V, W)$ to
     $\sum_i e_i^\vee \otimes f(e_i)$.
 
+??? proof "Proof (Identification of tensor-hom)"
+    The bilinear map $V^\vee \times W \to \mathrm{Hom}_K(V, W)$,
+    $(\varphi, w) \mapsto (x \mapsto \varphi(x) w)$, is $K$-bilinear
+    (in $\varphi$ and $w$), so by the universal property of the
+    tensor product it induces a $K$-linear map
+    $\Phi : V^\vee \otimes W \to \mathrm{Hom}_K(V, W)$ with
+    $\Phi(\varphi \otimes w)(x) = \varphi(x) w$.
+    For the inverse, let $(e_i)$ be a basis of $V$ and $(e_i^\vee)$ its
+    dual. Define
+    $\Psi : \mathrm{Hom}_K(V, W) \to V^\vee \otimes W$ by
+    $\Psi(f) = \sum_i e_i^\vee \otimes f(e_i)$. Check
+    $\Psi(\Phi(\varphi \otimes w)) = \sum_i e_i^\vee \otimes \varphi(e_i) w
+    = (\sum_i \varphi(e_i) e_i^\vee) \otimes w = \varphi \otimes w$
+    (using the canonical identification $V^\vee \otimes V \cong K$).
+    Check $\Phi(\Psi(f))(x) = \Phi(\sum_i e_i^\vee \otimes f(e_i))(x)
+    = \sum_i e_i^\vee(x) f(e_i) = f(\sum_i e_i^\vee(x) e_i) = f(x)$,
+    so $\Phi \circ \Psi = \mathrm{id}$. Hence $\Phi$ is a $K$-linear
+    isomorphism with inverse $\Psi$.
+
 !!! definition "Definition (Exterior derivative)"
     <a id="def-dg-1-3"></a>
     For a differentiable $p$-form $\alpha : U \to \Lambda^p(E^\vee)$,
@@ -37,6 +56,12 @@ theorem, the classical Stokes theorem, and the divergence theorem.
     \cong E^\vee \otimes \Lambda^p(E^\vee)$ with the map
     $\varphi \otimes \beta \mapsto \varphi \wedge \beta$ into
     $\Lambda^{p+1}(E^\vee)$.
+
+!!! proposition "Proposition (Leibniz rule for the exterior derivative)"
+    <a id="prop-dg-1-4"></a>
+    For a $p$-form $\alpha$ and a $q$-form $\beta$ of class $C^1$,
+    $$d(\alpha \wedge \beta) \;=\; d\alpha \wedge \beta \;+\; (-1)^p \,
+    \alpha \wedge d\beta.$$
 
 ??? proof "Proof (Leibniz rule for $d$)"
     By multilinearity, reduce to $\alpha = f \alpha_0$,
@@ -57,6 +82,12 @@ theorem, the classical Stokes theorem, and the divergence theorem.
     $f\, dg \wedge \alpha_0 \wedge \beta_0 = (-1)^p \alpha \wedge d\beta$
     (move $f$ past the $p$-form $\alpha_0$ to recover $\alpha = f
     \alpha_0$).
+
+!!! proposition "Proposition ($d^2 = 0$)"
+    <a id="prop-dg-1-5"></a>
+    For every $C^2$ form $\alpha$ on $U$, $d(d\alpha) = 0$. In
+    particular $d$ is a cochain complex differential on the
+    de Rham complex $\Omega^\bullet(U)$.
 
 ??? proof "Proof ($d^2 = 0$)"
     By linearity, reduce to $\alpha = f \beta$ with $\beta \in
@@ -99,6 +130,27 @@ theorem, the classical Stokes theorem, and the divergence theorem.
     $f_\varepsilon := f \ast \rho_\varepsilon$ is $C^\infty$ on the
     $\varepsilon$-interior of the domain, and $f_\varepsilon \to f$
     almost everywhere (and in $L^1_{\mathrm{loc}}$) as $\varepsilon \to 0$.
+
+??? proof "Proof (Mollification is smoothing, sketch)"
+    **Smoothness.** Differentiation under the integral gives
+    $\partial^\alpha f_\varepsilon = f \ast \partial^\alpha
+    \rho_\varepsilon$. Since $\rho$ is $C^\infty$ with compact
+    support, $\partial^\alpha \rho$ is bounded, so $\partial^\alpha
+    f_\varepsilon$ is bounded and continuous, hence $f_\varepsilon$
+    is $C^\infty$.
+    **Convergence in $L^1_{\mathrm{loc}}$.** For any compact $K$ and
+    $\varepsilon$ small, $|f_\varepsilon(x) - f(x)| \leq \int
+    |f(x - y) - f(x)| \rho_\varepsilon(y)\, dy \leq \sup_{|y| \leq
+    \varepsilon} |f(x - y) - f(x|) \to 0$ as $\varepsilon \to 0$
+    (uniform continuity of $f$ on compact sets, by absolute
+    continuity of the Lebesgue integral). Integrate over $K$ to get
+    $L^1$ convergence.
+    **A.e. convergence.** By the Lebesgue differentiation theorem,
+    for almost every $x$, $\lim_{r \to 0} \frac{1}{|B(0, r)|} \int_{B(x,
+    r)} |f(y) - f(x)|\, dy = 0$. The average $\int f(y)
+    \rho_\varepsilon(x - y)\, dy$ tends to $f(x)$ by the same
+    argument (replace $B(x, r)$ by the $\varepsilon$-ball and use
+    $\rho \geq 0$, $\int \rho = 1$).
 
 !!! definition "Definition (Local chart, smooth atlas)"
     <a id="def-dg-2-3"></a>
@@ -181,9 +233,23 @@ theorem, the classical Stokes theorem, and the divergence theorem.
     $\sum_i \rho_i = 1$ on every compact subset of $M$ (so the sum is
     locally finite).
 
-    **Proof.** Embed $M$ in $\mathbb{R}^n$ via a Whitney embedding and
-    use a single cover of $\mathbb{R}^n$ by unit balls; pull back the
-    associated bump functions.
+??? proof "Proof (Existence of partitions of unity, sketch)"
+    **Step 1 (Whitney embedding).** By Whitney's embedding theorem,
+    any smooth $n$-dimensional second-countable manifold $M$ embeds as
+    a closed submanifold of $\mathbb{R}^{2n+1}$.
+    **Step 2 (Refine the cover).** The pre-images of the open cover
+    $\{U_i\}$ form an open cover of $M \subset \mathbb{R}^{2n+1}$. By
+    compactness, for each point $x \in M$ there is an open ball
+    $B(x, r_x)$ in $\mathbb{R}^{2n+1}$ and a $U_i$ containing
+    $B(x, r_x) \cap M$. Take a smooth partition of unity on
+    $\mathbb{R}^{2n+1}$ subordinate to the cover $\{B(x, r_x/2)\}$ (this
+    exists by a standard explicit construction, e.g. using bump
+    functions on the cubes of a grid).
+    **Step 3 (Restrict).** Compose each bump function with the
+    inclusion $M \hookrightarrow \mathbb{R}^{2n+1}$ to get smooth
+    compactly-supported functions on $M$. The restriction to each
+    $U_i$ of the bump functions whose support is contained in $U_i$
+    gives the desired partition of unity subordinate to $\{U_i\}$.
 
 ## Stokes Formula
 
@@ -231,15 +297,19 @@ theorem, the classical Stokes theorem, and the divergence theorem.
 
 !!! corollary "Corollary (Classical versions)"
     <a id="cor-dg-6-2"></a>
+
     1. **Fundamental theorem of calculus** ($M = [a, b] \subseteq
        \mathbb{R}$): $\int_a^b f'(x)\, dx = f(b) - f(a)$.
+
     2. **Green's theorem** ($M \subseteq \mathbb{R}^2$ with $\partial M$
        a positively oriented simple closed curve):
        $\int_M (\partial_x Q - \partial_y P)\, dx\, dy = \oint_{\partial M}
        P\, dx + Q\, dy$.
+
     3. **Classical Stokes** (a surface $M$ with boundary $\partial M$ in
        $\mathbb{R}^3$): $\int_M (\nabla \times F) \cdot dS = \oint_{\partial
        M} F \cdot dr$.
+
     4. **Divergence theorem** (a compact region $M$ in $\mathbb{R}^3$):
        $\int_M \nabla \cdot F\, dV = \oint_{\partial M} F \cdot n\, dS$.
 
@@ -248,22 +318,25 @@ theorem, the classical Stokes theorem, and the divergence theorem.
        a $1$-form, so $\int_{[a, b]} d f = \int_{\partial [a, b]} f$.
        The boundary $\partial [a, b] = \{b\} - \{a\}$ (with the
        induced orientation) gives $f(b) - f(a)$.
+
     2. Apply to the $1$-form $\omega = P\, dx + Q\, dy$. Then
        $d\omega = (\partial_x Q - \partial_y P) dx \wedge dy$ and
        $\int_{\partial M} P\, dx + Q\, dy = \int_M d\omega = \int_M
        (\partial_x Q - \partial_y P)\, dx\, dy$.
+
     3. For a vector field $F = (P, Q, R)$, the $1$-form
        $\omega = P\, dx + Q\, dy + R\, dz$ has
-       $d\omega = (\partial_y R - \partial_z Q) dy \wedge dz
-       + (\partial_z P - \partial_x R) dz \wedge dx
-       + (\partial_x Q - \partial_y P) dx \wedge dy$, which is the
+       $d\omega = (\partial_y R - \partial_z Q)\, dy \wedge dz
+       + (\partial_z P - \partial_x R)\, dz \wedge dx
+       + (\partial_x Q - \partial_y P)\, dx \wedge dy$, which is the
        component of $\nabla \times F$ normal to the surface (via the
        standard identification $\mathbb{R}^3 \cong \Lambda^2(\mathbb{R}^3)$).
        Stokes gives $\int_M d\omega = \int_{\partial M} \omega$.
+
     4. For the divergence theorem, apply Stokes to the $2$-form
        $\omega = P\, dy \wedge dz + Q\, dz \wedge dx + R\, dx \wedge dy$
        (the flux form): $d\omega = (\partial_x P + \partial_y Q +
-       \partial_z R) dx \wedge dy \wedge dz = (\nabla \cdot F)
+       \partial_z R)\, dx \wedge dy \wedge dz = (\nabla \cdot F)
        dV$. Stokes gives $\int_M \nabla \cdot F\, dV = \int_{\partial
        M} \omega = \oint_{\partial M} F \cdot n\, dS$.
 

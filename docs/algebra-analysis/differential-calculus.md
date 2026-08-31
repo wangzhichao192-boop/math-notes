@@ -248,8 +248,10 @@ by the integral of $\|Df\|$.
 
 !!! proposition "Proposition (Examples of affine subspaces)"
     <a id="prop-9-4-4"></a>
+
     1. If $F$ is a vector subspace of $E$ and $p \in E$, then $p + F$ is
        affine.
+
     2. The solution set of a linear system $A x = b$ (with $A \in
        M_{m, p}(K)$, $b \in K^m$) is an affine subspace of $K^p$.
 

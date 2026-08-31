@@ -59,9 +59,31 @@ $\mathbb{R}$.
     every $x \in U$. In that case $f(x) \geq f(a) + Df(a)(x - a)$ for
     all $a, x \in U$, and $f = \sup_{a \in U} (f(a) + Df(a)(\cdot - a))$.
 
-    **Proof.** Taylor expand $g(t) = f(a + t(x - a))$ to second order:
-    $g(1) = g(0) + g'(0) + \tfrac{1}{2} g''(\theta)$ with $g''(\theta) =
-    D^2 f(\cdot)(x - a, x - a) \geq 0$.
+??? proof "Proof (Twice-differentiable convexity)"
+    **$(\Leftarrow)$** Fix $a, x \in U$ and set $g(t) = f(a + t(x - a))$
+    for $t \in [0, 1]$. Then $g$ is twice differentiable with
+    $g'(t) = Df(a + t(x - a))(x - a)$ and
+    $g''(t) = D^2 f(a + t(x - a))(x - a, x - a) \geq 0$ (by
+    semidefiniteness). By Taylor-Lagrange (Thm 9.7.2 applied to the
+    $C^2$ function $g$), there is $\theta \in (0, 1)$ with
+    $g(1) = g(0) + g'(0) + \tfrac{1}{2} g''(\theta)$. Hence
+    $f(x) = f(a) + Df(a)(x - a) + \tfrac{1}{2} g''(\theta)
+    \geq f(a) + Df(a)(x - a)$. So each affine function
+    $a \mapsto f(a) + Df(a)(x - a)$ is a lower bound for $f$.
+    Therefore $f$ is the pointwise supremum of the affine functions
+    that majorise it (Prop 8.1.5), and the pointwise supremum of a
+    family of convex (affine) functions is convex (Prop 8.1.5).
+    **$(\Rightarrow)$** Suppose $f$ is convex. For $a \in U$ and
+    $v \in E$ small, by the two-point convexity
+    $f(a + v) - f(a) \leq \tfrac{1}{2}(f(a + 2v) - f(a))$ so
+    $2(f(a + v) - f(a)) \leq f(a + 2v) - f(a)$. Subtract $f(a)$
+    from both sides, divide by $2\|v\|^2$, and let $v \to 0$:
+    $\tfrac{1}{\|v\|}(f(a + v) - f(a) - Df(a)(v)) \geq 0$ for $v$
+    positive scaling, and $\leq 0$ for $v$ negative scaling, so
+    $D^2 f(a)(v, v) \geq 0$ (the second-order term of
+    $f(a + v) - f(a) - Df(a)(v)$ as $v \to 0$ is $\tfrac{1}{2}
+    D^2 f(a)(v, v)$, which must be $\geq 0$ by the first-order
+    sign). Hence $D^2 f(a)$ is semidefinite.
 
 ## Hölder Inequality
 
@@ -77,11 +99,24 @@ $\mathbb{R}$.
 
 ??? proof "Proof (Hölder)"
     By induction on $n$. The case $n = 1$ is trivial. For the induction
-    step, suppose $p_n < \infty$ (the case $p_n = \infty$ is similar
-    and left to the reader). Apply the case $n = 2$ with
-    $p_1'^{-1} + p_1^{-1} = 1$ (so $p_1' = (1 - p_n^{-1})^{-1} = $ the
-    dual exponent of $p_1$ adjusted to absorb the other terms):
+    step, suppose first that $p_n < \infty$ (all other $p_i$ are then
+    automatically finite since $\sum 1/p_i = 1$). Apply the $n = 2$
+    Hölder inequality with $p_1' = (1 - 1/p_n)^{-1}$ (so
+    $1/p_1' + 1/p_n = 1$) to $f_n$ and the product
+    $f_1 \cdots f_{n-1} \in L^{p_1'}$:
     $\|f_1 \cdots f_n\|_{L^1} \leq \|f_n\|_{L^{p_n}} \|f_1 \cdots
+    f_{n-1}\|_{L^{p_1'}}$. By the induction hypothesis on the
+    $n - 1$ factors, $\|f_1 \cdots f_{n-1}\|_{L^{p_1'}} \leq \prod_{i=1}^{n-1}
+    \|f_i\|_{L^{p_i}}$. Multiply.
+    **Case $p_n = \infty$** (without loss of generality, by
+    reordering): then $1/p_1 + \cdots + 1/p_{n-1} = 1$. By
+    the same $n = 2$ trick,
+    $\|f_1 \cdots f_n\|_{L^1} \leq \|f_n\|_{L^\infty} \|f_1 \cdots
+    f_{n-1}\|_{L^1}$ (since $\|g \cdot h\|_{L^1} \leq \|g\|_{L^\infty}
+    \|h\|_{L^1}$ when $\|g\|_{L^\infty} < \infty$ by dominated
+    convergence: $|\int f_n h| \leq \|f_n\|_\infty \int |h|$, applied
+    pointwise to $h = f_1 \cdots f_{n-1}$). Apply the induction
+    hypothesis to the $L^1$ norm of $f_1 \cdots f_{n-1}$ to conclude.
     f_{n-1}\|_{L^{p_1'}}$. By the induction hypothesis,
     $\|f_1 \cdots f_{n-1}\|_{L^{p_1'}} \leq \|f_1\|_{L^{p_1}} \cdots
     \|f_{n-1}\|_{L^{p_{n-1}}}$. Multiply.
@@ -109,11 +144,24 @@ $\mathbb{R}$.
 !!! theorem "Theorem (Completeness of $L^p$)"
     <a id="thm-fs-2-4"></a>
     $L^p(\Omega, \mathcal{A}, \nu)$ is a Banach space for
-    $p \in [1, \infty]$. The proof is a standard Cauchy-subsequence
-    argument: extract $(f_{n_k})$ with
-    $\sum_k \|f_{n_{k+1}} - f_{n_k}\|_{L^p} < \infty$, deduce the
-    a.e.-pointwise convergence to a limit $f$ by Lemma 8.2.6, and
-    conclude $\|f - f_n\|_{L^p} \to 0$ by dominated convergence.
+    $p \in [1, \infty]$.
+
+??? proof "Proof (Completeness of $L^p$)"
+    Let $(f_n)$ be a Cauchy sequence in $L^p$. Extract a subsequence
+    $(f_{n_k})$ inductively: pick $n_{k+1}$ such that
+    $\|f_{n_{k+1}} - f_{n_k}\|_{L^p} \leq 2^{-(k+1)}$ (possible since
+    $(f_n)$ is Cauchy). Then $\sum_k \|f_{n_{k+1}} - f_{n_k}\|_{L^p}
+    < \infty$. By Lemma 8.2.6, there is $A \in \mathcal{A}$ with
+    $\nu(A) = 0$ such that $f_{n_k}(\omega)$ converges absolutely for
+    all $\omega \notin A$. Set $f(\omega)$ to be the limit for
+    $\omega \notin A$ and $f(\omega) = 0$ for $\omega \in A$. Then
+    $|f| \leq \sum_k |f_{n_{k+1}} - f_{n_k}| + |f_{n_0}|$ (a.s.), so
+    $f \in L^p$ (the dominating series is in $L^p$). For the
+    convergence: for $m > n$ large,
+    $\|f - f_{n_m}\|_{L^p} \leq \lim_k \sum_{j \geq m} \|f_{n_{j+1}} -
+    f_{n_j}\|_{L^p} \leq \lim_k \sum_{j \geq m} 2^{-j} = 2^{1 - m} \to 0$
+    as $m \to \infty$. So $f$ is the limit of the subsequence in
+    $L^p$, hence also of the original Cauchy sequence.
 
 ## Haar Measure on the Torus
 
@@ -140,6 +188,16 @@ $\mathbb{R}$.
     $L^2(\mathbb{T}^n, \mu_{\mathbb{T}^n})$:
     $\int_{\mathbb{T}^n} \chi_k \overline{\chi_\ell}\, d\mu = \delta_{k, \ell}$.
 
+??? proof "Proof (Orthonormality of characters)"
+    Compute (using Fubini):
+    $\int_{\mathbb{T}^n} \chi_k \overline{\chi_\ell}\, d\mu
+    = \int_{[0, 1)^n} e^{2\pi i \langle k - \ell, t \rangle}\, dt
+    = \prod_{j=1}^{n} \int_0^1 e^{2\pi i (k_j - \ell_j) t_j}\, dt_j$.
+    Each factor is $1$ if $k_j = \ell_j$ and $0$ otherwise (the
+    integral of $e^{2\pi i m t}$ over a period is $0$ for $m \in
+    \mathbb{Z} \setminus \{0\}$). So the product is $1$ when
+    $k = \ell$ and $0$ otherwise.
+
 ## Convolution
 
 !!! definition "Definition (Convolution)"
@@ -159,9 +217,15 @@ $\mathbb{R}$.
     convolution $f \ast g \in L^2(\mathbb{T}^n)$ with
     $\|f \ast g\|_{L^2} \leq \|f\|_{L^1} \|g\|_{L^2}$.
 
-    **Proof.** Apply Cauchy–Schwarz to
-    $(f \ast g)(x) = \int f(x - y) g(y)\, d\mu(y)$, then
-    Fubini.
+??? proof "Proof (Convolution of $L^2$ and $L^1$)"
+    By Cauchy–Schwarz in the inner integral,
+    $|(f \ast g)(x)|^2 = |\int f(x - y) g(y)\, d\mu(y)|^2 \leq
+    (\int |f(x - y)|\, d\mu(y)) \cdot (\int |f(x - y)| |g(y)|^2\,
+    d\mu(y)) = \|f\|_{L^1} \cdot (|f| \ast |g|^2)(x)$.
+    Integrate over $x$ and use Fubini (the integrand is in $L^1$):
+    $\|f \ast g\|_{L^2}^2 \leq \|f\|_{L^1} \int (|f| \ast |g|^2)(x)\,
+    dx = \|f\|_{L^1} \cdot \|f\|_{L^1} \cdot \|g\|_{L^2}^2 = \|f\|_{L^1}^2
+    \|g\|_{L^2}^2$. Take the square root.
 
 ## Fourier Series
 
@@ -209,6 +273,12 @@ $\mathbb{R}$.
     some $V_N$) gives $\|f - S_N f\|_{L^2} \to 0$, so
     $\sum_k |\hat f(k)|^2 \geq \|f\|_{L^2}^2$. The convergence
     $S_N f \to f$ in $L^2$ is the same statement.
+
+!!! proposition "Proposition (Pointwise convergence for $C^1$ functions)"
+    <a id="prop-fs-5-4"></a>
+    If $f \in C^1(\mathbb{T}^n)$, then the Fourier series
+    $\sum_{k \in \mathbb{Z}^n} \hat f(k) e^{2\pi i k \cdot x}$ converges
+    absolutely, hence uniformly, to $f$ on $\mathbb{T}^n$.
 
 ??? proof "Proof (Pointwise convergence for $C^1$ functions)"
     By integration by parts,

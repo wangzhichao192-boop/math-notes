@@ -1,6 +1,6 @@
 # 几何与拓扑
 
-> 收录 **Xing Gu** 主讲的 *Geometry and Topology* 课程笔记（西湖大学）。
+> 收录 **Xing Gu** 主讲的 *Geometry and Topology* 课程笔记。
 
 ## 课程主线
 
