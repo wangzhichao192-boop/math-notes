@@ -99,3 +99,12 @@ nav:
   - 实分析与测度论:
       - real-analysis/index.md
       - 测度与可测函数: real-analysis/measure.md
+  - 数理逻辑:
+      - mathematical-logic/index.md
+      - Counting to Infinity: mathematical-logic/counting-to-infinity.md
+      - First-order Logic: mathematical-logic/first-order-logic.md
+      - Quantifier Elimination: mathematical-logic/quantifier-elimination.md
+      - QE for ACF and Ax: mathematical-logic/qe-acf-ax.md
+      - Fundamental Theorems: mathematical-logic/fundamental-theorems.md
+      - Ultraproducts: mathematical-logic/ultraproducts.md
+      - RCF and Hilbert 17th: mathematical-logic/rcf-hilbert.md
