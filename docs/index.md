@@ -6,29 +6,26 @@
 
 <div class="grid cards" markdown>
 
-- :material-function-variant: **抽象代数**
 
-    群、环、域与 Galois 理论
+- :material-book-open-page-variant: **代数与分析基础**
 
-    [:octicons-arrow-right-24: 进入](abstract-algebra/index.md)
+    FAA I/II 教材合辑：逻辑、集合、群环模、拓扑、微积分、范畴论、多重线性代数、Haar 测度、微分几何与 Fourier 分析
+
+    [:octicons-arrow-right-24: 进入](algebra-analysis/index.md)
+
+
+- :material-shape-outline: **几何与拓扑**
+
+    复数的平方根与缠绕数、一般拓扑、同伦与基本群、射影几何、正则曲面的微分几何与双曲几何
+
+    [:octicons-arrow-right-24: 进入](geometry-topology/index.md)
+
 
 - :material-dice-multiple: **概率论**
 
     概率空间、随机变量与极限定理
 
     [:octicons-arrow-right-24: 进入](probability/index.md)
-
-- :material-chart-line: **常微分方程**
-
-    一阶方程、线性系统与定性理论
-
-    [:octicons-arrow-right-24: 进入](ode/index.md)
-
-- :material-sigma: **实分析与测度论**
-
-    测度、Lebesgue 积分与 $L^p$ 空间
-
-    [:octicons-arrow-right-24: 进入](real-analysis/index.md)
 
 </div>
 
@@ -38,17 +35,17 @@
 
 块级公式：
 
-$$
+\[
 \mathbb{E}[X] = \int_\Omega X(\omega)\,\mathrm{d}P(\omega)
-$$
+\]
 
 ## 提示框
 
 !!! note "定理（Cauchy 积分公式）"
     若 $f$ 在区域 $D$ 内解析，则对任意 $a \in D$，
-    $$
+    \[
     f(a) = \frac{1}{2\pi i}\oint_{\gamma}\frac{f(z)}{z-a}\,\mathrm{d}z.
-    $$
+    \]
 
 ??? proof "证明"
     留作练习。
@@ -63,3 +60,9 @@ mkdocs serve
 ```
 
 浏览器打开 <http://127.0.0.1:8000> 即可实时预览。
+
+## 写作与自检
+
+新增章节前先看 [写作指南](WRITING_GUIDE.md)（覆盖了 admonition 里
+数学公式的转义、`\[...\]` vs `\\[` 的使用条件、anchor 命名约定等踩过的坑）。
+写完跑一下 `node scripts/check_math.js`，有渲染问题会直接列出来。

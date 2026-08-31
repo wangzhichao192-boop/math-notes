@@ -1,0 +1,7 @@
+{
+  "name": "math-notes-math-check",
+  "private": true,
+  "dependencies": {
+    "katex": "^0.16.11"
+  }
+}

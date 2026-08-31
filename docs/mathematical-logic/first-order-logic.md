@@ -313,8 +313,7 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
     If a formula $\varphi(x_1,\dots,x_n)$ and elements $a_1,\dots,a_n \in A$ are given, one defines $\bar A \vDash \varphi[a_1,\dots,a_n]$ by $\bar{A} \vDash \varphi[\alpha]$, where $\alpha$ is an assignment with $\alpha(x_i) = a_i$, which is well defined by the previous proposition.
 
      Thus, $\varphi(x_1,\dots,x_n)$ defines an $n$-ary relation on the structure $\bar {A}$, given by
-    $\varphi[\bar{A}] := \{(a_1,\dots,a_n) \in A^n \mid \bar{A} \vDash \varphi[a_1,\dots,a_n]\}.
-    $
+    $\varphi[\bar{A}] := \{(a_1,\dots,a_n) \in A^n \mid \bar{A} \vDash \varphi[a_1,\dots,a_n]\}.$
 
     In particular, when $\varphi$ is a sentence, the relation $\bar{A} \vDash \varphi$ can be interpreted as "$\varphi$ is satisfied (or true) in $\bar{A}$'' or "$\bar{A}$ is a model of $\varphi$''.
 
@@ -351,11 +350,7 @@ The goal of this chapter is to find a way to substitute variables that is compat
 
     + Let $t$ be a term. Then $t_{s_0/x_0,\dots,s_r/x_r} = t_{\bar{s}/\bar{x}}$ is the word obtained by "simultaneously replacing all occurrences of $x_i$ in $t$ by $s_i$", that is, one sets
 
-      + $x_{\bar{s}/\bar{x}} =
-        \begin{cases}
-        x & \text{if } x \neq x_0,\dots,x \neq x_r \\
-        s_i & \text{if } x = x_i
-        \end{cases}$
+      + $x_{\bar{s}/\bar{x}} = \begin{cases} x & \text{if } x \neq x_0,\dots,x \neq x_r \\ s_i & \text{if } x = x_i \end{cases}$
 
       + $c_{\bar{s}/\bar{x}} = c$
 

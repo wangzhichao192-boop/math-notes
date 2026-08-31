@@ -1,5 +1,5 @@
-site_name: 数学笔记
-site_description: 个人数学笔记站（OI-wiki 同款模版）
+site_name: Wu's Maths-Wiki
+site_description: 个人数学笔记站
 site_url: https://wangzhichao192-boop.github.io/math-notes/
 copyright: CC BY-SA 4.0
 
@@ -53,6 +53,8 @@ markdown_extensions:
   - tables
   - attr_list
   - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
   - toc:
       permalink: true
   - pymdownx.details
@@ -86,19 +88,37 @@ plugins:
 
 nav:
   - 首页: index.md
-  - 抽象代数:
-      - abstract-algebra/index.md
-      - 群论: abstract-algebra/group.md
-      - 环与域: abstract-algebra/ring-and-field.md
+  - 代数与分析基础:
+      - algebra-analysis/index.md
+      - Basic Logic: algebra-analysis/basic-logic.md
+      - Set Theory: algebra-analysis/set-theory.md
+      - Correspondence: algebra-analysis/correspondence.md
+      - Binary Relations: algebra-analysis/binary-relations.md
+      - Groups: algebra-analysis/groups.md
+      - Rings and Modules: algebra-analysis/rings-and-modules.md
+      - Limit: algebra-analysis/limit.md
+      - Topology: algebra-analysis/topology.md
+      - Differential Calculus: algebra-analysis/differential-calculus.md
+      - Integral Calculus: algebra-analysis/integral-calculus.md
+      - Category Theory: algebra-analysis/category-theory.md
+      - Bilinear Algebra: algebra-analysis/bilinear-algebra.md
+      - Self-adjoint Operators: algebra-analysis/self-adjoint-operators.md
+      - Multilinear Algebra: algebra-analysis/multilinear-algebra.md
+      - Haar Measures: algebra-analysis/haar-measures.md
+      - Reduction of Endomorphisms: algebra-analysis/reduction-of-endomorphisms.md
+      - Differential Geometry: algebra-analysis/differential-geometry.md
+      - Fourier Series: algebra-analysis/fourier-series.md
+  - 几何与拓扑:
+      - geometry-topology/index.md
+      - Invitation: geometry-topology/invitation.md
+      - General Topology: geometry-topology/general-topology.md
+      - Homotopy and Fundamental Groups: geometry-topology/homotopy-and-fundamental-groups.md
+      - Projective Geometry: geometry-topology/projective-geometry.md
+      - Differential Geometry: geometry-topology/differential-geometry.md
+      - Hyperbolic Geometry: geometry-topology/hyperbolic-geometry.md
   - 概率论:
       - probability/index.md
       - 随机变量与分布: probability/random-variables.md
-  - 常微分方程:
-      - ode/index.md
-      - 一阶微分方程: ode/first-order.md
-  - 实分析与测度论:
-      - real-analysis/index.md
-      - 测度与可测函数: real-analysis/measure.md
   - 数理逻辑:
       - mathematical-logic/index.md
       - Counting to Infinity: mathematical-logic/counting-to-infinity.md
@@ -108,3 +128,5 @@ nav:
       - Fundamental Theorems: mathematical-logic/fundamental-theorems.md
       - Ultraproducts: mathematical-logic/ultraproducts.md
       - RCF and Hilbert 17th: mathematical-logic/rcf-hilbert.md
+  - 参考:
+      - 写作指南: WRITING_GUIDE.md
