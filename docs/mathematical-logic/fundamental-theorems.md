@@ -1,111 +1,118 @@
 # Some Fundamental Theorems
 
-**Definition.** 
+!!! definition "Definition."
 
-+ Let $\bar M, \bar N$ be $\mathscr L$-structures. We say that $\bar M,\bar N$ are **elementarily equivalent** if they satisfy the same $\mathscr L$-sentence. Written as $\bar M \equiv \bar N$. (i.e. $\text{Th}(\bar M)=\text{Th}(\bar N)$, recall that $\text{Th}(\bar M) = \{\varphi \ | \ \varphi \text{ is an } \mathscr L\text{-setence } \bar M \models \varphi \}$).
-+ Let $\bar M, \bar N$ be $\mathscr L$-structures. We say $\bar M$ is a **substructure** of $\bar N$ denoted by $\bar M \subseteq \bar N$ if $M\subseteq N$ and for any constant symbol $c , c^{\bar M} = c^{\bar N}$, any relation symbol $R,R^{\bar M} = R ^{\bar N} |_M$, any function symbol $f,f^{\bar M} =f ^{\bar N} |_M$.
-+ Let $\bar M, \bar N$ be $\mathscr L$-structures. We say $\bar M$ is an **elementary substructure** of $\bar N$ (and $\bar N$ is an elementary extension of $\bar M$), denoted by $\bar M \preceq \bar N$ if $\bar M \subseteq \bar N $ and for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n), a_1,\cdots,a_n \in M$, $\bar M \models \varphi[a_1,\cdots,a_n] \text{ iff } \bar N \models \varphi[a_1,\cdots,a_n]$. Note that it implies $\bar M \equiv \bar N$.
-+ We say the mapping $f:\bar M \to \bar N$ is an **elementary embedding** if it is an ismorphism between $\bar M$ and an elementary substructure of $\bar N$. i.e. for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n),a_1,\cdots,a_n \in M$, $\bar M \models \varphi[a_1,\cdots,a_n] \text{ iff } \bar N \models \varphi[f(a_1),\cdots,f(a_n)]$.
+    + Let $\bar M, \bar N$ be $\mathscr L$-structures. We say that $\bar M,\bar N$ are **elementarily equivalent** if they satisfy the same $\mathscr L$-sentence. Written as $\bar M \equiv \bar N$. (i.e. $\text{Th}(\bar M)=\text{Th}(\bar N)$, recall that $\text{Th}(\bar M) = \{\varphi \ | \ \varphi \text{ is an } \mathscr L\text{-setence } \bar M \models \varphi \}$).
+    + Let $\bar M, \bar N$ be $\mathscr L$-structures. We say $\bar M$ is a **substructure** of $\bar N$ denoted by $\bar M \subseteq \bar N$ if $M\subseteq N$ and for any constant symbol $c , c^{\bar M} = c^{\bar N}$, any relation symbol $R,R^{\bar M} = R ^{\bar N} |_M$, any function symbol $f,f^{\bar M} =f ^{\bar N} |_M$.
+    + Let $\bar M, \bar N$ be $\mathscr L$-structures. We say $\bar M$ is an **elementary substructure** of $\bar N$ (and $\bar N$ is an elementary extension of $\bar M$), denoted by $\bar M \preceq \bar N$ if $\bar M \subseteq \bar N $ and for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n), a_1,\cdots,a_n \in M$, $\bar M \models \varphi[a_1,\cdots,a_n] \text{ iff } \bar N \models \varphi[a_1,\cdots,a_n]$. Note that it implies $\bar M \equiv \bar N$.
+    + We say the mapping $f:\bar M \to \bar N$ is an **elementary embedding** if it is an ismorphism between $\bar M$ and an elementary substructure of $\bar N$. i.e. for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n),a_1,\cdots,a_n \in M$, $\bar M \models \varphi[a_1,\cdots,a_n] \text{ iff } \bar N \models \varphi[f(a_1),\cdots,f(a_n)]$.
 
-**Remark.**
+!!! remark "Remark."
 
-+ $\bar M\preceq \bar N \implies \bar M \equiv \bar N$
+    + $\bar M\preceq \bar N \implies \bar M \equiv \bar N$
 
-+ $\bar M \cong \bar N \implies \bar M \equiv \bar N$
+    + $\bar M \cong \bar N \implies \bar M \equiv \bar N$
 
-+ $\bar M \subseteq \bar N$ iff $M \subseteq N$ and for any quantifier-free $\varphi(x_1 \dots x_n)$ and $a_1 \dots a_n \in \bar M$, $\bar M \models \varphi[a_1 \dots a_n] \iff \bar N \models \varphi[a_1 \dots a_n]$
+    + $\bar M \subseteq \bar N$ iff $M \subseteq N$ and for any quantifier-free $\varphi(x_1 \dots x_n)$ and $a_1 \dots a_n \in \bar M$, $\bar M \models \varphi[a_1 \dots a_n] \iff \bar N \models \varphi[a_1 \dots a_n]$
 
-+ If $f : \bar M \to \bar N$ is an isomorphism, it is an elementary embedding.
-  
-  In particular, $f : \bar M \xrightarrow{\cong} \bar M$ automorphism, $\varphi(x_1 \dots x_n)$ $\mathscr{L}$-formula, $a_1 \dots a_n \in M$, $\bar M \models \varphi(a_1 \dots a_n)$ iff $\bar M \models \varphi[f(a_1) \dots f(a_n)]$.
-  
-  So let $D$ be the definable set for $\bar M$, $f(D)=D$.
+    + If $f : \bar M \to \bar N$ is an isomorphism, it is an elementary embedding.
 
-+  $\bar M \equiv \bar N, \bar M \subseteq \bar N \implies \bar M \preceq \bar N$ ? **Not neccessarily**. Check the counterexample: $\bar M = \langle 2\mathbb{Z},<,\rangle, \bar N = \langle \mathbb{Z},<\rangle$, $\varphi(x,y) = \exists z \ x < z < y$. $\bar M \models \neg \varphi[0,2]$, $\bar N \models \varphi[0,2]$
+      In particular, $f : \bar M \xrightarrow{\cong} \bar M$ automorphism, $\varphi(x_1 \dots x_n)$ $\mathscr{L}$-formula, $a_1 \dots a_n \in M$, $\bar M \models \varphi(a_1 \dots a_n)$ iff $\bar M \models \varphi[f(a_1) \dots f(a_n)]$.
 
-**Theorem (Tarski-Vaught test).** Let $\bar M, \bar N$ be $\mathscr L$-structures and $\bar M \subseteq \bar N$ if for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n,y)$, $a_1,\cdots,a_n\in M$ and there is some $b \in N$ such that $\bar N \models \varphi[a_1,\cdots,a_n,b]$ then there is some $b_0 \in M$ such that $\bar N \models \varphi[a_1,\cdots,a_n,b_0]$, then $\bar M \preceq \bar N$.
+      So let $D$ be the definable set for $\bar M$, $f(D)=D$.
 
-**Proof.** 
+    +  $\bar M \equiv \bar N, \bar M \subseteq \bar N \implies \bar M \preceq \bar N$ ? **Not neccessarily**. Check the counterexample: $\bar M = \langle 2\mathbb{Z},<,\rangle, \bar N = \langle \mathbb{Z},<\rangle$, $\varphi(x,y) = \exists z \ x < z < y$. $\bar M \models \neg \varphi[0,2]$, $\bar N \models \varphi[0,2]$
 
-$(\leftarrow)$:
+!!! theorem "Theorem (Tarski-Vaught test)."
+    Let $\bar M, \bar N$ be $\mathscr L$-structures and $\bar M \subseteq \bar N$ if for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n,y)$, $a_1,\cdots,a_n\in M$ and there is some $b \in N$ such that $\bar N \models \varphi[a_1,\cdots,a_n,b]$ then there is some $b_0 \in M$ such that $\bar N \models \varphi[a_1,\cdots,a_n,b_0]$, then $\bar M \preceq \bar N$.
 
-$\bar N \models \varphi[a_1,\cdots,a_n,b]$, and we can write a new formula $\psi (a_1,\cdots,a_n) = \exists b \ \varphi(a_1,\cdots,a_n,b)$. 
+??? proof "Proof."
 
-Since $\bar M \preceq \bar N$ and $\bar N \models \psi(a_1,\cdots,a_n)$, hence. $\bar M \models \psi(a_1,\cdots,a_n)$. That is $\exists b_0\in M ,\varphi(a_1,\cdots,a_n,b_0)$.
+    $(\leftarrow)$:
 
-$(\rightarrow)$:
+    $\bar N \models \varphi[a_1,\cdots,a_n,b]$, and we can write a new formula $\psi (a_1,\cdots,a_n) = \exists b \ \varphi(a_1,\cdots,a_n,b)$. 
 
-Induction on $\psi$, we show that $\bar{M} \models \psi[b_1, \dots, b_n]$ iff $\bar{N} \models \psi[b_1, \dots, b_n]$.
+    Since $\bar M \preceq \bar N$ and $\bar N \models \psi(a_1,\cdots,a_n)$, hence. $\bar M \models \psi(a_1,\cdots,a_n)$. That is $\exists b_0\in M ,\varphi(a_1,\cdots,a_n,b_0)$.
 
-* $\psi$ quantifier free: Clear by remark (3).
+    $(\rightarrow)$:
 
-* The inductive case for $\psi_1 \land \psi_2$, $\neg \psi$ are also clear.
+    Induction on $\psi$, we show that $\bar{M} \models \psi[b_1, \dots, b_n]$ iff $\bar{N} \models \psi[b_1, \dots, b_n]$.
 
-* So, the only non-trivial case is $\psi(x_1, \dots, x_n) = \exists y \, \theta(x_1, \dots, x_n, y)$.
+    * $\psi$ quantifier free: Clear by remark (3).
 
-Let $a_1, \dots, a_n \in M$.
+    * The inductive case for $\psi_1 \land \psi_2$, $\neg \psi$ are also clear.
 
-$\bar{M} \models \psi[a_1, \dots, a_n]$
+    * So, the only non-trivial case is $\psi(x_1, \dots, x_n) = \exists y \, \theta(x_1, \dots, x_n, y)$.
 
-$\Rightarrow$ There is $b \in M$ such that $\bar{M} \models \theta[a_1, \dots, a_n, b]$
+    Let $a_1, \dots, a_n \in M$.
 
-$\stackrel{IH}{\Rightarrow} \bar{N} \models \theta[a_1, \dots, a_n, b]$ 
+    $\bar{M} \models \psi[a_1, \dots, a_n]$
 
-$\Rightarrow \bar{N} \models \psi[a_1, \dots, a_n]$.
+    $\Rightarrow$ There is $b \in M$ such that $\bar{M} \models \theta[a_1, \dots, a_n, b]$
 
-$\bar{N} \models \psi[a_1, \dots, a_n]$
+    $\stackrel{IH}{\Rightarrow} \bar{N} \models \theta[a_1, \dots, a_n, b]$ 
 
-$\Rightarrow$ There is $b \in N$ s.t. $\bar{N} \models \theta[a_1, \dots, a_n, b]$.
+    $\Rightarrow \bar{N} \models \psi[a_1, \dots, a_n]$.
 
-Hypothesis $\Rightarrow$ There is $b_0 \in M$ s.t. $\bar{M} \models \theta[a_1, \dots, a_n, b_0]$.
+    $\bar{N} \models \psi[a_1, \dots, a_n]$
 
-$\Rightarrow \bar{M} \models \psi[a_1, \dots, a_n]$.
+    $\Rightarrow$ There is $b \in N$ s.t. $\bar{N} \models \theta[a_1, \dots, a_n, b]$.
 
-**Theorem (Downward Löwenheim-Skolem).** Let $\bar M$ be an $\mathscr L$-structure with $|M| \ge |\text{Fml}^\mathscr L|$. Let $A$ be any subset of $M$, there is $\bar N \preceq \bar M$, $A \subseteq N$ and $|N| \le \max(|A|,|\text{Fml}^\mathscr L|)$.
+    Hypothesis $\Rightarrow$ There is $b_0 \in M$ s.t. $\bar{M} \models \theta[a_1, \dots, a_n, b_0]$.
 
-In particular, if $\mathscr L$ is countable, then $\bar M$ has a countable elementary substructure.
+    $\Rightarrow \bar{M} \models \psi[a_1, \dots, a_n]$.
 
-**Proof.**
+!!! theorem "Theorem (Downward Löwenheim-Skolem)."
+    Let $\bar M$ be an $\mathscr L$-structure with $|M| \ge |\text{Fml}^\mathscr L|$. Let $A$ be any subset of $M$, there is $\bar N \preceq \bar M$, $A \subseteq N$ and $|N| \le \max(|A|,|\text{Fml}^\mathscr L|)$.
 
-*Goal*: Find an elementary substructure $\bar{N} \preceq \bar{M}$ such that $A \subseteq N$ and $|N| \le \max(|A|, |\text{Fml}^\mathscr{L}|)$.
+    In particular, if $\mathscr L$ is countable, then $\bar M$ has a countable elementary substructure.
 
-*1. Initial Step*
+??? proof "Proof."
 
-Let $A_0 = \tilde{A}$ (the substructure generated by $A$, ensuring closure under constants and functions).
+    *Goal*: Find an elementary substructure $\bar{N} \preceq \bar{M}$ such that $A \subseteq N$ and $|N| \le \max(|A|, |\text{Fml}^\mathscr{L}|)$.
 
-Ensure $|A_0| = \max(|A|, |\text{Fml}^\mathscr{L}|)$ by enlarging $A$ if necessary.
+    *1. Initial Step*
 
-*2. Inductive Construction*
+    Let $A_0 = \tilde{A}$ (the substructure generated by $A$, ensuring closure under constants and functions).
 
-For each stage $A_n$, construct $A_{n+1}$:
+    Ensure $|A_0| = \max(|A|, |\text{Fml}^\mathscr{L}|)$ by enlarging $A$ if necessary.
 
-* *Witnesses*: For every formula $\exists y \phi(\bar{x}, y)$ and parameters $\bar{a} \in A_n$, if $\bar{M} \models \exists y \phi(\bar{a}, y)$, pick a witness $b_{\phi, \bar{a}} \in M$.
+    *2. Inductive Construction*
 
-* *Closure*: Let $B_n = \{ b_{\phi, \bar{a}} \mid \text{all possible } \phi, \bar{a} \}$. Define $A_{n+1} = \widetilde{A_n \cup B_n}$.
+    For each stage $A_n$, construct $A_{n+1}$:
 
-* *Cardinality*: By cardinal arithmetic, $|A_{n+1}| = |A_n| = |A_0|$.
+    * *Witnesses*: For every formula $\exists y \phi(\bar{x}, y)$ and parameters $\bar{a} \in A_n$, if $\bar{M} \models \exists y \phi(\bar{a}, y)$, pick a witness $b_{\phi, \bar{a}} \in M$.
 
-*3. Limit & Verification*
+    * *Closure*: Let $B_n = \{ b_{\phi, \bar{a}} \mid \text{all possible } \phi, \bar{a} \}$. Define $A_{n+1} = \widetilde{A_n \cup B_n}$.
 
-Let $N = \bigcup_{n < \omega} A_n$.
+    * *Cardinality*: By cardinal arithmetic, $|A_{n+1}| = |A_n| = |A_0|$.
 
-* *Substructure*: $N$ is a union of a chain of substructures, so $\bar{N}$ is a valid $\mathscr{L}$-structure, and $|N| = |A_0|$.
+    *3. Limit & Verification*
 
-* *Elementary*: For any $\exists y \phi(\bar{x}, y)$ with parameters $\bar{a} \in N$, since $\bar{a}$ is finite, $\bar{a} \in A_n$ for some $n$. By construction, a witness $b \in A_{n+1} \subseteq N$ exists.
+    Let $N = \bigcup_{n < \omega} A_n$.
 
-* *Conclusion*: By the Tarski-Vaught Test, $\bar{N} \preceq \bar{M}$. 
+    * *Substructure*: $N$ is a union of a chain of substructures, so $\bar{N}$ is a valid $\mathscr{L}$-structure, and $|N| = |A_0|$.
 
-**Remark.** Let $\bar M \preceq \bar N, D\subseteq M ^n$ be definable with parameters in $M$, $D$ admits a canonical extension to $D'\subseteq N^n$ with $D' \cap M^n= D$.
+    * *Elementary*: For any $\exists y \phi(\bar{x}, y)$ with parameters $\bar{a} \in N$, since $\bar{a}$ is finite, $\bar{a} \in A_n$ for some $n$. By construction, a witness $b \in A_{n+1} \subseteq N$ exists.
 
-**Notation.** Let $\bar M$ be an $\mathscr L$-structure. We use $\mathscr L_M$ to denote the language of $\mathscr L$ adjoining new constant symbols $c_m$ for $m\in M$. $\bar M$ is naturally a $\mathscr L_M$-structure with $c_m$ interpreted as $m\in M$, $\bar M ^*$ denotes this $\mathscr L_M$-structure.
+    * *Conclusion*: By the Tarski-Vaught Test, $\bar{N} \preceq \bar{M}$. 
 
-**Definition.**
+!!! remark "Remark."
+    Let $\bar M \preceq \bar N, D\subseteq M ^n$ be definable with parameters in $M$, $D$ admits a canonical extension to $D'\subseteq N^n$ with $D' \cap M^n= D$.
 
-+ The **complete diagram** of $\bar M$ (an $\mathscr L$-structure), $D(\bar M)$ is $\text{Th}(\bar M^*)$. As a set, it is just the set of formulas of the form $\varphi(c_{m_1},\cdots,c_{m_n})$ where $\varphi(x_1,\cdots,x_n)$ is an $\mathscr L$-formula, $c_{m_1},\cdots,c_{m_n}\in \mathscr L_M$ such that $\bar M \models \varphi[m_2,\cdots,m_n]$.
-+ The **diagram / simple diagram** of $\bar M$ is the set of quantifier-free sentences in $D(\bar M)$, denoted by $\Delta(\bar M)$.
+!!! note "Notation."
+    Let $\bar M$ be an $\mathscr L$-structure. We use $\mathscr L_M$ to denote the language of $\mathscr L$ adjoining new constant symbols $c_m$ for $m\in M$. $\bar M$ is naturally a $\mathscr L_M$-structure with $c_m$ interpreted as $m\in M$, $\bar M ^*$ denotes this $\mathscr L_M$-structure.
 
-**Proposition.** Let $\bar M$ be an $\mathscr L$-structure and $\bar N ^ * \models D(\bar M)$, then the reduction of $\bar N ^*$ to $\mathscr L$ (denoted by $\bar N$) is an elementary extension of $\bar M$.
+!!! definition "Definition."
 
-**Proposition.** Models of $\Delta(\bar M)$ up to $\mathscr L$-isomorphisms are extensions of $\bar M$ when taking the reduction to $\mathscr L$.
+    + The **complete diagram** of $\bar M$ (an $\mathscr L$-structure), $D(\bar M)$ is $\text{Th}(\bar M^*)$. As a set, it is just the set of formulas of the form $\varphi(c_{m_1},\cdots,c_{m_n})$ where $\varphi(x_1,\cdots,x_n)$ is an $\mathscr L$-formula, $c_{m_1},\cdots,c_{m_n}\in \mathscr L_M$ such that $\bar M \models \varphi[m_2,\cdots,m_n]$.
+    + The **diagram / simple diagram** of $\bar M$ is the set of quantifier-free sentences in $D(\bar M)$, denoted by $\Delta(\bar M)$.
 
-**Theorem (Upwards Löwenheim-Skolem).** Let $\bar M$ be an $\mathscr L$-structure and $\kappa\ge max\{|M|, |\text{Fml}^\mathscr L|\}$ and $M$ is infinite. Then there is an elementary extension $\bar N \succeq \bar M$ such that $|N|=\kappa$.
+!!! proposition "Proposition."
+    Let $\bar M$ be an $\mathscr L$-structure and $\bar N ^ * \models D(\bar M)$, then the reduction of $\bar N ^*$ to $\mathscr L$ (denoted by $\bar N$) is an elementary extension of $\bar M$.
+
+!!! proposition "Proposition."
+    Models of $\Delta(\bar M)$ up to $\mathscr L$-isomorphisms are extensions of $\bar M$ when taking the reduction to $\mathscr L$.
+
+!!! theorem "Theorem (Upwards Löwenheim-Skolem)."
+    Let $\bar M$ be an $\mathscr L$-structure and $\kappa\ge max\{|M|, |\text{Fml}^\mathscr L|\}$ and $M$ is infinite. Then there is an elementary extension $\bar N \succeq \bar M$ such that $|N|=\kappa$.

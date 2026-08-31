@@ -8,278 +8,316 @@ We will make constant use of the **extensionality principle** according to which
 
 We shall also make use of the **comprehension principle** which states that given a set $A$ and a property $P$ of sets, there exists a set whose elements are exactly those elements of $A$ that satisfy property $P$.
 
-**Definition 1.1.1** Let $X$ and $Y$ be sets. One says that $X$ and $Y$ are **equinumerous**, and writes $X \sim Y$, if there exists a bijection between $X$ and $Y$; one says $X$ is **subnumerous** to $Y$, and writes $X \preceq Y$, if there exists an injection $X \to Y$.
+!!! definition "Definition 1.1.1"
+    Let $X$ and $Y$ be sets. One says that $X$ and $Y$ are **equinumerous**, and writes $X \sim Y$, if there exists a bijection between $X$ and $Y$; one says $X$ is **subnumerous** to $Y$, and writes $X \preceq Y$, if there exists an injection $X \to Y$.
 
-**Theorem 1.1.2 (Cantor-Bernstein).** For sets $X$ and $Y$, if $X \preceq Y$ and $Y \preceq X$, then $X \sim Y$.
+!!! theorem "Theorem 1.1.2 (Cantor-Bernstein)."
+    For sets $X$ and $Y$, if $X \preceq Y$ and $Y \preceq X$, then $X \sim Y$.
 
 ### 1.2. Order
 
-**Definition 1.2.1 (Partial/Total Order).**  A **partial order** $<$ on a set $X$ is a binary relation (subset of $X \times X$) satisfying:
+!!! definition "Definition 1.2.1 (Partial/Total Order)."
+    A **partial order** $<$ on a set $X$ is a binary relation (subset of $X \times X$) satisfying:
 
-1. **Transitive**: If $x < y$ and $y < z$, then $x < z$.
+    1. **Transitive**: If $x < y$ and $y < z$, then $x < z$.
 
-2. **Antireflexive**: $x \nless x$ for all $x \in X$.
+    2. **Antireflexive**: $x \nless x$ for all $x \in X$.
 
-If for every $x,y \in X$, exactly one of $x < y$, $x=y$, or $y < x$ holds, then $<$ is a **total order**.
+    If for every $x,y \in X$, exactly one of $x < y$, $x=y$, or $y < x$ holds, then $<$ is a **total order**.
 
-**Definition 1.2.2.** Let $X,Y$ be sets and $Y \subseteq X$,
+!!! definition "Definition 1.2.2."
+    Let $X,Y$ be sets and $Y \subseteq X$,
 
-- **Smallest element**: $y \in Y$ with $y \leq y'$ for all $y' \in Y$ (unique, if exists) 
-- **Minimal element**: $y \in Y$ with no $y' \in Y$ satisfying $y' < y$ (not necessarily unique) 
-- (Similarly define *largest/maximal element*) 
-- **Lower bound**: $x \in X$ with $x \leq y$ for all $y \in Y$ 
-- **Infimum**: the *largest* lower bound of $Y$
-- (Similarly define *upper bound, supremum*)
+    - **Smallest element**: $y \in Y$ with $y \leq y'$ for all $y' \in Y$ (unique, if exists) 
+    - **Minimal element**: $y \in Y$ with no $y' \in Y$ satisfying $y' < y$ (not necessarily unique) 
+    - (Similarly define *largest/maximal element*) 
+    - **Lower bound**: $x \in X$ with $x \leq y$ for all $y \in Y$ 
+    - **Infimum**: the *largest* lower bound of $Y$
+    - (Similarly define *upper bound, supremum*)
 
-**Definition 1.2.3.**
+!!! definition "Definition 1.2.3."
 
-+ Let $<$ be a partial order on $X$. We say $<$ is **well-founded** if any non-empty subset of $X$ contains a minimal element.
+    + Let $<$ be a partial order on $X$. We say $<$ is **well-founded** if any non-empty subset of $X$ contains a minimal element.
 
-+ A **well-order** is a well-founded total order.
+    + A **well-order** is a well-founded total order.
 
 ### 1.3. Operations on Orders
 
-**Definition 1.3.1.** Let $X$ and $Y$ be partially ordered sets.
+!!! definition "Definition 1.3.1."
+    Let $X$ and $Y$ be partially ordered sets.
 
-+ The **ordered sum** of $X$ and $Y$, denoted by $X + Y$, is the partially ordered set consisting of pairs $(x, 0)$ with $x \in X$ and $(y, 1)$ with $y \in Y$, the order being defined as follows: $(a, i) < (b, j)$ if $i < j$ or if $i = j$ and $a < b$.
+    + The **ordered sum** of $X$ and $Y$, denoted by $X + Y$, is the partially ordered set consisting of pairs $(x, 0)$ with $x \in X$ and $(y, 1)$ with $y \in Y$, the order being defined as follows: $(a, i) < (b, j)$ if $i < j$ or if $i = j$ and $a < b$.
 
-+ The **reverse lexicographic product** of $X$ and $Y$ is defined by endowing the cartesian product $X \times Y$ with the order: $(x, y) < (x', y')$ if $y < y'$ or if $y = y'$ and $x < x'$. It is still denoted by $X \times Y$.
+    + The **reverse lexicographic product** of $X$ and $Y$ is defined by endowing the cartesian product $X \times Y$ with the order: $(x, y) < (x', y')$ if $y < y'$ or if $y = y'$ and $x < x'$. It is still denoted by $X \times Y$.
 
-By an **isomorphism** between two partially ordered sets $X$ and $Y$ we mean a bijection $f$ between $X$ and $Y$ such that for any $x, x' \in X$ one has $x < x'$ if and only if $f(x) < f(x')$.
+    By an **isomorphism** between two partially ordered sets $X$ and $Y$ we mean a bijection $f$ between $X$ and $Y$ such that for any $x, x' \in X$ one has $x < x'$ if and only if $f(x) < f(x')$.
 
-**Lemma 1.3.2.**
+!!! lemma "Lemma 1.3.2."
 
-+ The ordered sum of total orders (resp. well-founded partial orders) is a total order (resp. well-founded).
+    + The ordered sum of total orders (resp. well-founded partial orders) is a total order (resp. well-founded).
 
-+ The reverse lexicographic product of two total orders (resp. well-founded partial orders) is a total order (resp. well-founded).
+    + The reverse lexicographic product of two total orders (resp. well-founded partial orders) is a total order (resp. well-founded).
 
-+ Let $X, Y, Z$ be partially ordered sets. We have the following canonical isomorphisms of partially ordered sets:
-  
-  + $(X + Y) + Z \cong X + (Y + Z)$.
-  
-  + $(X \times Y) \times Z \cong X \times (Y \times Z)$
-  
-  + $X \times (Y + Z) \cong (X \times Y) + (X \times Z)$.
+    + Let $X, Y, Z$ be partially ordered sets. We have the following canonical isomorphisms of partially ordered sets:
 
-**Proof.** The only non-trivial point to check is that the reverse lexicographic product of two well-founded partially ordered sets is well-founded.
-Let $X$ and $Y$ be two well-founded partially ordered sets. Let $Z$ be a non-empty subset of $X \times Y$. We denote by $\pi: X \times Y \to Y$ the projection on the second factor. The order on $Y$ being well-founded, there exists a minimal element $y_0$ in $\pi(Z) \subseteq Y$. Since the order on $X$ is well-founded, there is a minimal element $x_0$ in the (non-empty) set $Z_{y_0} = \{x \in X \mid (x, y_0) \in Z\}$. It is clear that $(x_0, y_0)$ is minimal in $Z$.
+      + $(X + Y) + Z \cong X + (Y + Z)$.
 
-**Definition 1.3.3.** Let $X$ and $Y$ be totally ordered sets. We assume that $X$ admits a smallest element $0$. One defines the partially ordered set $X^{(Y)}$ as follows. As a set, it is the set of functions from $Y$ to $X$ with finite support, that is, the subset of the set $X^Y$ of all functions $Y \to X$ consisting of functions $f: Y \to X$ such that
+      + $(X \times Y) \times Z \cong X \times (Y \times Z)$
 
-$$
-\text{supp}(f) := \{y \in Y \mid f(y) \neq 0\}
-$$
+      + $X \times (Y + Z) \cong (X \times Y) + (X \times Z)$.
 
-is finite. One sets $f < g$ if there exists $y \in Y$ such that $f(y) < g(y)$ and $f(y') = g(y')$ for every $y' > y$.
+??? proof "Proof."
+    The only non-trivial point to check is that the reverse lexicographic product of two well-founded partially ordered sets is well-founded.
+    Let $X$ and $Y$ be two well-founded partially ordered sets. Let $Z$ be a non-empty subset of $X \times Y$. We denote by $\pi: X \times Y \to Y$ the projection on the second factor. The order on $Y$ being well-founded, there exists a minimal element $y_0$ in $\pi(Z) \subseteq Y$. Since the order on $X$ is well-founded, there is a minimal element $x_0$ in the (non-empty) set $Z_{y_0} = \{x \in X \mid (x, y_0) \in Z\}$. It is clear that $(x_0, y_0)$ is minimal in $Z$.
 
-**Proposition 1.3.4.** Let $X, Y$ and $Z$ be totally ordered sets, and assume that $X$ admits a smallest element $0$.
+!!! definition "Definition 1.3.3."
+    Let $X$ and $Y$ be totally ordered sets. We assume that $X$ admits a smallest element $0$. One defines the partially ordered set $X^{(Y)}$ as follows. As a set, it is the set of functions from $Y$ to $X$ with finite support, that is, the subset of the set $X^Y$ of all functions $Y \to X$ consisting of functions $f: Y \to X$ such that
 
-+ The relation $<$ defines a **total order** on $X^{(Y)}$ which is well-founded when the orders on $X$ and $Y$ are both well-founded.
+    $$
+    \text{supp}(f) := \{y \in Y \mid f(y) \neq 0\}
+    $$
 
-+ There are canonical isomorphisms of totally ordered sets
-  
-  $$
-  X^{(Y+Z)} \cong X^{(Y)} \times X^{(Z)} \quad \text{and} \quad X^{(Y \times Z)} \cong (X^{(Y)})^{(Z)}
-  $$
+    is finite. One sets $f < g$ if there exists $y \in Y$ such that $f(y) < g(y)$ and $f(y') = g(y')$ for every $y' > y$.
 
-**Proof.** The only non-trivial point to check is that if $X$ and $Y$ are well-ordered, then $X^{(Y)}$ is well-founded. Let $Z$ be a non-empty subset of $X^{(Y)}$. Let us prove that $Z$ contains a smallest element. If the constant function with value $0$ belongs to $Z$, there is nothing to prove. Hence, we may assume $\text{supp}(f) \neq \emptyset$ for every $f \in Z$. Let
+!!! proposition "Proposition 1.3.4."
+    Let $X, Y$ and $Z$ be totally ordered sets, and assume that $X$ admits a smallest element $0$.
 
-$$
-Y_1 = \{s_1(f) \mid f \in Z\},
-$$
+    + The relation $<$ defines a **total order** on $X^{(Y)}$ which is well-founded when the orders on $X$ and $Y$ are both well-founded.
 
-where $s_1(f) = \max(\text{supp}(f))$. Let $y_1$ be the smallest element of $Y_1$, and set $Z_1' = \{f \in Z \mid s_1(f) = y_1\}$. The set $Z_1'$ is an initial segment of $Z$, in other words $f < g$ for every $f \in Z_1'$ and $g \in Z \setminus Z_1'$. Let $x_1$ be the smallest element of $\{f(y_1) \mid f \in Z_1'\}$. We set
+    + There are canonical isomorphisms of totally ordered sets
 
-$$
-Z_1 = \{f \in Z_1' \mid f(y_1) = x_1\}.
-$$
+      $$
+      X^{(Y+Z)} \cong X^{(Y)} \times X^{(Z)} \quad \text{and} \quad X^{(Y \times Z)} \cong (X^{(Y)})^{(Z)}
+      $$
 
-The set $Z_1$ is an initial segment of $Z_1'$. If $Z_1$ contains the function with constant value $0$ outside $\{y_1\}$, we are done. Otherwise, we have $\text{supp}(f) \setminus \{y_1\} \neq \emptyset$ for every $f \in Z_1$. Let $Y_2 = \{s_2(f) \mid f \in Z_1\}$, where $s_2(f) = \max(\text{supp}(f) \setminus \{y_1\})$. Let $y_2$ be the smallest element of $Y_2$, and $x_2$ the smallest element of $\{f(y_2) \mid f \in Z_1 \text{ and } y_2 = s_2(f)\}$. We set $Z_2 = \{f \in Z_1 \mid s_2(f) = y_2 \text{ and } f(y_2) = x_2\}$. It is an initial segment of $Z_1$. If $Z_2$ contains the function with constant value $0$ outside $\{y_1, y_2\}$, we are done, otherwise one continues in the same way, constructing $Y_3, y_3, Z_3', x_3, Z_3$ and so on. Since the sequence $(y_i)$ is strictly decreasing in $Y$, this process stops after a finite number of steps.
+??? proof "Proof."
+    The only non-trivial point to check is that if $X$ and $Y$ are well-ordered, then $X^{(Y)}$ is well-founded. Let $Z$ be a non-empty subset of $X^{(Y)}$. Let us prove that $Z$ contains a smallest element. If the constant function with value $0$ belongs to $Z$, there is nothing to prove. Hence, we may assume $\text{supp}(f) \neq \emptyset$ for every $f \in Z$. Let
+
+    $$
+    Y_1 = \{s_1(f) \mid f \in Z\},
+    $$
+
+    where $s_1(f) = \max(\text{supp}(f))$. Let $y_1$ be the smallest element of $Y_1$, and set $Z_1' = \{f \in Z \mid s_1(f) = y_1\}$. The set $Z_1'$ is an initial segment of $Z$, in other words $f < g$ for every $f \in Z_1'$ and $g \in Z \setminus Z_1'$. Let $x_1$ be the smallest element of $\{f(y_1) \mid f \in Z_1'\}$. We set
+
+    $$
+    Z_1 = \{f \in Z_1' \mid f(y_1) = x_1\}.
+    $$
+
+    The set $Z_1$ is an initial segment of $Z_1'$. If $Z_1$ contains the function with constant value $0$ outside $\{y_1\}$, we are done. Otherwise, we have $\text{supp}(f) \setminus \{y_1\} \neq \emptyset$ for every $f \in Z_1$. Let $Y_2 = \{s_2(f) \mid f \in Z_1\}$, where $s_2(f) = \max(\text{supp}(f) \setminus \{y_1\})$. Let $y_2$ be the smallest element of $Y_2$, and $x_2$ the smallest element of $\{f(y_2) \mid f \in Z_1 \text{ and } y_2 = s_2(f)\}$. We set $Z_2 = \{f \in Z_1 \mid s_2(f) = y_2 \text{ and } f(y_2) = x_2\}$. It is an initial segment of $Z_1$. If $Z_2$ contains the function with constant value $0$ outside $\{y_1, y_2\}$, we are done, otherwise one continues in the same way, constructing $Y_3, y_3, Z_3', x_3, Z_3$ and so on. Since the sequence $(y_i)$ is strictly decreasing in $Y$, this process stops after a finite number of steps.
 
 ### 1.4. Ordinal Numbers
 
-**Definition 1.4.1.** A set $X$ is said to be **transitive** if for all $x \in X$ and $y \in x$ one has $y \in X$. 
-This is equivalent to $x \in X \Rightarrow x \subseteq X$.
+!!! definition "Definition 1.4.1."
+    A set $X$ is said to be **transitive** if for all $x \in X$ and $y \in x$ one has $y \in X$.
+    This is equivalent to $x \in X \Rightarrow x \subseteq X$.
 
-**Definition 1.4.2.** A set $X$ is an **ordinal** if it is transitive and if the relation $\{(x,y) \in X \times X \mid x \in y\}$ on $X$ defines a well-order on $X$.
+!!! definition "Definition 1.4.2."
+    A set $X$ is an **ordinal** if it is transitive and if the relation $\{(x,y) \in X \times X \mid x \in y\}$ on $X$ defines a well-order on $X$.
 
-**Proposition 1.4.3.** Let $\alpha$ and $\beta$ be ordinals.
+!!! proposition "Proposition 1.4.3."
+    Let $\alpha$ and $\beta$ be ordinals.
 
-1. $\emptyset$ is an ordinal.
+    1. $\emptyset$ is an ordinal.
 
-2. If $\alpha \neq \emptyset$, then $\emptyset\in \alpha$.
+    2. If $\alpha \neq \emptyset$, then $\emptyset\in \alpha$.
 
-3. $\alpha \notin \alpha$.
+    3. $\alpha \notin \alpha$.
 
-4. If $x \in \alpha$, then $x = S_{<x} := \{y \in \alpha \mid y < x\}$.
+    4. If $x \in \alpha$, then $x = S_{<x} := \{y \in \alpha \mid y < x\}$.
 
-5. If $x \in \alpha$, then $x$ is an ordinal.
+    5. If $x \in \alpha$, then $x$ is an ordinal.
 
-6. $\beta \subseteq \alpha$ if and only if $\beta \in \alpha$ or $\beta = \alpha$.
+    6. $\beta \subseteq \alpha$ if and only if $\beta \in \alpha$ or $\beta = \alpha$.
 
-7. $x := \alpha \cup \{\alpha\}$ is an ordinal, denoted by $\alpha^+$
+    7. $x := \alpha \cup \{\alpha\}$ is an ordinal, denoted by $\alpha^+$
 
-**Proof.** (1) is clear. For (2), one considers $x \in \alpha$ minimal. If $y \in x$, then $y \in \alpha$ by transitivity of $\alpha$, and $x$ would not be minimal. In (3), by antireflexivity, we have $x \notin x$ for every $x \in \alpha$. Thus $\alpha \in \alpha$ implies $\alpha \notin \alpha$. (4) follows from the fact that $<$ is given by $\in$. To prove (5), note that $\in$ restricts to a well-order on $x$, since $x \subseteq \alpha$. Furthermore, $x = S_{<x}$ is transitive, since $z \in y \in x \Rightarrow z \in x \Rightarrow z \in S_{<x}$.
-To prove the 'only if' part in (6), let us assume that $\beta \subset \alpha$. Let $x$ be minimal in $\alpha \setminus \beta$. Clearly $\beta \supseteq S_{<x}$ by minimality. Furthermore, if $y \in \beta$, then $y \in x$ since otherwise $x \in y$ and $x \in \beta$. Hence $\beta = S_{<x} = x \in \alpha$. The other implication in (6) is clear, and the verification of (7) is immediate.
+??? proof "Proof."
+    (1) is clear. For (2), one considers $x \in \alpha$ minimal. If $y \in x$, then $y \in \alpha$ by transitivity of $\alpha$, and $x$ would not be minimal. In (3), by antireflexivity, we have $x \notin x$ for every $x \in \alpha$. Thus $\alpha \in \alpha$ implies $\alpha \notin \alpha$. (4) follows from the fact that $<$ is given by $\in$. To prove (5), note that $\in$ restricts to a well-order on $x$, since $x \subseteq \alpha$. Furthermore, $x = S_{<x}$ is transitive, since $z \in y \in x \Rightarrow z \in x \Rightarrow z \in S_{<x}$.
+    To prove the 'only if' part in (6), let us assume that $\beta \subset \alpha$. Let $x$ be minimal in $\alpha \setminus \beta$. Clearly $\beta \supseteq S_{<x}$ by minimality. Furthermore, if $y \in \beta$, then $y \in x$ since otherwise $x \in y$ and $x \in \beta$. Hence $\beta = S_{<x} = x \in \alpha$. The other implication in (6) is clear, and the verification of (7) is immediate.
 
-**Proposition 1.4.4.** Let $X$ be a non-empty set of ordinals. Then $\bigcap _{\alpha \in X} \alpha$ is a smallest element of $X$.
+!!! proposition "Proposition 1.4.4."
+    Let $X$ be a non-empty set of ordinals. Then $\bigcap _{\alpha \in X} \alpha$ is a smallest element of $X$.
 
-**Proof.** The intersection of a family of transitive sets is transitive, and the restriction of a well-order to a subset is a well-order. Hence $\beta = \bigcap_{\alpha \in X} \alpha$ is an ordinal. We have $\beta \subseteq \alpha$ for every $\alpha \in X$. If $\beta \notin X$, then $\beta \in \alpha$ for every $\alpha \in X$, by Proposition 1.4.3.(6) It follows that $\beta \in \beta$, which is absurd.
+??? proof "Proof."
+    The intersection of a family of transitive sets is transitive, and the restriction of a well-order to a subset is a well-order. Hence $\beta = \bigcap_{\alpha \in X} \alpha$ is an ordinal. We have $\beta \subseteq \alpha$ for every $\alpha \in X$. If $\beta \notin X$, then $\beta \in \alpha$ for every $\alpha \in X$, by Proposition 1.4.3.(6) It follows that $\beta \in \beta$, which is absurd.
 
-**Theorem 1.4.5.** Let $\alpha$ and $\beta$ be ordinals. Exactly one of the following properties holds: 
-(1) $\alpha \in \beta$, $\quad$ (2) $\alpha = \beta$, $\quad$ (3) $\beta \in \alpha$. 
+!!! theorem "Theorem 1.4.5."
+    Let $\alpha$ and $\beta$ be ordinals. Exactly one of the following properties holds:
+    (1) $\alpha \in \beta$, $\quad$ (2) $\alpha = \beta$, $\quad$ (3) $\beta \in \alpha$. 
 
-**Proof.** One sets $X = \{\alpha, \beta\}$, and one applies Proposition 1.4.4. If $\alpha \cap \beta = \alpha$, then $\alpha \subseteq \beta$, hence $\alpha = \beta$ or $\alpha \in \beta$. Similarly, if $\alpha \cap \beta = \beta$, then $\alpha = \beta$ or $\beta \in \alpha$. The fact that these properties are mutually exclusive follows from the axioms of a partial order. 
+??? proof "Proof."
+    One sets $X = \{\alpha, \beta\}$, and one applies Proposition 1.4.4. If $\alpha \cap \beta = \alpha$, then $\alpha \subseteq \beta$, hence $\alpha = \beta$ or $\alpha \in \beta$. Similarly, if $\alpha \cap \beta = \beta$, then $\alpha = \beta$ or $\beta \in \alpha$. The fact that these properties are mutually exclusive follows from the axioms of a partial order.
 
-**Notation 1.4.6.** From now on, we shall write $\alpha < \beta$ for $\alpha \in \beta$, and $\alpha \leq \beta$ for $\alpha \subseteq \beta$, when $\alpha$ and $\beta$ are ordinals.
+!!! note "Notation 1.4.6."
+    From now on, we shall write $\alpha < \beta$ for $\alpha \in \beta$, and $\alpha \leq \beta$ for $\alpha \subseteq \beta$, when $\alpha$ and $\beta$ are ordinals.
 
-**Proposition 1.4.7.** Let $X$ be a set of ordinals. Then $b = \bigcup_{\alpha \in X} \alpha$ is an ordinal. Furthermore, if $\gamma$ is an ordinal with $\gamma < b$, there exists $\alpha \in X$ such that $\gamma \in \alpha$. We shall also write $b = \sup_{\alpha \in X} \alpha$.
+!!! proposition "Proposition 1.4.7."
+    Let $X$ be a set of ordinals. Then $b = \bigcup_{\alpha \in X} \alpha$ is an ordinal. Furthermore, if $\gamma$ is an ordinal with $\gamma < b$, there exists $\alpha \in X$ such that $\gamma \in \alpha$. We shall also write $b = \sup_{\alpha \in X} \alpha$.
 
-**Proof.** The set $b$ being the union of transitive sets, it is transitive. Furthermore, $b$ contains only ordinals. By Theorem 1.4.5, $\in$ induces a total order on $b$. If $\emptyset \neq Z \subseteq b$, then $\bigcap_{\alpha \in Z} \alpha$ is a smallest element of $Z$ by Proposition 1.4.4. This shows that the order given by $\in$ on $b$ is well-founded. 
+??? proof "Proof."
+    The set $b$ being the union of transitive sets, it is transitive. Furthermore, $b$ contains only ordinals. By Theorem 1.4.5, $\in$ induces a total order on $b$. If $\emptyset \neq Z \subseteq b$, then $\bigcap_{\alpha \in Z} \alpha$ is a smallest element of $Z$ by Proposition 1.4.4. This shows that the order given by $\in$ on $b$ is well-founded.
 
-**Definition 1.4.8.**
+!!! definition "Definition 1.4.8."
 
-+ An ordinal of the form $\alpha^+$ is called a **successor ordinal**. It is clear that $\alpha^+$ is the smallest ordinal $> \alpha$.
+    + An ordinal of the form $\alpha^+$ is called a **successor ordinal**. It is clear that $\alpha^+$ is the smallest ordinal $> \alpha$.
 
-+ A **limit ordinal** is a non-empty ordinal which is not a successor.
+    + A **limit ordinal** is a non-empty ordinal which is not a successor.
 
-**Proposition 1.4.9.** For an ordinal $\lambda \neq \emptyset$, the following conditions are equivalent:
+!!! proposition "Proposition 1.4.9."
+    For an ordinal $\lambda \neq \emptyset$, the following conditions are equivalent:
 
-1. $\lambda$ is a limit ordinal;
+    1. $\lambda$ is a limit ordinal;
 
-2. $\lambda = \bigcup_{\alpha < \lambda} \alpha$.
+    2. $\lambda = \bigcup_{\alpha < \lambda} \alpha$.
 
-**Proof.** $(1) \Rightarrow (2)$. Let $\beta = \bigcup_{\alpha < \lambda} \alpha$ and $\lambda$ a limit. It is clear that $\beta \subseteq \lambda$. Conversely, assume $\alpha < \lambda$. Then $\alpha^+ \leq \lambda$ and it follows that $\alpha^+ < \lambda$ since $\lambda$ is a limit ordinal. The statement follows, since $\alpha \in \alpha^+ \subseteq \beta$.
-$(2) \Rightarrow (1)$. If $\lambda = \gamma^+$, then $\bigcup_{\alpha < \lambda} \alpha = \bigcup_{\alpha \leq \gamma} \alpha = \gamma < \lambda$.
+??? proof "Proof."
+    $(1) \Rightarrow (2)$. Let $\beta = \bigcup_{\alpha < \lambda} \alpha$ and $\lambda$ a limit. It is clear that $\beta \subseteq \lambda$. Conversely, assume $\alpha < \lambda$. Then $\alpha^+ \leq \lambda$ and it follows that $\alpha^+ < \lambda$ since $\lambda$ is a limit ordinal. The statement follows, since $\alpha \in \alpha^+ \subseteq \beta$.
+    $(2) \Rightarrow (1)$. If $\lambda = \gamma^+$, then $\bigcup_{\alpha < \lambda} \alpha = \bigcup_{\alpha \leq \gamma} \alpha = \gamma < \lambda$.
 
-**Example 1.4.10.** (1) One can recover the natural numbers as ordinals as follows.
-One sets $\underline{0} := \emptyset$, and inductively $\underline{n+1} := \underline{n}^+$ for $n \in \mathbb{N}$.
-For instance $\underline{1} = \{\emptyset\}$, $\underline{2} = \{0,1\} = \{\emptyset, \{\emptyset\}\}$, $\underline{3} = \{0,1,2\} = \{\emptyset, \{\emptyset\}, \{\emptyset, \{\emptyset\}\}\}$.
-One proves by induction that $\underline{n}$ is an ordinal for every natural number $n$. We shall often identify $\underline{n}$ and $n$.
-(2) One sets $\omega := \bigcup_{n \in \mathbb{N}} \underline{n}$. It is an ordinal by Proposition 1.4.9.
+!!! example "Example 1.4.10."
+    (1) One can recover the natural numbers as ordinals as follows.
+    One sets $\underline{0} := \emptyset$, and inductively $\underline{n+1} := \underline{n}^+$ for $n \in \mathbb{N}$.
+    For instance $\underline{1} = \{\emptyset\}$, $\underline{2} = \{0,1\} = \{\emptyset, \{\emptyset\}\}$, $\underline{3} = \{0,1,2\} = \{\emptyset, \{\emptyset\}, \{\emptyset, \{\emptyset\}\}\}$.
+    One proves by induction that $\underline{n}$ is an ordinal for every natural number $n$. We shall often identify $\underline{n}$ and $n$.
+    (2) One sets $\omega := \bigcup_{n \in \mathbb{N}} \underline{n}$. It is an ordinal by Proposition 1.4.9.
 
-**Definition 1.4.11.** One says that an ordinal is **finite** if it is not a limit and none of its elements is a limit.
+!!! definition "Definition 1.4.11."
+    One says that an ordinal is **finite** if it is not a limit and none of its elements is a limit.
 
-**Proposition 1.4.12.**
+!!! proposition "Proposition 1.4.12."
 
-1. $\omega$ is the set of finite ordinals.
+    1. $\omega$ is the set of finite ordinals.
 
-2. $\omega$ is the smallest limit ordinal.
+    2. $\omega$ is the smallest limit ordinal.
 
-**Proof.** One proves first, by induction on $n \in \mathbb{N}$, that all elements of $\omega$ are finite ordinals. Furthermore, $\alpha < \omega$ implies $\alpha^+ < \omega$. This proves (2). If $\alpha \notin \omega$, then $\omega \leq \alpha$, so either $\alpha = \omega$ or $\omega \in \alpha$. In both cases, $\alpha$ is not finite. This proves (1).
+??? proof "Proof."
+    One proves first, by induction on $n \in \mathbb{N}$, that all elements of $\omega$ are finite ordinals. Furthermore, $\alpha < \omega$ implies $\alpha^+ < \omega$. This proves (2). If $\alpha \notin \omega$, then $\omega \leq \alpha$, so either $\alpha = \omega$ or $\omega \in \alpha$. In both cases, $\alpha$ is not finite. This proves (1).
 
-**Lemma 1.4.13.** Let $f : \alpha \to \alpha'$ be a strictly increasing map between two ordinals. Then $f(\beta) \geq \beta$ for every $\beta \in \alpha$. In particular, $\alpha \leq \alpha'$, and if $f$ is an isomorphism of ordered sets, then $\alpha = \alpha'$ and $f$ is equal to the identity.
+!!! lemma "Lemma 1.4.13."
+    Let $f : \alpha \to \alpha'$ be a strictly increasing map between two ordinals. Then $f(\beta) \geq \beta$ for every $\beta \in \alpha$. In particular, $\alpha \leq \alpha'$, and if $f$ is an isomorphism of ordered sets, then $\alpha = \alpha'$ and $f$ is equal to the identity.
 
-**Proof.** If there exists $\beta \in \alpha$ with $f(\beta) < \beta$, we consider $\beta_0$ minimal with that property. Since $f$ is strictly increasing, we have $f(f(\beta_0)) < f(\beta_0)$, which contradicts minimality.
-The statement about an isomorphism $f$ follows by applying the result to $f$ as well as to $f^{-1}$.
+??? proof "Proof."
+    If there exists $\beta \in \alpha$ with $f(\beta) < \beta$, we consider $\beta_0$ minimal with that property. Since $f$ is strictly increasing, we have $f(f(\beta_0)) < f(\beta_0)$, which contradicts minimality.
+    The statement about an isomorphism $f$ follows by applying the result to $f$ as well as to $f^{-1}$.
 
-**Theorem 1.4.14 (Classification of well-orders by ordinals).** Every well-ordered set $X$ is isomorphic, as an ordered set, to some ordinal. Furthermore, the ordinal and the isomorphism are both unique.
+!!! theorem "Theorem 1.4.14 (Classification of well-orders by ordinals)."
+    Every well-ordered set $X$ is isomorphic, as an ordered set, to some ordinal. Furthermore, the ordinal and the isomorphism are both unique.
 
-**Proof.** Uniqueness follows from Lemma 1.5.8. To prove existence, let us first note that for every $x \in X$, any isomorphism between $S_{<x}$ and an ordinal $\alpha$ can be extended to an isomorphism between $S_{\leq x} = S_{<x} \cup \{x\}$ and $\alpha^+$. Let
+??? proof "Proof."
+    Uniqueness follows from Lemma 1.5.8. To prove existence, let us first note that for every $x \in X$, any isomorphism between $S_{<x}$ and an ordinal $\alpha$ can be extended to an isomorphism between $S_{\leq x} = S_{<x} \cup \{x\}$ and $\alpha^+$. Let
 
-$$
-Y = \{ y \in X \mid \text{there exists } f : S_{\leq y} \cong \alpha \text{ for some ordinal } \alpha \}.
-$$
+    $$
+    Y = \{ y \in X \mid \text{there exists } f : S_{\leq y} \cong \alpha \text{ for some ordinal } \alpha \}.
+    $$
 
-By uniqueness, for $y \in Y$, the ordinal $\alpha = \alpha(y)$ and the isomorphism $f = f_y$ are unique. Let us prove $Y = X$. Otherwise, there would exist $x \in X$ minimal in $X \setminus Y$. For $y < x$ we have an isomorphism $f_y : S_{\leq y} \cong \alpha(y)$. Furthermore, these isomorphisms form a coherent family in the sense that for every $y' < y < x$ we have $f_y \upharpoonright S_{\leq y'} = f_{y'}$. (To see this, note that an initial segment of an ordinal is an ordinal.) We set
+    By uniqueness, for $y \in Y$, the ordinal $\alpha = \alpha(y)$ and the isomorphism $f = f_y$ are unique. Let us prove $Y = X$. Otherwise, there would exist $x \in X$ minimal in $X \setminus Y$. For $y < x$ we have an isomorphism $f_y : S_{\leq y} \cong \alpha(y)$. Furthermore, these isomorphisms form a coherent family in the sense that for every $y' < y < x$ we have $f_y \upharpoonright S_{\leq y'} = f_{y'}$. (To see this, note that an initial segment of an ordinal is an ordinal.) We set
 
-$$
-\alpha = \sup_{y < x} \alpha(y) \text{ and } f : S_{<x} \to \alpha,\ f(y) := f_y(y).
-$$
+    $$
+    \alpha = \sup_{y < x} \alpha(y) \text{ and } f : S_{<x} \to \alpha,\ f(y) := f_y(y).
+    $$
 
-It is clear that $f$ is well defined and induces an isomorphism of ordered sets between $S_{<x}$ and $\alpha$. By the observation made at the beginning, $f$ may be extended to an isomorphism between $S_{\leq x}$ and $\alpha^+$, which leads to a contradiction. So we have $Y = X$. To conclude, one uses the same kind of argument, setting $\alpha(X) := \sup_{x \in X} \alpha(x)$ and $f : X \cong \alpha(X)$.
+    It is clear that $f$ is well defined and induces an isomorphism of ordered sets between $S_{<x}$ and $\alpha$. By the observation made at the beginning, $f$ may be extended to an isomorphism between $S_{\leq x}$ and $\alpha^+$, which leads to a contradiction. So we have $Y = X$. To conclude, one uses the same kind of argument, setting $\alpha(X) := \sup_{x \in X} \alpha(x)$ and $f : X \cong \alpha(X)$.
 
-**Remark 1.4.15 (Transfinite induction).** Let $P$ be a property of ordinals. One assumes: 
+!!! remark "Remark 1.4.15 (Transfinite induction)."
+    Let $P$ be a property of ordinals. One assumes:
 
-- $\emptyset$ satisfies $P$; 
+    - $\emptyset$ satisfies $P$; 
 
-- for every ordinal $\alpha$: if $\alpha$ satisfies $P$, then $\alpha^+$ satisfies $P$; 
+    - for every ordinal $\alpha$: if $\alpha$ satisfies $P$, then $\alpha^+$ satisfies $P$; 
 
-- for every limit ordinal $\lambda$: if every $\alpha < \lambda$ satisfies $P$, then $\lambda$ satisfies $P$.
+    - for every limit ordinal $\lambda$: if every $\alpha < \lambda$ satisfies $P$, then $\lambda$ satisfies $P$.
 
-Then every ordinal satisfies $P$.
+    Then every ordinal satisfies $P$.
 
 ### 1.5. **Ordinal Arithmetic**
 
 If $\alpha$ and $\beta$ are ordinals, by Theorem 1.4.15 there is a unique ordinal isomorphic to the ordered sum of $\alpha$ and $\beta$, which one denotes by $\alpha+\beta$. One similarly defines $\alpha\beta$ as the unique ordinal isomorphic to the reverse lexicographic product $\alpha \times \beta$ and $\alpha^\beta$ as the unique ordinal isomorphic to the ordered set $\alpha^{(\beta)}$. Note that $0^\beta$ has still to be defined: one sets $0^0 := 1$ and $0^\beta := 0$ for every $\beta > 0$.
 
-**Proposition 1.5.1 (Ordinal addition).** Let $\alpha, \beta$ and $\gamma$ be ordinals.
+!!! proposition "Proposition 1.5.1 (Ordinal addition)."
+    Let $\alpha, \beta$ and $\gamma$ be ordinals.
 
-1. $\alpha + 0 = 0 + \alpha = \alpha$. 
+    1. $\alpha + 0 = 0 + \alpha = \alpha$. 
 
-2. $\alpha + 1 = \alpha^+$. 
+    2. $\alpha + 1 = \alpha^+$. 
 
-3. $\alpha + (\beta + \gamma) = (\alpha + \beta) + \gamma$, in particular $\alpha + \beta^+ = (\alpha + \beta)^+$.
+    3. $\alpha + (\beta + \gamma) = (\alpha + \beta) + \gamma$, in particular $\alpha + \beta^+ = (\alpha + \beta)^+$.
 
-4. $\alpha < \beta$ if and only if there exists an ordinal $\delta > 0$ such that $\beta = \alpha + \delta$.
+    4. $\alpha < \beta$ if and only if there exists an ordinal $\delta > 0$ such that $\beta = \alpha + \delta$.
 
-5. If $\beta < \gamma$, then $\alpha + \beta < \alpha + \gamma$ for every $\alpha$. In particular, one may simplify on the left: $\alpha + \beta = \alpha + \gamma \Rightarrow \beta = \gamma$.
+    5. If $\beta < \gamma$, then $\alpha + \beta < \alpha + \gamma$ for every $\alpha$. In particular, one may simplify on the left: $\alpha + \beta = \alpha + \gamma \Rightarrow \beta = \gamma$.
 
-6. If $\lambda$ is a limit, then $\alpha + \lambda = \sup_{\beta < \lambda} (\alpha + \beta)$ (**continuity**).
+    6. If $\lambda$ is a limit, then $\alpha + \lambda = \sup_{\beta < \lambda} (\alpha + \beta)$ (**continuity**).
 
-7. $1 + \alpha = \alpha + 1$ when $\alpha$ is finite, otherwise $1 + \alpha = \alpha$.
+    7. $1 + \alpha = \alpha + 1$ when $\alpha$ is finite, otherwise $1 + \alpha = \alpha$.
 
-**Proof.** (1) and (2) are clear, and (3) follows from Lemma 1.4.1. For the non-trivial implication in (4), one easily checks that the ordinal $\delta$ isomorphic to the well-ordered set $\beta \setminus \alpha$ does the job.
-(5) If $\beta < \gamma$, by (2) and (4) one has $\gamma = \beta + \delta$, hence $\alpha + \gamma = (\alpha + \beta) + \delta$, for some $\delta > 0$.
-(6) $\alpha + \lambda \ge \sup_{\beta < \lambda} (\alpha + \beta)$ follows from (5). Conversely, suppose $\alpha \le \mu < \alpha + \lambda$. Then $\mu = \alpha + \delta$ for some $\delta$ with $0 \le \delta < \lambda$. Since $\lambda$ is a limit, one has $\delta^+ < \lambda$, hence $\mu < \alpha + \delta^+ \le \sup_{\beta < \lambda} (\alpha + \beta)$.
-(7) One proves by induction on $n \in \mathbb{N}$ that $1 + n = n + 1$. By (6) we have $1 + \omega = \omega$. Finally, $\alpha \ge \omega$ can be written as $\alpha = \omega + \beta$, hence $1 + \alpha = 1 + \omega + \beta = \omega + \beta = \alpha$.
+??? proof "Proof."
+    (1) and (2) are clear, and (3) follows from Lemma 1.4.1. For the non-trivial implication in (4), one easily checks that the ordinal $\delta$ isomorphic to the well-ordered set $\beta \setminus \alpha$ does the job.
+    (5) If $\beta < \gamma$, by (2) and (4) one has $\gamma = \beta + \delta$, hence $\alpha + \gamma = (\alpha + \beta) + \delta$, for some $\delta > 0$.
+    (6) $\alpha + \lambda \ge \sup_{\beta < \lambda} (\alpha + \beta)$ follows from (5). Conversely, suppose $\alpha \le \mu < \alpha + \lambda$. Then $\mu = \alpha + \delta$ for some $\delta$ with $0 \le \delta < \lambda$. Since $\lambda$ is a limit, one has $\delta^+ < \lambda$, hence $\mu < \alpha + \delta^+ \le \sup_{\beta < \lambda} (\alpha + \beta)$.
+    (7) One proves by induction on $n \in \mathbb{N}$ that $1 + n = n + 1$. By (6) we have $1 + \omega = \omega$. Finally, $\alpha \ge \omega$ can be written as $\alpha = \omega + \beta$, hence $1 + \alpha = 1 + \omega + \beta = \omega + \beta = \alpha$.
 
-&nbsp;
+    &nbsp;
 
-From now on, we shall allow the omission of parentheses, using the convention that exponentiation ties are stronger than multiplication and that multiplication ties are stronger than addition. For instance, one should read $\alpha\beta + \gamma$ as $(\alpha\beta) + \gamma$, and $\gamma\alpha^\beta$ as $\gamma(\alpha^\beta)$.
+    From now on, we shall allow the omission of parentheses, using the convention that exponentiation ties are stronger than multiplication and that multiplication ties are stronger than addition. For instance, one should read $\alpha\beta + \gamma$ as $(\alpha\beta) + \gamma$, and $\gamma\alpha^\beta$ as $\gamma(\alpha^\beta)$.
 
-**Proposition 1.5.2 (Ordinal multiplication).** Let $\alpha, \beta, \gamma$ be ordinals.
+!!! proposition "Proposition 1.5.2 (Ordinal multiplication)."
+    Let $\alpha, \beta, \gamma$ be ordinals.
 
-1. $\alpha 0 = 0\alpha = 0$. 
+    1. $\alpha 0 = 0\alpha = 0$. 
 
-2. $\alpha 1 = 1\alpha = \alpha$.
+    2. $\alpha 1 = 1\alpha = \alpha$.
 
-3. $\alpha(\beta\gamma) = (\alpha\beta)\gamma$.
+    3. $\alpha(\beta\gamma) = (\alpha\beta)\gamma$.
 
-4. $\alpha(\beta + \gamma) = \alpha\beta + \alpha\gamma$, in particular $\alpha\beta^+ = \alpha\beta + \alpha$. 
+    4. $\alpha(\beta + \gamma) = \alpha\beta + \alpha\gamma$, in particular $\alpha\beta^+ = \alpha\beta + \alpha$. 
 
-5. $2\omega = \omega < \omega 2 = \omega + \omega$. 
+    5. $2\omega = \omega < \omega 2 = \omega + \omega$. 
 
-6. Assume $\alpha \neq 0$. If $\beta < \gamma$, then $\alpha\beta < \alpha\gamma$. In particular, one may simplify on the left: $\alpha\beta = \alpha\gamma \Rightarrow \beta = \gamma$. 
+    6. Assume $\alpha \neq 0$. If $\beta < \gamma$, then $\alpha\beta < \alpha\gamma$. In particular, one may simplify on the left: $\alpha\beta = \alpha\gamma \Rightarrow \beta = \gamma$. 
 
-7. If $\lambda$ is a limit ordinal, then $\alpha\lambda = \sup_{\beta < \lambda} \alpha\beta$ (**continuity**).
+    7. If $\lambda$ is a limit ordinal, then $\alpha\lambda = \sup_{\beta < \lambda} \alpha\beta$ (**continuity**).
 
-**Proof.** (1) and (2) are clear, (3) and (4) follow from Lemma 1.4.1. For (6), it suffices to note that if $\beta < \gamma$ then $\gamma = \beta + \delta$ for some $\delta > 0$, hence $\alpha\gamma = \alpha\beta + \alpha\delta$ by (4) from which it follows that $\alpha\gamma > \alpha\beta$.
-(7) One may assume $\alpha \neq 0$. Let $\lambda$ be a limit ordinal. The inequality $\alpha\lambda \ge \sup_{\beta < \lambda} \alpha\beta =: \delta$ follows from (6). Conversely, let $\gamma < \alpha\lambda$. Euclidean division, proved in the next lemma, provides a pair of ordinals $(\rho, \mu)$ such that $\gamma = \alpha\mu + \rho$, with $\rho < \alpha$. Since $\mu < \lambda$ by (6), we have $\mu^+ < \lambda$ because $\lambda$ is a limit ordinal, hence $\gamma = \alpha\mu + \rho < \alpha\mu + \alpha = \alpha\mu^+ \le \delta$. In (5), $2\omega = \omega$ follows from (7), the other statements being clear.
+??? proof "Proof."
+    (1) and (2) are clear, (3) and (4) follow from Lemma 1.4.1. For (6), it suffices to note that if $\beta < \gamma$ then $\gamma = \beta + \delta$ for some $\delta > 0$, hence $\alpha\gamma = \alpha\beta + \alpha\delta$ by (4) from which it follows that $\alpha\gamma > \alpha\beta$.
+    (7) One may assume $\alpha \neq 0$. Let $\lambda$ be a limit ordinal. The inequality $\alpha\lambda \ge \sup_{\beta < \lambda} \alpha\beta =: \delta$ follows from (6). Conversely, let $\gamma < \alpha\lambda$. Euclidean division, proved in the next lemma, provides a pair of ordinals $(\rho, \mu)$ such that $\gamma = \alpha\mu + \rho$, with $\rho < \alpha$. Since $\mu < \lambda$ by (6), we have $\mu^+ < \lambda$ because $\lambda$ is a limit ordinal, hence $\gamma = \alpha\mu + \rho < \alpha\mu + \alpha = \alpha\mu^+ \le \delta$. In (5), $2\omega = \omega$ follows from (7), the other statements being clear.
 
-**Lemma 1.5.3 (Euclidean division).** Let $\alpha$ and $\beta$ be ordinals, with $\alpha \neq 0$. Then there exists a unique pair of ordinals $(\rho, \mu)$ such that $\rho < \alpha$ and $\beta = \alpha\mu + \rho$.
+!!! lemma "Lemma 1.5.3 (Euclidean division)."
+    Let $\alpha$ and $\beta$ be ordinals, with $\alpha \neq 0$. Then there exists a unique pair of ordinals $(\rho, \mu)$ such that $\rho < \alpha$ and $\beta = \alpha\mu + \rho$.
 
-**Proof.**
+??? proof "Proof."
 
-*Uniqueness:* Assume $\alpha\mu + \rho = \alpha\mu' + \rho'$ with $\rho, \rho' < \alpha$. If $\mu < \mu'$, then $\alpha\mu + \rho < \alpha\mu^+ \le \alpha\mu' \le \alpha\mu' + \rho'$, which is absurd. Hence $\mu = \mu'$ by symmetry, and one obtains $\rho = \rho'$ after simplifying.
+    *Uniqueness:* Assume $\alpha\mu + \rho = \alpha\mu' + \rho'$ with $\rho, \rho' < \alpha$. If $\mu < \mu'$, then $\alpha\mu + \rho < \alpha\mu^+ \le \alpha\mu' \le \alpha\mu' + \rho'$, which is absurd. Hence $\mu = \mu'$ by symmetry, and one obtains $\rho = \rho'$ after simplifying.
 
-*Existence:* When $\beta = 0$ there is nothing to prove. Assume $\beta \neq 0$. The mapping $f_0 : \beta \to \alpha \times \beta$, $x \mapsto (0, x)$ is strictly increasing, hence $\beta \le \alpha\beta$ by Lemma 1.4.13. If $\beta = \alpha\beta$, one sets $\mu = \beta$ and $\rho = 0$. Otherwise, we have $\beta \in \alpha\beta$. Let $f$ be the unique isomorphism of ordered sets between $\alpha\beta$ and $\alpha \times \beta$. One sets $(\rho, \mu) = f(\beta)$. Since $S_{<(\rho, \mu)} \cong (\alpha \times \mu) + \rho$ it follows that $\beta = \alpha\mu + \rho$.
+    *Existence:* When $\beta = 0$ there is nothing to prove. Assume $\beta \neq 0$. The mapping $f_0 : \beta \to \alpha \times \beta$, $x \mapsto (0, x)$ is strictly increasing, hence $\beta \le \alpha\beta$ by Lemma 1.4.13. If $\beta = \alpha\beta$, one sets $\mu = \beta$ and $\rho = 0$. Otherwise, we have $\beta \in \alpha\beta$. Let $f$ be the unique isomorphism of ordered sets between $\alpha\beta$ and $\alpha \times \beta$. One sets $(\rho, \mu) = f(\beta)$. Since $S_{<(\rho, \mu)} \cong (\alpha \times \mu) + \rho$ it follows that $\beta = \alpha\mu + \rho$.
 
-Note that we have only used properties (1)–(4) and (6) from Proposition 1.5.2 in our proof of Euclidean division, thus avoiding circularity.
+    Note that we have only used properties (1)–(4) and (6) from Proposition 1.5.2 in our proof of Euclidean division, thus avoiding circularity.
 
-**Proposition 1.5.4 (Ordinal exponentiation).** Let $\alpha, \beta, \gamma$ be ordinals.
+!!! proposition "Proposition 1.5.4 (Ordinal exponentiation)."
+    Let $\alpha, \beta, \gamma$ be ordinals.
 
-1. For every $\alpha$, we have $\alpha^0 = 1$, $\alpha^1 = \alpha$ and $1^\alpha = 1$. If $\alpha \neq 0$, then $0^\alpha = 0$. 
+    1. For every $\alpha$, we have $\alpha^0 = 1$, $\alpha^1 = \alpha$ and $1^\alpha = 1$. If $\alpha \neq 0$, then $0^\alpha = 0$. 
 
-2. $\alpha^{\beta+\gamma} = \alpha^\beta \alpha^\gamma$, in particular $\alpha^{\beta^+} = \alpha^\beta \alpha$. 
+    2. $\alpha^{\beta+\gamma} = \alpha^\beta \alpha^\gamma$, in particular $\alpha^{\beta^+} = \alpha^\beta \alpha$. 
 
-3. $(\alpha^\beta)^\gamma = \alpha^{\beta\gamma}$. 
+    3. $(\alpha^\beta)^\gamma = \alpha^{\beta\gamma}$. 
 
-4. If $\alpha > 1$ and $\beta < \gamma$, then $\alpha^\beta < \alpha^\gamma$. 
+    4. If $\alpha > 1$ and $\beta < \gamma$, then $\alpha^\beta < \alpha^\gamma$. 
 
-5. If $\lambda$ is a limit ordinal and $\alpha \neq 0$, then $\alpha^\lambda = \sup_{\beta < \lambda} \alpha^\beta$ (continuity).
+    5. If $\lambda$ is a limit ordinal and $\alpha \neq 0$, then $\alpha^\lambda = \sup_{\beta < \lambda} \alpha^\beta$ (continuity).
 
-**Proof.** (1) is checked directly, and statements (2) and (3) follow from Proposition 1.3.4.
-(4) $\beta < \gamma \Rightarrow \gamma = \beta + \delta$ for some $\delta > 0$. Hence $\alpha^\gamma = \alpha^{\beta+\delta} = \alpha^\beta \alpha^\delta$. But $\alpha^\delta > 1$ since as a set $\alpha^{(\delta)}$ contains at least two elements. It follows that $\alpha^\gamma > \alpha^\beta$ by Proposition 1.5.2(6).
-Let us prove the non-trivial inequality in (5). Let $f \in \alpha^{(\lambda)}$. One may assume $f$ is not the constant function with value $0$. Then $s_1(f) < \lambda$, and hence $\beta = s_1(f)^+ < \lambda$, which proves there exists a strictly increasing function $S_{\leq f} \to \alpha^{(\beta)}$. One concludes by Lemma 1.4.13.
+??? proof "Proof."
+    (1) is checked directly, and statements (2) and (3) follow from Proposition 1.3.4.
+    (4) $\beta < \gamma \Rightarrow \gamma = \beta + \delta$ for some $\delta > 0$. Hence $\alpha^\gamma = \alpha^{\beta+\delta} = \alpha^\beta \alpha^\delta$. But $\alpha^\delta > 1$ since as a set $\alpha^{(\delta)}$ contains at least two elements. It follows that $\alpha^\gamma > \alpha^\beta$ by Proposition 1.5.2(6).
+    Let us prove the non-trivial inequality in (5). Let $f \in \alpha^{(\lambda)}$. One may assume $f$ is not the constant function with value $0$. Then $s_1(f) < \lambda$, and hence $\beta = s_1(f)^+ < \lambda$, which proves there exists a strictly increasing function $S_{\leq f} \to \alpha^{(\beta)}$. One concludes by Lemma 1.4.13.
 
-**Remark 1.6.5.** The following formulas would allow us to define ordinal addition, multiplication and exponentiation by transfinite induction: 
+!!! remark "Remark 1.6.5."
+    The following formulas would allow us to define ordinal addition, multiplication and exponentiation by transfinite induction:
 
-+ $\alpha + 0 = \alpha$, $\alpha + \beta^+ = (\alpha + \beta)^+$, and $\alpha + \lambda = \sup_{\beta < \lambda} (\alpha + \beta)$ for $\lambda$ a limit ordinal.
+    + $\alpha + 0 = \alpha$, $\alpha + \beta^+ = (\alpha + \beta)^+$, and $\alpha + \lambda = \sup_{\beta < \lambda} (\alpha + \beta)$ for $\lambda$ a limit ordinal.
 
-+ $\alpha 0 = 0$, $\alpha \beta^+ = \alpha \beta + \alpha$, and $\alpha \lambda = \sup_{\beta < \lambda} (\alpha \beta)$ for $\lambda$ a limit ordinal. 
+    + $\alpha 0 = 0$, $\alpha \beta^+ = \alpha \beta + \alpha$, and $\alpha \lambda = \sup_{\beta < \lambda} (\alpha \beta)$ for $\lambda$ a limit ordinal. 
 
-+ Assume $\alpha \neq 0$. Then one has $\alpha^0 = 1$, $\alpha^{\beta^+} = \alpha^\beta \alpha$, and $\alpha^\lambda = \sup_{\beta < \lambda} \left( \alpha^\beta \right)$ for $\lambda$ a limit ordinal.
+    + Assume $\alpha \neq 0$. Then one has $\alpha^0 = 1$, $\alpha^{\beta^+} = \alpha^\beta \alpha$, and $\alpha^\lambda = \sup_{\beta < \lambda} \left( \alpha^\beta \right)$ for $\lambda$ a limit ordinal.
 
 ### 1.6. The Axiom of Choice
 
@@ -289,66 +327,84 @@ $$
 \prod_{i \in I} X_i = \left\{ f : I \to \bigcup_{i \in I} X_i \,\bigg|\, f(i) \in X_i \text{ for all } i \in I \right\}.
 $$
 
-**Definition 1.6.1.** The **Axiom of Choice** (AC) states that the product of a family of non-empty sets is non-empty: if $X_i \neq \emptyset$ for all $i \in I$, then $\prod_{i \in I} X_i \neq \emptyset$.
-In the Zermelo-Fraenkel system of axioms ZF, (AC) is equivalent to Zorn's Lemma and also to Zermelo's Theorem. We shall prove these equivalences in the last chapter of this book, and accept them for the moment.
+!!! definition "Definition 1.6.1."
+    The **Axiom of Choice** (AC) states that the product of a family of non-empty sets is non-empty: if $X_i \neq \emptyset$ for all $i \in I$, then $\prod_{i \in I} X_i \neq \emptyset$.
+    In the Zermelo-Fraenkel system of axioms ZF, (AC) is equivalent to Zorn's Lemma and also to Zermelo's Theorem. We shall prove these equivalences in the last chapter of this book, and accept them for the moment.
 
-**Definition 1.6.2.** A partially ordered set $X$ is **inductive** if any totally ordered subset $Y \subseteq X$ admits an upper bound in $X$. (In particular, such an $X$ is non-empty).
+!!! definition "Definition 1.6.2."
+    A partially ordered set $X$ is **inductive** if any totally ordered subset $Y \subseteq X$ admits an upper bound in $X$. (In particular, such an $X$ is non-empty).
 
-**Zorn's Lemma 1.6.3.** Every inductive partially ordered set admits a maximal element. 
+!!! lemma "Zorn's Lemma 1.6.3."
+    Every inductive partially ordered set admits a maximal element.
 
-**Zermelo's Theorem 1.6.4 (Wohlordnungssatz).** Every set can be well-ordered.
+!!! theorem "Zermelo's Theorem 1.6.4 (Wohlordnungssatz)."
+    Every set can be well-ordered.
 
 ### 1.7. Cardinal Numbers
 
 We now assume, until the end of the penultimate chapter, that the Axiom of Choice holds.
 
-**Definition 1.7.1.** An ordinal is a **cardinal** if it is not equinumerous to a smaller ordinal. **Example 1.7.2.**
+!!! definition "Definition 1.7.1."
+    An ordinal is a **cardinal** if it is not equinumerous to a smaller ordinal.
 
-1. Any finite ordinal is a cardinal.
+!!! example "Example 1.7.2."
 
-2. The ordinal $\omega$ is a cardinal. When considered as a cardinal it will be denoted by $\aleph_0$. 
+    1. Any finite ordinal is a cardinal.
 
-3. If $\alpha$ is an infinite ordinal, then $\alpha^+$ is not a cardinal. (Indeed, $\alpha^+$ and $\alpha$ are equinumerous.)
+    2. The ordinal $\omega$ is a cardinal. When considered as a cardinal it will be denoted by $\aleph_0$. 
 
-**Proposition 1.7.3.** Any set $X$ is equinumerous to a unique cardinal, denoted by $\operatorname{card}(X)$.
+    3. If $\alpha$ is an infinite ordinal, then $\alpha^+$ is not a cardinal. (Indeed, $\alpha^+$ and $\alpha$ are equinumerous.)
 
-**Proof.** By Zermelo's Theorem and Theorem 1.4.14, $X$ is equinumerous to an ordinal $\alpha$. Let $\beta \leq \alpha$ be minimal such that $\beta$ is equinumerous to $\alpha$. Then $\beta$ is a cardinal and is in bijection with $X$. Uniqueness is clear.
+!!! proposition "Proposition 1.7.3."
+    Any set $X$ is equinumerous to a unique cardinal, denoted by $\operatorname{card}(X)$.
 
-**Proposition 1.7.4.** Let $X$ and $Y$ be sets and assume that $X$ is non-empty. The following statements are equivalent:
+??? proof "Proof."
+    By Zermelo's Theorem and Theorem 1.4.14, $X$ is equinumerous to an ordinal $\alpha$. Let $\beta \leq \alpha$ be minimal such that $\beta$ is equinumerous to $\alpha$. Then $\beta$ is a cardinal and is in bijection with $X$. Uniqueness is clear.
 
-1. $\operatorname{card}(X) \leq \operatorname{card}(Y)$.
+!!! proposition "Proposition 1.7.4."
+    Let $X$ and $Y$ be sets and assume that $X$ is non-empty. The following statements are equivalent:
 
-2. There exists an injective map $X \to Y$.
+    1. $\operatorname{card}(X) \leq \operatorname{card}(Y)$.
 
-3. There exists a surjective map $Y \to X$.
+    2. There exists an injective map $X \to Y$.
 
-**Proof.** (1)$\Rightarrow$(2) is easy.
-(2)$\Rightarrow$(3): Let $f : X \to Y$ be an injective map. As $X$ is non-empty, one may fix $x_0 \in X$. One defines a surjective map $g : Y \to X$ by setting $g(y) := x_0$ if $y \notin \operatorname{im}(f) = \{f(x) \mid x \in X\}$, and $g(y) := f^{-1}(y)$ otherwise.
-(3)$\Rightarrow$(1): If there exists a surjective map $Y \to X$, then there exists a surjection $g : \lambda = \operatorname{card}(Y) \to \kappa = \operatorname{card}(X)$. The map $f$ sending $\alpha \in \kappa$ to the minimal $\beta \in \lambda$ such that $g(\beta) = \alpha$ provides an injection $\kappa \to \lambda$. In particular, $\kappa$ is in bijection with some ordinal $\gamma \leq \lambda$. (One takes $\gamma$ as the unique ordinal which is isomorphic to the well-order induced on $\operatorname{im}(f)$.)
+    3. There exists a surjective map $Y \to X$.
 
-**Definition 1.7.5.** A set $X$ is said to be **countable** if $\operatorname{card}(X) \leq \aleph_0$, and **finite** if $\operatorname{card}(X) < \aleph_0$.
+??? proof "Proof."
+    (1)$\Rightarrow$(2) is easy.
+    (2)$\Rightarrow$(3): Let $f : X \to Y$ be an injective map. As $X$ is non-empty, one may fix $x_0 \in X$. One defines a surjective map $g : Y \to X$ by setting $g(y) := x_0$ if $y \notin \operatorname{im}(f) = \{f(x) \mid x \in X\}$, and $g(y) := f^{-1}(y)$ otherwise.
+    (3)$\Rightarrow$(1): If there exists a surjective map $Y \to X$, then there exists a surjection $g : \lambda = \operatorname{card}(Y) \to \kappa = \operatorname{card}(X)$. The map $f$ sending $\alpha \in \kappa$ to the minimal $\beta \in \lambda$ such that $g(\beta) = \alpha$ provides an injection $\kappa \to \lambda$. In particular, $\kappa$ is in bijection with some ordinal $\gamma \leq \lambda$. (One takes $\gamma$ as the unique ordinal which is isomorphic to the well-order induced on $\operatorname{im}(f)$.)
 
-**Proposition 1.7.6.** Let $X$ be a set of cardinals. Then $\lambda = \sup_{\kappa \in X} \kappa$ is a cardinal.
+!!! definition "Definition 1.7.5."
+    A set $X$ is said to be **countable** if $\operatorname{card}(X) \leq \aleph_0$, and **finite** if $\operatorname{card}(X) < \aleph_0$.
 
-**Proof.** If $\alpha < \lambda$, then $\alpha < \kappa$ for some $\kappa \in X$. Since $\kappa$ is a cardinal, we have $\kappa = \operatorname{card}(\kappa) \leq \operatorname{card}(\lambda)$, and hence $\alpha < \operatorname{card}(\lambda)$. This proves that $\lambda$ is not equinumerous to some smaller ordinal.
+!!! proposition "Proposition 1.7.6."
+    Let $X$ be a set of cardinals. Then $\lambda = \sup_{\kappa \in X} \kappa$ is a cardinal.
 
-**Notation.** From now on, $\kappa, \lambda$, etc. will denote cardinals.
+??? proof "Proof."
+    If $\alpha < \lambda$, then $\alpha < \kappa$ for some $\kappa \in X$. Since $\kappa$ is a cardinal, we have $\kappa = \operatorname{card}(\kappa) \leq \operatorname{card}(\lambda)$, and hence $\alpha < \operatorname{card}(\lambda)$. This proves that $\lambda$ is not equinumerous to some smaller ordinal.
 
-There is no largest cardinal. Indeed, if $\kappa$ is a cardinal, then $\lambda := \operatorname{card}(\mathcal{P}(\kappa)) > \kappa$ by Cantor's Theorem. In particular, the set of all cardinals $\leq \lambda$ that are $> \kappa$ is non-empty. We denote by $\kappa^+$ its smallest element, called the **cardinal successor** of $\kappa$. To avoid confusion, from now on the ordinal successor of $\alpha$ will be denoted by $\alpha + 1$.
+!!! note "Notation."
+    From now on, $\kappa, \lambda$, etc. will denote cardinals.
 
-**Definition.** The $\aleph$-hierarchy assigns to any ordinal a cardinal as follows: 
+    There is no largest cardinal. Indeed, if $\kappa$ is a cardinal, then $\lambda := \operatorname{card}(\mathcal{P}(\kappa)) > \kappa$ by Cantor's Theorem. In particular, the set of all cardinals $\leq \lambda$ that are $> \kappa$ is non-empty. We denote by $\kappa^+$ its smallest element, called the **cardinal successor** of $\kappa$. To avoid confusion, from now on the ordinal successor of $\alpha$ will be denoted by $\alpha + 1$.
 
-+ $\aleph_0 := \omega$. 
+!!! definition "Definition."
+    The $\aleph$-hierarchy assigns to any ordinal a cardinal as follows:
 
-+ $\aleph_{\alpha+1} := \aleph_\alpha^+$.
+    + $\aleph_0 := \omega$. 
 
-+ $\aleph_\alpha := \sup_{\beta < \alpha} \aleph_\beta$, if $\alpha$ is a limit ordinal.
+    + $\aleph_{\alpha+1} := \aleph_\alpha^+$.
 
-By transfinite induction, one proves that $\alpha < \beta \Rightarrow \aleph_\alpha < \aleph_\beta$. In combination with the next result, it follows that the $\aleph$-hierarchy provides a strictly increasing enumeration of the infinite cardinals by the ordinals.
+    + $\aleph_\alpha := \sup_{\beta < \alpha} \aleph_\beta$, if $\alpha$ is a limit ordinal.
 
-**Proposition 1.7.7.** Every infinite cardinal is of the form $\aleph_\alpha$ for some $\alpha$.
+    By transfinite induction, one proves that $\alpha < \beta \Rightarrow \aleph_\alpha < \aleph_\beta$. In combination with the next result, it follows that the $\aleph$-hierarchy provides a strictly increasing enumeration of the infinite cardinals by the ordinals.
 
-**Proof.** Let $\kappa$ be an infinite cardinal. The function $\beta \mapsto \aleph_\beta$ is strictly increasing on $\kappa + 1$, and hence it takes its values in $\aleph_{\kappa+1}$. Thus $\aleph_\kappa \geq \kappa$ by Lemma 1.5.8, and it takes $\aleph_{\kappa+1} > \kappa$. Let $\alpha \leq \kappa + 1$ be minimal with $\aleph_\alpha > \kappa$. Since $\kappa \geq \aleph_0$, we have $\alpha > 0$. If $\alpha$ were a limit ordinal, by definition we would have $\kappa \in \bigcup_{\beta < \alpha} \aleph_\beta$, and hence $\kappa \in \aleph_\beta$ for some $\beta < \alpha$, which would contradict the minimality of $\alpha$. Thus $\alpha = \beta + 1$ and also $\aleph_\beta \leq \kappa < \aleph_{\beta+1} = \aleph_\beta^+$. Since $\aleph_\beta^+$ is the cardinal successor of $\aleph_\beta$, necessarily $\aleph_\beta = \kappa$.
+!!! proposition "Proposition 1.7.7."
+    Every infinite cardinal is of the form $\aleph_\alpha$ for some $\alpha$.
+
+??? proof "Proof."
+    Let $\kappa$ be an infinite cardinal. The function $\beta \mapsto \aleph_\beta$ is strictly increasing on $\kappa + 1$, and hence it takes its values in $\aleph_{\kappa+1}$. Thus $\aleph_\kappa \geq \kappa$ by Lemma 1.5.8, and it takes $\aleph_{\kappa+1} > \kappa$. Let $\alpha \leq \kappa + 1$ be minimal with $\aleph_\alpha > \kappa$. Since $\kappa \geq \aleph_0$, we have $\alpha > 0$. If $\alpha$ were a limit ordinal, by definition we would have $\kappa \in \bigcup_{\beta < \alpha} \aleph_\beta$, and hence $\kappa \in \aleph_\beta$ for some $\beta < \alpha$, which would contradict the minimality of $\alpha$. Thus $\alpha = \beta + 1$ and also $\aleph_\beta \leq \kappa < \aleph_{\beta+1} = \aleph_\beta^+$. Since $\aleph_\beta^+$ is the cardinal successor of $\aleph_\beta$, necessarily $\aleph_\beta = \kappa$.
 
 ### 1.8. Operations on Cardinals
 
@@ -358,170 +414,190 @@ They should not be confused with the corresponding ordinal operations. For insta
 
 The proof of the following statements is immediate, using Proposition 1.7.4.
 
-**Proposition 1.8.1.** Let $\kappa, \lambda$ and $\mu$ be cardinals.
+!!! proposition "Proposition 1.8.1."
+    Let $\kappa, \lambda$ and $\mu$ be cardinals.
 
-1. Cardinal addition and multiplication are commutative and associative, multiplication is distributive with respect to addition,
-   
-   $$
-   \kappa^{\lambda+\mu} = \kappa^\lambda \kappa^\mu,\ (\kappa^\lambda)^\mu = \kappa^{\lambda\mu}\ \text{and}\ (\kappa\lambda)^\mu = \kappa^\mu\lambda^\mu.
-   $$
+    1. Cardinal addition and multiplication are commutative and associative, multiplication is distributive with respect to addition,
 
-2. If $\kappa \leq \lambda$, then $\kappa + \mu \leq \lambda + \mu$, $\kappa\mu \leq \lambda\mu$ and $\kappa^\mu \leq \lambda^\mu$ (when $\kappa > 0$) and $\mu^\kappa \leq \mu^\lambda$ (when $\mu > 0$).
+       $$
+       \kappa^{\lambda+\mu} = \kappa^\lambda \kappa^\mu,\ (\kappa^\lambda)^\mu = \kappa^{\lambda\mu}\ \text{and}\ (\kappa\lambda)^\mu = \kappa^\mu\lambda^\mu.
+       $$
 
-**Proposition 1.8.2.** One has $\operatorname{card}(\mathbb{R}) = 2^{\aleph_0}$.
+    2. If $\kappa \leq \lambda$, then $\kappa + \mu \leq \lambda + \mu$, $\kappa\mu \leq \lambda\mu$ and $\kappa^\mu \leq \lambda^\mu$ (when $\kappa > 0$) and $\mu^\kappa \leq \mu^\lambda$ (when $\mu > 0$).
 
-**Proof.** There is an injection $h : 2^{\aleph_0} \to \mathbb{R}$ sending a sequence $(a_i)_{i \in \mathbb{N}}$ to the sum $\sum_i a_i 2^{-i}$ if the support of the sequence is infinite, and to $2 + \sum_i a_i 2^{-i}$ otherwise. This proves that $2^{\aleph_0} \leq \operatorname{card}(\mathbb{R})$. On the other hand, the image of $h$ contains the interval $(0,1)$ which is equinumerous to $\mathbb{R}$ (for instance via $x \mapsto 1/\pi \arctan(x) + 1/2$); hence $\operatorname{card}(\mathbb{R}) \leq 2^{\aleph_0}$.
+!!! proposition "Proposition 1.8.2."
+    One has $\operatorname{card}(\mathbb{R}) = 2^{\aleph_0}$.
 
-**Proposition 1.8.3 (Hessenberg's Theorem).** For every infinite cardinal $\kappa$, one has $\kappa\kappa = \kappa$.
+??? proof "Proof."
+    There is an injection $h : 2^{\aleph_0} \to \mathbb{R}$ sending a sequence $(a_i)_{i \in \mathbb{N}}$ to the sum $\sum_i a_i 2^{-i}$ if the support of the sequence is infinite, and to $2 + \sum_i a_i 2^{-i}$ otherwise. This proves that $2^{\aleph_0} \leq \operatorname{card}(\mathbb{R})$. On the other hand, the image of $h$ contains the interval $(0,1)$ which is equinumerous to $\mathbb{R}$ (for instance via $x \mapsto 1/\pi \arctan(x) + 1/2$); hence $\operatorname{card}(\mathbb{R}) \leq 2^{\aleph_0}$.
 
-**Proof.** By induction on $\alpha$, we will prove that $\aleph_\alpha \aleph_\alpha = \aleph_\alpha$.
-For $\alpha = 0$ this is clear. Indeed, the mapping $\alpha_2 : \mathbb{N}^2 \to \mathbb{N}$ defined by $\alpha_2(m, n) := 1/2(m + n + 1)(m + n) + n$ is bijective.
-Let us now assume $\aleph_\beta \aleph_\beta = \aleph_\beta$ for every $\beta < \alpha$. One endows $\aleph_\alpha \times \aleph_\alpha$ with the following order:
+!!! theorem "Proposition 1.8.3 (Hessenberg's Theorem)."
+    For every infinite cardinal $\kappa$, one has $\kappa\kappa = \kappa$.
 
-$$
-(\beta, \gamma) < (\beta', \gamma')
-$$
+??? proof "Proof."
+    By induction on $\alpha$, we will prove that $\aleph_\alpha \aleph_\alpha = \aleph_\alpha$.
+    For $\alpha = 0$ this is clear. Indeed, the mapping $\alpha_2 : \mathbb{N}^2 \to \mathbb{N}$ defined by $\alpha_2(m, n) := 1/2(m + n + 1)(m + n) + n$ is bijective.
+    Let us now assume $\aleph_\beta \aleph_\beta = \aleph_\beta$ for every $\beta < \alpha$. One endows $\aleph_\alpha \times \aleph_\alpha$ with the following order:
 
-if $\max(\beta, \gamma) < \max(\beta', \gamma')$, or 
-if $\max(\beta, \gamma) = \max(\beta', \gamma')$ and $\beta < \beta'$, or 
-if $\max(\beta, \gamma) = \max(\beta', \gamma')$, $\beta = \beta'$ and $\gamma < \gamma'$.
-One checks easily that this is a well-order. Furthermore, for every $\delta < \aleph_\alpha$, the set $\delta \times \delta$ is an initial segment for $<$. By Theorem 1.5.9, there is a unique isomorphism of ordered sets $f : \varepsilon \to \aleph_\alpha \times \aleph_\alpha$ with $\varepsilon$ an ordinal.
-Assume $\varepsilon > \aleph_\alpha$. Then $\aleph_\alpha \in \varepsilon$ and $f(\aleph_\alpha) = (\beta_0, \gamma_0) \in \aleph_\alpha \times \aleph_\alpha$. Set $\delta_0 := \max(\beta_0, \gamma_0) + 1$. Since no infinite successor ordinal is a cardinal (by Example 1.8.1), we have $\delta_0 < \aleph_\alpha$ and the restriction of $f$ to $\aleph_\alpha$ is an injective map from $\aleph_\alpha$ to $\delta_0 \times \delta_0$, a set of cardinality
+    $$
+    (\beta, \gamma) < (\beta', \gamma')
+    $$
 
-$$
-\operatorname{card}(\delta_0 \times \delta_0) = \operatorname{card}(\delta_0) \delta_0 < \aleph_\alpha
-$$
+    if $\max(\beta, \gamma) < \max(\beta', \gamma')$, or 
+    if $\max(\beta, \gamma) = \max(\beta', \gamma')$ and $\beta < \beta'$, or 
+    if $\max(\beta, \gamma) = \max(\beta', \gamma')$, $\beta = \beta'$ and $\gamma < \gamma'$.
+    One checks easily that this is a well-order. Furthermore, for every $\delta < \aleph_\alpha$, the set $\delta \times \delta$ is an initial segment for $<$. By Theorem 1.5.9, there is a unique isomorphism of ordered sets $f : \varepsilon \to \aleph_\alpha \times \aleph_\alpha$ with $\varepsilon$ an ordinal.
+    Assume $\varepsilon > \aleph_\alpha$. Then $\aleph_\alpha \in \varepsilon$ and $f(\aleph_\alpha) = (\beta_0, \gamma_0) \in \aleph_\alpha \times \aleph_\alpha$. Set $\delta_0 := \max(\beta_0, \gamma_0) + 1$. Since no infinite successor ordinal is a cardinal (by Example 1.8.1), we have $\delta_0 < \aleph_\alpha$ and the restriction of $f$ to $\aleph_\alpha$ is an injective map from $\aleph_\alpha$ to $\delta_0 \times \delta_0$, a set of cardinality
 
-by the induction hypothesis. This is a contradiction, and thus one has $\aleph_\alpha \aleph_\alpha \leq \aleph_\alpha$.
-The inequality in the other direction is clear.
+    $$
+    \operatorname{card}(\delta_0 \times \delta_0) = \operatorname{card}(\delta_0) \delta_0 < \aleph_\alpha
+    $$
 
-**Example 1.8.4.** Let $\mathcal{T}$ be the set of all open subsets of $\mathbb{R}$. Then $\operatorname{card}(\mathcal{T}) = 2^{\aleph_0}$.
+    by the induction hypothesis. This is a contradiction, and thus one has $\aleph_\alpha \aleph_\alpha \leq \aleph_\alpha$.
+    The inequality in the other direction is clear.
 
-**Proof.** The mapping assigning to a real number $r \in \mathbb{R}$ the open interval $(r, +\infty)$ defines an injection from $\mathbb{R}$ to $\mathcal{T}$, which proves that $\operatorname{card}(\mathcal{T}) \geq 2^{\aleph_0}$.
-Conversely, note that every open subset of $\mathbb{R}$ is a union of intervals of the form $(q, q + q')$, with $q \in \mathbb{Q}$ and $q' \in \mathbb{Q}_{>0}$. The mapping sending $Y \subseteq \mathbb{Q} \times \mathbb{Q}_{>0}$ to $\bigcup_{(q,q') \in Y} (q, q + q')$ provides a surjection of $\mathcal{P}(\mathbb{Q} \times \mathbb{Q}_{>0})$ to $\mathcal{T}$. Since $\mathbb{Q} \times \mathbb{Q}_{>0}$ is countable, one deduces that $2^{\aleph_0} \geq \operatorname{card}(\mathcal{T})$.
+!!! example "Example 1.8.4."
+    Let $\mathcal{T}$ be the set of all open subsets of $\mathbb{R}$. Then $\operatorname{card}(\mathcal{T}) = 2^{\aleph_0}$.
 
-**Proposition 1.8.5.**
+??? proof "Proof."
+    The mapping assigning to a real number $r \in \mathbb{R}$ the open interval $(r, +\infty)$ defines an injection from $\mathbb{R}$ to $\mathcal{T}$, which proves that $\operatorname{card}(\mathcal{T}) \geq 2^{\aleph_0}$.
+    Conversely, note that every open subset of $\mathbb{R}$ is a union of intervals of the form $(q, q + q')$, with $q \in \mathbb{Q}$ and $q' \in \mathbb{Q}_{>0}$. The mapping sending $Y \subseteq \mathbb{Q} \times \mathbb{Q}_{>0}$ to $\bigcup_{(q,q') \in Y} (q, q + q')$ provides a surjection of $\mathcal{P}(\mathbb{Q} \times \mathbb{Q}_{>0})$ to $\mathcal{T}$. Since $\mathbb{Q} \times \mathbb{Q}_{>0}$ is countable, one deduces that $2^{\aleph_0} \geq \operatorname{card}(\mathcal{T})$.
 
-1. Let $X$ and $Y$ be non-empty sets and assume that at least one of them is infinite. Then
-   
-   $$
-   \operatorname{card}(X \cup Y) = \operatorname{card}(X \times Y) = \max(\operatorname{card}(X), \operatorname{card}(Y))
-   $$
+!!! proposition "Proposition 1.8.5."
 
-2. Let $\kappa \geq \aleph_0$ and $\lambda > 0$ be cardinals. Then $\kappa + \lambda = \kappa\lambda = \max(\kappa, \lambda)$.
+    1. Let $X$ and $Y$ be non-empty sets and assume that at least one of them is infinite. Then
 
-3. Let $(X_i)_{i \in I}$ be a family of sets with at least one $X_i$ infinite. Then
-   
-   $$
-   \operatorname{card}\left( \bigcup_{i \in I} X_i \right) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
-\tag{*}
-   $$
-   
-    (In particular, a countable union of countable sets is countable.) 
-   
-   If furthermore the sets $X_i$ are all non-empty and mutually disjoint, then equality holds in ($*$).
+       $$
+       \operatorname{card}(X \cup Y) = \operatorname{card}(X \times Y) = \max(\operatorname{card}(X), \operatorname{card}(Y))
+       $$
 
-**Proof.** (1) Let $\kappa = \max(\operatorname{card}(X), \operatorname{card}(Y))$. We have
+    2. Let $\kappa \geq \aleph_0$ and $\lambda > 0$ be cardinals. Then $\kappa + \lambda = \kappa\lambda = \max(\kappa, \lambda)$.
 
-$$
-\kappa \leq \operatorname{card}(X \cup Y) \leq \kappa + \kappa = 2\kappa \leq \kappa\kappa
+    3. Let $(X_i)_{i \in I}$ be a family of sets with at least one $X_i$ infinite. Then
 
-$$
+       $$
+       \operatorname{card}\left( \bigcup_{i \in I} X_i \right) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
+    \tag{*}
+       $$
 
-and $\kappa \leq \operatorname{card}(X \times Y) \leq \kappa\kappa$. One concludes by Hessenberg's Theorem.
+        (In particular, a countable union of countable sets is countable.) 
 
-(2) is a special case of (1).
+       If furthermore the sets $X_i$ are all non-empty and mutually disjoint, then equality holds in ($*$).
 
-(3) Let $X = \{(x_i, i) \mid x_i \in X_i \text{ for some } i \in I\}$ be the disjoint union of the sets $X_i$. There is a canonical surjection $X \to \bigcup_{i \in I} X_i$, hence it suffices to prove that
+??? proof "Proof."
+    (1) Let $\kappa = \max(\operatorname{card}(X), \operatorname{card}(Y))$. We have
 
-$$
-\operatorname{card}(X) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
+    $$
+    \kappa \leq \operatorname{card}(X \cup Y) \leq \kappa + \kappa = 2\kappa \leq \kappa\kappa
 
-$$
+    $$
 
-Let $\kappa = \sup\{\operatorname{card}(X_i) \mid i \in I\}$, and let $Y_i$ be the set of injective maps $X_i \to \kappa$. Since the sets $Y_i$ are all non-empty, by the Axiom of Choice there exists some $f = (f_i)_{i \in I} \in \prod_{i \in I} Y_i$. Consider $g : X \to \kappa \times I$, defined by $g((x_i, i)) := (f_i(x_i), i)$. The function $g$ is injective, hence $\operatorname{card}(X) \leq \kappa \operatorname{card}(I) = \max(\kappa, \operatorname{card}(I))$. The equality statement is clear.
+    and $\kappa \leq \operatorname{card}(X \times Y) \leq \kappa\kappa$. One concludes by Hessenberg's Theorem.
 
-&nbsp;
+    (2) is a special case of (1).
 
-It follows from the preceding proposition that cardinal addition and multiplication is quite trivial for infinite cardinals. The situation for cardinal exponentiation is very different. In fact, the ZFC axioms are far from completely determining the values of cardinal exponentiation. For instance they do not allow to settle the continuum hypothesis:
+    (3) Let $X = \{(x_i, i) \mid x_i \in X_i \text{ for some } i \in I\}$ be the disjoint union of the sets $X_i$. There is a canonical surjection $X \to \bigcup_{i \in I} X_i$, hence it suffices to prove that
 
-**Definition 1.8.6.** 
+    $$
+    \operatorname{card}(X) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
 
-+ The **Continuum Hypothesis (CH)** is the statement $2^{\aleph_0} = \aleph_1$.
+    $$
 
-+ The **Generalized Continuum Hypothesis (GCH)** is the statement $2^\kappa = \kappa^+$ for every infinite cardinal $\kappa$.
+    Let $\kappa = \sup\{\operatorname{card}(X_i) \mid i \in I\}$, and let $Y_i$ be the set of injective maps $X_i \to \kappa$. Since the sets $Y_i$ are all non-empty, by the Axiom of Choice there exists some $f = (f_i)_{i \in I} \in \prod_{i \in I} Y_i$. Consider $g : X \to \kappa \times I$, defined by $g((x_i, i)) := (f_i(x_i), i)$. The function $g$ is injective, hence $\operatorname{card}(X) \leq \kappa \operatorname{card}(I) = \max(\kappa, \operatorname{card}(I))$. The equality statement is clear.
 
-If $(\kappa_i)_{i \in I}$ is a family of cardinals, we shall denote by $\sum_{i \in I} \kappa_i$ the cardinal of the disjoint union of the $\kappa_i$, and by $\prod_{i \in I} \kappa_i$ the cardinal of the product of the family.
+    &nbsp;
 
-**Theorem 1.8.7 (König's Theorem).** Let $(\kappa_i)_{i \in I}$ and $(\lambda_i)_{i \in I}$ be families of cardinals with $\kappa_i < \lambda_i$ for every $i$. Then $\sum_{i \in I} \kappa_i < \prod_{i \in I} \lambda_i$.
+    It follows from the preceding proposition that cardinal addition and multiplication is quite trivial for infinite cardinals. The situation for cardinal exponentiation is very different. In fact, the ZFC axioms are far from completely determining the values of cardinal exponentiation. For instance they do not allow to settle the continuum hypothesis:
 
-**Proof.** Let $f : \sum_{i \in I} \kappa_i \to \prod_{i \in I} \lambda_i$. For every $i$, $f$ induces a mapping $f_i : \kappa_i \to \lambda_i$ given by the $i$-th component of the restriction of $f$ to $\kappa_i$. Since $\kappa_i < \lambda_i$, the set $B_i := \lambda_i \setminus \operatorname{im}(f_i)$ is non-empty for every $i$. By (AC) there exists some $b \in \prod_{i \in I} B_i \subseteq \prod_{i \in I} \lambda_i$. Clearly $b \notin \operatorname{im}(f)$.
+!!! definition "Definition 1.8.6."
+
+    + The **Continuum Hypothesis (CH)** is the statement $2^{\aleph_0} = \aleph_1$.
+
+    + The **Generalized Continuum Hypothesis (GCH)** is the statement $2^\kappa = \kappa^+$ for every infinite cardinal $\kappa$.
+
+    If $(\kappa_i)_{i \in I}$ is a family of cardinals, we shall denote by $\sum_{i \in I} \kappa_i$ the cardinal of the disjoint union of the $\kappa_i$, and by $\prod_{i \in I} \kappa_i$ the cardinal of the product of the family.
+
+!!! theorem "Theorem 1.8.7 (König's Theorem)."
+    Let $(\kappa_i)_{i \in I}$ and $(\lambda_i)_{i \in I}$ be families of cardinals with $\kappa_i < \lambda_i$ for every $i$. Then $\sum_{i \in I} \kappa_i < \prod_{i \in I} \lambda_i$.
+
+??? proof "Proof."
+    Let $f : \sum_{i \in I} \kappa_i \to \prod_{i \in I} \lambda_i$. For every $i$, $f$ induces a mapping $f_i : \kappa_i \to \lambda_i$ given by the $i$-th component of the restriction of $f$ to $\kappa_i$. Since $\kappa_i < \lambda_i$, the set $B_i := \lambda_i \setminus \operatorname{im}(f_i)$ is non-empty for every $i$. By (AC) there exists some $b \in \prod_{i \in I} B_i \subseteq \prod_{i \in I} \lambda_i$. Clearly $b \notin \operatorname{im}(f)$.
 
 ### 1.9. Cofinality
 
 In this section we shall use the notion of cofinality to prove for instance that $2^{\aleph_0} \neq \aleph_\omega$.
 
-**Definition 1.9.1.**
+!!! definition "Definition 1.9.1."
 
-- Let $X$ be a totally ordered set. We say that a subset $Y \subseteq X$ is **cofinal** in $X$ if $Y$ is not bounded in $X$, that is, if for any $x \in X$ there exists $y \in Y$ such that $x \leq y$. We say that a function $f : Z \to X$ is cofinal if $\operatorname{im}(f)$ is cofinal in $X$.
-- The **cofinality** of an ordinal $\alpha$, denoted by $\operatorname{cof}(\alpha)$, is the smallest ordinal $\beta$ such that there exists a cofinal function $\beta \to \alpha$.
+    - Let $X$ be a totally ordered set. We say that a subset $Y \subseteq X$ is **cofinal** in $X$ if $Y$ is not bounded in $X$, that is, if for any $x \in X$ there exists $y \in Y$ such that $x \leq y$. We say that a function $f : Z \to X$ is cofinal if $\operatorname{im}(f)$ is cofinal in $X$.
+    - The **cofinality** of an ordinal $\alpha$, denoted by $\operatorname{cof}(\alpha)$, is the smallest ordinal $\beta$ such that there exists a cofinal function $\beta \to \alpha$.
 
-**Example 1.9.2.**
+!!! example "Example 1.9.2."
 
-1. $\operatorname{cof}(0) = 0$.
+    1. $\operatorname{cof}(0) = 0$.
 
-2. $\operatorname{cof}(\alpha + 1) = 1$ for any ordinal $\alpha$.
+    2. $\operatorname{cof}(\alpha + 1) = 1$ for any ordinal $\alpha$.
 
-3. $\operatorname{cof}(\omega) = \omega$.
+    3. $\operatorname{cof}(\omega) = \omega$.
 
-**Proposition 1.9.3.** Let $\alpha$ be an ordinal.
+!!! proposition "Proposition 1.9.3."
+    Let $\alpha$ be an ordinal.
 
-1. $\operatorname{cof}(\alpha) \leq \alpha$.
+    1. $\operatorname{cof}(\alpha) \leq \alpha$.
 
-2. $\operatorname{cof}(\alpha)$ is a cardinal.
+    2. $\operatorname{cof}(\alpha)$ is a cardinal.
 
-3. $\operatorname{cof}(\alpha)$ is the smallest ordinal $\beta$ such that there exists a cofinal and strictly increasing map $\beta \to \alpha$.
+    3. $\operatorname{cof}(\alpha)$ is the smallest ordinal $\beta$ such that there exists a cofinal and strictly increasing map $\beta \to \alpha$.
 
-4. $\operatorname{cof}(\operatorname{cof}(\alpha)) = \operatorname{cof}(\alpha)$.
+    4. $\operatorname{cof}(\operatorname{cof}(\alpha)) = \operatorname{cof}(\alpha)$.
 
-**Proof.** (1) is clear, and (2) follows from the fact that any ordinal $\beta$ is in bijection with $\text{card}(\beta) \le \beta$.
+??? proof "Proof."
+    (1) is clear, and (2) follows from the fact that any ordinal $\beta$ is in bijection with $\text{card}(\beta) \le \beta$.
 
-(3) It is enough to provide some $\beta \le \text{cof}(\alpha)$ and a cofinal and strictly increasing map $\beta \to \alpha$. By hypothesis, there exists a cofinal map $h : \text{cof}(\alpha) \to \alpha$. Let us define
+    (3) It is enough to provide some $\beta \le \text{cof}(\alpha)$ and a cofinal and strictly increasing map $\beta \to \alpha$. By hypothesis, there exists a cofinal map $h : \text{cof}(\alpha) \to \alpha$. Let us define
 
-$$
-X = \{x \in \text{cof}(\alpha) \mid h(y) < h(x) \text{ for every } y < x\}.
+    $$
+    X = \{x \in \text{cof}(\alpha) \mid h(y) < h(x) \text{ for every } y < x\}.
 
-$$
+    $$
 
-The set $h(X) = \{h(x) \mid x \in X\}$ is cofinal in $\alpha$. Indeed, let $\gamma < \alpha$. By the cofinality of $h$, there exists $y \in \text{cof}(\alpha)$ such that $h(y) \ge \gamma$. When $y$ is minimal with this property, we have $y \in X$.
+    The set $h(X) = \{h(x) \mid x \in X\}$ is cofinal in $\alpha$. Indeed, let $\gamma < \alpha$. By the cofinality of $h$, there exists $y \in \text{cof}(\alpha)$ such that $h(y) \ge \gamma$. When $y$ is minimal with this property, we have $y \in X$.
 
-Since $(X, <) \cong (\beta, \in)$ for some $\beta \le \text{cof}(\alpha)$, we are done, because the restriction of $h$ to $X$ is cofinal and strictly increasing.
+    Since $(X, <) \cong (\beta, \in)$ for some $\beta \le \text{cof}(\alpha)$, we are done, because the restriction of $h$ to $X$ is cofinal and strictly increasing.
 
-(4) $\text{cof}(\text{cof}(\alpha)) \le \text{cof}(\alpha)$ follows from part (1). For the inequality in the other direction, let us consider the cofinal and strictly increasing functions $f : \text{cof}(\text{cof}(\alpha)) \to \text{cof}(\alpha)$ and $g : \text{cof}(\alpha) \to \alpha$, which are possible by (3). Then the function $g \circ f : \text{cof}(\text{cof}(\alpha)) \to \alpha$ is cofinal, and hence $\text{cof}(\alpha) \le \text{cof}(\text{cof}(\alpha))$.
+    (4) $\text{cof}(\text{cof}(\alpha)) \le \text{cof}(\alpha)$ follows from part (1). For the inequality in the other direction, let us consider the cofinal and strictly increasing functions $f : \text{cof}(\text{cof}(\alpha)) \to \text{cof}(\alpha)$ and $g : \text{cof}(\alpha) \to \alpha$, which are possible by (3). Then the function $g \circ f : \text{cof}(\text{cof}(\alpha)) \to \alpha$ is cofinal, and hence $\text{cof}(\alpha) \le \text{cof}(\text{cof}(\alpha))$.
 
-&nbsp;
+    &nbsp;
 
-We shall say that an infinite cardinal $\kappa$ is **regular** if $\text{cof}(\kappa) = \kappa$, and **singular** if $\text{cof}(\kappa) < \kappa$.
+    We shall say that an infinite cardinal $\kappa$ is **regular** if $\text{cof}(\kappa) = \kappa$, and **singular** if $\text{cof}(\kappa) < \kappa$.
 
-**Proposition 1.9.4.** Any infinite cardinal which is a successor is regular. In particular $\aleph_1$ is regular.
+!!! proposition "Proposition 1.9.4."
+    Any infinite cardinal which is a successor is regular. In particular $\aleph_1$ is regular.
 
-**Proof.** Let $\kappa = \aleph_{\beta+1} = \aleph_\beta^+$. Note that for a limit ordinal $\alpha$, a subset $X \subseteq \alpha$ is cofinal if and only if $\alpha = \bigcup_{\gamma \in X} \gamma$. (This follows from Proposition 1.4.9.) Consider a function $f : \lambda \to \kappa$ for some $\lambda < \kappa$. Then $\lambda \le \aleph_\beta$ and it follows from Proposition 1.8.5(3) that $\text{card}\left(\bigcup_{\beta < \lambda} f(\beta)\right) \le \sup(\{\text{card}(f(\beta)) \mid \beta < \lambda\} \cup \{\lambda\}) \le \aleph_\beta$. Hence $f$ is not cofinal.
+??? proof "Proof."
+    Let $\kappa = \aleph_{\beta+1} = \aleph_\beta^+$. Note that for a limit ordinal $\alpha$, a subset $X \subseteq \alpha$ is cofinal if and only if $\alpha = \bigcup_{\gamma \in X} \gamma$. (This follows from Proposition 1.4.9.) Consider a function $f : \lambda \to \kappa$ for some $\lambda < \kappa$. Then $\lambda \le \aleph_\beta$ and it follows from Proposition 1.8.5(3) that $\text{card}\left(\bigcup_{\beta < \lambda} f(\beta)\right) \le \sup(\{\text{card}(f(\beta)) \mid \beta < \lambda\} \cup \{\lambda\}) \le \aleph_\beta$. Hence $f$ is not cofinal.
 
-**Proposition 1.9.5.** If $\lambda$ is a limit ordinal, then $\text{cof}(\aleph_\lambda) = \text{cof}(\lambda)$.
+!!! proposition "Proposition 1.9.5."
+    If $\lambda$ is a limit ordinal, then $\text{cof}(\aleph_\lambda) = \text{cof}(\lambda)$.
 
-**Proof.** If $f : \alpha \to \lambda$ is cofinal, then $\tilde{f} : \alpha \to \aleph_\lambda, \beta \mapsto \aleph_{f(\beta)}$ is cofinal too, since $\aleph_\lambda = \bigcup_{\gamma < \lambda} \aleph_\gamma$ by definition. This proves $\text{cof}(\aleph_\lambda) \le \text{cof}(\lambda)$. Conversely, let $g : \alpha \to \aleph_\lambda$ be cofinal. The map $\tilde{g} : \alpha \to \lambda$, defined by $\tilde{g}(\beta) = 0$ if $g(\beta)$ is finite, and $\tilde{g}(\beta) = \gamma$ if $\text{card}(g(\beta)) = \aleph_\gamma$, is cofinal.
+??? proof "Proof."
+    If $f : \alpha \to \lambda$ is cofinal, then $\tilde{f} : \alpha \to \aleph_\lambda, \beta \mapsto \aleph_{f(\beta)}$ is cofinal too, since $\aleph_\lambda = \bigcup_{\gamma < \lambda} \aleph_\gamma$ by definition. This proves $\text{cof}(\aleph_\lambda) \le \text{cof}(\lambda)$. Conversely, let $g : \alpha \to \aleph_\lambda$ be cofinal. The map $\tilde{g} : \alpha \to \lambda$, defined by $\tilde{g}(\beta) = 0$ if $g(\beta)$ is finite, and $\tilde{g}(\beta) = \gamma$ if $\text{card}(g(\beta)) = \aleph_\gamma$, is cofinal.
 
-**Proposition 1.9.6.** Let $\kappa \ge 2$ and $\lambda \ge \aleph_0$ be cardinals. Then $\text{cof}(\kappa^\lambda) > \lambda$.
+!!! proposition "Proposition 1.9.6."
+    Let $\kappa \ge 2$ and $\lambda \ge \aleph_0$ be cardinals. Then $\text{cof}(\kappa^\lambda) > \lambda$.
 
-**Proof.** Consider a map $f : \alpha \to \kappa^\lambda$, with $\alpha$ some ordinal $\le \lambda$. Since $f(\beta) < \kappa^\lambda$ for every $\beta < \alpha$, it follows from König’s Theorem that
+??? proof "Proof."
+    Consider a map $f : \alpha \to \kappa^\lambda$, with $\alpha$ some ordinal $\le \lambda$. Since $f(\beta) < \kappa^\lambda$ for every $\beta < \alpha$, it follows from König’s Theorem that
 
-$$
-\text{card}\left(\bigcup_{\beta < \alpha} f(\beta)\right) \le \sum_{\beta < \alpha} \text{card}(f(\beta)) < \prod_{\beta < \alpha} (\kappa^\lambda) = \kappa^{\lambda \cdot \text{card}(\alpha)} \le \kappa^\lambda.
+    $$
+    \text{card}\left(\bigcup_{\beta < \alpha} f(\beta)\right) \le \sum_{\beta < \alpha} \text{card}(f(\beta)) < \prod_{\beta < \alpha} (\kappa^\lambda) = \kappa^{\lambda \cdot \text{card}(\alpha)} \le \kappa^\lambda.
 
-$$
+    $$
 
-Hence $f$ is not cofinal. $\square$
+    Hence $f$ is not cofinal. $\square$
 
-**Corollary 1.9.7.** $2^{\aleph_0} \ne \aleph_\omega$.
+!!! corollary "Corollary 1.9.7."
+    $2^{\aleph_0} \ne \aleph_\omega$.
 
-**Proof.** We have $\text{cof}(\aleph_\omega) = \text{cof}(\omega) = \omega = \aleph_0 < \text{cof}(2^{\aleph_0})$.
+??? proof "Proof."
+    We have $\text{cof}(\aleph_\omega) = \text{cof}(\omega) = \omega = \aleph_0 < \text{cof}(2^{\aleph_0})$.
