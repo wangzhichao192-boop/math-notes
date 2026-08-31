@@ -1,5 +1,6 @@
 site_name: 数学笔记
 site_description: 个人数学笔记站（OI-wiki 同款模版）
+site_url: https://wangzhichao192-boop.github.io/math-notes/
 copyright: CC BY-SA 4.0
 
 theme:
