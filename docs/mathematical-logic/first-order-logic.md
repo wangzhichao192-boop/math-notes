@@ -1,14 +1,14 @@
 # First-order Logic
 
-### Languages and Structures
+## Languages and Structures
 
 !!! definition "Definition"
     **Statements** in first-order logic are a sequence of symbols describing properties of structures.
 
-!!! example "Example."
+!!! example "Example"
     $\forall x, \exists y, y\cdot y = x$, which is true in $\mathbb C$, but false in $\mathbb R$.
 
-!!! definition "Definition."
+!!! definition "Definition"
     A **first-order language** (may be shortened simply as "language") $\mathscr L$ is a set of symbols composed of the following two parts:
 
     + Logical symbols (common to all $\mathscr L$) :
@@ -35,7 +35,7 @@
 
     Note that a language is always infinite, $\mathscr L$ and $\sigma ^{\mathscr L}$ are used interchangeably.
 
-!!! example "Example."
+!!! example "Example"
 
     + $\mathscr L_\psi = \emptyset$ which is the empty language
 
@@ -49,12 +49,12 @@
 
     + $\mathscr L_{set} = \{ \in \}$ language of set theory where '$\in$' $\in \mathcal R ^{\mathscr L} _2$
 
-!!! definition "Definition."
+!!! definition "Definition"
     An **$\mathscr L$-structure** $\bar A$ consists of a non-empty set $A$ with an element $ C ^{\bar A  } \in A$ for any  $C \in \mathcal C ^ {\mathscr L}$, a funciton $f^{\bar A} : A^n \to A$ for any $f \in \mathcal F ^{\mathscr L} _{n}$ and a subset $\mathcal R ^{\bar A}$ for $R \in \mathcal R$. We write $\bar A = \langle A;(Z ^{\bar A})_{Z\in \sigma ^\mathscr L } \rangle$
 
     $Z^{\bar A}$ is called the interpretation of the symbol $Z \in \sigma ^\mathscr L$ in the structure $\bar A$.
 
-!!! example "Example."
+!!! example "Example"
 
     $\bar {\mathbb N} = \langle \mathbb N, 0, S, + , \cdot, < \rangle$ is an $\mathscr L _{ar}$-structure.  $\mathscr L _{ar} = \{ \mathbf 0, S, +, \cdot, < \}$
 
@@ -62,7 +62,7 @@
 
     $\bar {\mathbb R} = \langle \mathbb R, +, \cdot , -, 0, 1, < \rangle$ is a $\mathscr L_{oring}$-structure
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $\mathscr L$ be a language and $\bar M, \bar N$ be $\mathscr L$-structures.
 
     We say that $\bar M \cong \bar N$ ($\bar M$ is **isomorphic** to $\bar N$) if there is $f: M \to N$ a bijection that commutes with the interpretation of symbols.
@@ -73,46 +73,51 @@
 
     + $\left ( a_1, \cdots, a_n\right ) \in  R ^{\bar M } \iff \left ( f(a_1), \cdots, f(a_n) \right) \in  R ^{\bar N}, R \in  \mathcal             R ^\mathscr L _ n $
 
-!!! note "Exercise."
+!!! note "Exercise"
     If $f$ is an isomorphism of commutative rings $A, B$, then viewing $A, B$ as $\mathscr L _{ring}$ -structures, $\bar A \cong \bar B$.
 
-### Terms and Formulas
+## Terms and Formulas
 
-!!! definition "Definition."
+!!! definition "Definition"
     A **word** is a string of symbols in (a given alphabet) $E$, $w = a_0 \cdots a_n, n \in \mathbb N, a_i \in E$, then $w$ is a word in $E$ and $n + 1$ is the length of $w$.
 
     We use $E^\star$  to denote the set of words in $E$.
 
-!!! definition "Definition."
+!!! definition "Definition"
     $\mathscr L$ is a language. The set of **$\mathscr L$-terms $\mathcal{T} ^ {\mathscr L}$** is the smallest subset $ D $ of $\mathscr L ^\star$ such that if $f \in \mathcal F ^ \mathscr L _ n, t_1 ,\cdots , t_n \in \mathcal T ^ \mathscr L \implies f\  t_1 \cdots t_n \in D$ and $\mathcal V, \mathcal C ^ \mathscr L \subseteq D$.
 
-!!! definition "Definition (for the unique readability)."
+!!! definition "Definition (for the unique readability)"
+    <a id="def-for-the-unique-readability"></a>
     We define $K:\mathscr L \to \mathbb Z$ which sends any variable and constant symbol to $1$ and sends $f \in \mathcal F_n^{\mathscr L}$ to $1 - n$. Then we extend k to all terms additively.
 
 !!! lemma "Lemma (for the unique readability)"
+    <a id="lem-for-the-unique-readability"></a>
     $k(t) = 1$ if $t$ is a term.
 
-??? proof "Proof."
+??? proof "Proof"
     We perform an induction on the length of the string.
 
     $k(f \ t_1 \cdots t_n) = k(f) + k(t_1) + \cdots + k(t_n) = (1 - n) + n = 1$
 
-!!! definition "Definition."
+!!! definition "Definition"
     We call $s'$ a **terminal segment** of $s$ if there exists $s''$ such that $s = s'' s'$. Similarly, $s'$ is an **initial segment** of $s$ if there exists $s''$ such that $s = s' s''$.
 
-!!! lemma "Lemma (for the unique readability)."
+!!! lemma "Lemma (for the unique readability)"
+    <a id="lem-for-the-unique-readability-1"></a>
     Any terminal segment of a term is a concatenation of one or more terms.
 
-??? proof "Proof."
+??? proof "Proof"
     We perform an induction on the length of the term. For a term $f \ t_1 \cdots t_n$, any terminal segment has the form $t_k' \ t_{k+1} \ \cdots \ t_n$ where $t_k'$ is a terminal segment of $t_k$. By induction hypothesis, each $t_i$ is a term, so the terminal segment is a concatenation of terms.
 
-!!! corollary "Corollary (for the unique readability)."
+!!! corollary "Corollary (for the unique readability)"
+    <a id="cor-for-the-unique-readability"></a>
     No proper initial segment of a term is a term.
 
-??? proof "Proof."
+??? proof "Proof"
     Let $t$ be a term, $t'$ be a proper initial segment of $t$, and $t''$ be the corresponding terminal segment. Then $k(t) = k(t') + k(t'')$. Since $t''$ is a concatenation of terms, $k(t'') \geq 1$. If $t'$ were also a term, we would have $k(t') = 1$, so $k(t) = 1 + k(t'') \geq 2$, contradicting $k(t) = 1$.
 
-!!! proposition "Proposition (Unique readability of terms)."
+!!! proposition "Proposition (Unique readability of terms)"
+    <a id="prop-unique-readability-of-terms"></a>
     Any $t \in \mathcal T ^ \mathscr L$ satisfies exactly one of the following conditions:
 
     + $t$ is a variable
@@ -121,7 +126,7 @@
 
     + There is $n \in \mathbb N _{> 0} $ a unique $n$-ary function symbol $f \in \mathcal F _n ^ \mathscr L, t_1, \cdots t_n \in \mathcal T ^ \mathscr L$ such that $t = f\ t_1 \cdots t_n$.
 
-??? proof "Proof."
+??? proof "Proof"
 
     Suppose $f \ t_1 \cdots t_n = f \ t_1' \cdots t_m'$ with the same function symbol $f$. 
 
@@ -129,17 +134,18 @@
 
     We find the first $k$ such that $t_k \ne t'_k$, since two strings are the same, so the lengths of $t_k $ and $t'_k$ are different. WLOG assume $t_k$ is longer. Hence $t'_k$ is an initial segment of $t_k$ and its a term, which contradicting to the corollary.
 
-!!! note "Notation."
+!!! note "Notation"
     We shall often write $f(t_1, \cdots, t_n)$ instead of $f \ t_1 \cdots t_n$. When $f$ is binary we sometimes write $t_1 \ f \ t_2$ instead of $f \ t_1 \ t_2$.
 
-!!! definition "Definition."
+!!! definition "Definition"
     We define the **height** of a term $ht(t)$ is the least $n$ such that $t \in \mathcal T_n ^\mathscr L$, where we define
 
     $\mathcal T _0 ^\mathscr L : \mathcal C ^ \mathscr L \cup \mathcal V$
 
     $\mathcal T _{n+1} ^\mathscr L  = \mathcal T _n ^\mathscr L \cup \{ f \ t_1 \cdots t_m : f \in \mathcal F_m ^\mathscr L, t_1 \cdots t_m \in \mathcal T _n ^\mathscr L\}$
 
-!!! definition "Definition (formula)."
+!!! definition "Definition (formula)"
+    <a id="def-formula"></a>
 
     + An atomic **formula** in $\mathscr L$ is
 
@@ -157,7 +163,8 @@
 
     $\text{Fml}_{n+1}^\mathscr L := \text{Fml} _n ^\mathscr L \cup \{ \neg \varphi \ | \ \varphi \in \text{Fml}_n^\mathscr L \} \cup \{ (\varphi \land \psi ) \ | \ \varphi ,\psi \in \text{Fml}_n ^ \mathscr L \} \cup \{\exists x, \varphi\ | \ x \in \mathcal V, \varphi \in \text{Fml}_n^\mathscr L  \}$
 
-!!! proposition "Proposition(Unique readability of formulas)."
+!!! proposition "Proposition(Unique readability of formulas)"
+    <a id="prop-unique-readability-of-formulas"></a>
     Any $\varphi \in \mathscr{L}$-formula satisfies exactly one of the following conditions:
 
     1. $\varphi$ is atomic
@@ -168,7 +175,7 @@
 
     4. **$\varphi = \exists x \ \psi$**: for a unique variable $x \in \mathcal{V}$ and a unique subformula $\psi$, $\varphi$ is an existential quantification of $\psi$
 
-??? proof "Proof."
+??? proof "Proof"
 
     We extend $k$ to all symbols in $\mathscr L$
 
@@ -176,12 +183,12 @@
 
     The rest leaves for exercise.
 
-!!! definition "Definition."
+!!! definition "Definition"
     We can also define height $ht(\varphi)$ on formulas which is the least $n$ such that $\varphi \in \text{Fml}_n^\mathscr L$
 
     Since the unique readability, we have $ht\left ( (\varphi \land \psi) \right ) = 1 + \max (ht(\varphi), ht(\psi))$, $ht(\neg \varphi) = 1 + ht(\varphi)$, $ht(\exists x\ \varphi) = 1 + ht(\varphi)$
 
-!!! note "Notation."
+!!! note "Notation"
     We will use the following abbreviations:
 
     + $(\varphi \lor \psi) \quad \text{for} \quad \neg(\neg\varphi \land \neg\psi)$
@@ -192,20 +199,20 @@
 
     + $\forall x\ \varphi \quad \text{for} \quad \neg\exists x \ \neg\varphi$
 
-!!! note "Notation."
+!!! note "Notation"
     We shall write $\exists x_1,\cdots x_n$ instead of $\exists x_1 \cdots \exists x_n$ (similarly for the universal quantifier), $R (t_1,\cdots, t_n) $ instead of $R \ t_1 \cdots t_n$ and sometimes $t_1 \ R \ t_2$ instead of $R \ t_1 \ t_2$.
 
     We shall write $(\varphi_0 \land \cdots \land \varphi_n ) $ or sometimes $\bigwedge_{i=0} ^n \varphi _i $ instead of $(\cdots ((\varphi_0 \land \varphi_1) \land \varphi_2 )\land \cdots \land \varphi_n)$, similarly for $\lor$  instead of $\land$.
 
-!!! note "Notation."
+!!! note "Notation"
 
     The priority of logic symbols: $\{ \neg , \exists,\forall\}$  >  $\{ \land, \lor \}$  >  $\{\rightarrow , \leftrightarrow \}$.
 
-!!! example "Example."
+!!! example "Example"
 
     $\forall x \ \varphi \land \psi \to \chi \text{ shall mean } ((\forall x \ \varphi \land \psi) \to \chi)  \text{, and so finally } \neg((\neg\exists x \ \neg\varphi \land \psi) \land \neg\chi)$
 
-!!! example "Example."
+!!! example "Example"
     Axioms of fields in $\mathscr L _{ring}$:
 
     + $\forall x \ x + \mathbf 0 = x$
@@ -228,11 +235,11 @@
 
     + $\neg \mathbf 0 = \mathbf 1$
 
-### Semantics
+## Semantics
 
 In this part we fix a $\mathscr L$-structure $\bar A $.
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $v$ be a variable, we define inductively on $ht(\varphi)$ that $v$ **occurs freely** in $\varphi$
 
     - $\varphi$ atomic: all occurrences of $v$ in $\varphi$ are free
@@ -249,23 +256,24 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
 
     A formula $\varphi$ is called a **sentence** if $\text{Free}(\varphi) = \emptyset$.
 
-!!! example "Example."
+!!! example "Example"
     $\varphi = \left ( \exists v_0 \ v_0 < v_1 \land v_0 = v_1\right) \implies \text{Free}(\varphi) = \{ v_1 \}$
 
-!!! definition "Definition."
+!!! definition "Definition"
     An **assignment** is a function $\alpha : \mathcal V \to A$, which determines the value of a term $t$ by induction.
 
     - $v_i^{\bar A}[\alpha] = \alpha(v_i)$ (for $v_i \in \mathcal V$) and $C^{\bar A}[\alpha] = C^{\bar A}$ (for $C \in \mathcal C^{\mathscr L}$)
 
     - $f(t_1, \cdots, t_n)^{\bar A}[\alpha] = f^{\bar A}\left( t_1^{\bar A}[\alpha], \cdots, t_n^{\bar A}[\alpha] \right)$
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     Let $\alpha, \beta$ be two assignments, $t$ a term. If $\alpha$ and $\beta$ agree on all variables occurring in $t$, then $t^{\bar A}[\alpha] = t^{\bar A}[\beta]$.
 
-??? proof "Proof."
+??? proof "Proof"
     Induction on terms.
 
-!!! definition "Definition (Satisfaction)."
+!!! definition "Definition (Satisfaction)"
+    <a id="def-satisfaction"></a>
     Let $\bar A$ be an $\mathscr L$-structure, $\varphi$ a formula, $\alpha$ an assignment. We define $\bar A \models \varphi[\alpha]$ (read "$\varphi$ is satisfied in $\bar A$ by $\alpha$") by induction on $ht(\varphi)$:
 
     - If $\varphi : t_1 = t_2$, then $\bar A \models \varphi[\alpha]$ if $t_1^{\bar A}[\alpha] = t_2^{\bar A}[\alpha]$.
@@ -280,13 +288,13 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
 
     Here, $\alpha_{a/x}$ denotes the assignment defined by $\alpha_{a/x}(x) = a$ and $\alpha_{a/x}(y) = \alpha(y)$ for $y \ne x$.
 
-!!! example "Example."
+!!! example "Example"
     Let $\bar{\mathbb N} = \langle \mathbb N, 0, S, +, \cdot, < \rangle$ be the standard model of arithmetic and $\alpha$ an assignment with $\alpha(v_0) = 2, \alpha(v_1) = 3$. Then $\bar{\mathbb N} \models v_0 < v_1 [\alpha]$ since $2 < 3$. Moreover, $\bar{\mathbb N} \models \exists v_2 \ v_0 + v_2 = v_1 [\alpha]$ since taking $a = 1$ we have $\bar{\mathbb N} \models v_0 + v_2 = v_1 [\alpha_{1/v_2}]$.
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
     If two assignments $\alpha, \beta$ agree on $\text{Free}(\varphi)$, then $\bar A \models \varphi [\alpha] \iff \bar A \models \varphi [\beta]$
 
-??? proof "Proof."
+??? proof "Proof"
     Induction on $ht(\varphi)$.
 
     Atomic case follows from the analogue statement on terms.
@@ -299,7 +307,7 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
 
     - $\varphi = \exists x \ \psi$: Note that $\text{Free}(\varphi) = \text{Free}(\psi) \setminus \{ x \}$.
 
-!!! note "Notation."
+!!! note "Notation"
     A formula $\varphi$ shall sometimes be denoted by $\varphi(x_1,\dots,x_n)$ if the variables $x_i$ are distinct and all free variables in $\varphi$ belong to the $x_i$.
 
     If a formula $\varphi(x_1,\dots,x_n)$ and elements $a_1,\dots,a_n \in A$ are given, one defines $\bar A \vDash \varphi[a_1,\dots,a_n]$ by $\bar{A} \vDash \varphi[\alpha]$, where $\alpha$ is an assignment with $\alpha(x_i) = a_i$, which is well defined by the previous proposition.
@@ -310,7 +318,7 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
 
     In particular, when $\varphi$ is a sentence, the relation $\bar{A} \vDash \varphi$ can be interpreted as "$\varphi$ is satisfied (or true) in $\bar{A}$'' or "$\bar{A}$ is a model of $\varphi$''.
 
-!!! definition "Definition."
+!!! definition "Definition"
 
     Let $\bar A$ be a structure and $D \subseteq A^n$.
 
@@ -322,7 +330,7 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
       \varphi[\bar A,\bar b] := \{\bar a \in A^n \mid \bar A \vDash \varphi[a_1,\dots,a_n,b_1,\dots,b_m]\}.
       $$
 
-!!! example "Example."
+!!! example "Example"
 
     In $(\mathbb C, +,\cdot,0,1,-)$ , which is a $\mathscr L_{ring}$-structure.
 
@@ -334,11 +342,11 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
 
     - $\varphi_3:\mathbb{Z} \subseteq \mathbb C$ is not definable.
 
-### Substitution
+## Substitution
 
 The goal of this chapter is to find a way to substitute variables that is compatible with our semantics.
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $x_0,\cdots,x_r$ be variables that are distinct, $s_0 ,\cdots ,s_r$ be terms in $\mathscr L$. We define **simultaneous substitution** of $x_i$ be $s_i$.
 
     + Let $t$ be a term. Then $t_{s_0/x_0,\dots,s_r/x_r} = t_{\bar{s}/\bar{x}}$ is the word obtained by "simultaneously replacing all occurrences of $x_i$ in $t$ by $s_i$", that is, one sets
@@ -381,16 +389,16 @@ The goal of this chapter is to find a way to substitute variables that is compat
 
           where $u$ is the first variable appearing in the enumeration $\nu_0,\nu_1,\nu_2,\dots$ which does not occur in any of the words $\exists x  \ \psi, s_{i_1},\dots,s_{i_k}$.
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
 
     If $t$ is a term, then $t_{\bar s / \bar x}$ is a term.
 
     If $\varphi$ is a formula, then $\varphi_{\bar s / \bar x}$ is a formula.
 
-!!! note "Notation."
+!!! note "Notation"
     Let $x_0,\dots,x_r$ be distinct variables, $\alpha$ an assignment with values in $\bar{A}$ and $a_0,\dots,a_r$ elements of $A$. One defines the assignment $\alpha_{a_0/x_0,\dots,a_r/x_r} = \alpha_{\bar{a}/\bar{x}}$ by $\alpha_{\bar{a}/\bar{x}}(x_i) = a_i$ and $\alpha_{\bar{a}/\bar{x}}(y) = \alpha(y)$ if $y \neq x_i$ for every $i$.
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     Let $x_0, \dots, x_r$ be distinct variables, $s_0, \dots, s_r$ terms and $\alpha$ an assignment with values in $\bar A$.
 
     + For every term $t$ one has
@@ -405,7 +413,7 @@ The goal of this chapter is to find a way to substitute variables that is compat
     \bar A \vDash \varphi_{\bar{s}/\bar{x}}[\alpha] \quad \text{if and only if} \quad \bar A \vDash \varphi\left[\alpha_{s_0^{\bar A}[\alpha]/x_0,\dots,s_r^{\bar A}[\alpha]/x_r}\right].
     $$
 
-??? proof "Proof."
+??? proof "Proof"
 
     + The case of terms follows directly from induction on terms.
 
@@ -441,42 +449,42 @@ The goal of this chapter is to find a way to substitute variables that is compat
     \end{align*}
         $$
 
-!!! example "Example."
+!!! example "Example"
     Let $\varphi$ be a formula, $x_1, \cdots,x_r$ be distinct variables. $s_1, \cdots ,s_r$ be terms such that  no variables in $s_i$ occurs in $\varphi$. Then $\varphi_{\bar s / \bar x }$ is exactly the formula one gets after replacing free occurences of $x_i$ by $s_i$.
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     If $y$ is a variable with no occurence in $\varphi$. Then
 
     $$
     \left [ \varphi _ {y / x} \right ]_{x / y}     = \varphi
     $$
 
-??? proof "Proof."
+??? proof "Proof"
     Induction on formulas.
 
-!!! note "Notation."
+!!! note "Notation"
     Let $s_1, \cdots ,s_n$ be terms. If $t(x_1, \cdots,x_n)$ is a term, we shall often write $t(s_1, \cdots, s_n)$ for $t_{s_1 / x_1,\cdots, s_n/x_n}$, and $\varphi(s_1,\cdots,s_n)$ for $\varphi_{s_1 / x_1,\cdots, s_n/x_n}$ if $\varphi$ is a formula of the form $\varphi(x_1,\cdots, x_n)$.
 
-### Universally Valid Formulas
+## Universally Valid Formulas
 
 In this part, we want to define basic deductive rules.
 
-!!! definition "Definition."
+!!! definition "Definition"
     An $\mathscr L$-formula $\varphi$ is called **universally valid** formula " $\models \varphi$ " if it is satisfied in any $\mathscr L$-structure $\bar A$ with any assignment (The fact that we do not mention the language $\mathscr L$ in the notation $\models$ is justified in the next lemma).
 
-!!! remark "Remark."
+!!! remark "Remark"
     $\varphi(x_1,\cdots,x_n)$ is universally valid iff $\forall x_1, \cdots ,x_n \ \varphi$ is universally valid.
 
-!!! example "Example."
+!!! example "Example"
 
     + $\exists x \ x=x$ is universally valid (Axiom of equality)
 
     + $\varphi \land \psi \to \psi$ is universally valid.
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     Let $\varphi$ be an $\mathscr{L}$-formula and $\mathscr{L}' \supseteq \mathscr{L}$. Then $\varphi$ is universally valid as an $\mathscr{L}$-formula if and only if it is universally valid as an $\mathscr{L}'$-formula.
 
-??? proof "Proof."
+??? proof "Proof"
     One may identify assignments with values in $\bar A$ and those with values in $\bar A'$, and one has
 
     $$
@@ -485,7 +493,7 @@ In this part, we want to define basic deductive rules.
 
     for any assignment $\alpha$. Thus it suffices to prove that any $\mathscr{L}$-structure $\bar A$ has an expansion to some $\mathscr{L}'$-structure, which is clear.
 
-!!! definition "Definition."
+!!! definition "Definition"
     We fix a set $\mathcal P =\{p_i \ | \ i\in \mathbb{N} \}$ where $p_i$ are called propositional variables (they will only take only "true" or "false" as values).
 
 !!! proposition "Propositional calculus formulas"
@@ -497,7 +505,7 @@ In this part, we want to define basic deductive rules.
 
     We use $\text{PFml}$ to denote the sets of propositional calculus formulas. As before we introduce $\lor, \to,\leftrightarrow$.
 
-!!! definition "Definition."
+!!! definition "Definition"
     For any assignment $\delta :\mathcal P \to \{ 0,1 \}$, we extend $\delta $ to $\delta ^\star : \text{PFml}\to \{0,1\}$ defined by:
 
     + $\delta^\star (p_i) = \delta(p_i),p_i \in \mathcal P$
@@ -508,21 +516,22 @@ In this part, we want to define basic deductive rules.
 
     If $\delta ^\star (F) = 1$, we write $\delta \models F$.
 
-!!! definition "Definition."
+!!! definition "Definition"
 
     + We say that a formula $F \in \text{PFml}$ is a **tautology** for the propositional calculus if $\delta \models F$ for any assignment $\delta$.
     + We call an $\mathscr L $-formula $\varphi$ is a tautology for the predicate calculus if there exists $F=F(q_1,\cdots,q_n)$ is a tautology for the propositional calculus and $\mathscr L$-formulas $\psi_1,\cdots,\psi_n$ such that $\varphi$ equals to $F_{\psi_1 / q _1,\cdots,\psi_n /q_n}$.
 
-!!! example "Example."
+!!! example "Example"
 
     + $F(q) = q \lor \neg q$ is a tautology.
 
     + We replace all $q$ to a formula $\forall x\ P(x)$, hence $(\forall x\ P(x)) \lor (\forall x\ P(x))$ is a predicate tautology.
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     All tautologies for the predicate calculus is universally valid.
 
-!!! lemma "Lemma (Equality axioms)."
+!!! lemma "Lemma (Equality axioms)"
+    <a id="lem-equality-axioms"></a>
     The following are universally valid:
 
     + $\forall v_0\  v_0 = v_0$
@@ -535,7 +544,8 @@ In this part, we want to define basic deductive rules.
 
     + $\forall v_1 \dots v_{2n} \  \left( \bigwedge_{i=1}^n v_i = v_{i+n} \land R\  v_1 \dots v_n \rightarrow R\  v_{n+1} \dots v_{2n} \right),\ R \in \mathcal{R}_n^\mathcal{L}$
 
-!!! lemma "Lemma (Quantifiers axioms)."
+!!! lemma "Lemma (Quantifiers axioms)"
+    <a id="lem-quantifiers-axioms"></a>
 
     + For any non-free variable $x$ in $\varphi$, $\forall x \ (\varphi \rightarrow \psi) \rightarrow (\varphi \rightarrow \forall x \ \psi)$ is universally valid.
 
@@ -543,12 +553,12 @@ In this part, we want to define basic deductive rules.
 
     + For any variable $x$, the formula $\exists x \ \varphi \leftrightarrow \neg \forall x \ \neg \varphi$ universally valid.
 
-??? proof "Proof."
+??? proof "Proof"
     We will only show the first lemma.
 
     Suppose that $x \notin \text{Free}(\varphi)$, and that $\bar A \vDash \forall x \ (\varphi \to \psi)[\alpha]$. That is, $\bar A \vDash (\neg \varphi \lor \psi)[\alpha_{a/x}]$ for any $a \in A$, We have to prove that $\bar A \vDash (\varphi \to \forall x \ \psi)[\alpha]$, and for this we may assume that $\bar A \vDash \varphi[\alpha]$. But then $\bar A \vDash \varphi[\alpha_{a/x}]$ as $x \notin \text{Free}(\varphi)$, and so $\bar A \vDash \psi[\alpha_{a/x}]$. Since $a \in A$ was arbitrary, $\bar A \vDash \forall x \ \psi[\alpha]$ follows.
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $\mathscr L$ be a language. We call an $\mathscr L$**-theory** a set of $\mathscr L$-sentences (recall that sentences means formulas without free variables).
 
     Let $T$ be an $\mathscr L $-theory.
@@ -559,7 +569,7 @@ In this part, we want to define basic deductive rules.
 
       By the invariance for $\varphi$ of the expansion of languages, we know $T \models \varphi$ is independent with language $\mathscr L$.
 
-### Formal Proofs and Gödel's Completeness Theorem
+## Formal Proofs and Gödel's Completeness Theorem
 
 In this part, we are to prove **Gödel's Completeness Theorem**, which
 
@@ -587,7 +597,7 @@ There will be two *deduction rules*:
 
 + Generalization: From $\varphi$, one can deduce $\forall x \ \varphi$ ($x$ any variable).
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $T$ be an $\mathscr L$-theory, $\varphi$ be an $\mathscr L$-formula. A **formal proof** of $\varphi$ in $T$ is a tuple $(\varphi_0,\varphi_1,\cdots,\varphi_n)$ of $\mathscr L$-formulas for some $n\in \mathbb{N}$ such that $\varphi_n$ is $\varphi$ and $\varphi_i$ satisfies one of the following for any $i$ :
 
     + $\varphi_i \in T$
@@ -600,7 +610,7 @@ There will be two *deduction rules*:
 
     We say $\varphi$ is **provable** in $T$ (denoted as $T \vdash_{\mathscr L} \varphi$) if there exists a formal proof of $\varphi$ in $T$. In particular, We write $\vdash_\mathscr L \varphi$ if $\varphi$ is provable in the empty theory.
 
-!!! example "Example."
+!!! example "Example"
 
     - If $\varphi$ and $\psi$ are $\mathscr{L}$-sentences, then $\{\varphi, \psi\} \vdash_{\mathscr{L}} \varphi \land \psi$.
 
@@ -612,7 +622,7 @@ There will be two *deduction rules*:
 
     + $\vdash_{\mathscr{L}} \forall x \ \varphi \rightarrow \varphi$.
 
-??? proof "Proof."
+??? proof "Proof"
 
     + Let $\theta$ be the tautology $\varphi \rightarrow (\psi \rightarrow (\varphi \land \psi))$, and $\chi := \psi \to (\varphi \land \psi)$. Hence we get the formal prove $(\theta,\varphi,\psi,\chi,\varphi \land \psi)$, where:
 
@@ -630,14 +640,15 @@ There will be two *deduction rules*:
 
     + is a special case of (2), since $\varphi$ is equal to $\varphi_{x/x}$.
 
-!!! theorem "Theorem (soundness)."
+!!! theorem "Theorem (soundness)"
+    <a id="thm-soundness"></a>
     Let $T$ be an $\mathscr{L}$-theory and $\varphi$ an $\mathscr{L}$-formula. Then
 
     $$
     T \vdash_{\mathscr{L}} \varphi \Rightarrow T \vDash \varphi
     $$
 
-??? proof "Proof."
+??? proof "Proof"
     Let $(\varphi_0, \cdots, \varphi_n)$ be a formal proof where $\varphi_n = \varphi$. We perform a induction on $i$ to show $T\models \varphi_i$.
 
     + case 1: For $\varphi_i \in T$, $T \models \varphi_i$
@@ -648,20 +659,20 @@ There will be two *deduction rules*:
 
     + case 4: For the generalization case, we have $j < i ,\varphi_i = \forall x \ \varphi_j$.  By IH (induction hypothesis) $T\models \varphi_j$, thus for any $\mathscr L$-structure $\bar A $ is a model of $T$ and any assignment $\alpha$, $\bar A \models \varphi_j [\alpha]$. In particular, For any $a\in A, \bar A \models \varphi_j[\alpha_{a/x}]$. In conclusion, $T\models \forall x \ \varphi_j$.
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $\mathscr L$ be a language, $T$ be a $\mathscr L$-theory. We say that
 
     - $T$ is **inconsistent** if there is an $\mathscr L$-sentence $\varphi$ such that $T\vdash_{\mathscr L} \varphi$ and $T \vdash_{\mathscr L} \neg \varphi$. Otherwise $T$ is **consistent**.
 
     - $T$ is **complete** if $T$ is consistent and for $\varphi$ sentence $T \vdash_{\mathscr L} \varphi$ or $T \vdash_{\mathscr L} \neg \varphi$.
 
-!!! example "Example."
+!!! example "Example"
 
     - For a ${\mathscr L}$-structure $\bar A$. $\text{Th}(\bar A) = \{\varphi:\text{sentence}, \bar A \models \varphi \}$ This is always consistent and complete. For a theory $T$, if there is $\bar A \models T$, $T$ is always consistent.
 
     - The theory of algebraically closed fields ${\mathscr L}_{ring}$-theory ACF which is composed of the field axioms together with a sentence $\chi_n$ for any $n \ge 1$ expressing that any polynomial of degree $n$ has a root. For instance, the formula $\chi_n$ given by $\forall z_0,\cdots,z_{n-1}\ \exists x\ (x^n + z_{n-1}x^{n-1} + \cdots + z_0 = 0)$
 
-!!! remark "Remark."
+!!! remark "Remark"
 
     - If $T$ is inconsistent, then for any $\varphi$ in ${\mathscr L}$, $T\vdash_{\mathscr L} \varphi$.
 
@@ -669,16 +680,17 @@ There will be two *deduction rules*:
 
     - $T \vdash_{\mathscr L} \varphi $ implies that there is $T_0 \subseteq T$ finite such that $T_0 \vdash _{\mathscr L} \varphi$.
 
-!!! corollary "Corollary."
+!!! corollary "Corollary"
 
     - $T$ be an ${\mathscr L}$-theory. $T$ is consistent iff for any $T_0 \subseteq T$ finite, $T_0$ is consistent.
 
     - Let $(T_i)_{i\in I}$ be an indexed family of consistent ${\mathscr L}$-theories. If $\forall i,j \ \ T_j \subseteq T_i \text{ or } T_i \subseteq T_j$, then $\bigcup _{i \in I} T_i$ is consistent.
 
-!!! lemma "Lemma (Deduction Rules)."
+!!! lemma "Lemma (Deduction Rules)"
+    <a id="lem-deduction-rules"></a>
     Let $\chi$ be a ${\mathscr L}$-sentence, $T$ be a ${\mathscr L}$-theory, $\varphi$ be a ${\mathscr L}$-formula. $T\cup \{\chi\}\vdash_{\mathscr L} \varphi$ iff $T\vdash_{\mathscr L} \chi \to \varphi$.
 
-??? proof "Proof."
+??? proof "Proof"
     $T\vdash_{\mathscr L} \chi \to \varphi \implies T \cup \{\chi\} \vdash_{\mathscr L} \varphi$ is trivial by MP.
 
     Conversely: Let $(\varphi_0,\cdots,\varphi_n)$ be a formal proof of $\varphi$ from $T \cup \{\chi\}$.
@@ -711,15 +723,16 @@ There will be two *deduction rules*:
 
     Apply MP: $T \vdash_{\mathscr L} \chi \to \forall x \varphi_j = \chi \to \varphi_i$.
 
-!!! corollary "Corollary."
+!!! corollary "Corollary"
     Let $T$ be a ${\mathscr L}$-theory and $\varphi$ a ${\mathscr L}$-sentence. Then $T \vdash_{\mathscr L} \varphi$ iff $T \cup \{\neg \varphi\}$ is inconsistent.
 
-??? proof "Proof."
+??? proof "Proof"
     ($\Rightarrow$) Clear.
 
     ($\Leftarrow$) If $T \cup \{\neg \varphi\}$ is inconsistent, then $T \cup \{\neg \varphi\} \vdash_{\mathscr L} \varphi$ by Remark (1). By Deduction Lemma, $T \vdash_{\mathscr L} \neg \varphi \to \varphi$. Since $(\neg \varphi \to \varphi) \to \varphi$ is a tautology, we conclude by MP.
 
-!!! lemma "Lemma (Simulation of constants by variables)."
+!!! lemma "Lemma (Simulation of constants by variables)"
+    <a id="lem-simulation-of-constants-by-variables"></a>
     Let $\psi$ be a ${\mathscr L}$-formula, $T$ a ${\mathscr L}$-theory, and let $C$ be a set of constant symbols such that $C \cap {\mathscr L} = \emptyset$.
 
     Let $x$ be a variable, $c \in C$. Then the following statements are equivalent:
@@ -732,30 +745,31 @@ There will be two *deduction rules*:
 
     In particular, $T \vdash_{\mathscr L} \psi \iff T \vdash_{\mathscr L \cup C} \psi$.
 
-### Henkin Construction
+## Henkin Construction
 
 In this part, we want to expand $\mathscr L$ by a fresh set of constant symbols to build a model for any consistent theory.
 
-!!! definition "Definition."
+!!! definition "Definition"
     Let $\mathscr L$ be a language, $C$ a set of constant symbols with $C \cap \mathscr L = \emptyset$. An $\mathscr L \cup C$-theory $T^+$ admits **Henkin witnesses** in $C$ if for any $\mathscr L \cup C$-formula $\varphi(x)$ there exists $c \in C$ such that
 
     $\exists x \ \varphi \to \varphi_{c/x} \in T^+$.
 
     If $\bar A$ is an $\mathscr{L}$-structure and $A = \{a_c \mid c \in C\}$ is an enumeration (possibly non-injective) of its base set by $C$, one denotes by $\bar A^+$ the $\mathscr{L} \cup C$-structure obtained from $\bar A$ by interpreting $c$ by $a_c$. Then $\text{Th}(\bar A^+)$ is a complete theory which admits Henkin witnesses in $C$. In fact, any complete theory which admits Henkin witnesses in $C$ is of this form:
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
     Any complete $\mathscr{L} \cup C$-theory $T^+$ which admits Henkin witnesses in $C$ has a model $\bar A^+$ consisting of constants of $C$, that is, with a base set of the form $A^+ = \{c^{\bar A^+} \mid c \in C\}$.
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     Let $T$ be an $\mathscr L$-theory, $\varphi(x)$ an $\mathscr L$-formula and $c \in \mathscr L$ a constant symbol not occurring in $T \cup \{\varphi(x)\}$. Assume that $T$ is consistent. Then $T \cup \{\exists x \ \varphi \to \varphi_{c/x}\}$ is a consistent $\mathscr L$-theory.
 
-??? proof "Proof."
+??? proof "Proof"
     If not, $T \vdash_{\mathscr L} \exists x \ \varphi \land \neg \varphi_{c/x}$ by Corollary. In particular, $T \vdash_{\mathscr L} \exists x \ \varphi$, and by Lemma 2.6.8, $T \vdash_{\mathscr L} \neg \varphi$, so $T \vdash_{\mathscr L} \forall x\ \neg \varphi$ by generalization. This implies $T$ is inconsistent.
 
-!!! theorem "Theorem (Gödel's Completeness Theorem)."
+!!! theorem "Theorem (Gödel's Completeness Theorem)"
+    <a id="thm-godel-s-completeness-theorem"></a>
     A theory has a model if and only if it is consistent.
 
-??? proof "Proof."
+??? proof "Proof"
 
     ($\Rightarrow$) If $\bar A \models T$, then $T$ is consistent by Soundness Theorem.
 

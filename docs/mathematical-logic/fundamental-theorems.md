@@ -1,13 +1,15 @@
 # Some Fundamental Theorems
 
-!!! definition "Definition."
+## Elementary Maps
+
+!!! definition "Definition"
 
     + Let $\bar M, \bar N$ be $\mathscr L$-structures. We say that $\bar M,\bar N$ are **elementarily equivalent** if they satisfy the same $\mathscr L$-sentence. Written as $\bar M \equiv \bar N$. (i.e. $\text{Th}(\bar M)=\text{Th}(\bar N)$, recall that $\text{Th}(\bar M) = \{\varphi \ | \ \varphi \text{ is an } \mathscr L\text{-setence } \bar M \models \varphi \}$).
     + Let $\bar M, \bar N$ be $\mathscr L$-structures. We say $\bar M$ is a **substructure** of $\bar N$ denoted by $\bar M \subseteq \bar N$ if $M\subseteq N$ and for any constant symbol $c , c^{\bar M} = c^{\bar N}$, any relation symbol $R,R^{\bar M} = R ^{\bar N} |_M$, any function symbol $f,f^{\bar M} =f ^{\bar N} |_M$.
     + Let $\bar M, \bar N$ be $\mathscr L$-structures. We say $\bar M$ is an **elementary substructure** of $\bar N$ (and $\bar N$ is an elementary extension of $\bar M$), denoted by $\bar M \preceq \bar N$ if $\bar M \subseteq \bar N $ and for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n), a_1,\cdots,a_n \in M$, $\bar M \models \varphi[a_1,\cdots,a_n] \text{ iff } \bar N \models \varphi[a_1,\cdots,a_n]$. Note that it implies $\bar M \equiv \bar N$.
     + We say the mapping $f:\bar M \to \bar N$ is an **elementary embedding** if it is an ismorphism between $\bar M$ and an elementary substructure of $\bar N$. i.e. for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n),a_1,\cdots,a_n \in M$, $\bar M \models \varphi[a_1,\cdots,a_n] \text{ iff } \bar N \models \varphi[f(a_1),\cdots,f(a_n)]$.
 
-!!! remark "Remark."
+!!! remark "Remark"
 
     + $\bar M\preceq \bar N \implies \bar M \equiv \bar N$
 
@@ -23,10 +25,13 @@
 
     +  $\bar M \equiv \bar N, \bar M \subseteq \bar N \implies \bar M \preceq \bar N$ ? **Not neccessarily**. Check the counterexample: $\bar M = \langle 2\mathbb{Z},<,\rangle, \bar N = \langle \mathbb{Z},<\rangle$, $\varphi(x,y) = \exists z \ x < z < y$. $\bar M \models \neg \varphi[0,2]$, $\bar N \models \varphi[0,2]$
 
-!!! theorem "Theorem (Tarski-Vaught test)."
+## Tarski–Vaught Test
+
+!!! theorem "Theorem (Tarski-Vaught test)"
+    <a id="thm-tarski-vaught-test"></a>
     Let $\bar M, \bar N$ be $\mathscr L$-structures and $\bar M \subseteq \bar N$ if for any $\mathscr L$-formula $\varphi(x_1,\cdots,x_n,y)$, $a_1,\cdots,a_n\in M$ and there is some $b \in N$ such that $\bar N \models \varphi[a_1,\cdots,a_n,b]$ then there is some $b_0 \in M$ such that $\bar N \models \varphi[a_1,\cdots,a_n,b_0]$, then $\bar M \preceq \bar N$.
 
-??? proof "Proof."
+??? proof "Proof"
 
     $(\leftarrow)$:
 
@@ -62,12 +67,15 @@
 
     $\Rightarrow \bar{M} \models \psi[a_1, \dots, a_n]$.
 
-!!! theorem "Theorem (Downward Löwenheim-Skolem)."
+## Löwenheim–Skolem Theorems
+
+!!! theorem "Theorem (Downward Löwenheim-Skolem)"
+    <a id="thm-downward-lowenheim-skolem"></a>
     Let $\bar M$ be an $\mathscr L$-structure with $|M| \ge |\text{Fml}^\mathscr L|$. Let $A$ be any subset of $M$, there is $\bar N \preceq \bar M$, $A \subseteq N$ and $|N| \le \max(|A|,|\text{Fml}^\mathscr L|)$.
 
     In particular, if $\mathscr L$ is countable, then $\bar M$ has a countable elementary substructure.
 
-??? proof "Proof."
+??? proof "Proof"
 
     *Goal*: Find an elementary substructure $\bar{N} \preceq \bar{M}$ such that $A \subseteq N$ and $|N| \le \max(|A|, |\text{Fml}^\mathscr{L}|)$.
 
@@ -97,22 +105,27 @@
 
     * *Conclusion*: By the Tarski-Vaught Test, $\bar{N} \preceq \bar{M}$. 
 
-!!! remark "Remark."
+## Diagrams
+
+!!! remark "Remark"
     Let $\bar M \preceq \bar N, D\subseteq M ^n$ be definable with parameters in $M$, $D$ admits a canonical extension to $D'\subseteq N^n$ with $D' \cap M^n= D$.
 
-!!! note "Notation."
+!!! note "Notation"
     Let $\bar M$ be an $\mathscr L$-structure. We use $\mathscr L_M$ to denote the language of $\mathscr L$ adjoining new constant symbols $c_m$ for $m\in M$. $\bar M$ is naturally a $\mathscr L_M$-structure with $c_m$ interpreted as $m\in M$, $\bar M ^*$ denotes this $\mathscr L_M$-structure.
 
-!!! definition "Definition."
+!!! definition "Definition"
 
     + The **complete diagram** of $\bar M$ (an $\mathscr L$-structure), $D(\bar M)$ is $\text{Th}(\bar M^*)$. As a set, it is just the set of formulas of the form $\varphi(c_{m_1},\cdots,c_{m_n})$ where $\varphi(x_1,\cdots,x_n)$ is an $\mathscr L$-formula, $c_{m_1},\cdots,c_{m_n}\in \mathscr L_M$ such that $\bar M \models \varphi[m_2,\cdots,m_n]$.
     + The **diagram / simple diagram** of $\bar M$ is the set of quantifier-free sentences in $D(\bar M)$, denoted by $\Delta(\bar M)$.
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
     Let $\bar M$ be an $\mathscr L$-structure and $\bar N ^ * \models D(\bar M)$, then the reduction of $\bar N ^*$ to $\mathscr L$ (denoted by $\bar N$) is an elementary extension of $\bar M$.
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
     Models of $\Delta(\bar M)$ up to $\mathscr L$-isomorphisms are extensions of $\bar M$ when taking the reduction to $\mathscr L$.
 
-!!! theorem "Theorem (Upwards Löwenheim-Skolem)."
+## Upward Löwenheim–Skolem Theorem
+
+!!! theorem "Theorem (Upwards Löwenheim-Skolem)"
+    <a id="thm-upwards-lowenheim-skolem"></a>
     Let $\bar M$ be an $\mathscr L$-structure and $\kappa\ge max\{|M|, |\text{Fml}^\mathscr L|\}$ and $M$ is infinite. Then there is an elementary extension $\bar N \succeq \bar M$ such that $|N|=\kappa$.

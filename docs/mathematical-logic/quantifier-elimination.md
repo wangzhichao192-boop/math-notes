@@ -1,12 +1,16 @@
 # Quantifier Elimination (QE)
 
-!!! definition "Definition."
+## Definitions and Examples
+
+!!! definition "Definition"
     We say that $T$ is an $\mathscr L$-theory has quantifier elimination if for any formula $\varphi$ there is a quantifier-free formula $\psi$ such that $T\models \varphi \leftrightarrow \psi$.
 
-!!! example "Example."
+!!! example "Example"
     In the Theory of Real Closed Fields, the quantifier $\exists x\,(ax^2+bx+c=0)$ is equivalent to a quantifier-free formula $b^2-4ac\ge 0$.
 
-!!! definition "Definition."
+## Expansions by Definition
+
+!!! definition "Definition"
     Let $T$ be an $\mathscr L$-theory, $\mathscr L' \supseteq \mathscr L$, Assume that
 
     - for any $n$-ary relation symbol $R\in \mathscr L' \setminus \mathscr L$, there is an $\mathscr L$-formula $\varphi_R(x_1,\cdots,x_n)$
@@ -42,18 +46,18 @@
 
     , $\varphi, \psi$ are **logically equivalent** if $T = \emptyset$.
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
     Any formula is logically equivalent to a formula whose terms are of height $\le 1$.
 
     Hint. We do inductions, $R(f(g(x))) \leftrightarrow \exists y \ y=g(x) \land R(f(y))$
 
-!!! definition "Definition."
+!!! definition "Definition"
     $T$ is an $\mathscr L$-theory, $\mathscr L' \supseteq \mathscr L, T' \supseteq T$. $T'$ be an $\mathscr L'$-theory. We say $T'$ is a **conservative expansion** of $T$ if for any $\varphi$ over $\mathscr L$, $T\models \varphi$ iff $T'\models \varphi$.
 
-!!! proposition "Proposition."
+!!! proposition "Proposition"
     Let $T'$ be an expansion by definition of $T$, then $T'$ is conservative over $T$. Moreover any $\mathscr L'$-formula is equivalent to an $\mathscr L$-formula over $T'$.
 
-!!! example "Example."
+!!! example "Example"
 
     - $\langle \mathbb R + , \cdot, 0,1 \rangle$ be an $\mathscr L_{ring}$-structure. Introduce a new binary relation symbol $\le$, $\varphi_{\le} (x,y): \exists z ,(x + z^2 =y)$. Then we have an expansion by definition. $\langle \mathbb R, +, \cdot, 0, 1, \le \rangle$.
     - Let $T$ be the theory of linear orders without endpoints, $\mathscr L _{ord} = \{ <\}$. Let $T'$ be the theory of ordered fields in $\mathscr L_{oring}: \{+,\cdot, \mathbf 0, \mathbf 1, < \}$. It's not even conservative. Any ordered field id dense, $\forall x,y,(x < t \to \exists z, (x < z< y))$.
@@ -63,18 +67,21 @@
 
     What we usually need is a "reasonable" expansion by definition.
 
-!!! theorem "Theorem (QE test)."
+## The QE Test
+
+!!! theorem "Theorem (QE test)"
+    <a id="thm-qe-test"></a>
     Let $T$ be an $\mathscr L$-theory, $n\ge 1$ be an natural number, $\varphi(x_1,\cdots,x_n)$ be $\mathscr L$-formula. The following conditions are equivalent:
 
     1. There is quantifier-free $\psi(x_1,\cdots,x_n)$ such that $T\models \forall x_1,\cdots,x_n, (\varphi(x_1,\cdots,x_n) \leftrightarrow\psi(x_1,\cdots,x_n))$
     2. Let $\bar M,\bar N \models T$ with $\bar A$ a common substructure. Let $a_1,\cdots,a_n\in A$ then $\bar M \models \varphi[\bar a]$ iff $\bar N \models \varphi[\bar a ]$.
 
-!!! remark "Remark."
+!!! remark "Remark"
     When $n=0$ and $\varphi$ is a sentence, one may consider $\varphi$ as $\varphi(x)$ and apply the theorem to $\varphi(x)$ to find a quantifier-free formula $\psi(x)$ which is equivalent to $\varphi(x)$ in $T$. For instance, the theorem $\exists y \ y=y$ of $T$ is equivalent in $T$ to the formula $x=x$.
 
     Note that if the language $\mathscr L$ does not contain a constant symbol, there is no quantifier-free $\mathscr L$-sentence. In this case, when we assert the existence of a quantifier-free *formula* $\psi$ equivalent to a *sentence* $\varphi$ in what follows, we will allow that $\psi$ has one free variable.
 
-??? proof "Proof of the Theorem."
+??? proof "Proof of the Theorem"
     (1)$\Rightarrow$(2). We first observe that if $\bar A \subseteq \bar B$, $\psi(x_1,\cdots,x_n)$ is a quantifier-free formula and $\bar a \in A^n$, then one has $\bar A \models \psi[\bar a] \iff \bar B \models \psi[\bar a]$. Thus, if $\bar M$ and $\bar N$ are models of $T$ having $\bar A$ as a common substructure and if $\varphi(x_1,\cdots,x_n)$ is equivalent in $T$ to the quantifier-free formula $\psi(x_1,\cdots,x_n)$, then for $\bar a \in A^n$ one has
 
     $$
@@ -131,34 +138,36 @@
 
     As above, this implies that $T \models \forall \bar x \ (\bigwedge_{i=1}^m \zeta_i(\bar x) \to \varphi(\bar x))$. Since for all $i$ we have $T \models \forall \bar x \ (\varphi \to \zeta_i)$, we infer that $T \models \forall \bar x \ (\bigwedge_{i=1}^m \zeta_i(\bar x) \leftrightarrow \varphi(\bar x))$, with $\bigwedge_{i=1}^m \zeta_i(\bar x)$ a quantifier-free $\mathscr L$-formula.
 
-!!! lemma "Lemma."
+!!! lemma "Lemma"
     Assume that for every quantifier-free formula $\varphi$ and any variable $x$ there exists a quantifier-free formula $\psi$ such that $\exists x \ \varphi$ and $\psi$ are equivalent in $T$. Then $T$ admits quantifier elimination.
 
-??? proof "Proof."
+??? proof "Proof"
     Let $\psi$ and $\psi'$ be two formulas which are equivalent in $T$, which we denote by $\psi \sim_T \psi'$. Since $\neg\psi \sim_T \neg\psi'$, $\exists x \ \psi \sim_T \exists x \ \psi'$ and $\chi \land \psi \sim_T \chi \land \psi'$ for any formula $\chi$, we can argue by induction on the height of the formula, and the statement follows, by considering only formulas in prenex form and eliminating one quantifier at the time.
 
-!!! theorem "Theorem."
+!!! theorem "Theorem"
     Let $T$ be an $\mathscr L$-theory. One assumes that for any pair of models $\bar M$ and $\bar N$ of $T$, for any common substructure $\bar A$ of $\bar M$ and $\bar N$ and for any quantifier-free formula $\varphi(x_0,\cdots,x_n)$ and  $\bar a \in A^n$, there exists $b_0 \in M$ such that $\bar M \models \varphi[b_0, \bar a]$, then there exists $c_0 \in N$ such that $\bar N \models \varphi[c_0, \bar a]$.
     Then $T$ admits quantifier elimination.
 
-!!! remark "Remark."
+!!! remark "Remark"
     The converse of this statement is clear: any theory which admits quantifier elimination satisfies the hypothesis of the theorem.
 
-??? proof "Proof of the Theorem."
-    Let $\bar A \subseteq \bar M, \bar N$ be given, with $\bar M, \bar N \models T$. Let $\varphi$ be a quantifier-free formula and let $\chi$ be $\exists x_0 \ \varphi$. By hypothesis, we have $\bar M \models \chi[\bar a] \iff \bar N \models \chi[\bar a]$ for every $\bar a \in A^n$. It follows from Theorem (QE test)  that $\chi$ is equivalent in $T$ to a quantifier-free formula, which is enough to conclude by Lemma.
+??? proof "Proof of the Theorem"
+    Let $\bar A \subseteq \bar M, \bar N$ be given, with $\bar M, \bar N \models T$. Let $\varphi$ be a quantifier-free formula and let $\chi$ be $\exists x_0 \ \varphi$. By hypothesis, we have $\bar M \models \chi[\bar a] \iff \bar N \models \chi[\bar a]$ for every $\bar a \in A^n$. It follows from [Theorem (QE test)](#thm-qe-test)  that $\chi$ is equivalent in $T$ to a quantifier-free formula, which is enough to conclude by Lemma.
 
-!!! proposition "Proposition."
+## Consequences
+
+!!! proposition "Proposition"
     Let $T$ be a theory which admits quantifier elimination.
 
     1. Let $\bar M$ and $\bar N$ be models of $T$ with a common substructure. Then $\bar M \equiv \bar N$.
 
     2. Let $\bar M$ and $\bar N$ be models of $T$. If $\bar M \subseteq \bar N$, then $\bar M \preccurlyeq \bar N$.
 
-??? proof "Proof."
-    (1) This is a special case of the easy implication in Theorem (QE test). Indeed, any sentence $\varphi$ is equivalent in $T$ to a quantifier-free formula $\psi(x)$. Let $\bar A$ be a common substructure of $\bar M$ and $\bar N$. For any $a \in A$, one then has
+??? proof "Proof"
+    (1) This is a special case of the easy implication in [Theorem (QE test)](#thm-qe-test). Indeed, any sentence $\varphi$ is equivalent in $T$ to a quantifier-free formula $\psi(x)$. Let $\bar A$ be a common substructure of $\bar M$ and $\bar N$. For any $a \in A$, one then has
 
     $$
     \bar M \models \varphi \iff \bar M \models \psi[a] \iff \bar A \models \psi[a] \iff \bar N \models \psi[a] \iff \bar N \models \varphi.
     $$
 
-    (2) This is a direct consequence of Theorem (QE test).
+    (2) This is a direct consequence of [Theorem (QE test)](#thm-qe-test).
