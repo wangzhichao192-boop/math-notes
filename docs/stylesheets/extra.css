@@ -1,0 +1,23 @@
+/* KaTeX 公式溢出滚动 */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+
+/* 行内公式与中文间距 */
+.md-typeset .katex {
+  font-size: 1.05em;
+}
+
+/* 中文排版 */
+.md-typeset {
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+/* 表格更紧凑 */
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  padding: 0.6em 1em;
+}
