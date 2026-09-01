@@ -5,17 +5,17 @@
    ===================================================================== */
 
 :root {
-  /* Latin: OI-wiki's system stack — SF Pro on macOS (thinner, cleaner),
-     Helvetica/Arial elsewhere.  Chinese: PingFang SC → Microsoft YaHei →
-     Noto Sans CJK. */
+  /* OI-Wiki uses Fira Sans / Fira Mono. Chinese glyphs fall back to the
+     platform's lighter sans-serif face. */
   --mn-text-font:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Fira Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
     "Noto Sans CJK SC", sans-serif;
   --mn-code-font:
-    "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Consolas,
+    "Fira Mono", "SF Mono", Menlo, Consolas,
     "Liberation Mono", "Courier New", monospace;
   --mn-base-size: 16px;
+  --mn-accent: #00897b;
+  --md-typeset-a-color: var(--mn-accent);
 }
 
 /* ----- main text ----- */
@@ -270,12 +270,64 @@
    ===================================================================== */
 [data-md-color-scheme="slate"] {
   --mn-text-font:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Fira Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
     "Noto Sans CJK SC", sans-serif;
+  --mn-accent: #4db6ac;
+  --md-typeset-a-color: var(--mn-accent);
 }
 [data-md-color-scheme="slate"] .md-typeset {
   -webkit-font-smoothing: antialiased;
+}
+
+/* =====================================================================
+   Header and tabs — OI-Wiki-inspired light surface with a teal active cue.
+   ===================================================================== */
+[data-md-color-scheme="default"] .md-header,
+[data-md-color-scheme="default"] .md-tabs {
+  color: var(--md-default-fg-color);
+  background-color: var(--md-default-bg-color);
+}
+[data-md-color-scheme="default"] .md-header {
+  border-bottom: 0;
+  box-shadow:
+    0 0 0.2rem rgba(0, 0, 0, 0.15),
+    0 0.25rem 0.55rem rgba(0, 0, 0, 0.22);
+}
+[data-md-color-scheme="default"] .md-tabs {
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+[data-md-color-scheme="default"] .md-search__form {
+  background-color: rgba(0, 0, 0, 0.045);
+}
+.md-tabs__link {
+  position: relative;
+  opacity: 0.62;
+}
+.md-tabs__item--active .md-tabs__link,
+.md-tabs__link:hover {
+  color: var(--mn-accent) !important;
+  opacity: 1;
+}
+.md-tabs__item--active .md-tabs__link::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.62rem;
+  left: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--mn-accent);
+  content: "";
+}
+
+@media screen and (min-width: 76.25em) {
+  [data-md-color-scheme="default"] .md-header:not(.md-header--shadow) {
+    box-shadow: none;
+  }
+  [data-md-color-scheme="default"] .md-tabs {
+    box-shadow:
+      0 0 0.2rem rgba(0, 0, 0, 0.15),
+      0 0.25rem 0.55rem rgba(0, 0, 0, 0.22);
+  }
 }
 
 /* =====================================================================
@@ -308,6 +360,33 @@
   margin: 0.2em 0.3em;
 }
 
+/* Course cards — restrained lift and one consistent accent colour. */
+.md-typeset .grid.cards > ul > li {
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.md-typeset .grid.cards > ul > li:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--mn-accent) 42%, transparent);
+  box-shadow: 0 0.45rem 1.1rem rgba(0, 0, 0, 0.07);
+}
+.md-typeset .grid.cards > ul > li > p:first-child svg {
+  color: var(--mn-accent);
+}
+
+/* Right-hand table of contents: a slim line marks the current section. */
+.md-sidebar--secondary .md-nav__link {
+  padding-left: 0.55rem;
+  border-left: 2px solid transparent;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.md-sidebar--secondary .md-nav__link--active {
+  border-left-color: var(--mn-accent) !important;
+  color: var(--mn-accent) !important;
+}
+
 /* =====================================================================
    Left sidebar — OI-wiki style.  Course names are the only
    .md-nav__container items here (they carry the collapsible header), so
@@ -316,18 +395,138 @@
    - sub-page entries: keep the Material default (near-black inactive,
      teal active).
    ===================================================================== */
-.md-sidebar--primary .md-nav__link.md-nav__container,
-.md-sidebar--primary .md-nav__container .md-nav__link {
+.md-sidebar--primary .md-nav__container,
+.md-sidebar--primary .md-nav__container > .md-nav__link {
   color: var(--md-default-fg-color--light);
 }
-.md-sidebar--primary .md-nav__item--active > .md-nav__link.md-nav__container,
-.md-sidebar--primary .md-nav__item--active .md-nav__container .md-nav__link {
-  color: var(--md-typeset-a-color);
+.md-sidebar--primary .md-nav__container > .md-nav__link--active {
+  color: var(--mn-accent) !important;
 }
 
-/* hide the lonely "首页" nav link from the sidebar (the top-bar tab stays) */
-.md-sidebar--primary .md-nav__item:has(> .md-nav__link[href="."]) {
+/* Chapter links: inactive entries use the normal foreground; only the
+   current page uses teal. This avoids colouring an entire active branch. */
+.md-sidebar--primary .md-nav__container + .md-nav .md-nav__link {
+  color: var(--md-default-fg-color);
+}
+.md-sidebar--primary .md-nav__container + .md-nav .md-nav__link--active {
+  color: var(--mn-accent) !important;
+}
+
+/* Homepage sidebar: this remains the active top-level navigation item so
+   Material's scrollfix includes it in Safari's initial height calculation. */
+.mn-recent-updates {
+  display: none !important;
+  margin-top: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+.mn-recent-updates__title {
+  margin: 0 0 0.35rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.mn-recent-updates__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mn-recent-updates__item + .mn-recent-updates__item {
+  margin-top: 0.12rem;
+}
+.mn-recent-updates__link {
+  display: block;
+  padding: 0.28rem 0;
+  color: var(--md-default-fg-color);
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+.mn-recent-updates__link:hover,
+.mn-recent-updates__link:focus {
+  color: var(--mn-accent);
+}
+.mn-recent-updates__date {
+  display: block;
+  margin-top: 0.08rem;
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.55rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* On narrow screens Material folds the left sidebar into the hamburger
+   drawer. Repeat the same data in a compact homepage panel so it remains
+   immediately discoverable. */
+.mn-recent-updates-mobile {
   display: none;
+  margin: 0 0 1.4rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mn-accent) 4%, transparent);
+}
+.mn-recent-updates-mobile__title {
+  margin: 0 0 0.55rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.md-typeset .mn-recent-updates-mobile ul {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem 1.2rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+.md-typeset .mn-recent-updates-mobile li {
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0;
+}
+.mn-recent-updates-mobile a {
+  display: block;
+  overflow: hidden;
+  color: var(--md-default-fg-color);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mn-recent-updates-mobile a:hover {
+  color: var(--mn-accent);
+}
+.mn-recent-updates-mobile time {
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media screen and (max-width: 76.234375em) {
+  .mn-recent-updates-mobile {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 76.25em) {
+  /* Safari/WebKit can drop the first paint of an `overflow: hidden` layer
+     that lives inside a 3D-transformed ancestor (here, the fixed
+     `.md-sidebar--primary` carries `transform: translateX(0)` for the
+     mobile drawer). Promote the scrollwrap to its own composited layer
+     so it paints on the first frame instead of waiting for a scroll /
+     hover / focus interaction. The 3D promotion is visually a no-op
+     (`translateZ(0)` is equivalent to `translate(0,0)`), and the mobile
+     drawer animation is driven by a transform on `.md-sidebar--primary`,
+     not on the scrollwrap, so this does not conflict with it. */
+  .md-sidebar--primary .md-sidebar__scrollwrap {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .mn-recent-updates {
+    display: block !important;
+  }
 }
 
 /* =====================================================================

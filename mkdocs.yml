@@ -5,22 +5,25 @@ copyright: CC BY-SA 4.0
 
 theme:
   name: material
+  custom_dir: docs/overrides
   language: zh
   logo: assets/logo.svg
   favicon: assets/logo.svg
-  font: false
+  font:
+    text: Fira Sans
+    code: Fira Mono
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: teal
-      accent: indigo
+      primary: white
+      accent: teal
       toggle:
         icon: material/brightness-7
         name: 切换到深色模式
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: teal
-      accent: indigo
+      accent: teal
       toggle:
         icon: material/brightness-4
         name: 切换到浅色模式
@@ -40,7 +43,7 @@ theme:
 
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
-  - stylesheets/extra.css
+  - stylesheets/extra.css?v=20260901-4
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
@@ -95,7 +98,6 @@ hooks:
 
 nav:
   - 首页: index.md
-  - 最近更新: recent-updates.md
   - 代数与分析基础:
       - algebra-analysis/index.md
       - Basic Logic: algebra-analysis/basic-logic.md

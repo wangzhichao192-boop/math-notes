@@ -1,9 +1,9 @@
-"""Build hook: inject a "最近更新" (recently updated) list into the homepage.
+"""Build hook: collect the site's recently updated pages.
 
-Replaces the ``<!-- RECENT-UPDATES -->`` placeholder in ``docs/index.md`` with a
-markdown list of the most recently touched course pages, sorted by git
-last-commit date (falling back to file mtime for untracked/uncommitted files,
-so newly added chapters still show up before the first commit).
+The collected pages are exposed to the theme as ``extra.recent_updates``.  The
+primary-navigation override renders that list in the homepage sidebar.  The
+legacy ``recent-updates.md`` page still uses the same data when opened through
+an old direct link.
 
 Requires MkDocs >= 1.5 (``hooks`` config). Wired up in ``mkdocs.yml``:
 
@@ -15,7 +15,7 @@ import os
 import subprocess
 from datetime import datetime
 
-MAX_ITEMS = 8
+MAX_ITEMS = 6
 
 
 def _first_heading(path):
@@ -57,13 +57,12 @@ def _mtime(docs_dir, rel):
         return None
 
 
-def on_page_markdown(markdown, *, page, config, files):
-    if "<!-- RECENT-UPDATES -->" not in markdown:
-        return markdown
-
+def _collect_updates(files, config):
     rows = []
     for f in files.documentation_pages():
-        if f.src_path == "index.md" or f.src_path == "recent-updates.md":
+        if f.src_path in {"index.md", "recent-updates.md", "WRITING_GUIDE.md"}:
+            continue
+        if f.src_path.endswith("/index.md"):
             continue
         if not f.src_path.endswith(".md"):
             continue
@@ -72,13 +71,50 @@ def on_page_markdown(markdown, *, page, config, files):
         )
         if date is None:
             continue
-        rows.append((date, _first_heading(f.abs_src_path), f.url))
+        rows.append((date, _first_heading(f.abs_src_path), f.url, f.src_path))
 
     rows.sort(key=lambda r: r[0], reverse=True)
+    return rows[:MAX_ITEMS]
+
+
+def on_files(files, *, config):
+    """Make recent-update data available to the sidebar template."""
+    updates = [
+        {
+            "date": date.strftime("%Y-%m-%d"),
+            "title": title,
+            "url": url,
+            "source": source,
+        }
+        for date, title, url, source in _collect_updates(files, config)
+    ]
+    config.setdefault("extra", {})["recent_updates"] = updates
+    return files
+
+
+def on_page_markdown(markdown, *, page, config, files):
+    """Render the compact mobile list and keep the old direct URL useful."""
+    updates = config.get("extra", {}).get("recent_updates", [])
+
+    if "<!-- RECENT-UPDATES-MOBILE -->" in markdown:
+        mobile_lines = []
+        for item in updates:
+            mobile_lines.append(
+                f"- [{item['title']}]({item['source']})\n"
+                f"  <time datetime=\"{item['date']}\">{item['date']}</time>"
+            )
+        markdown = markdown.replace(
+            "<!-- RECENT-UPDATES-MOBILE -->", "\n".join(mobile_lines)
+        )
+
+    if "<!-- RECENT-UPDATES -->" not in markdown:
+        return markdown
 
     lines = ["", ""]
-    for date, title, url in rows[:MAX_ITEMS]:
-        lines.append(f"- **{title}** — {date.strftime('%Y-%m-%d')}（[阅读]({url})）")
+    for item in updates:
+        lines.append(
+            f"- **{item['title']}** — {item['date']}（[阅读]({item['source']})）"
+        )
     block = "\n".join(lines)
 
     return markdown.replace("<!-- RECENT-UPDATES -->", block)

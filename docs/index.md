@@ -5,6 +5,12 @@
 
 ## 课程
 
+<section class="mn-recent-updates-mobile" markdown>
+<p class="mn-recent-updates-mobile__title">最近更新</p>
+
+<!-- RECENT-UPDATES-MOBILE -->
+</section>
+
 <div class="grid cards" markdown>
 
 
