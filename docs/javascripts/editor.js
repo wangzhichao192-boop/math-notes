@@ -7,7 +7,7 @@
   const DRAFT_PREFIX = "mn-typora-draft:v1:";
   const PENDING_NAVIGATION_KEY = "mn-typora-pending-navigation";
   const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
-  const EDITOR_ASSET_URL = new URL("codemirror.bundle.js?v=20260910-4", document.currentScript.src).href;
+  const EDITOR_ASSET_URL = new URL("codemirror.bundle.js?v=20260910-6", document.currentScript.src).href;
   const RESUME_KEY = "mn-typora-resume";
 
   const BLOCKS = [
@@ -210,7 +210,7 @@
     return /^[a-z][\w-]*$/.test(kind) ? kind : "note";
   }
 
-  function createVisualExtension(modules) {
+  function createVisualExtension(modules, onAnalysis) {
     const { Decoration, WidgetType } = modules;
     let cachedDoc, cachedSyntax, cachedParsed, cachedMath;
 
@@ -291,16 +291,6 @@
       ignoreEvent() { return true; }
     }
 
-    class MathPreview extends MathWidget {
-      toDOM(view) {
-        const node = super.toDOM(view);
-        node.classList.add("mn-cm-math-preview");
-        node.removeAttribute("data-mn-edit-point");
-        node.title = "公式实时预览";
-        return node;
-      }
-    }
-
     class BulletWidget extends WidgetType {
       constructor(editFrom) {
         super();
@@ -340,15 +330,13 @@
         const blocked = [...cachedSyntax.code, ...cachedSyntax.inline.filter(item => item.type === "InlineCode")];
         const displayMath = findDisplayMath(source).filter(range => !blocked.some(item => range.from < item.to && range.to > item.from));
         cachedMath = [...displayMath, ...modules.findInlineMath(source, [...blocked, ...displayMath])].sort((a, b) => a.from - b.from);
+        onAnalysis?.(cachedMath, state.doc);
       }
       const parsed = cachedParsed;
       const math = cachedMath;
       math.forEach((range) => {
         if (rangeIsActive(state, range.from, range.to)) {
           decorations.push(Decoration.mark({ class: range.display ? "mn-cm-math-source mn-cm-math-source--display" : "mn-cm-math-source" }).range(range.from, range.to));
-          if (range.display) decorations.push(Decoration.widget({
-            widget: new MathPreview(range.tex, true, range.from, range.editFrom), block: true, side: 1
-          }).range(range.to));
           return;
         }
         const parentBlock = range.display
@@ -930,8 +918,11 @@
     sessionStorage.removeItem(RESUME_KEY);
     hideMenu(state);
     clearTimeout(state.draftTimer);
+    clearTimeout(state.outlineTimer);
     state.destroyed = true;
+    unmountMathPopover(state);
     state.view.destroy();
+    state.outline?.remove();
     state.article.innerHTML = state.originalHtml;
     document.body.classList.remove("mn-typora-editing");
     activeEditor = null;
@@ -949,6 +940,159 @@
     status.setAttribute("role", "status");
     status.innerHTML = '<span aria-hidden="true"></span><strong>正在打开编辑器…</strong>';
     document.body.appendChild(status);
+  }
+
+  function updateOutlineActive(state) {
+    if (!state.outline) return;
+    const position = state.view.state.selection.main.head;
+    let active = null;
+    for (const heading of state.outlineHeadings || []) {
+      if (heading.from > position) break;
+      active = heading;
+    }
+    state.outline.querySelectorAll("[data-outline-position]").forEach(button => {
+      const selected = active && Number(button.dataset.outlinePosition) === active.from;
+      button.classList.toggle("is-active", Boolean(selected));
+      if (selected) button.setAttribute("aria-current", "location");
+      else button.removeAttribute("aria-current");
+    });
+  }
+
+  function renderEditorOutline(state) {
+    if (!state.outline || state.destroyed) return;
+    const headings = state.modules.extractHeadings(state.view.state.doc.toString());
+    const pageHeading = headings.find(heading => heading.level === 1);
+    const pageTitle = pageHeading?.title || state.payload.sourcePath.split("/").pop().replace(/\.md$/, "");
+    const courseTitle = (state.payload.courses || []).find(course => course.slug === state.payload.courseSlug)?.title || "主页";
+    state.outlineHeadings = headings.filter(heading => heading.level > 1);
+    state.outline.innerHTML = `
+      <header class="mn-editor-outline__header">
+        <span>${escapeHtml(courseTitle)}</span>
+        <strong>${escapeHtml(pageTitle)}</strong>
+      </header>
+      <nav class="mn-editor-outline__nav" aria-label="当前页面目录">
+        <span class="mn-editor-outline__label">本页目录</span>
+        ${state.outlineHeadings.length ? state.outlineHeadings.map(heading => `
+          <button type="button" class="mn-editor-outline__item mn-editor-outline__item--${heading.level}"
+                  data-outline-position="${heading.from}">${escapeHtml(heading.title)}</button>`).join("")
+          : '<span class="mn-editor-outline__empty">输入二级标题后会显示在这里</span>'}
+      </nav>`;
+    updateOutlineActive(state);
+  }
+
+  function mountEditorOutline(state) {
+    const sidebar = document.querySelector(".md-sidebar--primary");
+    if (!sidebar) return;
+    const outline = document.createElement("section");
+    outline.className = "mn-editor-outline";
+    outline.addEventListener("click", event => {
+      const button = event.target.closest("[data-outline-position]");
+      if (!button) return;
+      const heading = (state.outlineHeadings || []).find(item => item.from === Number(button.dataset.outlinePosition));
+      if (!heading) return;
+      state.view.dispatch({ selection: { anchor: heading.contentFrom }, scrollIntoView: true });
+      state.view.focus();
+      updateOutlineActive(state);
+    });
+    sidebar.appendChild(outline);
+    state.outline = outline;
+    renderEditorOutline(state);
+  }
+
+  function hideMathPopover(state) {
+    if (!state.mathPopover) return;
+    state.mathPopover.hidden = true;
+    state.activeMathRange = null;
+    state.mathPopoverSignature = "";
+  }
+
+  function positionMathPopover(state, range) {
+    const popover = state.mathPopover;
+    if (!popover || popover.hidden || state.destroyed) return;
+    const start = state.view.coordsAtPos(range.from, 1);
+    const end = state.view.coordsAtPos(range.to, -1);
+    if (!start || !end) return hideMathPopover(state);
+
+    const margin = 8;
+    const gap = 10;
+    const anchorX = Math.abs(start.top - end.top) < 4 ? (start.left + end.right) / 2 : end.left;
+    const anchorTop = Math.min(start.top, end.top);
+    const anchorBottom = Math.max(start.bottom, end.bottom);
+    const width = popover.offsetWidth;
+    const height = popover.offsetHeight;
+    const maxLeft = Math.max(margin, window.innerWidth - width - margin);
+    const left = Math.min(maxLeft, Math.max(margin, anchorX - width / 2));
+    const fitsBelow = anchorBottom + gap + height <= window.innerHeight - margin;
+    const top = fitsBelow
+      ? anchorBottom + gap
+      : Math.max(margin, anchorTop - gap - height);
+    popover.classList.toggle("is-above", !fitsBelow);
+    popover.style.left = `${Math.round(left)}px`;
+    popover.style.top = `${Math.round(top)}px`;
+    popover.style.setProperty("--mn-math-arrow-x", `${Math.max(10, Math.min(width - 10, anchorX - left))}px`);
+  }
+
+  function updateMathPopover(state) {
+    if (!state.mathPopover || !state.view || state.destroyed || !state.visual || !state.view.hasFocus) {
+      hideMathPopover(state);
+      return;
+    }
+    const selection = state.view.state.selection.main;
+    const range = (state.mathRanges || []).find(item => selection.empty
+      ? selection.head >= item.from && selection.head <= item.to
+      : selection.from < item.to && selection.to > item.from);
+    if (!range || !range.tex.trim()) {
+      hideMathPopover(state);
+      return;
+    }
+
+    const signature = `${range.from}:${range.to}:${range.display ? 1 : 0}:${range.tex}`;
+    if (signature !== state.mathPopoverSignature) {
+      const content = state.mathPopover.firstElementChild;
+      try {
+        if (window.katex) window.katex.render(range.tex, content, { throwOnError: false, displayMode: range.display });
+        else content.textContent = range.tex;
+      } catch (_) {
+        content.textContent = range.tex;
+      }
+      state.mathPopoverSignature = signature;
+    }
+    state.activeMathRange = range;
+    state.mathPopover.hidden = false;
+    positionMathPopover(state, range);
+  }
+
+  function scheduleMathPopover(state) {
+    if (state.mathPopoverFrame != null) cancelAnimationFrame(state.mathPopoverFrame);
+    state.mathPopoverFrame = requestAnimationFrame(() => {
+      state.mathPopoverFrame = null;
+      updateMathPopover(state);
+    });
+  }
+
+  function mountMathPopover(state) {
+    const popover = document.createElement("div");
+    popover.className = "mn-cm-math-popover";
+    popover.hidden = true;
+    popover.setAttribute("role", "status");
+    popover.setAttribute("aria-label", "公式实时预览");
+    popover.innerHTML = '<div class="mn-cm-math-popover__content"></div>';
+    document.body.appendChild(popover);
+    state.mathPopover = popover;
+    state.mathPopoverListener = () => scheduleMathPopover(state);
+    window.addEventListener("resize", state.mathPopoverListener);
+    window.addEventListener("scroll", state.mathPopoverListener, true);
+    updateMathPopover(state);
+  }
+
+  function unmountMathPopover(state) {
+    if (state.mathPopoverFrame != null) cancelAnimationFrame(state.mathPopoverFrame);
+    if (state.mathPopoverListener) {
+      window.removeEventListener("resize", state.mathPopoverListener);
+      window.removeEventListener("scroll", state.mathPopoverListener, true);
+    }
+    state.mathPopover?.remove();
+    state.mathPopover = null;
   }
 
   async function enterEditor(payload, generation) {
@@ -1003,15 +1147,22 @@
     setOpeningStatus(false);
 
     const visualCompartment = new modules.Compartment();
-    const visualExtension = createVisualExtension(modules);
-    const state = {
+    let state;
+    const visualExtension = createVisualExtension(modules, (ranges) => {
+      if (!state) return;
+      state.mathRanges = ranges;
+      if (state.mathPopover) scheduleMathPopover(state);
+    });
+    state = {
       article, shell, toolbar, surface, payload, originalHtml, modules,
       baseRevision: source === draft?.source && !draftCompatible ? draft.baseRevision : payload.revision,
       savedSource: payload.source, pendingSource: null,
       status: toolbar.querySelector(".mn-typora-status"), visualCompartment, visualExtension,
       visual: true, draftTimer: null, menu: null, menuMode: "toolbar", slashRange: null,
       blockTabStop: null,
-      structureDialog: null, view: null
+      structureDialog: null, view: null, outline: null, outlineHeadings: [], outlineTimer: null,
+      mathRanges: [], mathPopover: null, mathPopoverFrame: null, mathPopoverListener: null,
+      mathPopoverSignature: "", activeMathRange: null
     };
 
     const updateListener = modules.EditorView.updateListener.of((update) => {
@@ -1033,8 +1184,12 @@
         setStatus(state, "正在保存草稿…", "pending");
         clearTimeout(state.draftTimer);
         state.draftTimer = setTimeout(() => writeDraft(state), 350);
+        clearTimeout(state.outlineTimer);
+        state.outlineTimer = setTimeout(() => renderEditorOutline(state), 80);
       }
       if (update.docChanged || update.selectionSet) updateSlashMenu(state);
+      if (update.selectionSet) updateOutlineActive(state);
+      if (update.docChanged || update.selectionSet || update.viewportChanged || update.focusChanged) updateMathPopover(state);
     });
     const textOffsetAtPoint = (element, x, y, sourceText = "") => {
       const lineElement = element.closest(".cm-line") || element;
@@ -1257,6 +1412,8 @@
       parent: surface
     });
     state.menu = makeBlockMenu(state);
+    mountEditorOutline(state);
+    mountMathPopover(state);
     activeEditor = state;
     sessionStorage.setItem(RESUME_KEY, payload.sourcePath);
     if (openingGeneration === generation) openingGeneration = 0;
@@ -1283,6 +1440,7 @@
         event.target.textContent = state.visual ? "源码" : "所见即所得";
         setStatus(state, state.visual ? "已回到即时排版" : "正在显示完整 Markdown", "saved");
         state.view.focus();
+        scheduleMathPopover(state);
       }
       if (action === "export") {
         downloadMarkdown(state.view.state.doc.toString(), payload.sourcePath.split("/").pop());
@@ -1295,6 +1453,7 @@
       if (!event.target.closest(".mn-typora-menu, [data-action=add]")) hideMenu(state);
     });
     state.view.focus();
+    scheduleMathPopover(state);
   }
 
   function initialize() {
@@ -1305,7 +1464,10 @@
     if (activeEditor) {
       writeDraft(activeEditor);
       activeEditor.destroyed = true;
+      clearTimeout(activeEditor.outlineTimer);
+      unmountMathPopover(activeEditor);
       activeEditor.view.destroy();
+      activeEditor.outline?.remove();
       activeEditor = null;
       document.body.classList.remove("mn-typora-editing");
     }

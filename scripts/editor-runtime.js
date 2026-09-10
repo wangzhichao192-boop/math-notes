@@ -4,7 +4,7 @@ import { Decoration, EditorView, WidgetType } from "@codemirror/view";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { Prec, EditorSelection } from "@codemirror/state";
 import { writingExtension, writingCommands } from "./editor-commands.mjs";
-import { analyzeMarkdown, findInlineMath, parseAdmonitions } from "./editor-syntax.mjs";
+import { analyzeMarkdown, extractHeadings, findInlineMath, parseAdmonitions } from "./editor-syntax.mjs";
 
 window.MathNotesCodeMirror = {
   basicSetup,
@@ -14,5 +14,5 @@ window.MathNotesCodeMirror = {
   EditorView,
   WidgetType,
   markdown, markdownLanguage, Prec, EditorSelection, writingExtension, writingCommands,
-  analyzeMarkdown, findInlineMath, parseAdmonitions
+  analyzeMarkdown, extractHeadings, findInlineMath, parseAdmonitions
 };

@@ -44,14 +44,14 @@ theme:
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
   - stylesheets/extra.css?v=20260901-4
-  - stylesheets/editor.css?v=20260910-4
+  - stylesheets/editor.css?v=20260910-6
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
   - javascripts/numbering.js
-  - javascripts/editor.js?v=20260910-4
+  - javascripts/editor.js?v=20260910-6
 
 markdown_extensions:
   - admonition

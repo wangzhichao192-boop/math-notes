@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { analyzeMarkdown, findInlineMath, parseAdmonitions } from "./editor-syntax.mjs";
+import { analyzeMarkdown, extractHeadings, findInlineMath, parseAdmonitions } from "./editor-syntax.mjs";
 
 function mathIn(source, admonitions = []) {
   const syntax = analyzeMarkdown(source, admonitions);
@@ -21,6 +21,16 @@ test("unindented separator lines do not visually extend an admonition", () => {
   const block = parseAdmonitions(source).blocks[0];
   assert.equal(block.endLine, 1);
   assert.equal(source.slice(block.from, block.to), '!!! proof "Proof"\n    Body.');
+});
+
+test("editor outline follows real headings and ignores fenced code", () => {
+  const source = '# Page **title**\n\n## First [part](first.md)\n### Detail {#detail}\n```md\n## not a heading\n```\n#### Last';
+  assert.deepEqual(extractHeadings(source).map(({ level, title }) => ({ level, title })), [
+    { level: 1, title: "Page title" },
+    { level: 2, title: "First part" },
+    { level: 3, title: "Detail" },
+    { level: 4, title: "Last" }
+  ]);
 });
 
 test("quoted and list-nested fences remain literal", () => {

@@ -44,6 +44,38 @@ export function parseAdmonitions(source, labels = {}) {
   return { blocks, lines, offsets };
 }
 
+function plainHeadingTitle(source) {
+  return source
+    .replace(/\s+\{[^}]+\}\s*$/, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/<[^>]+>/g, "")
+    .replace(/[`*_~]/g, "")
+    .replace(/\\([#`*_{}\[\]()])/g, "$1")
+    .trim();
+}
+
+export function extractHeadings(source) {
+  const headings = [];
+  const lines = source.split("\n");
+  let offset = 0, fence = null;
+  lines.forEach(line => {
+    const fenceMatch = /^\s{0,3}(`{3,}|~{3,})/.exec(line);
+    if (fenceMatch) {
+      const marker = fenceMatch[1][0];
+      if (!fence) fence = { marker, length: fenceMatch[1].length };
+      else if (marker === fence.marker && fenceMatch[1].length >= fence.length) fence = null;
+    } else if (!fence) {
+      const match = /^(#{1,4})[ \t]+(.+?)\s*#*\s*$/.exec(line);
+      if (match) {
+        const title = plainHeadingTitle(match[2]);
+        if (title) headings.push({ level: match[1].length, title, from: offset, contentFrom: offset + match[1].length + 1 });
+      }
+    }
+    offset += line.length + 1;
+  });
+  return headings;
+}
+
 // MkDocs admonitions are not CommonMark containers. Remove only their own
 // indentation before parsing, then map every syntax position back to the file.
 // Other indentation must survive so ordinary code blocks stay literal.

@@ -14,24 +14,27 @@
 const result = document.querySelector('#diagnostics');
 const editor = () => window.MathNotesCodeMirror?.EditorView.findFromDOM(document.querySelector('.cm-content'));
 document.querySelector('#snapshot').onclick = () => {
- const view = editor(); result.value = view ? JSON.stringify({source:view.state.doc.toString(),selection:view.state.selection.main.toJSON(),math:document.querySelectorAll('.mn-cm-math').length,preview:document.querySelectorAll('.mn-cm-math-preview').length},null,2) : '没有进入编辑模式';
+ const view = editor(); result.value = view ? JSON.stringify({source:view.state.doc.toString(),selection:view.state.selection.main.toJSON(),math:document.querySelectorAll('.mn-cm-math').length,preview:document.querySelectorAll('.mn-cm-math-popover:not([hidden])').length},null,2) : '没有进入编辑模式';
 };
 document.querySelector('#clear').onclick = () => {const view=editor();view.dispatch({changes:{from:0,to:view.state.doc.length,insert:''},selection:{anchor:0}});view.focus()};
-document.querySelector('#render-tests').onclick = () => {
+document.querySelector('#render-tests').onclick = async () => {
  const view=editor(), original=view.state, checks=[];
- const run=(name,fn)=>{try{fn();checks.push('PASS '+name)}catch(e){checks.push('FAIL '+name+': '+e.message)}};
- const set=(source,pos=0)=>view.dispatch({changes:{from:0,to:view.state.doc.length,insert:source},selection:{anchor:pos}});
+ const run=async(name,fn)=>{try{await fn();checks.push('PASS '+name)}catch(e){checks.push('FAIL '+name+': '+e.message)}};
+ const set=(source,pos=0)=>{view.dispatch({changes:{from:0,to:view.state.doc.length,insert:source},selection:{anchor:pos}});view.focus()};
+ const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
  const assert=(condition,message)=>{if(!condition)throw Error(message)};
- run('加粗不因点击同一行普通文字而展开',()=>{set('A **binary relation** on a set.\n',28);assert(document.querySelector('.cm-content').textContent.includes('A binary relation on a set.'),'markers expanded')});
- run('嵌套加粗斜体',()=>{set('\n**bold *italic***');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-em'),'missing nested style')});
- run('代码围栏保留原文、不渲染公式',()=>{set('\n```text\n**literal** $not_math$\n```');assert(!document.querySelector('.mn-cm-math'),'math inside code');assert(document.querySelector('.cm-content').textContent.includes('**literal**'),'literal markers hidden')});
- run('行内代码中的美元符保留',()=>{set('\n`$a$` and $b$');assert(document.querySelectorAll('.mn-cm-math').length===1,'wrong math count')});
- run('粗体中的公式同时渲染',()=>{set('\n**a $x$ b**');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-math'),'missing nested math')});
- run('引用内代码和金额保留原文',()=>{set('\n> ```\n> **literal** $no$\n> ```\n\ncost $5 and $10');assert(!document.querySelector('.mn-cm-math'),'literal dollars rendered')});
- run('定义正文保留粗体和公式',()=>{set('\n!!! definition "Test"\n    <a id="def-1-1-1"></a>\n    **word** $x$');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-math'),'missing admonition formatting')});
- run('块内代码换行立即留在块中',()=>{const source='!!! definition "Code"\n    <a id="def-1-1-1"></a>\n    ```js\n    const x = 1;\n    ';set(source,source.length);const lines=[...document.querySelectorAll('.cm-line')];assert(lines.at(-1)?.classList.contains('mn-cm-admonition--last'),'live code line escaped admonition')});
- run('编辑公式时保持实时预览',()=>{set('$$\nx^2\n$$\n',4);assert(document.querySelector('.mn-cm-math-preview .katex'),'missing preview');set('$$\ny^3\n$$\n',4);assert(document.querySelector('.mn-cm-math-preview').textContent.includes('y'),'stale preview')});
- run('源码视图可完整还原',()=>{const button=document.querySelector('[data-action=source]');button.click();assert(!document.querySelector('.mn-cm-math'),'preview retained in source');button.click()});
+ await run('加粗不因点击同一行普通文字而展开',()=>{set('A **binary relation** on a set.\n',28);assert(document.querySelector('.cm-content').textContent.includes('A binary relation on a set.'),'markers expanded')});
+ await run('嵌套加粗斜体',()=>{set('\n**bold *italic***');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-em'),'missing nested style')});
+ await run('代码围栏保留原文、不渲染公式',()=>{set('\n```text\n**literal** $not_math$\n```');assert(!document.querySelector('.mn-cm-math'),'math inside code');assert(document.querySelector('.cm-content').textContent.includes('**literal**'),'literal markers hidden')});
+ await run('行内代码中的美元符保留',()=>{set('\n`$a$` and $b$');assert(document.querySelectorAll('.mn-cm-math').length===1,'wrong math count')});
+ await run('粗体中的公式同时渲染',()=>{set('\n**a $x$ b**');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-math'),'missing nested math')});
+ await run('引用内代码和金额保留原文',()=>{set('\n> ```\n> **literal** $no$\n> ```\n\ncost $5 and $10');assert(!document.querySelector('.mn-cm-math'),'literal dollars rendered')});
+ await run('定义正文保留粗体和公式',()=>{set('\n!!! definition "Test"\n    <a id="def-1-1-1"></a>\n    **word** $x$');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-math'),'missing admonition formatting')});
+ await run('块内代码换行立即留在块中',()=>{const source='!!! definition "Code"\n    <a id="def-1-1-1"></a>\n    ```js\n    const x = 1;\n    ';set(source,source.length);const lines=[...document.querySelectorAll('.cm-line')];assert(lines.at(-1)?.classList.contains('mn-cm-admonition--last'),'live code line escaped admonition')});
+ await run('行内公式编辑时显示浮窗',async()=>{const source='A $\\sum_{i=0}^n |a_i|$ B';set(source,source.indexOf('sum')+2);await paint();const preview=document.querySelector('.mn-cm-math-popover');assert(preview&&!preview.hidden&&preview.querySelector('.katex'),'missing inline preview')});
+ await run('块公式编辑时浮窗实时更新',async()=>{set('$$\nx^2\n$$\n',4);await paint();let preview=document.querySelector('.mn-cm-math-popover');assert(preview&&!preview.hidden&&preview.querySelector('.katex'),'missing display preview');set('$$\ny^3\n$$\n',4);await paint();preview=document.querySelector('.mn-cm-math-popover');assert(preview.textContent.includes('y'),'stale preview')});
+ await run('离开公式后自动收起浮窗',async()=>{const source='before $x$ after';set(source,source.length);await paint();assert(document.querySelector('.mn-cm-math-popover')?.hidden,'preview remained visible')});
+ await run('源码视图可完整还原',()=>{const button=document.querySelector('[data-action=source]');button.click();assert(!document.querySelector('.mn-cm-math'),'preview retained in source');button.click()});
  view.setState(original); result.value=checks.join('\n');
 };
 document.querySelector('#save-tests').onclick = async () => {
