@@ -1,0 +1,616 @@
+/* =====================================================================
+   Math Notes — typography & layout
+   Based on OI-wiki's clean, comfortable look. 16px base, 1.6 line-height,
+   generous sans-serif stack with Chinese fallbacks.
+   ===================================================================== */
+
+:root {
+  /* OI-Wiki uses Fira Sans / Fira Mono. Chinese glyphs fall back to the
+     platform's lighter sans-serif face. */
+  --mn-text-font:
+    "Fira Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
+  --mn-code-font:
+    "Fira Mono", "SF Mono", Menlo, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --mn-base-size: 16px;
+  --mn-accent: #00897b;
+  --md-typeset-a-color: var(--mn-accent);
+}
+
+/* ----- main text ----- */
+.md-typeset {
+  font-family: var(--mn-text-font);
+  font-size: var(--mn-base-size);
+  line-height: 1.6;
+  letter-spacing: 0.005em;
+  /* Slightly tighter feature settings for the Inter / SF family. */
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* paragraphs: kill the giant default 1em top margin */
+.md-typeset p {
+  margin: 0.55em 0;
+}
+
+/* lists: tighter spacing between items */
+.md-typeset ul,
+.md-typeset ol {
+  margin: 0.4em 0;
+  padding-left: 1.4em;
+}
+.md-typeset li {
+  margin: 0.18em 0;
+}
+
+/* inline code */
+.md-typeset code,
+.md-typeset pre,
+.md-typeset kbd {
+  font-family: var(--mn-code-font);
+  font-size: 0.92em;
+}
+
+/* code blocks: keep readable but don't bloat */
+.md-typeset pre {
+  line-height: 1.55;
+  padding: 0.85em 1.1em;
+  border-radius: 6px;
+}
+
+/* ----- headings ----- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--mn-text-font);
+  font-weight: 500;            /* lighter than the default 700 */
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 1.2em 0 0.4em;
+}
+.md-typeset h1 { font-size: 1.5rem;  }
+.md-typeset h2 { font-size: 1.22rem; }
+.md-typeset h3 { font-size: 1.08rem; }
+.md-typeset h4 { font-size: 1.0rem; font-weight: 600; }
+
+/* ----- tables ----- */
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  padding: 0.55em 0.9em;
+}
+.md-typeset table:not([class]) th {
+  font-weight: 600;
+}
+
+/* ----- KaTeX math ----- */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.6em 0;
+  margin: 0.6em 0;
+}
+.md-typeset .katex {
+  font-size: 1.08em;
+  /* Slightly tighter so subscripts and superscripts sit nicely with
+     the surrounding prose. */
+  line-height: 1.05;
+}
+
+/* =====================================================================
+   Theorem-style admonitions — same colour scheme as before, but with
+   tighter padding so dense proofs don't sprawl vertically.
+
+   Numbering: each type (definition, theorem, lemma, proposition,
+   corollary, remark, example) has its own CSS counter, reset at every
+   `## Section` heading. The number is prepended to the title via
+   `::before` so the user-supplied title text (e.g. "(Image of a
+   union)") is preserved and read as the theorem's name.
+   ===================================================================== */
+
+.md-typeset h2 {
+  counter-reset: def-counter thm-counter lem-counter
+                 prop-counter cor-counter rem-counter
+                 ex-counter prf-counter;
+}
+
+.md-typeset .admonition.definition,
+.md-typeset details.definition { counter-increment: def-counter; }
+.md-typeset .admonition.theorem,
+.md-typeset details.theorem       { counter-increment: thm-counter; }
+.md-typeset .admonition.lemma,
+.md-typeset details.lemma         { counter-increment: lem-counter; }
+.md-typeset .admonition.proposition,
+.md-typeset details.proposition  { counter-increment: prop-counter; }
+.md-typeset .admonition.corollary,
+.md-typeset details.corollary    { counter-increment: cor-counter; }
+.md-typeset .admonition.remark,
+.md-typeset details.remark       { counter-increment: rem-counter; }
+.md-typeset .admonition.example,
+.md-typeset details.example      { counter-increment: ex-counter; }
+.md-typeset .admonition.proof,
+.md-typeset details.proof        { counter-increment: prf-counter; }
+
+.md-typeset .definition > .admonition-title::before,
+.md-typeset details.definition > summary::before {
+  content: counter(def-counter) ".  ";
+  color: #2962ff; font-weight: 700;
+}
+.md-typeset .theorem > .admonition-title::before,
+.md-typeset details.theorem > summary::before {
+  content: counter(thm-counter) ".  ";
+  color: #6200ee; font-weight: 700;
+}
+.md-typeset .lemma > .admonition-title::before,
+.md-typeset details.lemma > summary::before {
+  content: counter(lem-counter) ".  ";
+  color: #00897b; font-weight: 700;
+}
+.md-typeset .proposition > .admonition-title::before,
+.md-typeset details.proposition > summary::before {
+  content: counter(prop-counter) ".  ";
+  color: #2e7d32; font-weight: 700;
+}
+.md-typeset .corollary > .admonition-title::before,
+.md-typeset details.corollary > summary::before {
+  content: counter(cor-counter) ".  ";
+  color: #e65100; font-weight: 700;
+}
+.md-typeset .remark > .admonition-title::before,
+.md-typeset details.remark > summary::before {
+  content: counter(rem-counter) ".  ";
+  color: #455a64; font-weight: 700; font-style: italic;
+}
+.md-typeset .example > .admonition-title::before,
+.md-typeset details.example > summary::before {
+  content: counter(ex-counter) ".  ";
+  color: #2962ff; font-weight: 700;
+}
+.md-typeset .proof > .admonition-title::before,
+.md-typeset details.proof > summary::before {
+  content: counter(prf-counter) ".  ";
+  color: #9e9e9e; font-weight: 700;
+}
+
+/* ----- layout for the now-numbered admonitions ----- */
+.md-typeset .admonition,
+.md-typeset details[class] {
+  margin: 1em 0;
+  padding: 0.6em 1em;
+  font-size: 0.98em;
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  font-weight: 600;
+  padding: 0.4em 0.8em;
+  margin: -0.6em -1em 0.5em;
+}
+.md-typeset .admonition-title ~ p,
+.md-typeset .admonition > :last-child,
+.md-typeset details > :last-child {
+  margin-bottom: 0.2em;
+}
+
+/* Definition — blue */
+.md-typeset .admonition.definition,
+.md-typeset details.definition {
+  border-color: #448aff;
+}
+.md-typeset .definition > .admonition-title,
+.md-typeset details.definition > summary {
+  background-color: rgba(68, 138, 255, 0.1);
+}
+
+/* Theorem — purple */
+.md-typeset .admonition.theorem,
+.md-typeset details.theorem {
+  border-color: #7c4dff;
+}
+.md-typeset .theorem > .admonition-title,
+.md-typeset details.theorem > summary {
+  background-color: rgba(124, 77, 255, 0.1);
+}
+
+/* Lemma — teal */
+.md-typeset .admonition.lemma,
+.md-typeset details.lemma {
+  border-color: #00bfa5;
+}
+.md-typeset .lemma > .admonition-title,
+.md-typeset details.lemma > summary {
+  background-color: rgba(0, 191, 165, 0.1);
+}
+
+/* Proposition — green */
+.md-typeset .admonition.proposition,
+.md-typeset details.proposition {
+  border-color: #00c853;
+}
+.md-typeset .proposition > .admonition-title,
+.md-typeset details.proposition > summary {
+  background-color: rgba(0, 200, 83, 0.1);
+}
+
+/* Corollary — orange */
+.md-typeset .admonition.corollary,
+.md-typeset details.corollary {
+  border-color: #ff6d00;
+}
+.md-typeset .corollary > .admonition-title,
+.md-typeset details.corollary > summary {
+  background-color: rgba(255, 109, 0, 0.1);
+}
+
+/* Remark — slate */
+.md-typeset .admonition.remark,
+.md-typeset details.remark {
+  border-color: #607d8b;
+}
+.md-typeset .remark > .admonition-title,
+.md-typeset details.remark > summary {
+  background-color: rgba(96, 125, 139, 0.1);
+}
+
+/* Proof — dashed grey */
+.md-typeset .admonition.proof,
+.md-typeset details.proof {
+  border-style: dashed;
+  border-color: #9e9e9e;
+  font-size: 0.97em;     /* proofs slightly smaller than main text */
+}
+.md-typeset .proof > .admonition-title,
+.md-typeset details.proof > summary {
+  background-color: rgba(158, 158, 158, 0.12);
+}
+
+/* =====================================================================
+   Dark-mode tweak: keep the admonition tints readable.
+   ===================================================================== */
+[data-md-color-scheme="slate"] {
+  --mn-text-font:
+    "Fira Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
+  --mn-accent: #4db6ac;
+  --md-typeset-a-color: var(--mn-accent);
+}
+[data-md-color-scheme="slate"] .md-typeset {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =====================================================================
+   Header and tabs — OI-Wiki-inspired light surface with a teal active cue.
+   ===================================================================== */
+[data-md-color-scheme="default"] .md-header,
+[data-md-color-scheme="default"] .md-tabs {
+  color: var(--md-default-fg-color);
+  background-color: var(--md-default-bg-color);
+}
+[data-md-color-scheme="default"] .md-header {
+  border-bottom: 0;
+  box-shadow:
+    0 0 0.2rem rgba(0, 0, 0, 0.15),
+    0 0.25rem 0.55rem rgba(0, 0, 0, 0.22);
+}
+[data-md-color-scheme="default"] .md-tabs {
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+[data-md-color-scheme="default"] .md-search__form {
+  background-color: rgba(0, 0, 0, 0.045);
+}
+.md-tabs__link {
+  position: relative;
+  opacity: 0.62;
+}
+.md-tabs__item--active .md-tabs__link,
+.md-tabs__link:hover {
+  color: var(--mn-accent) !important;
+  opacity: 1;
+}
+.md-tabs__item--active .md-tabs__link::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.62rem;
+  left: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--mn-accent);
+  content: "";
+}
+
+@media screen and (min-width: 76.25em) {
+  [data-md-color-scheme="default"] .md-header:not(.md-header--shadow) {
+    box-shadow: none;
+  }
+  [data-md-color-scheme="default"] .md-tabs {
+    box-shadow:
+      0 0 0.2rem rgba(0, 0, 0, 0.15),
+      0 0.25rem 0.55rem rgba(0, 0, 0, 0.22);
+  }
+}
+
+/* =====================================================================
+   Homepage hero.
+   ===================================================================== */
+.md-typeset .hero {
+  position: relative;
+  text-align: center;
+  padding: 3em 1.5em 2.2em;
+  margin-bottom: 2em;
+  border-radius: 14px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background:
+    radial-gradient(1100px 400px at 50% -120px, rgba(0, 150, 136, 0.10), transparent 70%);
+}
+.md-typeset .hero h1 {
+  font-size: 2.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.3em;
+}
+.md-typeset .hero h1 + p {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--md-default-fg-color--light);
+  max-width: 40em;
+  margin: 0 auto 1.2em;
+}
+.md-typeset .hero .md-button {
+  margin: 0.2em 0.3em;
+}
+
+/* Course cards — restrained lift and one consistent accent colour. */
+.md-typeset .grid.cards > ul > li {
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.md-typeset .grid.cards > ul > li:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--mn-accent) 42%, transparent);
+  box-shadow: 0 0.45rem 1.1rem rgba(0, 0, 0, 0.07);
+}
+.md-typeset .grid.cards > ul > li > p:first-child svg {
+  color: var(--mn-accent);
+}
+
+/* Right-hand table of contents: a slim line marks the current section. */
+.md-sidebar--secondary .md-nav__link {
+  padding-left: 0.55rem;
+  border-left: 2px solid transparent;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.md-sidebar--secondary .md-nav__link--active {
+  border-left-color: var(--mn-accent) !important;
+  color: var(--mn-accent) !important;
+}
+
+/* =====================================================================
+   Left sidebar — OI-wiki style.  Course names are the only
+   .md-nav__container items here (they carry the collapsible header), so
+   they are the "topmost" entries:
+   - course name: gray when inactive, theme teal when active;
+   - sub-page entries: keep the Material default (near-black inactive,
+     teal active).
+   ===================================================================== */
+.md-sidebar--primary .md-nav__container,
+.md-sidebar--primary .md-nav__container > .md-nav__link {
+  color: var(--md-default-fg-color--light);
+}
+.md-sidebar--primary .md-nav__container > .md-nav__link--active {
+  color: var(--mn-accent) !important;
+}
+
+/* Chapter links: inactive entries use the normal foreground; only the
+   current page uses teal. This avoids colouring an entire active branch. */
+.md-sidebar--primary .md-nav__container + .md-nav .md-nav__link {
+  color: var(--md-default-fg-color);
+}
+.md-sidebar--primary .md-nav__container + .md-nav .md-nav__link--active {
+  color: var(--mn-accent) !important;
+}
+
+/* Homepage sidebar: this remains the active top-level navigation item so
+   Material's scrollfix includes it in Safari's initial height calculation. */
+.mn-recent-updates {
+  display: none !important;
+  margin-top: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+.mn-recent-updates__title {
+  margin: 0 0 0.35rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.mn-recent-updates__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mn-recent-updates__item + .mn-recent-updates__item {
+  margin-top: 0.12rem;
+}
+.mn-recent-updates__link {
+  display: block;
+  padding: 0.28rem 0;
+  color: var(--md-default-fg-color);
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+.mn-recent-updates__link:hover,
+.mn-recent-updates__link:focus {
+  color: var(--mn-accent);
+}
+.mn-recent-updates__date {
+  display: block;
+  margin-top: 0.08rem;
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.55rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* On narrow screens Material folds the left sidebar into the hamburger
+   drawer. Repeat the same data in a compact homepage panel so it remains
+   immediately discoverable. */
+.mn-recent-updates-mobile {
+  display: none;
+  margin: 0 0 1.4rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mn-accent) 4%, transparent);
+}
+.mn-recent-updates-mobile__title {
+  margin: 0 0 0.55rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.md-typeset .mn-recent-updates-mobile ul {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem 1.2rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+.md-typeset .mn-recent-updates-mobile li {
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0;
+}
+.mn-recent-updates-mobile a {
+  display: block;
+  overflow: hidden;
+  color: var(--md-default-fg-color);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mn-recent-updates-mobile a:hover {
+  color: var(--mn-accent);
+}
+.mn-recent-updates-mobile time {
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media screen and (max-width: 76.234375em) {
+  .mn-recent-updates-mobile {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 76.25em) {
+  /* Safari/WebKit can drop the first paint of an `overflow: hidden` layer
+     that lives inside a 3D-transformed ancestor (here, the fixed
+     `.md-sidebar--primary` carries `transform: translateX(0)` for the
+     mobile drawer). Promote the scrollwrap to its own composited layer
+     so it paints on the first frame instead of waiting for a scroll /
+     hover / focus interaction. The 3D promotion is visually a no-op
+     (`translateZ(0)` is equivalent to `translate(0,0)`), and the mobile
+     drawer animation is driven by a transform on `.md-sidebar--primary`,
+     not on the scrollwrap, so this does not conflict with it. */
+  .md-sidebar--primary .md-sidebar__scrollwrap {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .mn-recent-updates {
+    display: block !important;
+  }
+}
+
+/* =====================================================================
+   Anchor-driven numbering: admonitions that carry an <a id="..."> anchor
+   are numbered by numbering.js (chapter.section.order). Suppress the CSS
+   per-section counter for them so numbers are not duplicated. Admonitions
+   without an anchor keep the per-section counter fallback above.
+   ===================================================================== */
+.md-typeset .admonition:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                            a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                            a[id^="ex-"], a[id^="prf-"]),
+.md-typeset details:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                        a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                        a[id^="ex-"], a[id^="prf-"]) {
+  counter-increment: none;
+}
+.md-typeset .admonition:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                            a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                            a[id^="ex-"], a[id^="prf-"]) > .admonition-title::before,
+.md-typeset details:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
+                        a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
+                        a[id^="ex-"], a[id^="prf-"]) > summary::before {
+  /* Restore the Material icon in the title slot (the CSS counter was removed
+     above, but the 2rem icon-slot padding remains — a clean icon fills it). */
+  content: "";
+}
+
+/* per-type icon glyph + colour (matches the .mn-thm-num colours below) */
+.md-typeset .admonition.definition:has(a[id^="def-"]) > .admonition-title::before,
+.md-typeset details.definition:has(a[id^="def-"]) > summary::before {
+  background-color: #2962ff;
+  -webkit-mask-image: var(--md-admonition-icon--note);
+  mask-image: var(--md-admonition-icon--note);
+}
+.md-typeset .admonition.theorem:has(a[id^="thm-"]) > .admonition-title::before,
+.md-typeset details.theorem:has(a[id^="thm-"]) > summary::before {
+  background-color: #6200ee;
+  -webkit-mask-image: var(--md-admonition-icon--tip);
+  mask-image: var(--md-admonition-icon--tip);
+}
+.md-typeset .admonition.lemma:has(a[id^="lem-"]) > .admonition-title::before,
+.md-typeset details.lemma:has(a[id^="lem-"]) > summary::before {
+  background-color: #00897b;
+  -webkit-mask-image: var(--md-admonition-icon--abstract);
+  mask-image: var(--md-admonition-icon--abstract);
+}
+.md-typeset .admonition.proposition:has(a[id^="prop-"]) > .admonition-title::before,
+.md-typeset details.proposition:has(a[id^="prop-"]) > summary::before {
+  background-color: #2e7d32;
+  -webkit-mask-image: var(--md-admonition-icon--info);
+  mask-image: var(--md-admonition-icon--info);
+}
+.md-typeset .admonition.corollary:has(a[id^="cor-"]) > .admonition-title::before,
+.md-typeset details.corollary:has(a[id^="cor-"]) > summary::before {
+  background-color: #e65100;
+  -webkit-mask-image: var(--md-admonition-icon--success);
+  mask-image: var(--md-admonition-icon--success);
+}
+.md-typeset .admonition.remark:has(a[id^="rem-"]) > .admonition-title::before,
+.md-typeset details.remark:has(a[id^="rem-"]) > summary::before {
+  background-color: #455a64;
+  -webkit-mask-image: var(--md-admonition-icon--question);
+  mask-image: var(--md-admonition-icon--question);
+}
+.md-typeset .admonition.example:has(a[id^="ex-"]) > .admonition-title::before,
+.md-typeset details.example:has(a[id^="ex-"]) > summary::before {
+  background-color: #2962ff;
+  -webkit-mask-image: var(--md-admonition-icon--example);
+  mask-image: var(--md-admonition-icon--example);
+}
+
+/* number injected by numbering.js, coloured per admonition type */
+.md-typeset .mn-thm-num { font-weight: 700; }
+.md-typeset .admonition.definition .mn-thm-num,
+.md-typeset details.definition .mn-thm-num     { color: #2962ff; }
+.md-typeset .admonition.theorem .mn-thm-num,
+.md-typeset details.theorem .mn-thm-num         { color: #6200ee; }
+.md-typeset .admonition.lemma .mn-thm-num,
+.md-typeset details.lemma .mn-thm-num           { color: #00897b; }
+.md-typeset .admonition.proposition .mn-thm-num,
+.md-typeset details.proposition .mn-thm-num     { color: #2e7d32; }
+.md-typeset .admonition.corollary .mn-thm-num,
+.md-typeset details.corollary .mn-thm-num       { color: #e65100; }
+.md-typeset .admonition.remark .mn-thm-num,
+.md-typeset details.remark .mn-thm-num          { color: #455a64; font-style: italic; }
+.md-typeset .admonition.example .mn-thm-num,
+.md-typeset details.example .mn-thm-num          { color: #2962ff; }

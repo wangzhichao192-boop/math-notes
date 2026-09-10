@@ -17,27 +17,22 @@
     - for any $n$-ary function symbol $f\in \mathscr L' \setminus \mathscr L$, there is an $\mathscr L$-formula $\varphi_f(x_1,\cdots,x_n,x_{n+1})$ such that $T\models \forall x_1,\cdots,x_n,\exists ! x_0\ \varphi_f(x_1,\cdots,x_n,x_0)$.
     - for any constant $c \in \mathscr L' \setminus \mathscr L$ there is an $\mathscr L$-formula $\varphi_c(x)$ such that $T\models \exists ! x\ \varphi_c(x)$.
 
-    Consider the $\mathscr L'$-theory $T'$ which is $T$ with the following:
-
-    - for any $R$, $n$-ary relation in $\mathscr L' \setminus \mathscr L$
+    Consider the $\mathscr L'$-theory $T'$ which is $T$ together with the following sentences: for any $n$-ary relation symbol $R$ in $\mathscr L' \setminus \mathscr L$,
 
     $$
-    \forall x_1 \dots x_n \ (\varphi_R(x_1 \dots x_n) \leftrightarrow R(x_1 \dots x_n))
-
+    \forall x_1 \dots x_n \ (\varphi_R(x_1 \dots x_n) \leftrightarrow R(x_1 \dots x_n)),
     $$
 
-    - for any $f$ as before
+    for any function symbol $f$ as before,
 
     $$
-    \forall x_1 \dots x_n \ \varphi_f(x_1 \dots x_n, f(x_1 \dots x_n))
-
+    \forall x_1 \dots x_n \ \varphi_f(x_1 \dots x_n, f(x_1 \dots x_n)),
     $$
 
-    - for any $c$ as before
+    and for any constant $c$ as before,
 
     $$
-    \varphi_c(c)
-
+    \varphi_c(c).
     $$
 
     $T'$ is called an **expansion** of $T$ by definition.

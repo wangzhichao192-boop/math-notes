@@ -13,7 +13,6 @@
 
 <div class="grid cards" markdown>
 
-
 - :material-book-open-page-variant: **代数与分析基础**
 
     FAA I/II 教材合辑：逻辑、集合、群环模、拓扑、微积分、范畴论、多重线性代数、Haar 测度、微分几何与 Fourier 分析
@@ -21,11 +20,25 @@
     [:octicons-arrow-right-24: 进入](algebra-analysis/index.md)
 
 
+- :material-book-open-page-variant: **抽象代数**
+
+    待补充
+
+    [:octicons-arrow-right-24: 进入](abstract-algebra/index.md)
+
+
 - :material-shape-outline: **几何与拓扑**
 
     复数的平方根与缠绕数、一般拓扑、同伦与基本群、射影几何、正则曲面的微分几何与双曲几何
 
     [:octicons-arrow-right-24: 进入](geometry-topology/index.md)
+
+
+- :material-book-open-page-variant: **测度论与实分析**
+
+    可数集、数项级数、区间与长度、带标签分割、gauge 与 Kurzweil–Henstock 积分
+
+    [:octicons-arrow-right-24: 进入](measure-theory-and-real-anaysis/index.md)
 
 
 - :material-dice-multiple: **概率论**
@@ -41,5 +54,18 @@
 
     [:octicons-arrow-right-24: 进入](mathematical-logic/index.md)
 
+
+- :material-book-open-page-variant: **组合数学**
+
+    待补充
+
+    [:octicons-arrow-right-24: 进入](combinatorics/index.md)
+
+
+- :material-book-open-page-variant: **常微分方程**
+
+    课程简介待补充。
+
+    [:octicons-arrow-right-24: 进入](ode/index.md)
 
 </div>

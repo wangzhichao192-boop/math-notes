@@ -44,12 +44,14 @@ theme:
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
   - stylesheets/extra.css?v=20260901-4
+  - stylesheets/editor.css?v=20260910-4
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
   - javascripts/numbering.js
+  - javascripts/editor.js?v=20260910-4
 
 markdown_extensions:
   - admonition
@@ -95,6 +97,7 @@ plugins:
 
 hooks:
   - hooks/recent_updates.py
+  - hooks/editor.py
 
 nav:
   - 首页: index.md
@@ -118,6 +121,10 @@ nav:
       - Reduction of Endomorphisms: algebra-analysis/reduction-of-endomorphisms.md
       - Differential Geometry: algebra-analysis/differential-geometry.md
       - Fourier Series: algebra-analysis/fourier-series.md
+  - "抽象代数":
+      - abstract-algebra/index.md
+      - "Sets, Cardinality, Choice, and Quotients": abstract-algebra/lesson1.md
+      - "Integers, Groups, and Homomorphisms": abstract-algebra/integers-groups-and-homomorphisms.md
   - 几何与拓扑:
       - geometry-topology/index.md
       - Invitation: geometry-topology/invitation.md
@@ -126,9 +133,13 @@ nav:
       - Projective Geometry: geometry-topology/projective-geometry.md
       - Differential Geometry: geometry-topology/differential-geometry.md
       - Hyperbolic Geometry: geometry-topology/hyperbolic-geometry.md
+  - "测度论与实分析":
+      - measure-theory-and-real-anaysis/index.md
+      - Countable Sets and Number Series: measure-theory-and-real-anaysis/countable-sets-and-number-series.md
+      - Kurzweil-Henstock Integration: measure-theory-and-real-anaysis/kurzweil-henstock-integration.md
   - 概率论:
       - probability/index.md
-      - Lesson 1: probability/lesson1.md
+      - Foundations of Probability: probability/lesson1.md
   - 数理逻辑:
       - mathematical-logic/index.md
       - Counting to Infinity: mathematical-logic/counting-to-infinity.md
@@ -138,5 +149,10 @@ nav:
       - Fundamental Theorems: mathematical-logic/fundamental-theorems.md
       - Ultraproducts: mathematical-logic/ultraproducts.md
       - RCF and Hilbert 17th: mathematical-logic/rcf-hilbert.md
+  - "组合数学":
+      - combinatorics/index.md
+      - "Lesson3": combinatorics/lesson3.md
+  - "常微分方程":
+      - ode/index.md
   - 参考:
       - 写作指南: WRITING_GUIDE.md

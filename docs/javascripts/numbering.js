@@ -10,18 +10,24 @@
  * (see extra.css). Runs on every page via Material's document$ event, so it
  * also works with navigation.instant.
  */
-document$.subscribe(({ body }) => {
+window.MathNotes = window.MathNotes || {};
+
+window.MathNotes.numberBlocks = (root) => {
   const re = /^(def|thm|prop|lem|cor|rem|ex|prf)-(\d+)-(\d+)-(\d+)$/;
-  body.querySelectorAll(".md-typeset .admonition, .md-typeset details[class]").forEach((el) => {
+  root.querySelectorAll(".md-typeset .admonition, .md-typeset details[class]").forEach((el) => {
     const a = el.querySelector("a[id]");
     if (!a) return;
     const m = re.exec(a.id);
     if (!m) return;
     const title = el.querySelector(":scope > .admonition-title, :scope > summary");
-    if (!title) return;
+    if (!title || title.querySelector(":scope > .mn-thm-num")) return;
     const span = document.createElement("span");
     span.className = "mn-thm-num";
     span.textContent = `${m[2]}.${m[3]}.${m[4]} `;
     title.insertBefore(span, title.firstChild);
   });
+};
+
+document$.subscribe(({ body }) => {
+  window.MathNotes.numberBlocks(body);
 });

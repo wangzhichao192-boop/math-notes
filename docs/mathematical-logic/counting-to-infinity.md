@@ -95,9 +95,9 @@ We shall also make use of the **comprehension principle** which states that give
 
     + There are canonical isomorphisms of totally ordered sets
 
-      $$
-      X^{(Y+Z)} \cong X^{(Y)} \times X^{(Z)} \quad \text{and} \quad X^{(Y \times Z)} \cong (X^{(Y)})^{(Z)}
-      $$
+    $$
+    X^{(Y+Z)} \cong X^{(Y)} \times X^{(Z)} \quad \text{and} \quad X^{(Y \times Z)} \cong (X^{(Y)})^{(Z)}
+    $$
 
 ??? proof "Proof"
     The only non-trivial point to check is that if $X$ and $Y$ are well-ordered, then $X^{(Y)}$ is well-founded. Let $Z$ be a non-empty subset of $X^{(Y)}$. Let us prove that $Z$ contains a smallest element. If the constant function with value $0$ belongs to $Z$, there is nothing to prove. Hence, we may assume $\text{supp}(f) \neq \emptyset$ for every $f \in Z$. Let
@@ -458,13 +458,13 @@ The proof of the following statements is immediate, using [Proposition 1.7.4](#p
     <a id="prop-1-8-1"></a>
     Let $\kappa, \lambda$ and $\mu$ be cardinals.
 
-    1. Cardinal addition and multiplication are commutative and associative, multiplication is distributive with respect to addition,
+    **Commutativity and exponentiation.** Cardinal addition and multiplication are commutative and associative, multiplication is distributive with respect to addition, and
 
-       $$
-       \kappa^{\lambda+\mu} = \kappa^\lambda \kappa^\mu,\ (\kappa^\lambda)^\mu = \kappa^{\lambda\mu}\ \text{and}\ (\kappa\lambda)^\mu = \kappa^\mu\lambda^\mu.
-       $$
+    $$
+    \kappa^{\lambda+\mu} = \kappa^\lambda \kappa^\mu,\ (\kappa^\lambda)^\mu = \kappa^{\lambda\mu}\ \text{and}\ (\kappa\lambda)^\mu = \kappa^\mu\lambda^\mu.
+    $$
 
-    2. If $\kappa \leq \lambda$, then $\kappa + \mu \leq \lambda + \mu$, $\kappa\mu \leq \lambda\mu$ and $\kappa^\mu \leq \lambda^\mu$ (when $\kappa > 0$) and $\mu^\kappa \leq \mu^\lambda$ (when $\mu > 0$).
+    **Monotonicity.** If $\kappa \leq \lambda$, then $\kappa + \mu \leq \lambda + \mu$, $\kappa\mu \leq \lambda\mu$ and $\kappa^\mu \leq \lambda^\mu$ (when $\kappa > 0$) and $\mu^\kappa \leq \mu^\lambda$ (when $\mu > 0$).
 
 !!! proposition "Proposition"
     <a id="prop-1-8-2"></a>
@@ -510,31 +510,28 @@ The proof of the following statements is immediate, using [Proposition 1.7.4](#p
 !!! proposition "Proposition"
     <a id="prop-1-8-5"></a>
 
-    1. Let $X$ and $Y$ be non-empty sets and assume that at least one of them is infinite. Then
+    **Union and product.** Let $X$ and $Y$ be non-empty sets and assume that at least one of them is infinite. Then
 
-       $$
-       \operatorname{card}(X \cup Y) = \operatorname{card}(X \times Y) = \max(\operatorname{card}(X), \operatorname{card}(Y))
-       $$
+    $$
+    \operatorname{card}(X \cup Y) = \operatorname{card}(X \times Y) = \max(\operatorname{card}(X), \operatorname{card}(Y)).
+    $$
 
-    2. Let $\kappa \geq \aleph_0$ and $\lambda > 0$ be cardinals. Then $\kappa + \lambda = \kappa\lambda = \max(\kappa, \lambda)$.
+    **Consequence for cardinals.** Let $\kappa \geq \aleph_0$ and $\lambda > 0$ be cardinals. Then $\kappa + \lambda = \kappa\lambda = \max(\kappa, \lambda)$.
 
-    3. Let $(X_i)_{i \in I}$ be a family of sets with at least one $X_i$ infinite. Then
+    **Unions of families.** Let $(X_i)_{i \in I}$ be a family of sets with at least one $X_i$ infinite. Then
 
-       $$
-       \operatorname{card}\left( \bigcup_{i \in I} X_i \right) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
+    $$
+    \operatorname{card}\left( \bigcup_{i \in I} X_i \right) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
     \tag{*}
-       $$
+    $$
 
-        (In particular, a countable union of countable sets is countable.) 
-
-       If furthermore the sets $X_i$ are all non-empty and mutually disjoint, then equality holds in ($*$).
+    (In particular, a countable union of countable sets is countable.) If furthermore the sets $X_i$ are all non-empty and mutually disjoint, then equality holds in ($*$).
 
 ??? proof "Proof"
     (1) Let $\kappa = \max(\operatorname{card}(X), \operatorname{card}(Y))$. We have
 
     $$
     \kappa \leq \operatorname{card}(X \cup Y) \leq \kappa + \kappa = 2\kappa \leq \kappa\kappa
-
     $$
 
     and $\kappa \leq \operatorname{card}(X \times Y) \leq \kappa\kappa$. One concludes by Hessenberg's Theorem.
@@ -545,7 +542,6 @@ The proof of the following statements is immediate, using [Proposition 1.7.4](#p
 
     $$
     \operatorname{card}(X) \leq \sup\left( \{\operatorname{card}(X_i) \mid i \in I\} \cup \{\operatorname{card}(I)\} \right).
-
     $$
 
     Let $\kappa = \sup\{\operatorname{card}(X_i) \mid i \in I\}$, and let $Y_i$ be the set of injective maps $X_i \to \kappa$. Since the sets $Y_i$ are all non-empty, by the Axiom of Choice there exists some $f = (f_i)_{i \in I} \in \prod_{i \in I} Y_i$. Consider $g : X \to \kappa \times I$, defined by $g((x_i, i)) := (f_i(x_i), i)$. The function $g$ is injective, hence $\operatorname{card}(X) \leq \kappa \operatorname{card}(I) = \max(\kappa, \operatorname{card}(I))$. The equality statement is clear.
@@ -608,7 +604,6 @@ In this section we shall use the notion of cofinality to prove for instance that
 
     $$
     X = \{x \in \text{cof}(\alpha) \mid h(y) < h(x) \text{ for every } y < x\}.
-
     $$
 
     The set $h(X) = \{h(x) \mid x \in X\}$ is cofinal in $\alpha$. Indeed, let $\gamma < \alpha$. By the cofinality of $h$, there exists $y \in \text{cof}(\alpha)$ such that $h(y) \ge \gamma$. When $y$ is minimal with this property, we have $y \in X$.
@@ -644,7 +639,6 @@ In this section we shall use the notion of cofinality to prove for instance that
 
     $$
     \text{card}\left(\bigcup_{\beta < \alpha} f(\beta)\right) \le \sum_{\beta < \alpha} \text{card}(f(\beta)) < \prod_{\beta < \alpha} (\kappa^\lambda) = \kappa^{\lambda \cdot \text{card}(\alpha)} \le \kappa^\lambda.
-
     $$
 
     Hence $f$ is not cofinal. $\square$

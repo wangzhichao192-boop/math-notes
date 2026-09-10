@@ -1,7 +1,18 @@
 {
   "name": "math-notes-math-check",
   "private": true,
+  "scripts": {
+    "test:editor": "node --test test_editor_commands.mjs test_editor_syntax.mjs",
+    "build:editor": "esbuild editor-runtime.js --bundle --minify --format=iife --target=es2020 --outfile=../docs/javascripts/codemirror.bundle.js"
+  },
   "dependencies": {
     "katex": "^0.16.11"
+  },
+  "devDependencies": {
+    "@codemirror/lang-markdown": "^6.3.3",
+    "@codemirror/state": "^6.7.2",
+    "@codemirror/view": "^6.43.10",
+    "codemirror": "^6.0.2",
+    "esbuild": "^0.25.9"
   }
 }

@@ -4,7 +4,7 @@
     {
       "label": "mkdocs preview (serve + browser)",
       "type": "shell",
-      "command": "nohup .venv/bin/mkdocs serve > /tmp/mkdocs_serve.log 2>&1 & sleep 2; open http://127.0.0.1:8000",
+      "command": "lsof -ti:8765 | xargs kill 2>/dev/null; ./.venv/bin/mkdocs serve --dev-addr 127.0.0.1:8765 --open",
       "options": {
         "cwd": "${workspaceFolder}"
       },

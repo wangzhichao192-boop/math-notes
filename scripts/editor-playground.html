@@ -1,0 +1,63 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>编辑器独立测试</title>
+<link rel="stylesheet" href="/katex.css"><link rel="stylesheet" href="/editor.css">
+<style>
+:root{--md-default-bg-color:#fff;--md-default-fg-color:#273632;--md-default-fg-color--light:#64736d;--md-code-bg-color:#f3f5f4;--mn-text-font:system-ui;--mn-code-font:monospace;--mn-base-size:18px;font-size:20px}body{margin:0;background:#fff;font-family:system-ui}.md-content{max-width:920px;margin:40px auto}#test-controls{position:relative;padding:12px;background:#f0f4f2;font-size:14px}#diagnostics{display:block;width:95%;height:100px;font:12px monospace}button{cursor:pointer} .cm-editor{min-height:350px}
+</style>
+<section id="test-controls">独立试写 · 不会修改正式笔记
+<button id="snapshot">检查当前源码与光标</button><button id="clear">清空试写内容</button><button id="render-tests">运行渲染回归</button>
+<button id="save-tests">运行保存回归</button>
+<textarea id="diagnostics" readonly aria-label="测试结果"></textarea></section>
+<main class="md-content"><article class="md-typeset"><h1>独立试写</h1><p>按 ⌘⇧E 开始。</p></article></main>
+<script id="mn-editor-source" type="application/json">__PAYLOAD__</script>
+<script>window.document$={subscribe(fn){fn()}};</script><script src="/katex.js"></script><script src="/editor.js"></script>
+<script>
+const result = document.querySelector('#diagnostics');
+const editor = () => window.MathNotesCodeMirror?.EditorView.findFromDOM(document.querySelector('.cm-content'));
+document.querySelector('#snapshot').onclick = () => {
+ const view = editor(); result.value = view ? JSON.stringify({source:view.state.doc.toString(),selection:view.state.selection.main.toJSON(),math:document.querySelectorAll('.mn-cm-math').length,preview:document.querySelectorAll('.mn-cm-math-preview').length},null,2) : '没有进入编辑模式';
+};
+document.querySelector('#clear').onclick = () => {const view=editor();view.dispatch({changes:{from:0,to:view.state.doc.length,insert:''},selection:{anchor:0}});view.focus()};
+document.querySelector('#render-tests').onclick = () => {
+ const view=editor(), original=view.state, checks=[];
+ const run=(name,fn)=>{try{fn();checks.push('PASS '+name)}catch(e){checks.push('FAIL '+name+': '+e.message)}};
+ const set=(source,pos=0)=>view.dispatch({changes:{from:0,to:view.state.doc.length,insert:source},selection:{anchor:pos}});
+ const assert=(condition,message)=>{if(!condition)throw Error(message)};
+ run('加粗不因点击同一行普通文字而展开',()=>{set('A **binary relation** on a set.\n',28);assert(document.querySelector('.cm-content').textContent.includes('A binary relation on a set.'),'markers expanded')});
+ run('嵌套加粗斜体',()=>{set('\n**bold *italic***');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-em'),'missing nested style')});
+ run('代码围栏保留原文、不渲染公式',()=>{set('\n```text\n**literal** $not_math$\n```');assert(!document.querySelector('.mn-cm-math'),'math inside code');assert(document.querySelector('.cm-content').textContent.includes('**literal**'),'literal markers hidden')});
+ run('行内代码中的美元符保留',()=>{set('\n`$a$` and $b$');assert(document.querySelectorAll('.mn-cm-math').length===1,'wrong math count')});
+ run('粗体中的公式同时渲染',()=>{set('\n**a $x$ b**');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-math'),'missing nested math')});
+ run('引用内代码和金额保留原文',()=>{set('\n> ```\n> **literal** $no$\n> ```\n\ncost $5 and $10');assert(!document.querySelector('.mn-cm-math'),'literal dollars rendered')});
+ run('定义正文保留粗体和公式',()=>{set('\n!!! definition "Test"\n    <a id="def-1-1-1"></a>\n    **word** $x$');assert(document.querySelector('.mn-cm-strong')&&document.querySelector('.mn-cm-math'),'missing admonition formatting')});
+ run('块内代码换行立即留在块中',()=>{const source='!!! definition "Code"\n    <a id="def-1-1-1"></a>\n    ```js\n    const x = 1;\n    ';set(source,source.length);const lines=[...document.querySelectorAll('.cm-line')];assert(lines.at(-1)?.classList.contains('mn-cm-admonition--last'),'live code line escaped admonition')});
+ run('编辑公式时保持实时预览',()=>{set('$$\nx^2\n$$\n',4);assert(document.querySelector('.mn-cm-math-preview .katex'),'missing preview');set('$$\ny^3\n$$\n',4);assert(document.querySelector('.mn-cm-math-preview').textContent.includes('y'),'stale preview')});
+ run('源码视图可完整还原',()=>{const button=document.querySelector('[data-action=source]');button.click();assert(!document.querySelector('.mn-cm-math'),'preview retained in source');button.click()});
+ view.setState(original); result.value=checks.join('\n');
+};
+document.querySelector('#save-tests').onclick = async () => {
+ const view=editor(), checks=[];
+ const wait = async predicate => {
+   const deadline=Date.now()+5000;
+   while(!predicate()){if(Date.now()>deadline)throw Error('timeout');await new Promise(resolve=>setTimeout(resolve,25))}
+ };
+ try {
+   view.dispatch({changes:{from:0,to:view.state.doc.length,insert:'保存前'},selection:{anchor:3}});
+   document.querySelector('[data-action=done]').click();
+   view.dispatch({changes:{from:3,insert:'继续输入'},selection:{anchor:7}});
+   await wait(()=>!document.querySelector('[data-action=save]')?.disabled);
+   if(editor()!==view || view.state.doc.toString()!=='保存前继续输入')throw Error('完成时丢失后续输入或退出编辑');
+   checks.push('PASS 点击完成期间继续输入，保持编辑和最新文本');
+   const draft=JSON.parse(localStorage.getItem('mn-typora-draft:v1:__writing-test.md'));
+   if(draft.source!=='保存前继续输入')throw Error('草稿未记录后续输入');
+   checks.push('PASS 后续输入即时保存在草稿中');
+   document.querySelector('[data-action=save]').click();
+   await wait(()=>!document.querySelector('[data-action=save]')?.disabled);
+   if(editor()!==view)throw Error('保存打断编辑');
+   if(!document.querySelector('.mn-typora-status').textContent.includes('已保存到文件'))throw Error('保存失败');
+   checks.push('PASS 再次保存成功，仍可继续编辑');
+   if(!window.MathNotesDeferReload())throw Error('没有拦住开发服务自动刷新');
+   checks.push('PASS 编辑期间延后开发服务自动刷新');
+ }catch(error){checks.push('FAIL '+error.message)}
+ result.value=checks.join('\n');
+};
+</script></html>

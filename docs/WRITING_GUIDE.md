@@ -30,12 +30,39 @@ docs/<subject>/
 
 ---
 
-## 2. Math syntax — what works, what doesn't
+## 2. Note-writing style
+
+- Write chapter content in **English**. Use **Chinese** for course home pages,
+  navigation, and overview material.
+- Aim for the style of a concise graduate-level mathematics textbook or set of
+  course notes, rather than a chronological record of a lecture.
+- Begin each chapter with a short paragraph stating its subject, scope, and
+  main line of development. Organise the rest by conceptual dependency.
+- Make definitions precise, state all assumptions, and introduce notation
+  before or when it is first used. Bold key terms.
+- Keep the prose concise and information-dense. Avoid decorative language,
+  lengthy historical background, and repetitive summaries.
+- Keep proofs direct and compact: retain the essential construction and chain
+  of reasoning, compress routine steps into a sentence when appropriate, and
+  cite earlier results instead of proving them again.
+- Follow abstract concepts with short examples, counterexamples, or remarks
+  when they clarify boundaries, common confusions, or technical points. Avoid
+  long pedagogical digressions.
+- Display important formulas on their own lines; keep ordinary relations inline
+  rather than breaking them out solely for visual effect.
+- Use an objective, restrained tone. An occasional “we” may guide the chapter's
+  development, but the prose should not sound conversational.
+- Make each chapter reasonably self-contained while using numbering and
+  cross-references to form a continuous body of notes across chapters.
+
+---
+
+## 3. Math syntax — what works, what doesn't
 
 The site uses `pymdownx.arithmatex: generic: true` + the KaTeX
 auto-render script in `docs/javascripts/katex.js`. Both must agree.
 
-### 2.1 Inline math — **always safe**
+### 3.1 Inline math — **always safe**
 
 ```markdown
 Let $\alpha, \beta$ be ordinals with $\alpha < \beta$.
@@ -45,7 +72,7 @@ This is wrapped in `<span class="arithmatex">\(...\)</span>` by arithmatex
 **before** markdown runs, so `_`, `*`, `[`, `]` etc. inside the math are
 not touched.
 
-### 2.2 Block math — `$$...$$`
+### 3.2 Block math — `$$...$$`
 
 ```markdown
 Some text.
@@ -75,7 +102,7 @@ the closing `$$`.
 Keep display formulas in their own paragraph (a plain paragraph inside an
 admonition is fine); use inline `$...$` when a formula must live in a bullet.
 
-### 2.3 Math inside admonitions — same syntax, no escaping
+### 3.3 Math inside admonitions — same syntax, no escaping
 
 Admonitions and proofs use **exactly the same** `$...$` / `$$...$$`
 syntax. `pymdownx.arithmatex` wraps the math before markdown runs, so
@@ -98,10 +125,10 @@ Rules that must hold in **all** math:
   `\\Gamma`, `x\_1`, `\{`.
 - Inline `$...$` stays on **one line** — no newline inside a dollar pair.
 - No blank line between the last content line and the closing `$$`.
-- Block `$$...$$` needs a blank line **before and after** it (see §2.2);
+- Block `$$...$$` needs a blank line **before and after** it (see §3.2);
   a missing blank leaves literal `$$` in the built page.
 
-### 2.5 Proofs use `??? proof "Proof"`
+### 3.4 Proofs use `??? proof "Proof"`
 
 Collapsible proofs are `???` (instead of `!!!`) and the content follows the same math rules as everything else:
 
@@ -118,7 +145,7 @@ Collapsible proofs are `???` (instead of `!!!`) and the content follows the same
 
 ---
 
-## 3. Admonition skeleton
+## 4. Admonition skeleton
 
 **Title format** — every admonition needs a title in quotes, in one of
 these two forms:
@@ -206,7 +233,7 @@ Cross-file links keep the `.md` extension so mkdocs resolves them.
 
 ---
 
-## 4. Other formatting gotchas
+## 5. Other formatting gotchas
 
 - **No `# Heading` inside an admonition body** — markdown doesn't process
   headings inside admonitions cleanly. Use `**Bold title**` for emphasis
@@ -228,7 +255,7 @@ Cross-file links keep the `.md` extension so mkdocs resolves them.
 
 ---
 
-## 5. Self-check — `scripts/check_math.js`
+## 6. Self-check — `scripts/check_math.js`
 
 After authoring, always run:
 
@@ -244,7 +271,7 @@ Point it at one file with `node scripts/check_math.js docs/<subject>/<topic>.md`
 
 ---
 
-## 6. End-to-end workflow
+## 7. End-to-end workflow
 
 ```bash
 # 1. Write the chapter
@@ -258,7 +285,7 @@ mkdocs serve   # http://127.0.0.1:8000
 ```
 ---
 
-## 7. Quick reference card
+## 8. Quick reference card
 
 | Want to write | Use |
 |---|---|
@@ -268,4 +295,3 @@ mkdocs serve   # http://127.0.0.1:8000
 | Collapsible proof | `??? proof "Proof"` |
 | Cross-reference | `[Def 1.2.2](#def-1-2-2)` same page · `[Def 1.2.2](general-topology.md#def-1-2-2)` cross-file · `[Cor 2.6.3](../algebra-analysis/set-theory.md#cor-2-6-3)` another course |
 | Numbered anchor | `<a id="def-1-2-3"></a>` right after admonition title |
-

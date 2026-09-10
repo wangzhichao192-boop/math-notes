@@ -72,24 +72,23 @@
 
     Now we define the $\mathscr L$-structure on the ultraproduct $\prod _{i\in I} M_i / \mathcal U$:
 
-    + **Constant symbols:** For any constant $c \in \mathscr L$, 
+    **Constant symbols.** For any constant $c \in \mathscr L$,
 
-      $$
-      c^{\prod \bar{M}_i / \mathcal U} := [(c^{\bar{M}_i})_{i \in I}]
-      $$
+    $$
+    c^{\prod \bar{M}_i / \mathcal U} := [(c^{\bar{M}_i})_{i \in I}].
+    $$
 
-    + **Function symbols:** For any $n$-ary function $f \in \mathscr L$ and elements $[a^1], \dots, [a^n]$ in the ultraproduct,
+    **Function symbols.** For any $n$-ary function $f \in \mathscr L$ and elements $[a^1], \dots, [a^n]$ in the ultraproduct,
 
-      $$
-      f^{\prod \bar{M}_i / \mathcal U}([a^1], \cdots, [a^n]) := [(f^{\bar{M}_i}(a^1_i, \cdots, a^n_i))_{i \in I}]
+    $$
+    f^{\prod \bar{M}_i / \mathcal U}([a^1], \cdots, [a^n]) := [(f^{\bar{M}_i}(a^1_i, \cdots, a^n_i))_{i \in I}].
+    $$
 
-      $$
+    **Relation symbols.** For any $n$-ary relation $R \in \mathscr L$,
 
-    + **Relation symbols:** For any $n$-ary relation $R \in \mathscr L$,
-
-      $$
-      \prod_{i\in I} \bar{M}_i \Big/ \mathcal U \models R([a^1], \cdots, [a^n]) \iff \{i \in I \mid \bar{M}_i \models R(a^1_i, \cdots, a^n_i)\} \in \mathcal U
-      $$
+    $$
+    \prod_{i\in I} \bar{M}_i \Big/ \mathcal U \models R([a^1], \cdots, [a^n]) \iff \{i \in I \mid \bar{M}_i \models R(a^1_i, \cdots, a^n_i)\} \in \mathcal U.
+    $$
 
 !!! example "Example"
     Let $\mathcal U$ be a principal filter on a set $I$, i.e., $\mathcal U = D_k$ for some fixed $k \in I$. Let $\bar{M}_i$ be $\mathscr L$-structures. Then the ultraproduct is isomorphic to the $k$-th structure:
@@ -119,53 +118,34 @@
 
     $$
     \begin{aligned}
-
     & \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \models \varphi[[f_1], \dots, [f_n]] \\
-
     \iff & \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \models \theta[[f_1], \dots, [f_n]] \text{ and } \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \models \psi[[f_1], \dots, [f_n]] \\
-
     \stackrel{\text{IH}}{\iff} & \underbrace{\{i \in I \mid \mathcal{M}_i \models \theta[f_1(i), \dots, f_n(i)]\}}_{=: A} \in \mathcal{U} \text{ and } \underbrace{\{i \in I \mid \mathcal{M}_i \models \psi[f_1(i), \dots, f_n(i)]\}}_{=: B} \in \mathcal{U} \\
-
     \iff & A \cap B \in \mathcal{U} \quad \text{(since } \mathcal{U} \text{ is a filter and closed under finite intersection)} \\
-
     \iff & \{i \in I \mid \mathcal{M}_i \models (\theta \land \psi)[f_1(i), \dots, f_n(i)]\} \in \mathcal{U}.
-
     \end{aligned}
-
     $$
 
     *Case 2: Negation,* $\varphi := \neg \theta$.
 
     $$
     \begin{aligned}
-
     & \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \models \varphi[[f_1], \dots, [f_n]] \\
-
     \iff & \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \not\models \theta[[f_1], \dots, [f_n]] \\
-
     \stackrel{\text{IH}}{\iff} & \{i \in I \mid \mathcal{M}_i \models \theta[f_1(i), \dots, f_n(i)]\} \notin \mathcal{U} \\
-
     \iff & \{i \in I \mid \mathcal{M}_i \models \neg\theta[f_1(i), \dots, f_n(i)]\} \in \mathcal{U} \quad \text{(since } \mathcal{U} \text{ is an ultrafilter)}.
-
     \end{aligned}
-
     $$
 
     *Case 3: Existential quantifier,* $\varphi := \exists x \theta(x, x_1, \dots, x_n)$.
 
     $$
     \begin{aligned}
-
     & \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \models \varphi[[f_1], \dots, [f_n]] \\
-
     \iff & \text{there is } g \in \prod_{i\in I} M_i \text{ such that } \prod_{i\in I} \mathcal{M}_i/\mathcal{U} \models \theta[[g], [f_1], \dots, [f_n]] \\
-
     \stackrel{\text{IH}}{\iff} & \{i \in I \mid \mathcal{M}_i \models \theta[g(i), f_1(i), \dots, f_n(i)]\} \in \mathcal{U} \\
-
     \iff & \{i \in I \mid \mathcal{M}_i \models \exists x \theta(x, f_1(i), \dots, f_n(i))\} \in \mathcal{U}.
-
     \end{aligned}
-
     $$
 
 ## Compactness via Ultraproducts

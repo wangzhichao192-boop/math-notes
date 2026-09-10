@@ -325,9 +325,9 @@ In this part we fix a $\mathscr L$-structure $\bar A $.
 
     - Let $B \subseteq A$ be a parameter set. Then $D$ is called $B$-definable in $\bar A$ if there exist a formula $\varphi(x_1,\dots,x_n,y_1,\dots,y_m)$ and $\bar b \in B^m$ such that $D$ is equal to the set
 
-      $$
-      \varphi[\bar A,\bar b] := \{\bar a \in A^n \mid \bar A \vDash \varphi[a_1,\dots,a_n,b_1,\dots,b_m]\}.
-      $$
+    $$
+    \varphi[\bar A,\bar b] := \{\bar a \in A^n \mid \bar A \vDash \varphi[a_1,\dots,a_n,b_1,\dots,b_m]\}.
+    $$
 
 !!! example "Example"
 
@@ -376,13 +376,7 @@ The goal of this chapter is to find a way to substitute variables that is compat
 
           $[\exists x \ \psi]_{\bar{s}/\bar{x}}$ equal to $\exists \ x [\psi]_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k}}$ (Note that $x$ can't be substituted in $\psi$ )
 
-        + If $x$ has some occurrence in one of $s_{i_1},\dots,s_{i_k}$, one sets
-
-          $$
-          [\exists \ x \ \psi]_{\bar{s}/\bar{x}} \text{ equal to } \exists u \  [\psi]_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k},u/x},
-          $$
-
-          where $u$ is the first variable appearing in the enumeration $\nu_0,\nu_1,\nu_2,\dots$ which does not occur in any of the words $\exists x  \ \psi, s_{i_1},\dots,s_{i_k}$.
+        + If $x$ has some occurrence in one of $s_{i_1},\dots,s_{i_k}$, one sets $[\exists \ x \ \psi]_{\bar{s}/\bar{x}}$ equal to $\exists u \ [\psi]_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k},u/x}$, where $u$ is the first variable appearing in the enumeration $\nu_0,\nu_1,\nu_2,\dots$ which does not occur in any of the words $\exists x \ \psi, s_{i_1},\dots,s_{i_k}$.
 
 !!! proposition "Proposition"
 
@@ -396,13 +390,13 @@ The goal of this chapter is to find a way to substitute variables that is compat
 !!! lemma "Lemma"
     Let $x_0, \dots, x_r$ be distinct variables, $s_0, \dots, s_r$ terms and $\alpha$ an assignment with values in $\bar A$.
 
-    + For every term $t$ one has
+    **Terms.** For every term $t$ one has
 
-      $$
-      t_{\bar{s}/\bar{x}}^{\bar A}[\alpha] = t^{\bar A}\left[\alpha_{s_0^{\bar A}[\alpha]/x_0,\dots,s_r^{\bar A}[\alpha]/x_r}\right].
-      $$
+    $$
+    t_{\bar{s}/\bar{x}}^{\bar A}[\alpha] = t^{\bar A}\left[\alpha_{s_0^{\bar A}[\alpha]/x_0,\dots,s_r^{\bar A}[\alpha]/x_r}\right].
+    $$
 
-    + For every formula $\varphi$ one has
+    **Formulas.** For every formula $\varphi$ one has
 
     $$
     \bar A \vDash \varphi_{\bar{s}/\bar{x}}[\alpha] \quad \text{if and only if} \quad \bar A \vDash \varphi\left[\alpha_{s_0^{\bar A}[\alpha]/x_0,\dots,s_r^{\bar A}[\alpha]/x_r}\right].
@@ -410,14 +404,14 @@ The goal of this chapter is to find a way to substitute variables that is compat
 
 ??? proof "Proof"
 
-    + The case of terms follows directly from induction on terms.
+    The case of terms follows directly by induction on terms.
 
-    + By induction, the only non-trivial case being when $\psi$ is of the form $\exists x \ \varphi$. Let $x_{i_1},\cdots,x_{i_k}$ be variables free in $\psi$.
+    For formulas, by induction the only non-trivial case is when $\psi$ is of the form $\exists x \ \varphi$. Let $x_{i_1},\cdots,x_{i_k}$ be the variables free in $\psi$.
 
-      + If $x$ occurs in $s_{i_1},\cdots,s_{i_k}$, let $u$ be the variable chosen in the definition. Then
+    **The variable $x$ occurs in some $s_{i_j}$.** Let $u$ be the variable chosen in the definition. Then
 
-        $$
-        \begin{align*}
+    $$
+    \begin{align*}
     \bar A \vDash [\exists x \ \varphi]_{\bar{s}/\bar{x}}[\alpha]
     &\iff \bar A \vDash \exists u \ [\varphi]_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k},u/x}[\alpha] \\
     &\iff \text{There exists } a \in A \text{ such that } \bar A \vDash \varphi_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k},u/x}[\alpha_{a/u}] \\
@@ -428,21 +422,21 @@ The goal of this chapter is to find a way to substitute variables that is compat
     &\iff \bar A \vDash \exists x \ \varphi\left[\alpha_{s_{i_1}^{\bar A}[\alpha]/x_{i_1},\dots,s_{i_k}^{\bar A}[\alpha]/x_{i_k}}\right] \\
     &\iff \bar A \vDash \exists x \ \varphi\left[\alpha_{s_0^{\bar A}[\alpha]/x_0,\dots,s_r^{\bar A}[\alpha]/x_r}\right].
     \end{align*}
-        $$
+    $$
 
-      + If $x$ doesn't have any occurrence in any of the terms $s_{i_1},\cdots,s_{i_k}$. Then
+    **The variable $x$ has no occurrence in any of the terms $s_{i_1},\cdots,s_{i_k}$.** Then
 
-        $$
-        \begin{align*}
+    $$
+    \begin{align*}
     \bar A \vDash [\exists x \ \varphi]_{\bar{s}/\bar{x}}[\alpha]
     &\iff \bar A \vDash \exists x \ [\varphi]_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k}}[\alpha] \\
-    &\iff \text{There exists } a \in A , \bar A \vDash \varphi_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k}}[\alpha_{a/x}] \\
+    &\iff \text{There exists } a \in A \text{ such that } \bar A \vDash \varphi_{s_{i_1}/x_{i_1},\dots,s_{i_k}/x_{i_k}}[\alpha_{a/x}] \\
     &\iff \ (\text{by the induction hypothesis and since } x \neq x_{i_1},\dots,x \neq x_{i_k}) \\
     &\quad\quad \text{There exists } a \in A \text{ with } \bar A \vDash \varphi\left[\alpha_{s_{i_1}^{\bar A}[\alpha_{a/x}]/x_{i_1},\dots,s_{i_k}^{\bar A}[\alpha_{a/x}]/x_{i_k},a/x}\right] \\
     &\iff \bar A \vDash \exists x \ \varphi\left[\alpha_{s_{i_1}^{\bar A}[\alpha]/x_{i_1},\dots,s_{i_k}^{\bar A}[\alpha]/x_{i_k}}\right] \\
     &\iff \bar A \vDash \exists x \ \varphi\left[\alpha_{s_0^{\bar A}[\alpha]/x_0,\dots,s_r^{\bar A}[\alpha]/x_r}\right].
     \end{align*}
-        $$
+    $$
 
 !!! example "Example"
     Let $\varphi$ be a formula, $x_1, \cdots,x_r$ be distinct variables. $s_1, \cdots ,s_r$ be terms such that  no variables in $s_i$ occurs in $\varphi$. Then $\varphi_{\bar s / \bar x }$ is exactly the formula one gets after replacing free occurences of $x_i$ by $s_i$.
@@ -751,8 +745,38 @@ In this part, we want to expand $\mathscr L$ by a fresh set of constant symbols 
 
     If $\bar A$ is an $\mathscr{L}$-structure and $A = \{a_c \mid c \in C\}$ is an enumeration (possibly non-injective) of its base set by $C$, one denotes by $\bar A^+$ the $\mathscr{L} \cup C$-structure obtained from $\bar A$ by interpreting $c$ by $a_c$. Then $\text{Th}(\bar A^+)$ is a complete theory which admits Henkin witnesses in $C$. In fact, any complete theory which admits Henkin witnesses in $C$ is of this form:
 
-!!! proposition "Proposition"
+!!! proposition "Proposition (Term model)"
+    <a id="prop-term-model"></a>
     Any complete $\mathscr{L} \cup C$-theory $T^+$ which admits Henkin witnesses in $C$ has a model $\bar A^+$ consisting of constants of $C$, that is, with a base set of the form $A^+ = \{c^{\bar A^+} \mid c \in C\}$.
+
+??? proof "Proof"
+    We assume $T^+$ is deductively closed.
+
+    Note that $c \sim d :\Longleftrightarrow c = d \in T^+$ is an equivalence relation by the equality axioms. Set $A^+ = \{c/{\sim} \mid c \in C\} \neq \emptyset$.
+
+    Define an $\mathscr L \cup C$-structure $\bar A^+$ on $A^+$:
+
+    + For every constant symbol $d$: $d^{\bar A^+} = c/{\sim}$ if the sentence $c = d$ is in $T^+$.
+
+    + For every $R \in \mathcal R_n^{\mathscr L}$: $(c_1/{\sim},\ldots,c_n/{\sim}) \in R^{\bar A^+}$ iff $Rc_1\cdots c_n \in T^+$.
+
+    + For every $f \in \mathcal F_n^{\mathscr L}$: $f^{\bar A^+}(c_1/{\sim},\ldots,c_n/{\sim}) = c_0/{\sim}$ iff $fc_1\cdots c_n = c_0 \in T^+$.
+
+    **Claim.** For any $\mathscr L \cup C$-sentence $\psi$, one has $\bar A^+ \models \psi \iff \psi \in T^+$.
+
+    We prove the claim by induction on $ht(\psi)$:
+
+    + If $\psi$ is an equation $t_1 = t_2$, the claim follows directly from the definitions.
+
+    + If $\psi$ is $Rt_1\cdots t_n$, choose for each term $t_i$ a constant $c_i$ such that $t_i^{\bar A^+} = c_i/{\sim}$. Then $\bar A^+ \models \psi \iff Rc_1\cdots c_n \in T^+ \iff \psi \in T^+$.
+
+    + If $\psi = \neg \varphi$: since $T^+$ is complete, $\bar A^+ \models \psi \iff \bar A^+ \not\models \varphi \iff \varphi \not\in T^+ \iff \psi \in T^+$.
+
+    + If $\psi = \exists x \ \varphi$: the sentence $\psi$ belongs to $T^+$ iff there exists $c \in C$ with $\varphi_{c/x} \in T^+$ (this is exactly the Henkin witness property). Then $\bar A^+ \models \psi$ iff $\bar A^+ \models \varphi[c/{\sim}]$ for some $c$, iff $\bar A^+ \models \varphi_{c/x}$ for some $c$, iff $\varphi_{c/x} \in T^+$, iff $\psi \in T^+$.
+
+    Thus $\bar A^+$ is a model of $T^+$ with base set $\{c^{\bar A^+} \mid c \in C\}$.
+
+    Finally, let $\bar A$ be the reduct of $\bar A^+$ to $\mathscr L$. Then $\bar A \models T$.
 
 !!! lemma "Lemma"
     Let $T$ be an $\mathscr L$-theory, $\varphi(x)$ an $\mathscr L$-formula and $c \in \mathscr L$ a constant symbol not occurring in $T \cup \{\varphi(x)\}$. Assume that $T$ is consistent. Then $T \cup \{\exists x \ \varphi \to \varphi_{c/x}\}$ is a consistent $\mathscr L$-theory.
@@ -788,4 +812,23 @@ In this part, we want to expand $\mathscr L$ by a fresh set of constant symbols 
 
     Consider $\mathcal S = \{ S' \supseteq T' \mid S' \text{ is a consistent } \mathscr L^+ \text{-theory} \}$. By Zorn's Lemma, there exists a maximal consistent $\mathscr L^+$-theory $T^+$ containing $T'$. By maximality, $T^+$ is complete.
 
-    Thus $T^+$ is a complete $\mathscr L^+$-theory that admits Henkin witnesses in $C$.
+    Thus $T^+$ is a complete $\mathscr L^+$-theory that admits Henkin witnesses in $C$. By the [Proposition](#prop-term-model) above, $T^+$ has a model $\bar A^+$ whose base set consists of the interpretations of the constants $c \in C$; its reduct to the language $\mathscr L$ is a model of $T$.
+
+!!! theorem "Theorem (Gödel's Completeness Theorem, syntactic form)"
+    <a id="thm-godel-s-completeness-theorem-syntactic-form"></a>
+    Let $T$ be an $\mathscr L$-theory and $\varphi$ an $\mathscr L$-sentence. Then
+
+    $$
+    T \models \varphi \iff T \vdash_{\mathscr L} \varphi.
+    $$
+
+??? proof "Proof"
+    The implication ($\Leftarrow$) is the Soundness Theorem. For ($\Rightarrow$), if $T \not\vdash_{\mathscr L} \varphi$, then $T \cup \{\neg\varphi\}$ is consistent by the Corollary following the Deduction Lemma, hence has a model by the model-existence form of Gödel's Completeness Theorem. This model satisfies $T$ and falsifies $\varphi$, so $T \not\models \varphi$.
+
+!!! remark "Remark"
+    Since $\models$ does not depend on the language $\mathscr L$, a posteriori $\vdash_{\mathscr L}$ does not depend on $\mathscr L$ either. Thus we write $\vdash$ instead of $\vdash_{\mathscr L}$.
+
+!!! remark "Remark (Henkin's Method)"
+    Given an $\mathscr L$-structure $\bar A$, let $C$ be a set of constants with $C \cap \mathscr L = \emptyset$. Fix an enumeration $\{a_c \in A \mid c \in C\}$ of $A$ by $C$. We can expand $\bar A$ to an $\mathscr L^+ := \mathscr L \cup C$-structure $\bar A^+$ where $c^{\bar A^+} = a_c$. Then trivially $\text{Th}(\bar A^+)$ as an $\mathscr L^+$-theory admits Henkin witnesses in $C$.
+
+    Conversely, any complete $\mathscr L \cup C$-theory admitting Henkin witnesses in $C$ has a model of this form, that is, with base set $\{c^{\bar A^+} \mid c \in C\}$.
