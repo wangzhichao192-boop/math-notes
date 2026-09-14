@@ -151,7 +151,10 @@ nav:
       - RCF and Hilbert 17th: mathematical-logic/rcf-hilbert.md
   - "组合数学":
       - combinatorics/index.md
-      - "Lesson3": combinatorics/lesson3.md
+      - "Formal Power Series and Generating Functions": combinatorics/lesson1.md
+      - "Basic Counting, Cycles, and Stirling Numbers": combinatorics/lesson2.md
+      - "Permutation Statistics and Catalan Numbers": combinatorics/lesson3.md
+      - "$q$-Analogues, Pattern Avoidance, and Partitions": combinatorics/lesson4.md
   - "常微分方程":
       - ode/index.md
   - 参考:
