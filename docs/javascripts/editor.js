@@ -7,7 +7,7 @@
   const DRAFT_PREFIX = "mn-typora-draft:v1:";
   const PENDING_NAVIGATION_KEY = "mn-typora-pending-navigation";
   const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
-  const EDITOR_ASSET_URL = new URL("codemirror.bundle.js?v=20260910-6", document.currentScript.src).href;
+  const EDITOR_ASSET_URL = new URL("codemirror.bundle.js?v=20260914-1", document.currentScript.src).href;
   const RESUME_KEY = "mn-typora-resume";
 
   const BLOCKS = [
@@ -28,6 +28,10 @@
     lemma: "Lemma", corollary: "Corollary", proof: "Proof",
     example: "Example", remark: "Remark"
   };
+  const NUMBERED_KINDS = new Set([
+    "definition", "theorem", "proposition", "lemma", "corollary",
+    "example", "remark"
+  ]);
 
   let activeEditor = null;
   let currentPayload = null;
@@ -201,18 +205,33 @@
     return ranges;
   }
 
-  function displayNumber(anchor) {
-    const match = /^(?:def|thm|prop|lem|cor|rem|ex|prf)-(\d+)-(\d+)-(\d+)$/.exec(anchor);
-    return match ? `${match[1]}.${match[2]}.${match[3]}` : "";
+  function automaticBlockNumbers(source, blocks, chapterNumber) {
+    const headings = Array.from(source.matchAll(/^##\s+/gm)).map((match) => match.index);
+    const numbers = new Map();
+    let headingIndex = 0;
+    let section = 0;
+    let blockNumber = 0;
+    [...blocks].sort((left, right) => left.from - right.from).forEach((block) => {
+      while (headingIndex < headings.length && headings[headingIndex] < block.from) {
+        section += 1;
+        blockNumber = 0;
+        headingIndex += 1;
+      }
+      if (!NUMBERED_KINDS.has(block.kind)) return;
+      if (section === 0) section = 1;
+      blockNumber += 1;
+      numbers.set(block.from, `${chapterNumber}.${section}.${blockNumber}`);
+    });
+    return numbers;
   }
 
   function safeClass(kind) {
     return /^[a-z][\w-]*$/.test(kind) ? kind : "note";
   }
 
-  function createVisualExtension(modules, onAnalysis) {
+  function createVisualExtension(modules, onAnalysis, chapterNumber = 1) {
     const { Decoration, WidgetType } = modules;
-    let cachedDoc, cachedSyntax, cachedParsed, cachedMath;
+    let cachedDoc, cachedSyntax, cachedParsed, cachedMath, cachedNumbers;
 
     function activateAt(view, event, position) {
       if (typeof event.button === "number" && event.button !== 0) return;
@@ -327,6 +346,7 @@
         cachedDoc = state.doc;
         cachedParsed = modules.parseAdmonitions(source, KIND_LABELS);
         cachedSyntax = modules.analyzeMarkdown(source, cachedParsed.blocks);
+        cachedNumbers = automaticBlockNumbers(source, cachedParsed.blocks, chapterNumber);
         const blocked = [...cachedSyntax.code, ...cachedSyntax.inline.filter(item => item.type === "InlineCode")];
         const displayMath = findDisplayMath(source).filter(range => !blocked.some(item => range.from < item.to && range.to > item.from));
         cachedMath = [...displayMath, ...modules.findInlineMath(source, [...blocked, ...displayMath])].sort((a, b) => a.from - b.from);
@@ -379,7 +399,7 @@
 
         if (!headerActive) {
           const title = block.header[3];
-          const number = displayNumber(block.anchor);
+          const number = cachedNumbers.get(block.from) || "";
           if (title) {
             const titleFrom = headerFrom + block.lines[block.startLine].indexOf(`"${title}"`) + 1;
             addReplacement(headerFrom, titleFrom, { widget: new PrefixWidget(number ? `${number} ` : "", kind, titleFrom) });
@@ -431,10 +451,14 @@
           }
         }
         const listItem = /^(\s{0,12})[+*-]\s+/.exec(line);
-        if (listItem && !active) {
+        if (listItem) {
           const markerFrom = from + listItem[1].length;
-          addReplacement(markerFrom, from + listItem[0].length, {
-            widget: new BulletWidget(from + listItem[0].length)
+          const markerTo = from + listItem[0].length;
+          const markerActive = state.selection.ranges.some(range => range.empty
+            ? range.head >= markerFrom && range.head < markerTo
+            : range.from < markerTo && range.to > markerFrom);
+          if (!markerActive) addReplacement(markerFrom, markerTo, {
+            widget: new BulletWidget(markerTo)
           });
         }
 
@@ -464,22 +488,11 @@
     return modules.EditorView.decorations.compute(["doc", "selection"], buildDecorations);
   }
 
-  function suggestedAnchor(source, position, prefix) {
-    const before = source.slice(0, position);
-    const all = Array.from(source.matchAll(/id="(?:def|thm|prop|lem|cor|rem|ex|prf)-(\d+)-(\d+)-(\d+)"/g));
-    const nearest = Array.from(before.matchAll(/id="(?:def|thm|prop|lem|cor|rem|ex|prf)-(\d+)-(\d+)-(\d+)"/g)).pop();
-    const chapter = nearest?.[1] || all[0]?.[1] || "1";
-    const section = String(Math.max(1, (before.match(/^##\s+/gm) || []).length));
-    const used = all.filter((anchor) => anchor[1] === chapter && anchor[2] === section).map((anchor) => Number(anchor[3]));
-    return `${prefix}-${chapter}-${section}-${used.length ? Math.max(...used) + 1 : 1}`;
-  }
-
   function blockText(block, source, position) {
     if (block.special === "math") return { text: "$$\nformula\n$$", select: [3, 10] };
     if (block.special === "heading") return { text: "## Section title", select: [3, 16] };
-    const anchor = suggestedAnchor(source, position, block.prefix);
     const body = block.id === "proof" ? "Write the proof here." : `Write the ${block.id} here.`;
-    const text = `${block.marker} ${block.id} "${block.title}"\n    <a id="${anchor}"></a>\n    ${body}`;
+    const text = `${block.marker} ${block.id} "${block.title}"\n    ${body}`;
     const name = text.indexOf("Name");
     const bodyStart = text.indexOf(body);
     return {
@@ -633,6 +646,72 @@
     state.view.dispatch({ changes: { from: selection.from, to: selection.to, insert: insertion },
       selection: { anchor: selection.from + insertion.length }, scrollIntoView: true, userEvent: "input" });
     return true;
+  }
+
+  function handleDisplayMathEnter(state) {
+    const selection = state.view.state.selection.main;
+    if (!selection.empty) return false;
+    const doc = state.view.state.doc;
+    const line = doc.lineAt(selection.head);
+    const match = /^([ \t]*)\$\$[ \t]*$/.exec(line.text);
+    if (!match || selection.head < line.to) return false;
+    const previousDelimiters = (doc.sliceString(0, line.from).match(/^[ \t]*\$\$[ \t]*$/gm) || []).length;
+    if (previousDelimiters % 2 === 1) return false;
+    const indentation = match[1];
+    const insertion = `\n${indentation}\n${indentation}$$`;
+    state.view.dispatch({
+      changes: { from: selection.head, insert: insertion },
+      selection: { anchor: selection.head + 1 + indentation.length },
+      scrollIntoView: true,
+      userEvent: "input"
+    });
+    return true;
+  }
+
+  function handleInlineMathVertical(state, forward) {
+    const selection = state.view.state.selection.main;
+    if (!selection.empty) return false;
+    const activeMath = (state.mathRanges || []).find(range => !range.display &&
+      selection.head >= range.from && selection.head <= range.to);
+    const coordinates = state.view.coordsAtPos(selection.head, forward ? 1 : -1);
+    if (!coordinates) return false;
+    const y = forward
+      ? coordinates.bottom + state.view.defaultLineHeight * 0.55
+      : coordinates.top - state.view.defaultLineHeight * 0.55;
+    const target = document.elementFromPoint(coordinates.left, y);
+    const targetMath = target?.closest?.(".mn-cm-math--inline[data-mn-edit-point]");
+    if (!activeMath && !targetMath) return false;
+    let position;
+    if (targetMath) {
+      const contentFrom = Number(targetMath.dataset.mnEditPoint);
+      const contentTo = Number(targetMath.dataset.mnSourceTo) - 1;
+      const rect = targetMath.getBoundingClientRect();
+      const ratio = rect.width > 0 ? Math.max(0, Math.min(1, (coordinates.left - rect.left) / rect.width)) : 0;
+      position = Math.round(contentFrom + (contentTo - contentFrom) * ratio);
+    } else {
+      position = state.view.posAtCoords({ x: coordinates.left, y }, false);
+    }
+    if (!Number.isInteger(position) || position === selection.head) return false;
+    state.view.dispatch({ selection: { anchor: position }, scrollIntoView: true, userEvent: "select" });
+    return true;
+  }
+
+  function handleBlockListTab(state, backwards) {
+    const selection = state.view.state.selection.main;
+    if (!selection.empty) return false;
+    const doc = state.view.state.doc;
+    const line = doc.lineAt(selection.head);
+    const parsed = state.modules.parseAdmonitions(doc.toString(), KIND_LABELS);
+    const lineIndex = line.number - 1;
+    const block = parsed.blocks.find(candidate => lineIndex > candidate.startLine && lineIndex <= candidate.endLine);
+    if (!block) return false;
+    const base = line.text.startsWith("    ") ? "    " : line.text.startsWith("\t") ? "\t" : "";
+    if (!base || selection.head < line.from + base.length) return false;
+    const item = /^(\s*)(?:[-+*]|\d+[.)])\s+/.exec(line.text.slice(base.length));
+    if (!item) return false;
+    // The block's four-space indent is structural, not a list nesting level.
+    if (backwards && !item[1]) return true;
+    return state.modules.indentWriting(state.view, backwards);
   }
 
   function setStatus(state, message, kind) {
@@ -1152,7 +1231,7 @@
       if (!state) return;
       state.mathRanges = ranges;
       if (state.mathPopover) scheduleMathPopover(state);
-    });
+    }, Number(payload.chapterNumber) || 1);
     state = {
       article, shell, toolbar, surface, payload, originalHtml, modules,
       baseRevision: source === draft?.source && !draftCompatible ? draft.baseRevision : payload.revision,
@@ -1376,7 +1455,23 @@
           return true;
         }
         if (event.key === "Enter" && !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey &&
+            handleDisplayMathEnter(state)) {
+          event.preventDefault();
+          return true;
+        }
+        if (event.key === "Enter" && !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey &&
             handleBlockEnter(state)) {
+          event.preventDefault();
+          return true;
+        }
+        if ((event.key === "ArrowUp" || event.key === "ArrowDown") &&
+            !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey &&
+            handleInlineMathVertical(state, event.key === "ArrowDown")) {
+          event.preventDefault();
+          return true;
+        }
+        if (event.key === "Tab" && !event.metaKey && !event.ctrlKey && !event.altKey &&
+            handleBlockListTab(state, event.shiftKey)) {
           event.preventDefault();
           return true;
         }
@@ -1405,9 +1500,9 @@
           anchor: Math.min(source.length, Math.max(0, draft.selection.anchor || 0)),
           head: Math.min(source.length, Math.max(0, draft.selection.head ?? draft.selection.anchor ?? 0))
         } : undefined,
-        extensions: [modules.basicSetup, modules.markdown(), modules.writingExtension, modules.EditorView.lineWrapping,
+        extensions: [modules.Prec.highest(interactionHandler), modules.basicSetup, modules.markdown(), modules.writingExtension, modules.EditorView.lineWrapping,
           modules.EditorView.contentAttributes.of({ "aria-label": "笔记编辑器", spellcheck: "false" }),
-          visualCompartment.of([visualExtension]), updateListener, mouseSelection, modules.Prec.highest(interactionHandler)]
+          visualCompartment.of([visualExtension]), updateListener, mouseSelection]
       }),
       parent: surface
     });

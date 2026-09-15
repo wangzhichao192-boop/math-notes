@@ -589,8 +589,192 @@
     =\mathbb{E}[X^2]-(\mathbb{E}X)^2.
     $$
 
+!!! example "Example (Means and variances of standard distributions)"
+    <a id="ex-1-10-3"></a>
+    The Bernoulli, binomial, Poisson, and normal distributions satisfy
+
+    $$
+    \begin{array}{c|c|c}
+    \text{Distribution of }X & \mathbb{E}X & \operatorname{Var}(X)\\
+    \hline
+    \operatorname{Ber}(p) & p & p(1-p)\\
+    \operatorname{Bin}(n,p) & np & np(1-p)\\
+    \operatorname{Pois}(\lambda) & \lambda & \lambda\\
+    \mathcal{N}(\mu,\sigma^2) & \mu & \sigma^2
+    \end{array}
+    $$
+
+    For $X\sim\operatorname{Ber}(p)$, the identity $X^2=X$ gives
+
+    $$
+    \mathbb{E}X=p,
+    \qquad
+    \operatorname{Var}(X)
+    =\mathbb{E}[X^2]-(\mathbb{E}X)^2
+    =p-p^2=p(1-p).
+    $$
+
+    Now let $X\sim\operatorname{Bin}(n,p)$. From
+    $k\binom{n}{k}=n\binom{n-1}{k-1}$ and the binomial theorem,
+
+    $$
+    \begin{aligned}
+    \mathbb{E}X
+    &=\sum_{k=1}^{n}k\binom{n}{k}p^k(1-p)^{n-k}\\
+    &=np\sum_{j=0}^{n-1}\binom{n-1}{j}p^j(1-p)^{n-1-j}
+    =np.
+    \end{aligned}
+    $$
+
+    Similarly,
+
+    $$
+    \begin{aligned}
+    \mathbb{E}[X(X-1)]
+    &=\sum_{k=2}^{n}k(k-1)\binom{n}{k}p^k(1-p)^{n-k}\\
+    &=n(n-1)p^2.
+    \end{aligned}
+    $$
+
+    Since $X^2=X(X-1)+X$,
+
+    $$
+    \operatorname{Var}(X)
+    =n(n-1)p^2+np-n^2p^2
+    =np(1-p).
+    $$
+
+    If $X\sim\operatorname{Pois}(\lambda)$, shifting the summation index
+    yields
+
+    $$
+    \begin{aligned}
+    \mathbb{E}X
+    &=e^{-\lambda}\sum_{k=1}^{\infty}
+      \frac{k\lambda^k}{k!}
+      =\lambda e^{-\lambda}\sum_{j=0}^{\infty}
+      \frac{\lambda^j}{j!}
+      =\lambda,\\
+    \mathbb{E}[X(X-1)]
+    &=e^{-\lambda}\sum_{k=2}^{\infty}
+      \frac{k(k-1)\lambda^k}{k!}
+      =\lambda^2.
+    \end{aligned}
+    $$
+
+    It follows that
+
+    $$
+    \operatorname{Var}(X)
+    =\lambda^2+\lambda-\lambda^2
+    =\lambda.
+    $$
+
+    Finally, let $X\sim\mathcal{N}(\mu,\sigma^2)$ and put
+    $Z=(X-\mu)/\sigma$. Then $Z\sim\mathcal{N}(0,1)$. Symmetry gives
+    $\mathbb{E}Z=0$, while integration by parts and the Gaussian integral
+    give
+
+    $$
+    \begin{aligned}
+    \mathbb{E}[Z^2]
+    &=\frac{1}{\sqrt{2\pi}}
+      \int_{-\infty}^{\infty}z^2e^{-z^2/2}\,dz\\
+    &=\frac{1}{\sqrt{2\pi}}
+      \left(
+      \left[-ze^{-z^2/2}\right]_{-\infty}^{\infty}
+      +\int_{-\infty}^{\infty}e^{-z^2/2}\,dz
+      \right)
+      =1.
+    \end{aligned}
+    $$
+
+    Therefore
+!!! remark "Remark"
+    <a id="rem-1-3-6"></a>
+    For continuous random variables $X$ and $Y$, we can't define $P(A\mid B)=\frac{P(A\cap B)}{P(B)}$. instead we consider
+    $$
+    P(X\in A\mid Y\in[y_0-\varepsilon,y_0+\varepsilon]).
+    $$
+    Then
+    $$
+    P(X\in A\mid Y\in[y_0-\varepsilon,y_0+\varepsilon])
+    =
+    \frac{
+    \int_A\int_{y_0-\varepsilon}^{y_0+\varepsilon}
+    f_{X,Y}(x,y)\,dy\,dx
+    }{
+    \int_{y_0-\varepsilon}^{y_0+\varepsilon}
+    f_Y(y)\,dy
+    }.
+    $$
+    Letting $\varepsilon\to 0$,
+
+    $$
+    P(X\in A\mid Y=y_0)
+    =
+    \frac{
+    \int_A f_{X,Y}(x,y_0)\,dx
+    }{
+    f_Y(y_0)
+    }.
+    $$
+
+    Hence the conditional density is
+    $$
+    f_{X\mid Y}(x\mid y)
+    =
+    \frac{f_{X,Y}(x,y)}{f_Y(y)}
+    \qquad (f_Y(y)>0).
+    $$
+    Therefore,
+    $$
+    P(X\in A\mid Y=y)
+    =
+    \int_A f_{X\mid Y}(x\mid y)\,dx.
+    $$
+
+!!! proposition "Proposition (independence)"
+    <a id="prop-1-3-3"></a>
+    Discrete random variable $X_1,\cdots X_n$ are indepedent if for every $A_1,\cdots A_n \subset \R$, we have
+    $$
+    \mathbb P(X_1 \in A_1,\cdots,X_n\in A_n) = \mathbb P(X_1\in A_1)\cdots\mathbb P(X_n\in A_n)
+    $$
+
+!!! proposition "Proposition (linearity for expectation)"
+    <a id="prop-1-3-4"></a>
+    For discrete random variable $X ,Y$,
+    $$
+    \mathbb E(X+Y) = \mathbb E X +\mathbb EY
+    $$
+    In addition, if $X,Y$ are **independent**,
+    $$
+    \mathbb EXY = \mathbb EX \cdot\mathbb EY
+    $$
+
+??? proof "Proof"
+    <a id="prf-1-3-5"></a>
+    $$
+    \begin{aligned}
+    \text{LHS} &= \sum_{i,j} (x_i+y_j)p_{i,j}\\
+    &= \sum_{i,j}x_ip_{i,j} +\sum_{i,j} y_j p_{i,j}\\
+    &= \sum_i x_i p_i + \sum_j y_j p_j\\
+    &= \mathbb EX+\mathbb EY
+    \end{aligned}
+    $$
+    If $X,Y$ are independent,
+    $$
+    \begin{aligned}
+    \mathbb EXY &= \sum_{i,j} x_i\cdot y_i \cdot p_{i,j}\\
+    &=\sum_{i,j} x_i\cdot y_i \cdot p_i \cdot p_j \\
+    &= \left (\sum_i x_i p_i\right ) \left( \sum_j y_j p_j\right)\\
+    &= \mathbb EX\cdot\mathbb EY
+    \end{aligned}
+    $$
+
+
 !!! theorem "Theorem (Jensen's inequality)"
-    <a id="thm-1-10-3"></a>
+    <a id="thm-1-10-4"></a>
     Let $J:\mathbb{R}\to\mathbb{R}$ be convex. Whenever the expectations are
     finite,
 
@@ -598,8 +782,26 @@
     J(\mathbb{E}X)\leq\mathbb{E}[J(X)].
     $$
 
+??? proof "Proof"
+    Set $m=\mathbb{E}X$. Since $J$ is convex on $\mathbb{R}$, it has a
+    supporting line at $m$: there exists $a\in\mathbb{R}$ such that
+
+    $$
+    J(x)\geq J(m)+a(x-m),
+    \qquad x\in\mathbb{R}.
+    $$
+
+    Applying this inequality pointwise to $X$ and taking expectations gives
+
+    $$
+    \mathbb{E}[J(X)]
+    \geq J(m)+a(\mathbb{E}X-m)
+    =J(m)
+    =J(\mathbb{E}X).
+    $$
+
 !!! example "Example (Power moments)"
-    <a id="ex-1-10-4"></a>
+    <a id="ex-1-10-5"></a>
     For $p\geq1$, the function $J(x)=|x|^p$ is convex. Jensen's inequality
     therefore gives
 
@@ -608,7 +810,7 @@
     $$
 
 !!! theorem "Theorem (Hölder's inequality)"
-    <a id="thm-1-10-5"></a>
+    <a id="thm-1-10-6"></a>
     Let $p,q\in(1,\infty)$ satisfy $1/p+1/q=1$. If
     $\mathbb{E}|X|^p<\infty$ and $\mathbb{E}|Y|^q<\infty$, then
 
@@ -616,3 +818,40 @@
     |\mathbb{E}[XY]|
     \leq(\mathbb{E}|X|^p)^{1/p}(\mathbb{E}|Y|^q)^{1/q}.
     $$
+
+??? proof "Proof"
+    Write
+
+    $$
+    A=(\mathbb{E}|X|^p)^{1/p},
+    \qquad
+    B=(\mathbb{E}|Y|^q)^{1/q}.
+    $$
+
+    If $A=0$ or $B=0$, then $X=0$ or $Y=0$ almost surely, and the result is
+    immediate. Suppose that $A,B>0$. Young's inequality
+    $uv\leq u^p/p+v^q/q$ for $u,v\geq0$, applied to
+    $u=|X|/A$ and $v=|Y|/B$, yields
+
+    $$
+    \frac{|XY|}{AB}
+    \leq \frac{|X|^p}{pA^p}+\frac{|Y|^q}{qB^q}.
+    $$
+
+    Taking expectations and using $1/p+1/q=1$ gives
+
+    $$
+    \frac{\mathbb{E}|XY|}{AB}
+    \leq \frac1p+\frac1q=1.
+    $$
+
+    Therefore
+
+    $$
+    |\mathbb{E}[XY]|
+    \leq\mathbb{E}|XY|
+    \leq AB,
+    $$
+
+    which is the claimed inequality.
+

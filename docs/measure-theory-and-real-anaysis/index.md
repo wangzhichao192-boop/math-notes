@@ -9,5 +9,4 @@
 
 ## 目录
 
-1. [Countable Sets and Number Series](countable-sets-and-number-series.md) — 可数性的等价判别、有限积与可数并、Cantor 对角论证、数项级数、绝对收敛与 Riemann 重排定理
-2. [Kurzweil–Henstock Integration](kurzweil-henstock-integration.md) — 区间与紧致区间、长度、分割与带标签分割、gauge、Cousin 引理
+1. [Countability, Series, and the Kurzweil–Henstock Integral](countable-sets-and-number-series.md) — 可数性与 Cantor 对角论证、数项级数与 Riemann 重排定理、区间长度与带标签分割、gauge、Cousin 引理、KH 积分的线性与单调性、Cauchy 判别及可数修改不变性

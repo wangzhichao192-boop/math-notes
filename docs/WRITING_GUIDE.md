@@ -11,17 +11,39 @@ below and the self-check script will stay green.
 ```
 docs/<subject>/
 ├── index.md        # course hub: course main line, chapter list, anchor links
-├── <topic-1>.md    # one file per chapter/topic
+├── <topic-1>.md    # one file per book-scale chapter
 ├── <topic-2>.md
 └── ...
 ```
 
-- One `.md` file per chapter (matches the `mathematical-logic` precedent:
-  `counting-to-infinity.md`, `first-order-logic.md`, …).
-- Cross-references between chapters use the same anchor convention:
+### 1.1 Chapter and section granularity
+
+- Treat the finished notes as a **concise academic book**, not as a transcript
+  or a one-page-per-lesson archive.
+- Each content `.md` file is one **chapter page**. The total number of chapter
+  pages should be comparable to the chapter count of a normal concise academic
+  book on the same material.
+- A lesson or lecture is only a source boundary, not a structural rule. One
+  short lesson may form only part of a chapter; several related lessons may be
+  merged into one chapter; an unusually long lesson may be split across
+  chapters when a well-edited academic book would do so.
+- Use one `#` heading for the chapter title. Within that page, each `##`
+  heading is a genuine book **section** (also informally called a subchapter).
+  The number of `##` headings should resemble the section count of a normal
+  academic chapter covering the same material.
+- Choose chapter and section boundaries by mathematical scope, conceptual
+  dependency, and reading length. Do not create a new chapter or section merely
+  because the lecture date changes, the blackboard moves to a new panel, or a
+  new definition or theorem begins.
+- Merge headings that contain only a small amount of material into a broader
+  coherent section. Use `###` subsections only when a substantial section has
+  a genuine internal division; keep them sparse.
+- The course `index.md` and `mkdocs.yml` navigation must list the resulting
+  chapter pages, not the original lesson count.
+- Cross-references between chapters use stable descriptive anchors:
 
   ```
-  See [Theorem 5.1.3](#thm-5-1-3) in [Groups](groups.md).
+  See the [first isomorphism theorem](groups.md#thm-first-isomorphism).
   ```
 
 - The `index.md` is in **Chinese** with a Chinese 课程主线 admonition +
@@ -134,7 +156,7 @@ Collapsible proofs are `???` (instead of `!!!`) and the content follows the same
 
 ```markdown
 ??? proof "Proof"
-    Using [Proposition 3.3.4](#prop-3-3-4) and ...
+    Using the [image-of-a-union proposition](#prop-image-of-union) and ...
 
     $$
     f\Big(\bigcup_i A_i\Big) = \bigcup_i f(A_i).
@@ -174,14 +196,14 @@ Do **not** write:
 !!! definition "A composition law on a set X is a mapping"   # BAD: full sentence
 ```
 
-The CSS counter auto-prepends a number to the title via `::before`, so
-the title bar shows e.g. `1. Definition (Composition law)`. The
-admonition kinds are also configured as proper counter contexts (one
-counter per `## section`, reset at each new `## heading`).
+The site automatically prepends a `chapter.section.block` number to each
+theorem-style title. Definitions, theorems, propositions, lemmas, corollaries,
+examples, and remarks share one block counter. A new `##` heading resets the
+block counter; proofs and ordinary notes are not numbered.
 
 ```markdown
 !!! definition "Definition (Composition law)"
-    <a id="def-5-1-1"></a>
+    <a id="def-composition-law"></a>
     A **composition law** on a set $X$ is a mapping
     $\ast : X \times X \to X$, $(x, y) \mapsto x \ast y$.
 
@@ -192,44 +214,39 @@ counter per `## section`, reset at each new `## heading`).
     + If $\ast$ is associative, then $(X, \ast)$ is a **semigroup**.
 
 !!! remark "Remark"
-    <a id="rem-5-1-2"></a>
+    <a id="rem-nested-admonitions"></a>
     Nested admonitions are also fine. Use them sparingly.
 
 ??? proof "Proof"
-    <a id="prf-5-1-3"></a>
     Optional collapsible proof.
 ```
 
-The `<a id="...">` anchor goes on its own line right after the
-admonition title. Anchor naming convention used in this repo:
+An `<a id="...">` anchor is optional and is used only as a stable link target.
+When needed, put it on its own line immediately after the admonition title and
+use a descriptive name:
 
-- `def-<chapter>-<section>-<n>` for definitions
-- `thm-<chapter>-<section>-<n>` for theorems
-- `prop-<chapter>-<section>-<n>` for propositions
-- `lem-<chapter>-<section>-<n>` for lemmas
-- `cor-<chapter>-<section>-<n>` for corollaries
-- `rem-<chapter>-<section>-<n>` for remarks
-- `ex-<chapter>-<section>-<n>` for examples
+- `def-composition-law` for a definition
+- `thm-cantor-bernstein` for a theorem
+- `prop-image-of-union` for a proposition
+- `lem-schur` for a lemma
 
-**On-screen numbering** is driven by the anchor: `docs/javascripts/numbering.js`
-reads `<a id="def-1-2-3"></a>` and displays the admonition as "1.2.3 Definition
-…". The anchor is the single source of truth for the number — keep it
-canonical, and if you ever renumber, update the anchor (and every reference to
-it).
+**On-screen numbering** is position-driven. The chapter number is the page's
+position in its course navigation (excluding `index.md`); the section number is
+the position of the `##` heading in that chapter; and the block number is the
+position of the theorem-style block in that section. Moving a chapter, section,
+or block therefore renumbers it automatically. Anchors never control the
+displayed number. Existing numeric anchors remain valid as legacy links.
 
-**Cross-references** are ordinary markdown anchor links, and the number you
-type is exactly what readers see on screen:
+**Cross-references** are ordinary Markdown links. Prefer a descriptive label so
+the prose remains correct after automatic renumbering:
 
-- same page: `[Def 1.2.2](#def-1-2-2)`
-- same course, another file: `[Def 1.2.2](general-topology.md#def-1-2-2)`
-- another course: `[Cor 2.6.3](../algebra-analysis/set-theory.md#cor-2-6-3)`
+- same page: `[the composition-law definition](#def-composition-law)`
+- same course, another file:
+  `[Cantor--Bernstein](set-theory.md#thm-cantor-bernstein)`
+- another course:
+  `[Schur's lemma](../abstract-algebra/representations.md#lem-schur)`
 
 Cross-file links keep the `.md` extension so mkdocs resolves them.
-
-> Files **without** anchors (e.g. `probability/random-variables.md` and
-> several `mathematical-logic/` pages) fall back to the CSS per-section
-> counter and cannot be cross-referenced this way — add anchors if you want
-> them numbered and linkable.
 
 ---
 
@@ -249,8 +266,8 @@ Cross-file links keep the `.md` extension so mkdocs resolves them.
 
   (The `+` bullet is the project convention; `1.` also works.)
 
-- **Cross-references** between files use absolute path with `.md`:
-  `[Corollary 2.6.3](set-theory.md#cor-2-6-3)`. The trailing `.md` is
+- **Cross-references** between files use a path with `.md`:
+  `[the desired corollary](set-theory.md#cor-finite-unions)`. The trailing `.md` is
   needed for mkdocs to resolve the link.
 
 ---
@@ -293,5 +310,5 @@ mkdocs serve   # http://127.0.0.1:8000
 | Block math (own paragraph, **not** inside a list) | `$$ ... $$` — blank line before **and** after; none before the closing `$$` |
 | Definition / Theorem / Lemma / etc. | `!!! <kind> "Title"` then 4-space-indented body |
 | Collapsible proof | `??? proof "Proof"` |
-| Cross-reference | `[Def 1.2.2](#def-1-2-2)` same page · `[Def 1.2.2](general-topology.md#def-1-2-2)` cross-file · `[Cor 2.6.3](../algebra-analysis/set-theory.md#cor-2-6-3)` another course |
-| Numbered anchor | `<a id="def-1-2-3"></a>` right after admonition title |
+| Cross-reference | `[the definition](#def-composition-law)` same page · `[the theorem](groups.md#thm-first-isomorphism)` cross-file |
+| Optional stable anchor | `<a id="def-composition-law"></a>` right after the admonition title |

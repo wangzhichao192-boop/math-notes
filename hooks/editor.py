@@ -138,6 +138,39 @@ def _course_entries(config) -> list[dict[str, str]]:
     return courses
 
 
+def _nav_paths(value):
+    """Yield Markdown paths from a possibly nested MkDocs nav node."""
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, list):
+        for item in value:
+            yield from _nav_paths(item)
+    elif isinstance(value, dict):
+        for item in value.values():
+            yield from _nav_paths(item)
+
+
+def _chapter_number(config, source_path: str) -> int | None:
+    """Return the page's one-based chapter position inside its course."""
+    if "/" not in source_path or source_path.endswith("/index.md"):
+        return None
+    course_slug = source_path.split("/", 1)[0]
+    for item in config.get("nav") or []:
+        if not isinstance(item, dict) or len(item) != 1:
+            continue
+        children = next(iter(item.values()))
+        paths = list(_nav_paths(children))
+        index_path = f"{course_slug}/index.md"
+        if index_path not in paths:
+            continue
+        chapters = [path for path in paths if path.endswith(".md") and path != index_path]
+        try:
+            return chapters.index(source_path) + 1
+        except ValueError:
+            return None
+    return None
+
+
 def _is_local_request(environ) -> bool:
     """Only allow the development writer through a loopback connection."""
     try:
@@ -164,6 +197,7 @@ def on_page_content(html, *, page, config, files):
         "sourcePath": source_path,
         "sourceB64": base64.b64encode(source.encode("utf-8")).decode("ascii"),
         "revision": _revision(source),
+        "chapterNumber": _chapter_number(config, source_path),
         "saveEndpoint": _mount_path(config) + ENDPOINT_NAME,
         "manageEndpoint": _mount_path(config) + MANAGE_ENDPOINT_NAME,
     }

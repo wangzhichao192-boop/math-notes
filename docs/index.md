@@ -36,14 +36,14 @@
 
 - :material-book-open-page-variant: **测度论与实分析**
 
-    可数集、数项级数、区间与长度、带标签分割、gauge 与 Kurzweil–Henstock 积分
+    待补充
 
     [:octicons-arrow-right-24: 进入](measure-theory-and-real-anaysis/index.md)
 
 
 - :material-dice-multiple: **概率论**
 
-    概率空间、随机变量与极限定理
+    待补充
 
     [:octicons-arrow-right-24: 进入](probability/index.md)
 

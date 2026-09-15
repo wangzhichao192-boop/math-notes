@@ -43,15 +43,15 @@ theme:
 
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
-  - stylesheets/extra.css?v=20260901-4
-  - stylesheets/editor.css?v=20260910-6
+  - stylesheets/extra.css?v=20260914-1
+  - stylesheets/editor.css?v=20260914-2
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
-  - javascripts/numbering.js
-  - javascripts/editor.js?v=20260910-6
+  - javascripts/numbering.js?v=20260914-1
+  - javascripts/editor.js?v=20260914-2
 
 markdown_extensions:
   - admonition
@@ -135,8 +135,7 @@ nav:
       - Hyperbolic Geometry: geometry-topology/hyperbolic-geometry.md
   - "测度论与实分析":
       - measure-theory-and-real-anaysis/index.md
-      - Countable Sets and Number Series: measure-theory-and-real-anaysis/countable-sets-and-number-series.md
-      - Kurzweil-Henstock Integration: measure-theory-and-real-anaysis/kurzweil-henstock-integration.md
+      - Countability, Series, and the Kurzweil–Henstock Integral: measure-theory-and-real-anaysis/countable-sets-and-number-series.md
   - 概率论:
       - probability/index.md
       - Foundations of Probability: probability/lesson1.md

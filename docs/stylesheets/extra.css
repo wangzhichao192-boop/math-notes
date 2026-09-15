@@ -103,76 +103,10 @@
    Theorem-style admonitions — same colour scheme as before, but with
    tighter padding so dense proofs don't sprawl vertically.
 
-   Numbering: each type (definition, theorem, lemma, proposition,
-   corollary, remark, example) has its own CSS counter, reset at every
-   `## Section` heading. The number is prepended to the title via
-   `::before` so the user-supplied title text (e.g. "(Image of a
-   union)") is preserved and read as the theorem's name.
+   numbering.js assigns chapter.section.block numbers from page and DOM
+   position. All theorem-style kinds share the block counter; proofs and
+   ordinary notes are intentionally unnumbered.
    ===================================================================== */
-
-.md-typeset h2 {
-  counter-reset: def-counter thm-counter lem-counter
-                 prop-counter cor-counter rem-counter
-                 ex-counter prf-counter;
-}
-
-.md-typeset .admonition.definition,
-.md-typeset details.definition { counter-increment: def-counter; }
-.md-typeset .admonition.theorem,
-.md-typeset details.theorem       { counter-increment: thm-counter; }
-.md-typeset .admonition.lemma,
-.md-typeset details.lemma         { counter-increment: lem-counter; }
-.md-typeset .admonition.proposition,
-.md-typeset details.proposition  { counter-increment: prop-counter; }
-.md-typeset .admonition.corollary,
-.md-typeset details.corollary    { counter-increment: cor-counter; }
-.md-typeset .admonition.remark,
-.md-typeset details.remark       { counter-increment: rem-counter; }
-.md-typeset .admonition.example,
-.md-typeset details.example      { counter-increment: ex-counter; }
-.md-typeset .admonition.proof,
-.md-typeset details.proof        { counter-increment: prf-counter; }
-
-.md-typeset .definition > .admonition-title::before,
-.md-typeset details.definition > summary::before {
-  content: counter(def-counter) ".  ";
-  color: #2962ff; font-weight: 700;
-}
-.md-typeset .theorem > .admonition-title::before,
-.md-typeset details.theorem > summary::before {
-  content: counter(thm-counter) ".  ";
-  color: #6200ee; font-weight: 700;
-}
-.md-typeset .lemma > .admonition-title::before,
-.md-typeset details.lemma > summary::before {
-  content: counter(lem-counter) ".  ";
-  color: #00897b; font-weight: 700;
-}
-.md-typeset .proposition > .admonition-title::before,
-.md-typeset details.proposition > summary::before {
-  content: counter(prop-counter) ".  ";
-  color: #2e7d32; font-weight: 700;
-}
-.md-typeset .corollary > .admonition-title::before,
-.md-typeset details.corollary > summary::before {
-  content: counter(cor-counter) ".  ";
-  color: #e65100; font-weight: 700;
-}
-.md-typeset .remark > .admonition-title::before,
-.md-typeset details.remark > summary::before {
-  content: counter(rem-counter) ".  ";
-  color: #455a64; font-weight: 700; font-style: italic;
-}
-.md-typeset .example > .admonition-title::before,
-.md-typeset details.example > summary::before {
-  content: counter(ex-counter) ".  ";
-  color: #2962ff; font-weight: 700;
-}
-.md-typeset .proof > .admonition-title::before,
-.md-typeset details.proof > summary::before {
-  content: counter(prf-counter) ".  ";
-  color: #9e9e9e; font-weight: 700;
-}
 
 /* ----- layout for the now-numbered admonitions ----- */
 .md-typeset .admonition,
@@ -529,73 +463,55 @@
   }
 }
 
-/* =====================================================================
-   Anchor-driven numbering: admonitions that carry an <a id="..."> anchor
-   are numbered by numbering.js (chapter.section.order). Suppress the CSS
-   per-section counter for them so numbers are not duplicated. Admonitions
-   without an anchor keep the per-section counter fallback above.
-   ===================================================================== */
-.md-typeset .admonition:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
-                            a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
-                            a[id^="ex-"], a[id^="prf-"]),
-.md-typeset details:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
-                        a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
-                        a[id^="ex-"], a[id^="prf-"]) {
-  counter-increment: none;
-}
-.md-typeset .admonition:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
-                            a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
-                            a[id^="ex-"], a[id^="prf-"]) > .admonition-title::before,
-.md-typeset details:has(a[id^="def-"], a[id^="thm-"], a[id^="prop-"],
-                        a[id^="lem-"], a[id^="cor-"], a[id^="rem-"],
-                        a[id^="ex-"], a[id^="prf-"]) > summary::before {
-  /* Restore the Material icon in the title slot (the CSS counter was removed
-     above, but the 2rem icon-slot padding remains — a clean icon fills it). */
-  content: "";
-}
-
-/* per-type icon glyph + colour (matches the .mn-thm-num colours below) */
-.md-typeset .admonition.definition:has(a[id^="def-"]) > .admonition-title::before,
-.md-typeset details.definition:has(a[id^="def-"]) > summary::before {
+/* Per-type icon glyph + colour. Anchors are optional because numbering is
+   computed from chapter, section, and block position. */
+.md-typeset .admonition.definition > .admonition-title::before,
+.md-typeset details.definition > summary::before {
   background-color: #2962ff;
   -webkit-mask-image: var(--md-admonition-icon--note);
   mask-image: var(--md-admonition-icon--note);
 }
-.md-typeset .admonition.theorem:has(a[id^="thm-"]) > .admonition-title::before,
-.md-typeset details.theorem:has(a[id^="thm-"]) > summary::before {
+.md-typeset .admonition.theorem > .admonition-title::before,
+.md-typeset details.theorem > summary::before {
   background-color: #6200ee;
   -webkit-mask-image: var(--md-admonition-icon--tip);
   mask-image: var(--md-admonition-icon--tip);
 }
-.md-typeset .admonition.lemma:has(a[id^="lem-"]) > .admonition-title::before,
-.md-typeset details.lemma:has(a[id^="lem-"]) > summary::before {
+.md-typeset .admonition.lemma > .admonition-title::before,
+.md-typeset details.lemma > summary::before {
   background-color: #00897b;
   -webkit-mask-image: var(--md-admonition-icon--abstract);
   mask-image: var(--md-admonition-icon--abstract);
 }
-.md-typeset .admonition.proposition:has(a[id^="prop-"]) > .admonition-title::before,
-.md-typeset details.proposition:has(a[id^="prop-"]) > summary::before {
+.md-typeset .admonition.proposition > .admonition-title::before,
+.md-typeset details.proposition > summary::before {
   background-color: #2e7d32;
   -webkit-mask-image: var(--md-admonition-icon--info);
   mask-image: var(--md-admonition-icon--info);
 }
-.md-typeset .admonition.corollary:has(a[id^="cor-"]) > .admonition-title::before,
-.md-typeset details.corollary:has(a[id^="cor-"]) > summary::before {
+.md-typeset .admonition.corollary > .admonition-title::before,
+.md-typeset details.corollary > summary::before {
   background-color: #e65100;
   -webkit-mask-image: var(--md-admonition-icon--success);
   mask-image: var(--md-admonition-icon--success);
 }
-.md-typeset .admonition.remark:has(a[id^="rem-"]) > .admonition-title::before,
-.md-typeset details.remark:has(a[id^="rem-"]) > summary::before {
+.md-typeset .admonition.remark > .admonition-title::before,
+.md-typeset details.remark > summary::before {
   background-color: #455a64;
   -webkit-mask-image: var(--md-admonition-icon--question);
   mask-image: var(--md-admonition-icon--question);
 }
-.md-typeset .admonition.example:has(a[id^="ex-"]) > .admonition-title::before,
-.md-typeset details.example:has(a[id^="ex-"]) > summary::before {
+.md-typeset .admonition.example > .admonition-title::before,
+.md-typeset details.example > summary::before {
   background-color: #2962ff;
   -webkit-mask-image: var(--md-admonition-icon--example);
   mask-image: var(--md-admonition-icon--example);
+}
+.md-typeset .admonition.proof > .admonition-title::before,
+.md-typeset details.proof > summary::before {
+  background-color: #9e9e9e;
+  -webkit-mask-image: var(--md-admonition-icon--note);
+  mask-image: var(--md-admonition-icon--note);
 }
 
 /* number injected by numbering.js, coloured per admonition type */
