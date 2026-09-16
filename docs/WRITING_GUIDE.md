@@ -54,6 +54,34 @@ docs/<subject>/
 
 ## 2. Note-writing style
 
+### 2.1 Source fidelity and the no-deletion rule
+
+- Treat lecture-board photographs, scans, handouts, and the instructor's
+  worked examples as the **minimum required corpus**, not as optional source
+  material. The finished notes may add clarification and background, but must
+  contain every mathematical definition, statement, construction, proof
+  method, example, exercise, diagram, and in-class question visible in the
+  supplied sources.
+- **Add; do not subtract.** Never delete, replace, merge away, or materially
+  compress source-backed content merely to make the notes shorter. Never
+  remove existing note content without first telling the user exactly what is
+  proposed and obtaining approval.
+- A shorter proof is supplementary, not a replacement. If the instructor gives
+  two proofs (for example, an algebraic proof and a bijective proof), preserve
+  both in full and label them separately. Do not replace a board construction
+  with a one-line generating-function or citation-only argument.
+- Preserve the instructor's intermediate steps when they carry mathematical or
+  examinable content: the sets and maps used in a bijection, the inverse map,
+  checks of injectivity/surjectivity, coefficient extractions, boundary cases,
+  and representative worked examples all belong in the notes.
+- Before finishing, make a source-to-note audit. Check every board panel or
+  source page against the draft and confirm that each item appears somewhere
+  in the notes. If a symbol or line is unreadable, mark the uncertainty and ask
+  the user; do not silently omit it or invent a replacement.
+- Editorial restructuring is allowed only when it preserves all source
+  content. Moving material, adding connective prose, or supplying an additional
+  proof is fine; deleting source-backed material requires prior user approval.
+
 - Write chapter content in **English**. Use **Chinese** for course home pages,
   navigation, and overview material.
 - Aim for the style of a concise graduate-level mathematics textbook or set of

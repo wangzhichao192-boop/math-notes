@@ -123,9 +123,22 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     \min\{\operatorname{val}(f),\operatorname{val}(g)\}.
     $$
 
+??? proof "Proof"
+    Below degree $\min\{\operatorname{val}(f),\operatorname{val}(g)\}$, both series have zero coefficients, so their sum does as well. Equality holds unless the first nonzero coefficients cancel. Applying the decreasing function $r\mapsto2^{-r}$ gives the norm inequality.
+
 !!! remark "Remark (Coefficientwise meaning of convergence)"
     <a id="rem-1-3-3"></a>
     The metric $d(f,g)=|f-g|$ makes $\mathbb C[[X]]$ complete. A sequence $f_N$ converges to $f$ precisely when, for every fixed $k$, the coefficient $[X^k]f_N$ eventually equals $[X^k]f$. In particular, $|f-g|<2^{-N}$ exactly when the coefficients through degree $N$ agree.
+
+    The open ball of radius $2^{-N}$ about $f$ is therefore
+
+    $$
+    B(f,2^{-N})
+    =
+    \{g\in\mathbb C[[X]]:g-f\in X^{N+1}\mathbb C[[X]]\}.
+    $$
+
+    Every point of an ultrametric ball is a center: if $h\in B(f,2^{-N})$, then $B(h,2^{-N})=B(f,2^{-N})$. This follows immediately from the ultrametric inequality in both directions.
 
 !!! example "Example (The scalar embedding is not continuous)"
     <a id="ex-1-3-4"></a>
@@ -172,6 +185,8 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     $$
 
     This is well-defined because $\operatorname{val}(g^n)\to+\infty$. The condition $g(0)=0$ is essential when $f$ has infinitely many nonzero coefficients.
+
+    For example, $\sum_{n\ge0}(X+1)^n/n!$ is not defined as an element of $\mathbb C[[X]]$: every summand contributes to the constant coefficient, so that coefficient is not a finite algebraic sum. Formal composition is therefore controlled by valuation, not by analytic convergence.
 
 !!! proposition "Proposition (Units)"
     <a id="prop-1-4-2"></a>
@@ -222,6 +237,19 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     \exp(\log(1+f))=1+f.
     $$
 
+??? proof "Proof"
+    Each identity is valid for polynomials after truncation modulo $X^{N+1}$, because only finitely many terms contribute in the quotient $\mathbb C[[X]]/(X^{N+1})$. The ordinary polynomial identities therefore hold modulo $X^{N+1}$ for every $N$, and hence hold coefficientwise in $\mathbb C[[X]]$.
+
+    In particular, the familiar calculation
+
+    $$
+    \left(\sum_{n\ge0}\frac{X^n}{n!}\right)
+    \left(\sum_{n\ge0}\frac{(-1)^nX^n}{n!}\right)
+    =1
+    $$
+
+    is a formal identity; it does not appeal to numerical convergence of $e^Xe^{-X}$.
+
 !!! definition "Definition (Generalized powers)"
     <a id="def-1-4-6"></a>
     For $f\in X\mathbb C[[X]]$ and $\lambda\in\mathbb C$, define
@@ -238,6 +266,25 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     Vandermonde's identity yields $(1+f)^{\lambda+\mu}=(1+f)^\lambda(1+f)^\mu$.
 
+??? proof "Proof of the exponent law"
+    Since $f\in X\mathbb C[[X]]$, every coefficient in the following Cauchy product is a finite sum. Vandermonde's identity gives
+
+    $$
+    \begin{aligned}
+    (1+f)^\lambda(1+f)^\mu
+    &=
+    \sum_{r,s\ge0}
+    \binom{\lambda}{r}\binom{\mu}{s}f^{r+s}\\
+    &=
+    \sum_{n\ge0}
+    \left(\sum_{r=0}^{n}
+    \binom{\lambda}{r}\binom{\mu}{n-r}\right)f^n\\
+    &=
+    \sum_{n\ge0}\binom{\lambda+\mu}{n}f^n\\
+    &=(1+f)^{\lambda+\mu}.
+    \end{aligned}
+    $$
+
 !!! definition "Definition (Formal derivative)"
     <a id="def-1-4-7"></a>
     For $f(X)=\sum_{n\ge0}a_nX^n$, define
@@ -247,6 +294,45 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     $$
 
     Formal differentiation satisfies linearity, the product rule, and the chain rule $(f\circ g)'=g'(f'\circ g)$ whenever the composition is defined.
+
+??? proof "Verification of the formal rules"
+    Linearity is coefficientwise. For the product rule, the coefficient of $X^{n-1}$ in $(fg)'$ is
+
+    $$
+    n\sum_{i=0}^{n}a_ib_{n-i}
+    =
+    \sum_{i=0}^{n}ia_ib_{n-i}
+    +
+    \sum_{i=0}^{n}(n-i)a_ib_{n-i},
+    $$
+
+    which is the same coefficient in $f'g+fg'$. The chain rule first follows for monomials $f=X^m$ from the product rule, then for polynomials by linearity, and finally for formal series coefficientwise because $g(0)=0$ makes every fixed coefficient depend on only finitely many terms of $f$.
+
+### Board exercise: a logarithmic differential equation
+
+!!! proposition "Proposition (Formal logarithmic antiderivative)"
+    <a id="prop-1-4-8"></a>
+    Let $f\in1+X\mathbb C[[X]]$. There is a unique $g\in X\mathbb C[[X]]$ satisfying
+
+    $$
+    g'(X)=\frac{f'(X)}{f(X)},
+    \qquad
+    g(0)=0,
+    $$
+
+    namely $g=\log f$. Equivalently, $f=\exp g$.
+
+??? proof "Proof"
+    Termwise differentiation of the logarithmic series gives $(\log f)'=f'/f$. Conversely, if $g$ satisfies the differential equation, the product and chain rules give
+
+    $$
+    (fe^{-g})'
+    =
+    f'e^{-g}-fg'e^{-g}
+    =0.
+    $$
+
+    A formal series with zero derivative is constant, and $f(0)e^{-g(0)}=1$. Hence $fe^{-g}=1$, so $f=e^g$ and $g=\log f$.
 
 ## 5. Extracting enumerative identities
 

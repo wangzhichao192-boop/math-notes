@@ -37,6 +37,18 @@ This chapter studies statistics on permutations and the generating polynomials t
 ??? proof "Proof"
     Given $(a_1,\ldots,a_n)$, start with the one-letter word $n$. For $i=n-1,n-2,\ldots,1$, insert $i$ in the unique gap with exactly $a_i$ existing letters to its left. All existing letters are larger than $i$, so this produces the prescribed inversion table. The construction is unique.
 
+    For the board example,
+
+    $$
+    (a_1,\ldots,a_9)=(1,5,2,0,4,2,0,1,0),
+    $$
+
+    successive insertion of $9,8,\ldots,1$ reconstructs
+
+    $$
+    w=417396285.
+    $$
+
 ## 2. The $q$-factorial
 
 !!! definition "Definition ($q$-integer and $q$-factorial)"
@@ -47,6 +59,12 @@ This chapter studies statistics on permutations and the generating polynomials t
     [m]_q=1+q+\cdots+q^{m-1}=\frac{1-q^m}{1-q},
     \qquad
     [n]_q!=\prod_{m=1}^{n}[m]_q.
+    $$
+
+    Since $[m]_q\to m$ as $q\to1$, one has
+
+    $$
+    \lim_{q\to1}[n]_q!=n!.
     $$
 
 !!! theorem "Theorem (Inversion enumerator)"
@@ -80,6 +98,19 @@ This chapter studies statistics on permutations and the generating polynomials t
     $$
 
     Thus $[n]_q!$ is a finite-field analogue of $n!$.
+
+??? proof "Counting the flags"
+    There are
+
+    $$
+    \frac{q^n-1}{q-1}=[n]_q
+    $$
+
+    choices for the line $V_1$. Once $V_i$ is fixed, choosing $V_{i+1}\supset V_i$ is equivalent to choosing a line in the quotient $\mathbb F_q^n/V_i$, which has dimension $n-i$. Hence there are $[n-i]_q$ choices. Multiplying over $i=0,1,\ldots,n-1$ gives
+
+    $$
+    [n]_q[n-1]_q\cdots[1]_q=[n]_q!.
+    $$
 
 !!! proposition "Proposition (Inversions of inverse permutations)"
     <a id="prop-3-2-4"></a>
@@ -167,7 +198,51 @@ This chapter studies statistics on permutations and the generating polynomials t
 
     In each block, move the last letter to the front, then append $x$; call the result $\gamma_{k+1}$. If $c_k$ letters of $\gamma_k$ exceed $x$, then in the descent case the rotations create $k-c_k$ inversions and appending $x$ creates $c_k$, for a net increase of $k$. In the ascent case the rotations remove $c_k$ inversions and appending $x$ restores them, for a net increase of $0$. These are exactly the changes in the major index.
 
+    More explicitly, in the descent case $w_k>x$,
+
+    $$
+    \operatorname{maj}(Y_{k+1})
+    =
+    \operatorname{maj}(Y_k)+k
+    $$
+
+    and
+
+    $$
+    \operatorname{inv}(\gamma_{k+1})
+    =
+    \operatorname{inv}(\gamma_k)+(k-c_k)+c_k.
+    $$
+
+    In the ascent case $w_k<x$, no new descent is created; the rotations remove $c_k$ inversions and appending $x$ creates exactly $c_k$, so both statistics are unchanged. This proves the invariant by induction for every prefix $Y_k$.
+
     The construction is reversible. The last letter of $\gamma_{k+1}$ is $x$, and the first remaining letter determines which comparison case occurred; reversing the block rotations recovers $\gamma_k$. Thus $\Phi(w)=\gamma_n$ is a bijection satisfying $\operatorname{inv}(\Phi(w))=\operatorname{maj}(w)$.
+
+    For the reverse step, remove $x$. If the first remaining letter is greater than $x$, cut according to letters greater than $x$ and move the first letter of each block back to the end. If it is smaller than $x$, do the same using letters smaller than $x$. The last letter of the recovered word is $w_k$, so repeating the procedure uniquely recovers $w$.
+
+    The board example $w=683941725$ gives
+
+    $$
+    \begin{aligned}
+    \gamma_1&=6,\\
+    \gamma_2&=68,\\
+    \gamma_3&=683,\\
+    \gamma_4&=6839,\\
+    \gamma_5&=68934,\\
+    \gamma_6&=689341,\\
+    \gamma_7&=6389417,\\
+    \gamma_8&=63894712,\\
+    \gamma_9&=364891725.
+    \end{aligned}
+    $$
+
+    Thus $\Phi(683941725)=364891725$; direct calculation gives
+
+    $$
+    \operatorname{maj}(683941725)
+    =
+    \operatorname{inv}(364891725).
+    $$
 
 ## 5. Dyck paths and Catalan numbers
 
@@ -206,8 +281,28 @@ This chapter studies statistics on permutations and the generating polynomials t
     C_n=\frac1{n+1}\binom{2n}{n}.
     $$
 
+    The first values are
+
+    $$
+    C_0,C_1,C_2,C_3,C_4,C_5
+    =
+    1,1,2,5,14,42.
+    $$
+
 ??? proof "Proof"
     The recurrence gives $(C(X)-1)/X=C(X)^2$. Of the two quadratic roots, only the displayed one has constant term $1$. Expanding $(1-4X)^{1/2}$ by [Definition 1.4.6](lesson1.md#def-1-4-6) yields the coefficient formula.
+
+    In detail,
+
+    $$
+    \begin{aligned}
+    C_n
+    &=[X^n]C(X)\\
+    &=-\frac12[X^{n+1}](1-4X)^{1/2}\\
+    &=-\frac12\binom{1/2}{n+1}(-4)^{n+1}\\
+    &=\frac1{n+1}\binom{2n}{n}.
+    \end{aligned}
+    $$
 
 ## 6. Permutation plots and pattern avoidance
 
@@ -226,6 +321,14 @@ This chapter studies statistics on permutations and the generating polynomials t
 
     A zero-one matrix is a permutation matrix exactly when each row and each column contains one entry equal to $1$.
 
+    Equivalently, the $n$ points
+
+    $$
+    (1,w_1),(2,w_2),\ldots,(n,w_n)
+    $$
+
+    form the permutation plot. Reflecting this plot in the main diagonal gives the plot of $w^{-1}$.
+
 !!! definition "Definition (321-avoidance)"
     <a id="def-3-6-2"></a>
     A permutation $w$ is 321-avoiding if there are no indices $i<j<k$ with $w_i>w_j>w_k$.
@@ -240,3 +343,4 @@ This chapter studies statistics on permutations and the generating polynomials t
 
     The next chapter develops a diagrammatic Catalan correspondence for the closely related class of 132-avoiding permutations.
 
+<!-- Source audit: all mathematical content visible in the supplied lecture photographs is retained above. -->

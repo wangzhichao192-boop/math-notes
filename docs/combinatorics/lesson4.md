@@ -8,6 +8,16 @@ This chapter extends inversion enumeration from ordinary permutations to multise
     <a id="def-4-1-1"></a>
     Let $M=\{1^{a_1},\ldots,m^{a_m}\}$ be a multiset on a totally ordered alphabet, with $n=a_1+\cdots+a_m$. A permutation of $M$ is a word with precisely these multiplicities. Denote the set of such words by $\mathfrak S_M$ and define inversions by the usual strict comparison of letters.
 
+    At $q=1$, the number of such words is
+
+    $$
+    |\mathfrak S_M|
+    =
+    \binom{n}{a_1,\ldots,a_m}
+    =
+    \frac{n!}{a_1!\cdots a_m!}.
+    $$
+
 !!! definition "Definition ($q$-multinomial coefficient)"
     <a id="def-4-1-2"></a>
     For $n=a_1+\cdots+a_m$, define
@@ -47,6 +57,8 @@ This chapter extends inversion enumeration from ordinary permutations to multise
     $$
 
     and division proves the identity.
+
+    In particular, although the defining quotient for the $q$-multinomial coefficient initially looks rational, this inversion enumerator proves that it is a polynomial in $q$ with nonnegative integer coefficients.
 
 ## 2. Alternating permutations and Euler numbers
 
@@ -95,6 +107,24 @@ This chapter extends inversion enumeration from ordinary permutations to multise
 
     The series $\sec x+\tan x$ satisfies this initial-value problem and is therefore its unique formal solution. Its even and odd parts are $\sec x$ and $\tan x$, respectively.
 
+    Indeed,
+
+    $$
+    \frac{d}{dx}(\sec x+\tan x)
+    =
+    \sec x\tan x+\sec^2x
+    =
+    \frac{(\sec x+\tan x)^2+1}{2}.
+    $$
+
+    The differential equation recursively determines the coefficient of $x^{n+1}$ from the coefficients through degree $n$, so the formal solution with constant term $1$ is unique. Separating even and odd powers gives
+
+    $$
+    \sum_{n\ge0}E_{2n}\frac{x^{2n}}{(2n)!}=\sec x,
+    \qquad
+    \sum_{n\ge0}E_{2n+1}\frac{x^{2n+1}}{(2n+1)!}=\tan x.
+    $$
+
 ## 3. Rothe diagrams and 132-avoidance
 
 !!! definition "Definition (Rothe diagram)"
@@ -140,6 +170,16 @@ This chapter extends inversion enumeration from ordinary permutations to multise
 ??? proof "Proof"
     If $i<j<k$ and $w_i<w_k<w_j$, then $(j,w_k)\in D(w)$ while $(j,w_i)\notin D(w)$. Thus row $j$ contains a cell but omits a cell to its left, so it is not a Ferrers row. Conversely, such a hole in a row recovers a 132 pattern. The bound on row $i$ is $n-i$, since every diagram cell in that row comes from a later position.
 
+    For the converse in detail, suppose row $j$ contains $(j,b)$ but omits $(j,a)$ with $a<b$. The present cell gives $j<w^{-1}(b)$ and $w_j>b$. If the omitted cell is not excluded by $a\ge w_j$, which is impossible because $a<b<w_j$, it must be excluded by $w^{-1}(a)<j$. Thus
+
+    $$
+    w^{-1}(a)<j<w^{-1}(b),
+    \qquad
+    a<b<w_j,
+    $$
+
+    and the entries in these three positions form a 132 pattern.
+
 !!! corollary "Corollary (132-avoiding permutations are Catalan)"
     <a id="cor-4-3-6"></a>
     Taking the boundary of $\lambda\subseteq\delta_n$ gives a Dyck path of semilength $n$. Therefore
@@ -175,6 +215,8 @@ This chapter extends inversion enumeration from ordinary permutations to multise
 !!! remark "Remark (Full binary trees)"
     <a id="rem-4-4-3"></a>
     A binary tree is full if every vertex has either zero or two children. If the maximum splits $w$ as $urv$, then $T(w)$ is full precisely when either both $u,v$ are empty, or both are nonempty and $T(u),T(v)$ are full.
+
+    The board also posed two further structural questions: which letters of $w$ become leaves of $T(w)$, and which letters become vertices with exactly one child? They can be answered recursively from the same decomposition $w=urv$: the root is a leaf exactly when $u=v=\varnothing$, and it has exactly one child exactly when precisely one of $u,v$ is empty; the question then repeats independently inside the nonempty subwords.
 
 ## 5. Gaussian binomial coefficients
 
@@ -235,6 +277,20 @@ This chapter extends inversion enumeration from ordinary permutations to multise
 
     Let $p(j,k,n)$ count partitions of $n$ with at most $k$ parts and largest part at most $j$.
 
+    The initial values recorded on the board include
+
+    $$
+    p_0(0)=1,
+    \qquad
+    p_0(n)=0\quad(n\ge1),
+    $$
+
+    $$
+    p_1(n)=1\quad(n\ge1),
+    \qquad
+    p_2(n)=\left\lfloor\frac n2\right\rfloor.
+    $$
+
 !!! example "Example (Partitions of five)"
     <a id="ex-4-6-3"></a>
     The seven partitions of $5$ are
@@ -257,6 +313,17 @@ This chapter extends inversion enumeration from ordinary permutations to multise
 !!! definition "Definition (Ferrers diagram)"
     <a id="def-4-6-5"></a>
     The Ferrers diagram of $\lambda=(\lambda_1,\ldots,\lambda_r)$ has $r$ left-justified rows, with $\lambda_i$ cells in row $i$. It fits in a $k\times j$ rectangle exactly when $\ell(\lambda)\le k$ and $\lambda_1\le j$.
+
+    For example, $\lambda=(4,3,3,1)$ has diagram
+
+    ```text
+    ■ ■ ■ ■
+    ■ ■ ■
+    ■ ■ ■
+    ■
+    ```
+
+    and therefore $|\lambda|=11$.
 
 ## 7. Partitions in a rectangle
 
