@@ -1,8 +1,8 @@
-# Set Partitions, Finite Differences, and Inclusion–Exclusion
+# Finite Differences, Inclusion–Exclusion, and Restricted Positions
 
-This chapter begins with set partitions and Stirling numbers of the second kind, interprets the two kinds of Stirling numbers as inverse changes of polynomial basis, and develops finite-difference calculus. Möbius inversion on the Boolean lattice then yields inclusion–exclusion, derangements, rook polynomials, and the restricted-position formulation of the ménage problem.
+This chapter develops three mutually reinforcing inversion methods. Set partitions and the two kinds of Stirling numbers describe changes of polynomial basis; finite differences yield Newton expansion and binomial inversion; Möbius inversion on the Boolean lattice yields inclusion–exclusion. The final sections apply these tools to derangements, rook polynomials, restricted permutations, and the ménage problem.
 
-## 1. Set partitions and Stirling numbers of the second kind
+## Set partitions and Stirling numbers of the second kind
 
 !!! definition "Definition (Set partition)"
     <a id="def-6-1-1"></a>
@@ -99,7 +99,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     form another basis, with the Stirling numbers of the second kind as change-of-basis coefficients.
 
-## 2. Stirling inversion
+## Stirling inversion and finite differences
 
 !!! definition "Definition (Signed Stirling numbers of the first kind)"
     <a id="def-6-2-1"></a>
@@ -175,7 +175,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
     \sum_{j=k}^n s(n,j)S(j,k)=\delta_{nk}.
     $$
 
-## 3. Finite differences and Newton expansion
+### Finite differences and Newton expansion
 
 !!! definition "Definition (Difference and shift operators)"
     <a id="def-6-3-1"></a>
@@ -270,7 +270,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     Thus Newton expansion is the discrete analogue of the Taylor expansion.
 
-## 4. Möbius inversion on the Boolean lattice
+## Boolean-lattice inversion and inclusion–exclusion
 
 !!! theorem "Theorem (Inclusion–exclusion as an inverse linear map)"
     <a id="thm-6-4-1"></a>
@@ -343,7 +343,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     This is why checking one composition in the preceding proof suffices.
 
-## 5. Exact properties, inclusive properties, and weighted inclusion–exclusion
+### Exact, inclusive, and weighted property counts
 
 Let $S$ be a set of properties that an element of a finite set $A$ may or may not satisfy. For $a\in A$, write
 
@@ -399,7 +399,7 @@ $$
     $$
 
 ??? proof "Proof"
-    An element counted by $f_{=}(Y)$ is counted by $f_{\ge}(T)$ exactly when $Y\supseteq T$. Thus $f_{\ge}=\phi f_{=}$, and [Theorem 6.4.1](#thm-6-4-1) gives the inverse formula.
+    An element counted by $f_{=}(Y)$ is counted by $f_{\ge}(T)$ exactly when $Y\supseteq T$. Thus $f_{\ge}=\phi f_{=}$, and [Boolean-lattice inversion](#thm-6-4-1) gives the inverse formula.
 
 !!! example "Example (Three properties)"
     <a id="ex-6-5-3"></a>
@@ -494,7 +494,7 @@ $$
 
     The constructions $\Phi$ and $\Psi$ are inverse bijections, so (4) holds for every $x\in\mathbb N$. Both sides are polynomials in $x$, hence the identity holds identically.
 
-## 6. Dual Boolean inversion and binomial inversion
+## Binomial inversion and derangements
 
 !!! theorem "Theorem (Dual Boolean-lattice inversion)"
     <a id="thm-6-6-1"></a>
@@ -515,7 +515,7 @@ $$
     $$
 
 ??? proof "Proof"
-    The proof is the order-dual of [Theorem 6.4.1](#thm-6-4-1). Alternatively, replace every subset by its complement, which reverses containment.
+    The proof is the order-dual of [Boolean-lattice inversion](#thm-6-4-1). Alternatively, replace every subset by its complement, which reverses containment.
 
 !!! corollary "Corollary (Binomial inversion)"
     <a id="cor-6-6-2"></a>
@@ -546,9 +546,9 @@ $$
     $$
 
 ??? proof "Proof"
-    Fix $T$ with $|S\setminus T|=m$. A superset $Y\supseteq T$ with $|S\setminus Y|=i$ is obtained by choosing the $i$ elements of $S\setminus T$ that remain outside $Y$, so there are $\binom mi$ such $Y$. The exact-to-inclusive relation and its inverse therefore collapse to the two displayed binomial transforms. The last equality is [Proposition 6.3.2](#prop-6-3-2).
+    Fix $T$ with $|S\setminus T|=m$. A superset $Y\supseteq T$ with $|S\setminus Y|=i$ is obtained by choosing the $i$ elements of $S\setminus T$ that remain outside $Y$, so there are $\binom mi$ such $Y$. The exact-to-inclusive relation and its inverse therefore collapse to the two displayed binomial transforms. The last equality is [the finite-difference formula](#prop-6-3-2).
 
-## 7. Derangements
+### Derangements
 
 !!! definition "Definition (Derangement number)"
     <a id="def-6-7-1"></a>
@@ -603,7 +603,7 @@ $$
     =D(n-i).
     $$
 
-    Thus in [Corollary 6.6.2](#cor-6-6-2), $b(m)=m!$ and $a(m)=D(m)$. Binomial inversion gives
+    Thus in [binomial inversion](#cor-6-6-2), $b(m)=m!$ and $a(m)=D(m)$. Binomial inversion gives
 
     $$
     D(n)=\sum_{i=0}^n(-1)^{n-i}\binom ni i!.
@@ -646,7 +646,7 @@ $$
 
     The coefficient of $x^n$ is $\sum_{j=0}^n(-1)^j/j!=D(n)/n!$.
 
-## 8. Permutations with restricted positions and rook polynomials
+## Restricted positions and rook polynomials
 
 !!! definition "Definition (Forbidden board and graph of a permutation)"
     <a id="def-6-8-1"></a>
@@ -746,7 +746,7 @@ $$
 
     Substituting $y=x-1$ proves the polynomial identity; substituting $x=0$ gives the avoidance formula.
 
-## 9. The ménage problem as a rook problem
+### The ménage problem
 
 !!! example "Problem (Problème de ménages)"
     <a id="ex-6-9-1"></a>

@@ -5,16 +5,14 @@
 ## 课程主线
 
 !!! abstract "课程主线"
-    **形式幂级数 / 生成函数** $\longrightarrow$ **基本计数 / 置换循环** $\longrightarrow$ **置换统计量 / $q$-阶乘** $\longrightarrow$ **Catalan 对象 / 模式避免** $\longrightarrow$ **Gaussian 系数 / 整数分拆**
+    **基础计数 / 生成函数** $\longrightarrow$ **置换 / 循环 / 统计量** $\longrightarrow$ **有限差分 / 容斥 / rook theory** $\longrightarrow$ **Catalan 结构 / Gaussian 系数 / 整数分拆**
 
-## 笔记
+## 第一部分：计数组合学
 
-1. [Formal Power Series and Generating Functions](lesson1.md) — 形式幂级数的拓扑与代数、普通与指数生成函数、形式指数与对数
-2. [Basic Counting, Cycles, and Stirling Numbers](lesson2.md) — 组合、可重复选择、循环指标与第一类 Stirling 数
-3. [Permutation Statistics and Catalan Numbers](lesson3.md) — 逆序、major index、Foata 变换、Dyck path 与 Catalan 数
-4. [$q$-Analogues, Pattern Avoidance, and Partitions](lesson4.md) — $q$-多项式系数、Euler 数、132-避免、Gaussian 系数与整数分拆
-5. [Integer Partitions and $q$-Series](lesson5.md) — Gaussian 系数的有限域与双射证明、共轭分拆、Euler 分拆恒等式、Durfee 方块与二变量 $q$-恒等式
-6. [Set Partitions, Finite Differences, and Inclusion–Exclusion](lesson6.md) — 集合分拆、两类 Stirling 数、有限差分、容斥原理、错排与 rook polynomial
++ [Enumerative Foundations and Generating Functions](enumerative-foundations.md) — 基础计数、组合与多项式系数、形式幂级数、普通与指数生成函数
++ [Permutations, Cycles, and Statistics](permutations-and-statistics.md) — 循环结构、cycle index、Stirling 数、逆序与 major index、$q$-类比和 Euler 数
++ [Finite Differences, Inclusion–Exclusion, and Restricted Positions](inclusion-exclusion.md) — 集合分拆、有限差分、Möbius 反演、容斥、错排、rook polynomial 与 ménage problem
++ [Catalan Structures, Gaussian Coefficients, and Integer Partitions](catalan-and-partitions.md) — Dyck path、模式避免、二叉树、Gaussian 系数、整数分拆与 $q$-级数
 
 ## 教材
 

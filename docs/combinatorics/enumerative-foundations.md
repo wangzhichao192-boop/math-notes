@@ -1,8 +1,172 @@
-# Formal Power Series and Generating Functions
+# Enumerative Foundations and Generating Functions
 
-Enumerative combinatorics asks for the cardinalities of finite families and for algebraic structures that encode them. This chapter introduces formal power series, their coefficientwise topology, and the ordinary and exponential generating functions used throughout the subject.
+This chapter develops the basic counting constructions and algebraic language used throughout enumerative combinatorics. It begins with finite sets, multisets, compositions, and multinomial coefficients, then introduces formal power series, formal convergence, substitution, differentiation, and the ordinary and exponential generating functions that encode counting sequences.
 
-## 1. Forms of enumeration
+## Sets, multisets, and elementary identities
+
+!!! proposition "Proposition (Subset expansion)"
+    <a id="prop-2-1-1"></a>
+    For $S=\{x_1,\ldots,x_n\}$,
+
+    $$
+    \prod_{i=1}^{n}(1+x_i)
+    =
+    \sum_{T\subseteq S}\prod_{x_i\in T}x_i.
+    $$
+
+    Setting every $x_i=x$ gives the binomial theorem
+
+    $$
+    (1+x)^n=\sum_{k=0}^{n}\binom{n}{k}x^k.
+    $$
+
+??? proof "Proof"
+    In expanding the product, choose either $1$ or $x_i$ from each factor. The set $T$ of indices from which $x_i$ is chosen contributes the monomial $\prod_{x_i\in T}x_i$, and every subset occurs exactly once.
+
+    Three useful specializations from the board are
+
+    $$
+    \sum_{k=0}^{n}\binom{n}{k}=2^n,
+    \qquad
+    \sum_{k=0}^{n}(-1)^k\binom{n}{k}=0
+    \quad(n\ge1),
+    $$
+
+    and, after formal differentiation,
+
+    $$
+    n(1+x)^{n-1}
+    =
+    \sum_{k=1}^{n}k\binom{n}{k}x^{k-1}.
+    $$
+
+!!! remark "Remark (Weighted counting)"
+    <a id="rem-2-1-2"></a>
+    If a finite collection $\mathcal A$ contains exactly $f(n)$ objects of size $n$, then
+
+    $$
+    \sum_{A\in\mathcal A}x^{|A|}
+    =
+    \sum_{n\ge0}f(n)x^n.
+    $$
+
+    More generally, a weight $g(|A|)$ replaces $f(n)$ by $g(n)f(n)$.
+
+!!! definition "Definition (Finite multiset)"
+    <a id="def-2-1-3"></a>
+    A finite multiset on $S$ is a function $v:S\to\mathbb N$ with finite support. The integer $v(x)$ is the multiplicity of $x$, and
+
+    $$
+    |M|=\sum_{x\in S}v(x).
+    $$
+
+    For $S=\{x_1,\ldots,x_n\}$, write $M=\{x_1^{a_1},\ldots,x_n^{a_n}\}$ when $a_i=v(x_i)$.
+
+!!! proposition "Proposition (Combinations with repetition)"
+    <a id="prop-2-1-4"></a>
+    The number of $k$-element multisets on an $n$-element set is
+
+    $$
+    \left(\!\!\binom{n}{k}\!\!\right)
+    =
+    \binom{n+k-1}{k}
+    =
+    (-1)^k\binom{-n}{k}.
+    $$
+
+??? proof "Proof"
+    A multiset corresponds to a solution of $a_1+\cdots+a_n=k$ in nonnegative integers. Its generating function is
+
+    $$
+    (1+x+x^2+\cdots)^n
+    =
+    (1-x)^{-n}
+    =
+    \sum_{k\ge0}(-1)^k\binom{-n}{k}x^k.
+    $$
+
+    Equivalently, write the solution as a row of $k$ stars separated into $n$ boxes by $n-1$ bars. Choosing the positions of the bars among the $n+k-1$ symbols gives $\binom{n+k-1}{k}$ solutions. Thus the generating-function and stars-and-bars arguments give the same identity.
+
+    More generally, if the elements of $S$ carry variables $x_s$, then the weight enumerator for finite multisets on $S$ is
+
+    $$
+    \prod_{s\in S}(1+x_s+x_s^2+\cdots)
+    =
+    \sum_{M}\prod_{s\in S}x_s^{v_M(s)}.
+    $$
+
+## Compositions and multinomial coefficients
+
+!!! definition "Definition (Weak composition)"
+    <a id="def-2-2-1"></a>
+    A weak composition of $n$ into $k$ parts is a solution of
+
+    $$
+    x_1+\cdots+x_k=n
+    $$
+
+    in nonnegative integers.
+
+!!! proposition "Proposition (Stars and bars)"
+    <a id="prop-2-2-2"></a>
+    The number of weak compositions of $n$ into $k$ parts is
+
+    $$
+    \binom{n+k-1}{k-1}.
+    $$
+
+    The number of solutions to $x_1+\cdots+x_k\le n$ is $\binom{n+k}{k}$.
+
+??? proof "Proof"
+    Place $n$ indistinguishable stars in a row and choose the locations of $k-1$ bars among the $n+k-1$ positions. For the inequality, add the slack variable $x_{k+1}=n-(x_1+\cdots+x_k)$.
+
+!!! definition "Definition (Composition)"
+    <a id="def-2-2-3"></a>
+    A composition of $n$ is a finite tuple $\alpha=(a_1,\ldots,a_r)$ of positive integers with $a_1+\cdots+a_r=n$. If $r=k$, it is a $k$-composition.
+
+!!! proposition "Proposition (Number of compositions)"
+    <a id="prop-2-2-4"></a>
+    The number of $k$-compositions of $n$ is $\binom{n-1}{k-1}$.
+
+??? proof "Proof"
+    Map $\alpha=(a_1,\ldots,a_k)$ to its proper partial sums
+
+    $$
+    \{a_1,a_1+a_2,\ldots,a_1+\cdots+a_{k-1}\}\subseteq[n-1].
+    $$
+
+    This is a bijection with the $(k-1)$-subsets of $[n-1]$.
+
+    Allowing all possible values of $k$ identifies every composition of $n$ with an arbitrary subset of $[n-1]$. Hence $n$ has $2^{n-1}$ compositions for $n\ge1$. For example, the eight compositions of $4$ are
+
+    $$
+    1111,\ 211,\ 121,\ 112,\ 22,\ 13,\ 31,\ 4.
+    $$
+
+!!! definition "Definition (Multinomial coefficient)"
+    <a id="def-2-2-5"></a>
+    If $a_1+\cdots+a_m=n$, then
+
+    $$
+    \binom{n}{a_1,\ldots,a_m}
+    =
+    \frac{n!}{a_1!\cdots a_m!}.
+    $$
+
+    It counts assignments of the elements of $[n]$ to $m$ labeled classes of sizes $a_1,\ldots,a_m$.
+
+    Choosing the classes successively gives the board identity
+
+    $$
+    \binom{n}{a_1,\ldots,a_m}
+    =
+    \binom{n}{a_1}
+    \binom{n-a_1}{a_2}
+    \cdots
+    \binom{n-a_1-\cdots-a_{m-1}}{a_m}.
+    $$
+
+## Forms of enumeration
 
 Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumeration may take the form of a closed formula, a recurrence, a finite or infinite sum or product, or a generating function.
 
@@ -25,7 +189,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     S_n\simeq S_{n-1}\sqcup S_{n-2}.
     $$
 
-## 2. The ring of formal power series
+## The ring of formal power series
 
 !!! definition "Definition (Formal power series)"
     <a id="def-1-2-1"></a>
@@ -90,7 +254,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     \frac1{n!}\sum_{j=0}^{n}\binom{n}{j}a_jb_{n-j}.
     $$
 
-## 3. Valuation and formal convergence
+## Valuation and formal convergence
 
 !!! definition "Definition (Valuation and norm)"
     <a id="def-1-3-1"></a>
@@ -174,7 +338,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     Conversely, $P_N-P_{N-1}=P_{N-1}g_N$, so convergence forces $|g_N|\to0$.
 
-## 4. Formal substitution and calculus
+## Formal substitution and calculus
 
 !!! definition "Definition (Composition)"
     <a id="def-1-4-1"></a>
@@ -334,7 +498,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     A formal series with zero derivative is constant, and $f(0)e^{-g(0)}=1$. Hence $fe^{-g}=1$, so $f=e^g$ and $g=\log f$.
 
-## 5. Extracting enumerative identities
+## Extracting enumerative identities
 
 !!! example "Example (Fibonacci generating function)"
     <a id="ex-1-5-1"></a>
@@ -400,3 +564,5 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     =
     \frac1{4^n}\binom{2n}{n}.
     $$
+
+<!-- Structural audit: this chapter preserves all mathematical content from Lecture 1 and Sections 1–2 of Lecture 2. -->
