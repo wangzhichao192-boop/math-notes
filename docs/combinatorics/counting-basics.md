@@ -1,8 +1,8 @@
-# Formal Generating Functions and Basic Enumeration
+# Counting Basics
 
 Enumerative combinatorics asks for the cardinalities of finite families and for algebraic structures that encode them. This chapter introduces formal power series, their coefficientwise topology, and the ordinary and exponential generating functions used throughout the subject.
 
-## Forms of enumeration
+## Generating Functions
 
 Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumeration may take the form of a closed formula, a recurrence, a finite or infinite sum or product, or a generating function.
 
@@ -25,7 +25,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     S_n\simeq S_{n-1}\sqcup S_{n-2}.
     $$
 
-## The ring of formal power series
+### Formal Power Series
 
 !!! definition "Definition (Formal power series)"
     <a id="def-1-2-1"></a>
@@ -90,7 +90,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     \frac1{n!}\sum_{j=0}^{n}\binom{n}{j}a_jb_{n-j}.
     $$
 
-## Valuation and formal convergence
+## Formal Convergence
 
 !!! definition "Definition (Valuation and norm)"
     <a id="def-1-3-1"></a>
@@ -174,7 +174,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     Conversely, $P_N-P_{N-1}=P_{N-1}g_N$, so convergence forces $|g_N|\to0$.
 
-## Formal substitution and calculus
+## Formal Calculus
 
 !!! definition "Definition (Composition)"
     <a id="def-1-4-1"></a>
@@ -308,7 +308,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     which is the same coefficient in $f'g+fg'$. The chain rule first follows for monomials $f=X^m$ from the product rule, then for polynomials by linearity, and finally for formal series coefficientwise because $g(0)=0$ makes every fixed coefficient depend on only finitely many terms of $f$.
 
-### Board exercise: a logarithmic differential equation
+### Logarithmic Differentiation
 
 !!! proposition "Proposition (Formal logarithmic antiderivative)"
     <a id="prop-1-4-8"></a>
@@ -334,7 +334,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     A formal series with zero derivative is constant, and $f(0)e^{-g(0)}=1$. Hence $fe^{-g}=1$, so $f=e^g$ and $g=\log f$.
 
-## Extracting enumerative identities
+### Generating Function Identities
 
 !!! example "Example (Fibonacci generating function)"
     <a id="ex-1-5-1"></a>
@@ -401,9 +401,9 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     \frac1{4^n}\binom{2n}{n}.
     $$
 
-This chapter develops several basic counting constructions and then applies generating functions to the cycle structure of permutations. The central objects are compositions, multisets, cycle indices, and the Stirling numbers of the first kind.
+We now develop several basic counting constructions and then apply generating functions to the cycle structure of permutations. The central objects are compositions, multisets, cycle indices, and the Stirling numbers of the first kind.
 
-## Sets, multisets, and elementary identities
+## Elementary Counting
 
 !!! proposition "Proposition (Subset expansion)"
     <a id="prop-2-1-1"></a>
@@ -496,7 +496,7 @@ This chapter develops several basic counting constructions and then applies gene
     \sum_{M}\prod_{s\in S}x_s^{v_M(s)}.
     $$
 
-## Compositions and multinomial coefficients
+### Compositions
 
 !!! definition "Definition (Weak composition)"
     <a id="def-2-2-1"></a>
@@ -567,7 +567,7 @@ This chapter develops several basic counting constructions and then applies gene
     \binom{n-a_1-\cdots-a_{m-1}}{a_m}.
     $$
 
-## Cycles and the fundamental bijection
+## Permutation Cycles
 
 Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in cycle notation or in one-line notation.
 
@@ -612,7 +612,7 @@ Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in c
     2416753.
     $$
 
-## Cycle type and the cycle index
+### Cycle Index
 
 !!! definition "Definition (Cycle type)"
     <a id="def-2-4-1"></a>
@@ -697,7 +697,7 @@ Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in c
     $$
 
 ??? proof "Proof"
-    By the formal exponential identities of [exponential and logarithmic identities](formal-generating-and-enumeration.md#prop-1-4-5),
+    By the formal exponential identities of [exponential and logarithmic identities](counting-basics.md#prop-1-4-5),
 
     $$
     \exp\left(\sum_{i\ge1}t_i\frac{x^i}{i}\right)
@@ -705,9 +705,9 @@ Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in c
     \prod_{i\ge1}\sum_{j\ge0}t_i^j\frac{x^{ij}}{i^j j!}.
     $$
 
-    The coefficient of $t_1^{c_1}\cdots t_n^{c_n}x^n$ is $\prod_i(i^{c_i}c_i!)^{-1}$, which equals the number in [Proposition 2.4.2](#prop-2-4-2) divided by $n!$.
+    The coefficient of $t_1^{c_1}\cdots t_n^{c_n}x^n$ is $\prod_i(i^{c_i}c_i!)^{-1}$, which equals the number in [cycle-type enumeration](#prop-2-4-2) divided by $n!$.
 
-## Applications of the cycle index
+### Applications
 
 !!! example "Example (Permutations satisfying $w^6=1$)"
     <a id="ex-2-5-1"></a>
@@ -751,7 +751,7 @@ Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in c
 
     Summing over the $\binom nk$ choices of $A$ gives $\mathbb E[C_k]=1/k$.
 
-## Stirling numbers of the first kind
+## Stirling Numbers
 
 !!! definition "Definition (Stirling numbers of the first kind)"
     <a id="def-2-6-1"></a>

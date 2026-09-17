@@ -1,8 +1,8 @@
-# Set Partitions, Finite Differences, and Inclusion–Exclusion
+# Inclusion–Exclusion and Restricted Counting
 
 This chapter begins with set partitions and Stirling numbers of the second kind, interprets the two kinds of Stirling numbers as inverse changes of polynomial basis, and develops finite-difference calculus. Möbius inversion on the Boolean lattice then yields inclusion–exclusion, derangements, rook polynomials, and the restricted-position formulation of the ménage problem.
 
-## Set partitions and Stirling numbers of the second kind
+## Set Partitions
 
 !!! definition "Definition (Set partition)"
     <a id="def-6-1-1"></a>
@@ -99,7 +99,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     form another basis, with the Stirling numbers of the second kind as change-of-basis coefficients.
 
-## Stirling inversion
+## Finite Differences
 
 !!! definition "Definition (Signed Stirling numbers of the first kind)"
     <a id="def-6-2-1"></a>
@@ -175,7 +175,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
     \sum_{j=k}^n s(n,j)S(j,k)=\delta_{nk}.
     $$
 
-## Finite differences and Newton expansion
+### Newton Expansion
 
 !!! definition "Definition (Difference and shift operators)"
     <a id="def-6-3-1"></a>
@@ -270,7 +270,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     Thus Newton expansion is the discrete analogue of the Taylor expansion.
 
-## Möbius inversion on the Boolean lattice
+## Inclusion–Exclusion
 
 !!! theorem "Theorem (Inclusion–exclusion as an inverse linear map)"
     <a id="thm-6-4-1"></a>
@@ -343,7 +343,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     This is why checking one composition in the preceding proof suffices.
 
-## Exact properties, inclusive properties, and weighted inclusion–exclusion
+### Weighted Counts
 
 Let $S$ be a set of properties that an element of a finite set $A$ may or may not satisfy. For $a\in A$, write
 
@@ -494,7 +494,7 @@ $$
 
     The constructions $\Phi$ and $\Psi$ are inverse bijections, so (4) holds for every $x\in\mathbb N$. Both sides are polynomials in $x$, hence the identity holds identically.
 
-## Dual Boolean inversion and binomial inversion
+## Binomial Inversion
 
 !!! theorem "Theorem (Dual Boolean-lattice inversion)"
     <a id="thm-6-6-1"></a>
@@ -546,7 +546,7 @@ $$
     $$
 
 ??? proof "Proof"
-    Fix $T$ with $|S\setminus T|=m$. A superset $Y\supseteq T$ with $|S\setminus Y|=i$ is obtained by choosing the $i$ elements of $S\setminus T$ that remain outside $Y$, so there are $\binom mi$ such $Y$. The exact-to-inclusive relation and its inverse therefore collapse to the two displayed binomial transforms. The last equality is [Proposition 6.3.2](#prop-6-3-2).
+    Fix $T$ with $|S\setminus T|=m$. A superset $Y\supseteq T$ with $|S\setminus Y|=i$ is obtained by choosing the $i$ elements of $S\setminus T$ that remain outside $Y$, so there are $\binom mi$ such $Y$. The exact-to-inclusive relation and its inverse therefore collapse to the two displayed binomial transforms. The last equality is [the alternating binomial sum](#prop-6-3-2).
 
 ## Derangements
 
@@ -603,7 +603,7 @@ $$
     =D(n-i).
     $$
 
-    Thus in [Corollary 6.6.2](#cor-6-6-2), $b(m)=m!$ and $a(m)=D(m)$. Binomial inversion gives
+    Thus in [the binomial inversion formula](#cor-6-6-2), $b(m)=m!$ and $a(m)=D(m)$. Binomial inversion gives
 
     $$
     D(n)=\sum_{i=0}^n(-1)^{n-i}\binom ni i!.
@@ -646,7 +646,7 @@ $$
 
     The coefficient of $x^n$ is $\sum_{j=0}^n(-1)^j/j!=D(n)/n!$.
 
-## Permutations with restricted positions and rook polynomials
+## Rook Polynomials
 
 !!! definition "Definition (Forbidden board and graph of a permutation)"
     <a id="def-6-8-1"></a>
@@ -746,7 +746,7 @@ $$
 
     Substituting $y=x-1$ proves the polynomial identity; substituting $x=0$ gives the avoidance formula.
 
-## The ménage problem as a rook problem
+### The Ménage Problem
 
 !!! example "Problem (Problème de ménages)"
     <a id="ex-6-9-1"></a>
