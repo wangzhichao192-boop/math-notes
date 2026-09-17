@@ -155,6 +155,7 @@ nav:
       - "Permutation Statistics and Catalan Numbers": combinatorics/lesson3.md
       - "$q$-Analogues, Pattern Avoidance, and Partitions": combinatorics/lesson4.md
       - "Integer Partitions and $q$-Series": combinatorics/lesson5.md
+      - "Set Partitions, Finite Differences, and Inclusion–Exclusion": combinatorics/lesson6.md
   - "常微分方程":
       - ode/index.md
   - 参考:
