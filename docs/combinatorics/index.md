@@ -13,6 +13,7 @@
 2. [Basic Counting, Cycles, and Stirling Numbers](lesson2.md) — 组合、可重复选择、循环指标与第一类 Stirling 数
 3. [Permutation Statistics and Catalan Numbers](lesson3.md) — 逆序、major index、Foata 变换、Dyck path 与 Catalan 数
 4. [$q$-Analogues, Pattern Avoidance, and Partitions](lesson4.md) — $q$-多项式系数、Euler 数、132-避免、Gaussian 系数与整数分拆
+5. [Integer Partitions and $q$-Series](lesson5.md) — Gaussian 系数的有限域与双射证明、共轭分拆、Euler 分拆恒等式、Durfee 方块与二变量 $q$-恒等式
 
 ## 教材
 
