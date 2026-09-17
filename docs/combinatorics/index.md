@@ -5,14 +5,14 @@
 ## 课程主线
 
 !!! abstract "课程主线"
-    **基础计数 / 生成函数** $\longrightarrow$ **置换 / 循环 / 统计量** $\longrightarrow$ **有限差分 / 容斥 / rook theory** $\longrightarrow$ **Catalan 结构 / Gaussian 系数 / 整数分拆**
+    **形式幂级数 / 生成函数 / 基础计数** $\longrightarrow$ **置换统计 / Catalan 结构 / $q$-类比** $\longrightarrow$ **整数分拆 / $q$-级数** $\longrightarrow$ **集合分拆 / 有限差分 / 容斥**
 
 ## 第一部分：计数组合学
 
-+ [Enumerative Foundations and Generating Functions](enumerative-foundations.md) — 基础计数、组合与多项式系数、形式幂级数、普通与指数生成函数
-+ [Permutations, Cycles, and Statistics](permutations-and-statistics.md) — 循环结构、cycle index、Stirling 数、逆序与 major index、$q$-类比和 Euler 数
-+ [Finite Differences, Inclusion–Exclusion, and Restricted Positions](inclusion-exclusion.md) — 集合分拆、有限差分、Möbius 反演、容斥、错排、rook polynomial 与 ménage problem
-+ [Catalan Structures, Gaussian Coefficients, and Integer Partitions](catalan-and-partitions.md) — Dyck path、模式避免、二叉树、Gaussian 系数、整数分拆与 $q$-级数
++ [Formal Generating Functions and Basic Enumeration](formal-generating-and-enumeration.md) — 第一、二课：形式幂级数、生成函数、基础计数、循环与第一类 Stirling 数
++ [Permutation Statistics, Catalan Structures, and $q$-Analogues](permutation-statistics-and-q-analogues.md) — 第三、四课：逆序与 major index、Catalan 数、模式避免、$q$-类比与 Gaussian 系数
++ [Integer Partitions and $q$-Series](integer-partitions-and-q-series.md) — 第五课：共轭分拆、对角钩、Euler 分拆恒等式与二变量 $q$-恒等式
++ [Set Partitions, Finite Differences, and Inclusion–Exclusion](set-partitions-and-inclusion-exclusion.md) — 第六课：集合分拆、Stirling 反演、有限差分、容斥、错排与 rook polynomial
 
 ## 教材
 

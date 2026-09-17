@@ -150,10 +150,10 @@ nav:
       - RCF and Hilbert 17th: mathematical-logic/rcf-hilbert.md
   - "组合数学":
       - combinatorics/index.md
-      - "生成函数与基础计数": combinatorics/enumerative-foundations.md
-      - "置换、循环与统计量": combinatorics/permutations-and-statistics.md
-      - "有限差分、容斥与限制位置": combinatorics/inclusion-exclusion.md
-      - "Catalan 结构、Gaussian 系数与整数分拆": combinatorics/catalan-and-partitions.md
+      - "形式生成函数与基础计数": combinatorics/formal-generating-and-enumeration.md
+      - "置换统计、Catalan 结构与 q-类比": combinatorics/permutation-statistics-and-q-analogues.md
+      - "整数分拆与 q-级数": combinatorics/integer-partitions-and-q-series.md
+      - "集合分拆、有限差分与容斥": combinatorics/set-partitions-and-inclusion-exclusion.md
   - "常微分方程":
       - ode/index.md
   - 参考:
