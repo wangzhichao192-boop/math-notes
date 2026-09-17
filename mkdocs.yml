@@ -150,9 +150,9 @@ nav:
       - RCF and Hilbert 17th: mathematical-logic/rcf-hilbert.md
   - "组合数学":
       - combinatorics/index.md
-      - "计数基础": combinatorics/counting-basics.md
-      - "q-模拟与整数分拆": combinatorics/q-analogues-and-partitions.md
-      - "容斥与限制计数": combinatorics/inclusion-exclusion.md
+      - "Counting Basics": combinatorics/counting-basics.md
+      - "q-Analogues and Partitions": combinatorics/q-analogues-and-partitions.md
+      - "Inclusion–Exclusion and Restricted Counting": combinatorics/inclusion-exclusion.md
   - "常微分方程":
       - ode/index.md
   - 参考:
