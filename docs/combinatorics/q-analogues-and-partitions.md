@@ -49,7 +49,7 @@ This chapter studies statistics on permutations and the generating polynomials t
     w=417396285.
     $$
 
-### The $q$-Factorial
+**The $q$-Factorial.**
 
 !!! definition "Definition ($q$-integer and $q$-factorial)"
     <a id="def-3-2-1"></a>
@@ -123,7 +123,7 @@ This chapter studies statistics on permutations and the generating polynomials t
 ??? proof "Proof"
     Plot the points $(i,w_i)$. An inversion is a pair whose first coordinates increase while the second coordinates decrease. Reflection across the main diagonal replaces $w$ by $w^{-1}$ and preserves these pairs.
 
-### Descents
+**Descents.**
 
 !!! definition "Definition (Descent set)"
     <a id="def-3-3-1"></a>
@@ -160,7 +160,7 @@ This chapter studies statistics on permutations and the generating polynomials t
     <a id="rem-3-3-3"></a>
     Counts with $\operatorname{Des}(w)=S$ follow from $\alpha$ by inclusion-exclusion over subsets of $S$.
 
-### Major Index
+**Major Index.**
 
 !!! definition "Definition (Major index)"
     <a id="def-3-4-1"></a>
@@ -304,7 +304,7 @@ This chapter studies statistics on permutations and the generating polynomials t
     \end{aligned}
     $$
 
-### Pattern Avoidance
+**Pattern Avoidance.**
 
 !!! definition "Definition (Permutation matrix)"
     <a id="def-3-6-1"></a>
@@ -405,7 +405,7 @@ We now extend inversion enumeration from ordinary permutations to multiset permu
 
     In particular, although the defining quotient for the $q$-multinomial coefficient initially looks rational, this inversion enumerator proves that it is a polynomial in $q$ with nonnegative integer coefficients.
 
-### Alternating Permutations
+**Alternating Permutations.**
 
 !!! definition "Definition (Alternating permutation)"
     <a id="def-4-2-1"></a>
@@ -544,7 +544,7 @@ We now extend inversion enumeration from ordinary permutations to multiset permu
     \sum_{\lambda\subseteq\delta_n}q^{|\lambda|}.
     $$
 
-### Binary Trees
+**Binary Trees.**
 
 !!! definition "Definition (Max-rooted Cartesian tree)"
     <a id="def-4-4-1"></a>
@@ -598,7 +598,7 @@ We now extend inversion enumeration from ordinary permutations to multiset permu
     \binom{n}{k}_q.
     $$
 
-### Integer Partitions
+**Integer Partitions.**
 
 !!! definition "Definition (Partition)"
     <a id="def-4-6-1"></a>
@@ -670,7 +670,7 @@ We now extend inversion enumeration from ordinary permutations to multiset permu
 
     and therefore $|\lambda|=11$.
 
-### Partitions in Rectangles
+**Partitions in Rectangles.**
 
 !!! theorem "Theorem (Gaussian polynomial as an area enumerator)"
     <a id="thm-4-7-1"></a>
@@ -695,7 +695,7 @@ We now extend inversion enumeration from ordinary permutations to multiset permu
 
 We now develop the partition-theoretic meaning of Gaussian coefficients and several classical partition identities. It preserves the finite-field and bijective proofs, worked examples, diagram decompositions, and the classroom question about the limit $q\to1$.
 
-### Gaussian Polynomial Proofs
+**Gaussian Polynomial Proofs.**
 
 The remaining material in this lecture develops the partition-theoretic meaning of Gaussian coefficients and several classical partition identities. It is recorded here in full, including both the finite-field and word-bijection arguments.
 
@@ -943,7 +943,7 @@ The remaining material in this lecture develops the partition-theoretic meaning 
 ??? proof "Proof"
     Choosing a multiplicity $m_i\in S_i$ contributes weight $q^{im_i}$. The choices for distinct part sizes are independent, so multiplication records every permitted sequence $(m_1,m_2,\ldots)$ exactly once. Equivalently, the coefficient of $q^n$ on both sides is the number of partitions of $n$ belonging to $P(S)$.
 
-### Diagram Identities
+**Diagram Identities.**
 
 !!! proposition "Proposition (A row-column identity)"
     <a id="prop-5-3-1"></a>
@@ -991,7 +991,7 @@ The remaining material in this lecture develops the partition-theoretic meaning 
     \operatorname{rank}(\lambda)=3.
     $$
 
-### Self-Conjugate Partitions
+**Self-Conjugate Partitions.**
 
 !!! proposition "Proposition (Self-conjugate partitions)"
     <a id="prop-5-4-1"></a>
@@ -1085,7 +1085,7 @@ The remaining material in this lecture develops the partition-theoretic meaning 
     \mu=(40,36,20,9,6,2,1)\vdash114.
     $$
 
-### Bivariate Identities
+**Bivariate Identities.**
 
 For compactness, write
 

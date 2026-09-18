@@ -25,7 +25,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
     S_n\simeq S_{n-1}\sqcup S_{n-2}.
     $$
 
-### Formal Power Series
+**Formal Power Series.**
 
 !!! definition "Definition (Formal power series)"
     <a id="def-1-2-1"></a>
@@ -308,7 +308,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     which is the same coefficient in $f'g+fg'$. The chain rule first follows for monomials $f=X^m$ from the product rule, then for polynomials by linearity, and finally for formal series coefficientwise because $g(0)=0$ makes every fixed coefficient depend on only finitely many terms of $f$.
 
-### Logarithmic Differentiation
+**Logarithmic Differentiation.**
 
 !!! proposition "Proposition (Formal logarithmic antiderivative)"
     <a id="prop-1-4-8"></a>
@@ -334,7 +334,7 @@ Let $(S_n)_{n\ge 0}$ be a family of finite sets and write $a_n=|S_n|$. An enumer
 
     A formal series with zero derivative is constant, and $f(0)e^{-g(0)}=1$. Hence $fe^{-g}=1$, so $f=e^g$ and $g=\log f$.
 
-### Generating Function Identities
+**Generating Function Identities.**
 
 !!! example "Example (Fibonacci generating function)"
     <a id="ex-1-5-1"></a>
@@ -496,7 +496,7 @@ We now develop several basic counting constructions and then apply generating fu
     \sum_{M}\prod_{s\in S}x_s^{v_M(s)}.
     $$
 
-### Compositions
+**Compositions.**
 
 !!! definition "Definition (Weak composition)"
     <a id="def-2-2-1"></a>
@@ -612,7 +612,7 @@ Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in c
     2416753.
     $$
 
-### Cycle Index
+**Cycle Index.**
 
 !!! definition "Definition (Cycle type)"
     <a id="def-2-4-1"></a>
@@ -707,7 +707,7 @@ Write $\mathfrak S_n$ for the symmetric group. A permutation may be written in c
 
     The coefficient of $t_1^{c_1}\cdots t_n^{c_n}x^n$ is $\prod_i(i^{c_i}c_i!)^{-1}$, which equals the number in [cycle-type enumeration](#prop-2-4-2) divided by $n!$.
 
-### Applications
+**Applications.**
 
 !!! example "Example (Permutations satisfying $w^6=1$)"
     <a id="ex-2-5-1"></a>

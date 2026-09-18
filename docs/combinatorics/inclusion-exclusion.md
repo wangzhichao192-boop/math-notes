@@ -175,7 +175,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
     \sum_{j=k}^n s(n,j)S(j,k)=\delta_{nk}.
     $$
 
-### Newton Expansion
+**Newton Expansion.**
 
 !!! definition "Definition (Difference and shift operators)"
     <a id="def-6-3-1"></a>
@@ -343,7 +343,7 @@ This chapter begins with set partitions and Stirling numbers of the second kind,
 
     This is why checking one composition in the preceding proof suffices.
 
-### Weighted Counts
+**Weighted Counts.**
 
 Let $S$ be a set of properties that an element of a finite set $A$ may or may not satisfy. For $a\in A$, write
 
@@ -746,7 +746,7 @@ $$
 
     Substituting $y=x-1$ proves the polynomial identity; substituting $x=0$ gives the avoidance formula.
 
-### The Ménage Problem
+**The Ménage Problem.**
 
 !!! example "Problem (Problème de ménages)"
     <a id="ex-6-9-1"></a>
