@@ -2,6 +2,8 @@
 
 An ordinary differential equation describes how a quantity changes along one independent variable. This chapter develops the vocabulary needed to read such equations, connects equations with direction fields and phase space, and separates three questions that are often confused: whether a solution exists, whether it is unique, and whether it has an elementary formula.
 
+The emphasis is practical: identify the structure first, then choose an analytic, geometric, or numerical tool suited to the question.
+
 ## Differential Equations as Models
 
 !!! definition "Definition (Ordinary differential equation)"
