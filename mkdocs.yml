@@ -158,5 +158,6 @@ nav:
       - "Inclusion–Exclusion and Restricted Counting": combinatorics/inclusion-exclusion.md
   - "常微分方程":
       - ode/index.md
+      - "Models, Geometry, and Well-Posedness": ode/models-geometry-and-well-posedness.md
   - 参考:
       - 写作指南: WRITING_GUIDE.md

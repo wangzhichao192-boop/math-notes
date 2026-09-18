@@ -64,7 +64,7 @@
 
 - :material-book-open-page-variant: **常微分方程**
 
-    课程简介待补充。
+    模型、方向场与相空间；一阶方程、存在唯一性与线性系统
 
     [:octicons-arrow-right-24: 进入](ode/index.md)
 

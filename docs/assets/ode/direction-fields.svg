@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" aria-labelledby="title desc">
+  <title id="title">Direction fields for two first-order differential equations</title>
+  <desc id="desc">The left panel shows rays tangent to the field y prime equals y over x. The right panel shows circular arcs tangent to the field y prime equals negative x over y.</desc>
+  <defs>
+    <style>
+      .axis{stroke:#334155;stroke-width:2;fill:none;stroke-linecap:round}.curve{stroke:#0f766e;stroke-width:3;fill:none}.guide{stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:6 7;fill:none}.tick{stroke:#0f766e;stroke-width:2;stroke-linecap:round}.label{font:20px system-ui,sans-serif;fill:#334155}.math{font:italic 22px Georgia,serif;fill:#0f172a}.panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}.dot{fill:#be123c}
+    </style>
+  </defs>
+  <rect class="panel" x="18" y="18" width="448" height="344" rx="16"/>
+  <rect class="panel" x="494" y="18" width="448" height="344" rx="16"/>
+
+  <g aria-label="Rays for y prime equals y over x">
+    <path class="axis" d="M80 302H422M94 326V56"/>
+    <path class="axis" d="M422 302l-12-7m12 7l-12 7M94 56l-7 12m7-12l7 12"/>
+    <path class="guide" d="M94 302L354 82M94 302L394 152M94 302L398 238"/>
+    <path class="curve" d="M94 302L394 152"/>
+    <circle class="dot" cx="244" cy="227" r="5"/>
+    <path class="tick" d="M157 267l24-12M215 238l24-12M274 208l24-12M333 179l24-12"/>
+    <text class="label" x="408" y="324">x</text><text class="label" x="72" y="66">y</text>
+    <text class="math" x="272" y="106">y = 2x</text><text class="math" x="348" y="144">y = x</text>
+    <text class="math" x="326" y="228">y = ½x</text><text class="math" x="132" y="340">y = Cx</text>
+    <text class="math" x="214" y="282">y′ = y/x</text>
+  </g>
+
+  <g aria-label="Circles for y prime equals negative x over y">
+    <path class="axis" d="M550 302H894M564 326V56"/>
+    <path class="axis" d="M894 302l-12-7m12 7l-12 7M564 56l-7 12m7-12l7 12"/>
+    <path class="guide" d="M564 302L820 78M564 302L884 170M564 302L880 246"/>
+    <path class="curve" d="M564 102A200 200 0 0 1 764 302"/>
+    <path class="curve" d="M564 162A140 140 0 0 1 704 302"/>
+    <path class="tick" d="M702 112l13 21M755 151l4 24M786 211l-7 23M795 270l-15 18"/>
+    <path class="tick" d="M657 184l15 18M690 219l6 22M706 258l-5 21"/>
+    <text class="label" x="880" y="324">x</text><text class="label" x="542" y="66">y</text>
+    <text class="math" x="758" y="92">y = x</text><text class="math" x="792" y="160">y = ½x</text>
+    <text class="math" x="620" y="334">x² + y² = C</text><text class="math" x="594" y="88">y′ = −x/y</text>
+  </g>
+</svg>
