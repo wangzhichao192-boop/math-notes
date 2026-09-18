@@ -206,12 +206,123 @@
   --mn-text-font:
     "Fira Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
     "Noto Sans CJK SC", sans-serif;
-  --mn-accent: #4db6ac;
+  --mn-accent: #8faac5;
+  --md-primary-fg-color: #1a1e22;
+  --md-primary-fg-color--light: #252b31;
+  --md-primary-fg-color--dark: #101214;
+  --md-primary-bg-color: #eeece7;
+  --md-primary-bg-color--light: rgba(238, 236, 231, 0.72);
+  --md-accent-fg-color: #8faac5;
+  --md-accent-fg-color--transparent: rgba(143, 170, 197, 0.13);
+  --md-default-bg-color: #121416;
+  --md-default-fg-color: rgba(226, 225, 220, 0.92);
+  --md-default-fg-color--light: rgba(218, 218, 213, 0.7);
+  --md-default-fg-color--lighter: rgba(203, 205, 204, 0.48);
+  --md-default-fg-color--lightest: rgba(190, 195, 198, 0.13);
+  --md-code-bg-color: #1b1e21;
+  --md-code-fg-color: #deded9;
   --md-typeset-a-color: var(--mn-accent);
 }
 [data-md-color-scheme="slate"] .md-typeset {
+  color: var(--md-default-fg-color);
   -webkit-font-smoothing: antialiased;
 }
+[data-md-color-scheme="slate"] .md-header,
+[data-md-color-scheme="slate"] .md-tabs {
+  color: rgba(238, 236, 231, 0.86);
+  background-color: #171a1d;
+}
+[data-md-color-scheme="slate"] .md-header {
+  border-bottom: 1px solid rgba(165, 181, 197, 0.09);
+  box-shadow: 0 0.35rem 1.2rem rgba(0, 0, 0, 0.3);
+}
+[data-md-color-scheme="slate"] .md-tabs {
+  border-bottom: 1px solid rgba(165, 181, 197, 0.1);
+}
+[data-md-color-scheme="slate"] .md-tabs__link { opacity: 0.6; }
+[data-md-color-scheme="slate"] .md-tabs__item--active .md-tabs__link,
+[data-md-color-scheme="slate"] .md-tabs__link:hover {
+  color: #a8bed2 !important;
+  opacity: 1;
+}
+[data-md-color-scheme="slate"] .md-search__form {
+  border: 1px solid rgba(174, 190, 205, 0.1);
+  background-color: #1d2227;
+}
+[data-md-color-scheme="slate"] .md-search__input,
+[data-md-color-scheme="slate"] .md-search__input::placeholder {
+  color: rgba(235, 234, 229, 0.76);
+}
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: rgba(239, 237, 232, 0.95);
+}
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3,
+[data-md-color-scheme="slate"] .md-typeset h4 {
+  color: rgba(233, 232, 227, 0.91);
+}
+[data-md-color-scheme="slate"] .md-typeset code {
+  border: 1px solid rgba(185, 196, 207, 0.09);
+}
+[data-md-color-scheme="slate"] .md-typeset blockquote {
+  color: rgba(216, 216, 211, 0.74);
+  border-left-color: rgba(143, 170, 197, 0.5);
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li {
+  border-color: rgba(185, 196, 207, 0.12);
+  background: #191c1f;
+  box-shadow: 0 0.25rem 0.8rem rgba(0, 0, 0, 0.12);
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  border-color: rgba(143, 170, 197, 0.42);
+  box-shadow: 0 0.55rem 1.3rem rgba(0, 0, 0, 0.24);
+}
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) {
+  background-color: #191c1f;
+  box-shadow: 0 0 0 1px rgba(185, 196, 207, 0.1);
+}
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background-color: #20252a;
+}
+
+/* Dark semantic blocks use quieter borders and translucent surfaces. */
+[data-md-color-scheme="slate"] .md-typeset .admonition,
+[data-md-color-scheme="slate"] .md-typeset details[class] {
+  background-color: #191c1f;
+  box-shadow: 0 0 0 1px rgba(185, 196, 207, 0.05);
+}
+[data-md-color-scheme="slate"] .md-typeset .admonition.definition,
+[data-md-color-scheme="slate"] .md-typeset details.definition,
+[data-md-color-scheme="slate"] .md-typeset .admonition.example,
+[data-md-color-scheme="slate"] .md-typeset details.example { border-color: #6f9edc; }
+[data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.definition > summary,
+[data-md-color-scheme="slate"] .md-typeset .example > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.example > summary { background-color: rgba(111, 158, 220, 0.13); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.theorem,
+[data-md-color-scheme="slate"] .md-typeset details.theorem { border-color: #9a82d4; }
+[data-md-color-scheme="slate"] .md-typeset .theorem > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.theorem > summary { background-color: rgba(154, 130, 212, 0.13); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.lemma,
+[data-md-color-scheme="slate"] .md-typeset details.lemma { border-color: #839fbd; }
+[data-md-color-scheme="slate"] .md-typeset .lemma > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.lemma > summary { background-color: rgba(131, 159, 189, 0.13); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.proposition,
+[data-md-color-scheme="slate"] .md-typeset details.proposition { border-color: #6dbb84; }
+[data-md-color-scheme="slate"] .md-typeset .proposition > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.proposition > summary { background-color: rgba(109, 187, 132, 0.12); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.corollary,
+[data-md-color-scheme="slate"] .md-typeset details.corollary { border-color: #d59b63; }
+[data-md-color-scheme="slate"] .md-typeset .corollary > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.corollary > summary { background-color: rgba(213, 155, 99, 0.13); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.remark,
+[data-md-color-scheme="slate"] .md-typeset details.remark { border-color: #78908d; }
+[data-md-color-scheme="slate"] .md-typeset .remark > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.remark > summary { background-color: rgba(120, 144, 141, 0.12); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.proof,
+[data-md-color-scheme="slate"] .md-typeset details.proof { border-color: #73807d; }
+[data-md-color-scheme="slate"] .md-typeset .proof > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.proof > summary { background-color: rgba(115, 128, 125, 0.11); }
 
 /* =====================================================================
    Header and tabs — OI-Wiki-inspired light surface with a teal active cue.
@@ -530,3 +641,36 @@
 .md-typeset details.remark .mn-thm-num          { color: #455a64; font-style: italic; }
 .md-typeset .admonition.example .mn-thm-num,
 .md-typeset details.example .mn-thm-num          { color: #2962ff; }
+
+/* Keep the light palette above intact; soften semantic accents only in slate. */
+[data-md-color-scheme="slate"] .md-logo img {
+  filter: hue-rotate(35deg) saturate(55%) brightness(1.3);
+}
+[data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.definition > summary::before,
+[data-md-color-scheme="slate"] .md-typeset .example > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.example > summary::before { background-color: #7f9fc8; }
+[data-md-color-scheme="slate"] .md-typeset .definition .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.definition .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset .example .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.example .mn-thm-num { color: #7f9fc8; }
+[data-md-color-scheme="slate"] .md-typeset .theorem > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.theorem > summary::before { background-color: #a18cc4; }
+[data-md-color-scheme="slate"] .md-typeset .theorem .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.theorem .mn-thm-num { color: #a18cc4; }
+[data-md-color-scheme="slate"] .md-typeset .lemma > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.lemma > summary::before { background-color: #839fbd; }
+[data-md-color-scheme="slate"] .md-typeset .lemma .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.lemma .mn-thm-num { color: #839fbd; }
+[data-md-color-scheme="slate"] .md-typeset .proposition > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.proposition > summary::before { background-color: #83a88d; }
+[data-md-color-scheme="slate"] .md-typeset .proposition .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.proposition .mn-thm-num { color: #83a88d; }
+[data-md-color-scheme="slate"] .md-typeset .corollary > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.corollary > summary::before { background-color: #c69a70; }
+[data-md-color-scheme="slate"] .md-typeset .corollary .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.corollary .mn-thm-num { color: #c69a70; }
+[data-md-color-scheme="slate"] .md-typeset .remark > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.remark > summary::before { background-color: #82908e; }
+[data-md-color-scheme="slate"] .md-typeset .remark .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.remark .mn-thm-num { color: #82908e; }

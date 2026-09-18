@@ -50,6 +50,11 @@ class ManagementFlow(unittest.TestCase):
                     self.assertEqual(status, 201)
                     self.assertEqual(result["path"], "abstract-algebra/index.md")
                     self.wait_page("abstract-algebra/", "抽象代数")
+                    course_index_path = docs / "abstract-algebra/index.md"
+                    course_index_path.write_text(
+                        course_index_path.read_text(encoding="utf-8").replace("## 目录", "## 笔记"),
+                        encoding="utf-8",
+                    )
                     home = self.wait_page("", "abstract-algebra/")
                     self.assertIn("抽象代数", home)
                     status, result = self.post({"action": "createPage", "course": "abstract-algebra",
@@ -84,6 +89,88 @@ class ManagementFlow(unittest.TestCase):
                     status, _ = self.post({"action": "status"}, origin="https://other.example")
                     self.assertEqual(status, 403)
                     self.assertEqual(snapshot, (config.read_bytes(), (docs / "index.md").read_bytes()))
+
+                    _, rename_status = self.post({"action": "status"})
+                    abstract = next(course for course in rename_status["courses"]
+                                    if course["slug"] == "abstract-algebra")
+                    self.assertEqual(abstract["pageCount"], 1)
+                    status, result = self.post({
+                        "action": "renamePage", "course": "abstract-algebra",
+                        "path": "abstract-algebra/groups.md", "title": "Group Theory",
+                        "baseRevision": rename_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 200)
+                    self.assertEqual(result["url"], "/math-notes/abstract-algebra/groups/")
+                    self.assertIn('"Group Theory": abstract-algebra/groups.md',
+                                  config.read_text(encoding="utf-8"))
+                    self.assertTrue((docs / "abstract-algebra/groups.md").read_text(
+                        encoding="utf-8").startswith("# Group Theory\n"))
+                    self.assertIn("[Group Theory](groups.md)", (docs / "abstract-algebra/index.md").read_text(
+                        encoding="utf-8"))
+                    self.wait_page("abstract-algebra/groups/", "Group Theory")
+
+                    _, rename_status = self.post({"action": "status"})
+                    status, result = self.post({
+                        "action": "renameCourse", "course": "abstract-algebra",
+                        "path": "abstract-algebra/groups.md", "title": "现代代数",
+                        "baseRevision": rename_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 200)
+                    self.assertEqual(result["url"], "/math-notes/abstract-algebra/groups/")
+                    self.assertIn('"现代代数":', config.read_text(encoding="utf-8"))
+                    self.assertIn("**现代代数**", (docs / "index.md").read_text(encoding="utf-8"))
+                    self.assertTrue((docs / "abstract-algebra/index.md").read_text(
+                        encoding="utf-8").startswith("# 现代代数\n"))
+                    self.wait_page("abstract-algebra/", "现代代数")
+
+                    _, delete_status = self.post({"action": "status"})
+                    status, _ = self.post({
+                        "action": "deletePage", "course": "abstract-algebra",
+                        "path": "abstract-algebra/groups.md", "confirmation": "Groups",
+                        "baseRevision": delete_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 400)
+                    self.assertTrue((docs / "abstract-algebra/groups.md").is_file())
+                    status, result = self.post({
+                        "action": "deletePage", "course": "abstract-algebra",
+                        "path": "abstract-algebra/groups.md", "confirmation": "Group Theory",
+                        "baseRevision": delete_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 200)
+                    self.assertEqual(result["url"], "/math-notes/abstract-algebra/")
+                    self.assertFalse((docs / "abstract-algebra/groups.md").exists())
+                    self.assertNotIn("abstract-algebra/groups.md", config.read_text(encoding="utf-8"))
+                    self.assertNotIn("groups.md", (docs / "abstract-algebra/index.md").read_text(
+                        encoding="utf-8"))
+                    self.assertTrue((root / result["recovery"]).is_file())
+                    config_after_page_delete = config.read_text(encoding="utf-8")
+                    self.assertIn("  - First:\n      - first/index.md\n", config_after_page_delete)
+                    _, after_page_delete = self.post({"action": "status"})
+                    self.assertEqual([course["slug"] for course in after_page_delete["courses"]],
+                                     ["abstract-algebra", "first"])
+
+                    _, delete_status = self.post({"action": "status"})
+                    status, _ = self.post({
+                        "action": "deleteCourse", "course": "abstract-algebra",
+                        "confirmation": "抽象代数",
+                        "baseRevision": delete_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 400)
+                    self.assertTrue((docs / "abstract-algebra").is_dir())
+                    status, result = self.post({
+                        "action": "deleteCourse", "course": "abstract-algebra",
+                        "confirmation": "现代代数",
+                        "baseRevision": delete_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 200)
+                    self.assertEqual(result["url"], "/math-notes/")
+                    self.assertFalse((docs / "abstract-algebra").exists())
+                    self.assertNotIn("abstract-algebra/index.md", config.read_text(encoding="utf-8"))
+                    self.assertNotIn("abstract-algebra/index.md", (docs / "index.md").read_text(
+                        encoding="utf-8"))
+                    self.assertTrue((root / result["recovery"]).is_dir())
+                    self.assertIn("  - First:\n      - first/index.md\n", config.read_text(encoding="utf-8"))
+                    self.wait_page("", "First")
                 except Exception:
                     log.flush()
                     log.seek(0)

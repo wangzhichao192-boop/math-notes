@@ -20,6 +20,7 @@ import posixpath
 import re
 import tempfile
 import threading
+import time
 import yaml
 from urllib.parse import urlsplit
 
@@ -57,14 +58,25 @@ def _navigation_courses(source):
         start = source.rfind("\n", 0, node.start_mark.index) + 1
         end = (source.rfind("\n", 0, nav.value[index + 1].start_mark.index) + 1
                if index + 1 < len(nav.value) else nav.end_mark.index)
-        courses.append({**found[0], "start": start, "end": end})
+        key_node, value_node = node.value[0]
+        page_count = sum(
+            1 for path in _nav_paths(yaml.safe_load(fragment))
+            if path.endswith(".md") and not path.endswith("/index.md")
+        )
+        courses.append({
+            **found[0], "start": start, "end": end,
+            "title_start": key_node.start_mark.index,
+            "title_end": key_node.end_mark.index,
+            "value_node": value_node,
+            "page_count": page_count,
+        })
     return courses
 
 
 def _structure_status(config_path, docs_dir):
     config_source, home_source = _structure_sources(config_path, docs_dir)
     return {"ok": True, "courses": [
-        {"title": item["title"], "slug": item["slug"]}
+        {"title": item["title"], "slug": item["slug"], "pageCount": item["page_count"]}
         for item in _navigation_courses(config_source)
     ], "structureRevision": _revision(config_source + "\0" + home_source)}
 
@@ -195,6 +207,7 @@ def on_page_content(html, *, page, config, files):
 
     payload = {
         "sourcePath": source_path,
+        "pageTitle": str(page.title or posixpath.basename(source_path).removesuffix(".md")),
         "sourceB64": base64.b64encode(source.encode("utf-8")).decode("ascii"),
         "revision": _revision(source),
         "chapterNumber": _chapter_number(config, source_path),
@@ -270,6 +283,183 @@ def _markdown_text(value: str) -> str:
     return value.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]").replace("*", "\\*")
 
 
+def _check_structure_revision(payload: dict, config_source: str, home_source: str) -> None:
+    if payload.get("baseRevision") != _revision(config_source + "\0" + home_source):
+        raise FileExistsError("站点结构已更新，请关闭窗口后重新打开。")
+
+
+def _course_by_slug(config_source: str, slug: str) -> dict:
+    course = next((item for item in _navigation_courses(config_source) if item["slug"] == slug), None)
+    if not course:
+        raise LookupError(slug)
+    return course
+
+
+def _page_navigation_entry(config_source: str, course_slug: str, source_path: str) -> dict:
+    course = _course_by_slug(config_source, course_slug)
+
+    def find(node):
+        if isinstance(node, yaml.SequenceNode):
+            for child in node.value:
+                found = find(child)
+                if found:
+                    return found
+        elif isinstance(node, yaml.MappingNode):
+            for key_node, value_node in node.value:
+                if isinstance(value_node, yaml.ScalarNode) and value_node.value == source_path:
+                    line_start = config_source.rfind("\n", 0, node.start_mark.index) + 1
+                    # A YAML mapping node at the end of a sequence may include
+                    # the indentation that begins the next course.  The scalar
+                    # path itself always ends on the page's own line.
+                    line_end = config_source.find("\n", value_node.end_mark.index)
+                    if line_end < 0:
+                        line_end = len(config_source)
+                    else:
+                        line_end += 1
+                    return {
+                        "title": str(key_node.value),
+                        "title_start": key_node.start_mark.index,
+                        "title_end": key_node.end_mark.index,
+                        "start": line_start,
+                        "end": line_end,
+                    }
+                found = find(value_node)
+                if found:
+                    return found
+        return None
+
+    result = find(course["value_node"])
+    if not result:
+        raise LookupError(source_path)
+    return result
+
+
+def _replace_first_heading(source: str, title: str) -> str:
+    heading = re.search(r"(?m)^#\s+.*$", source)
+    replacement = f"# {title}"
+    if heading:
+        return source[:heading.start()] + replacement + source[heading.end():]
+    return replacement + "\n\n" + source.lstrip("\n")
+
+
+def _home_course_cards(source: str) -> tuple[re.Match, list[dict]]:
+    grid = re.search(r'<div\s+class="grid cards"\s+markdown[^>]*>([\s\S]*?)</div>', source)
+    if not grid:
+        raise ValueError("未找到主页课程卡片")
+    body = grid.group(1)
+    starts = list(re.finditer(r"(?m)^- ", body))
+    cards = []
+    for index, match in enumerate(starts):
+        end = starts[index + 1].start() if index + 1 < len(starts) else len(body)
+        card_source = body[match.start():end]
+        links = re.findall(r"\]\(([a-z0-9-]+)/index\.md\)", card_source)
+        if len(links) != 1:
+            raise ValueError("主页课程卡片格式不匹配")
+        cards.append({"slug": links[0], "source": card_source.rstrip()})
+    return grid, cards
+
+
+def _render_home_cards(source: str, grid: re.Match, cards: list[dict]) -> str:
+    body = "\n\n" + "\n\n\n".join(card["source"] for card in cards) + "\n\n"
+    return source[:grid.start(1)] + body + source[grid.end(1):]
+
+
+def _rename_home_card(source: str, slug: str, title: str) -> str:
+    grid, cards = _home_course_cards(source)
+    card = next((item for item in cards if item["slug"] == slug), None)
+    if not card:
+        raise LookupError(slug)
+    updated, count = re.subn(
+        r"(?m)^(?P<prefix>- .*?\*\*).*(?P<suffix>\*\*)[ \t]*$",
+        lambda match: match.group("prefix") + _markdown_text(title) + match.group("suffix"),
+        card["source"], count=1,
+    )
+    if count != 1:
+        raise ValueError("主页课程卡片标题格式不匹配")
+    card["source"] = updated
+    return _render_home_cards(source, grid, cards)
+
+
+def _remove_home_card(source: str, slug: str) -> str:
+    grid, cards = _home_course_cards(source)
+    remaining = [item for item in cards if item["slug"] != slug]
+    if len(remaining) == len(cards):
+        raise LookupError(slug)
+    return _render_home_cards(source, grid, remaining)
+
+
+def _update_course_page_entry(source: str, page_slug: str, title: str | None = None) -> str:
+    pattern = re.compile(
+        rf"(?m)^(?P<number>\d+\.\s+)\[(?P<label>(?:\\.|[^\]])*)\]"
+        rf"\({re.escape(page_slug)}\.md\)(?P<tail>[^\n]*)(?P<newline>\n?)"
+    )
+    match = pattern.search(source)
+    if not match:
+        raise LookupError(page_slug)
+    headings = list(re.finditer(r"(?m)^## (?:目录|笔记)[ \t]*$", source[:match.start()]))
+    if not headings:
+        raise LookupError(page_slug)
+    heading = headings[-1]
+    intervening_heading = re.search(r"(?m)^## ", source[heading.end():match.start()])
+    if intervening_heading:
+        raise LookupError(page_slug)
+    section_start = heading.end()
+    next_heading = re.search(r"(?m)^## ", source[section_start:])
+    section_end = len(source) if not next_heading else section_start + next_heading.start()
+    section = source[section_start:section_end]
+    relative_start = match.start() - section_start
+    relative_end = match.end() - section_start
+    if title is None:
+        section = section[:relative_start] + section[relative_end:]
+        counter = 0
+
+        def renumber(item):
+            nonlocal counter
+            counter += 1
+            return f"{counter}. "
+
+        section = re.sub(r"(?m)^\d+\.\s+", renumber, section)
+    else:
+        replacement = (match.group("number") + f"[{_markdown_text(title)}]({page_slug}.md)" +
+                       match.group("tail") + match.group("newline"))
+        section = section[:relative_start] + replacement + section[relative_end:]
+    return source[:section_start] + section + source[section_end:]
+
+
+def _write_transaction(changes: list[tuple[str, str, str]]) -> None:
+    """Write (path, old, new) entries and restore every original on failure."""
+    try:
+        for path, _old, new in changes:
+            _atomic_write(path, new)
+    except OSError:
+        for path, old, _new in changes:
+            try:
+                _atomic_write(path, old)
+            except OSError:
+                pass
+        raise
+
+
+def _source_url(mount_path: str, source_path: str) -> str:
+    stem = source_path[:-3]
+    if stem.endswith("/index"):
+        stem = stem[:-6]
+    return f"{mount_path}{stem.strip('/')}/" if stem.strip("/") else mount_path
+
+
+def _recovery_target(docs_dir: str, name: str) -> str:
+    trash_dir = os.path.join(os.path.dirname(docs_dir), ".math-notes-trash")
+    os.makedirs(trash_dir, exist_ok=True)
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    base = f"{stamp}-{name}"
+    target = os.path.join(trash_dir, base)
+    suffix = 2
+    while os.path.exists(target):
+        target = os.path.join(trash_dir, f"{base}-{suffix}")
+        suffix += 1
+    return target
+
+
 def _insert_course_navigation(source: str, title: str, slug: str) -> str:
     if f"      - {slug}/index.md" in source:
         raise FileExistsError(slug)
@@ -314,7 +504,7 @@ def _insert_course_page(source: str, title: str, page_slug: str, description: st
     link = f"]({page_slug}.md)"
     if link in source:
         raise FileExistsError(page_slug)
-    heading = re.search(r"(?m)^## 目录[ \t]*$", source)
+    heading = re.search(r"(?m)^## (?:目录|笔记)[ \t]*$", source)
     entry_description = f" — {_markdown_text(description)}" if description else ""
     if not heading:
         return source.rstrip() + f"\n\n## 目录\n\n1. [{_markdown_text(title)}]({page_slug}.md){entry_description}\n"
@@ -432,6 +622,148 @@ def _create_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: 
     }
 
 
+def _rename_course(payload: dict, *, docs_dir: str, config_path: str, mount_path: str) -> dict:
+    course_slug = _clean_slug(payload.get("course"), "course")
+    title = _clean_text(payload.get("title"), "title", 80)
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    _check_structure_revision(payload, config_source, home_source)
+    course = _course_by_slug(config_source, course_slug)
+    course_index = os.path.join(docs_dir, course_slug, "index.md")
+    if not os.path.isfile(course_index):
+        raise LookupError(course_slug)
+    with open(course_index, encoding="utf-8") as stream:
+        index_source = stream.read()
+    next_config = (config_source[:course["title_start"]] + _yaml_string(title) +
+                   config_source[course["title_end"]:])
+    next_home = _rename_home_card(home_source, course_slug, title)
+    next_index = _replace_first_heading(index_source, title)
+    _write_transaction([
+        (config_path, config_source, next_config),
+        (os.path.join(docs_dir, "index.md"), home_source, next_home),
+        (course_index, index_source, next_index),
+    ])
+    current_path = payload.get("path")
+    if not isinstance(current_path, str) or not current_path.startswith(f"{course_slug}/"):
+        current_path = f"{course_slug}/index.md"
+    return {"ok": True, "url": _source_url(mount_path, current_path), "title": title}
+
+
+def _rename_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: str) -> dict:
+    source_path = payload.get("path")
+    if not isinstance(source_path, str):
+        raise ValueError("path")
+    normalized = posixpath.normpath("/" + source_path).lstrip("/")
+    if normalized != source_path or "/" not in source_path or source_path.endswith("/index.md"):
+        raise ValueError("path")
+    course_slug, filename = source_path.split("/", 1)
+    course_slug = _clean_slug(course_slug, "course")
+    page_slug = filename[:-3]
+    if not SLUG_PATTERN.fullmatch(page_slug):
+        raise ValueError("path")
+    title = _clean_text(payload.get("title"), "title", 100)
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    _check_structure_revision(payload, config_source, home_source)
+    entry = _page_navigation_entry(config_source, course_slug, source_path)
+    target = os.path.realpath(os.path.join(docs_dir, source_path))
+    course_index = os.path.join(docs_dir, course_slug, "index.md")
+    if (os.path.commonpath([os.path.realpath(docs_dir), target]) != os.path.realpath(docs_dir)
+            or not os.path.isfile(target) or not os.path.isfile(course_index)):
+        raise LookupError(source_path)
+    with open(target, encoding="utf-8") as stream:
+        page_source = stream.read()
+    with open(course_index, encoding="utf-8") as stream:
+        index_source = stream.read()
+    next_config = (config_source[:entry["title_start"]] + _yaml_string(title) +
+                   config_source[entry["title_end"]:])
+    next_page = _replace_first_heading(page_source, title)
+    next_index = _update_course_page_entry(index_source, page_slug, title)
+    _write_transaction([
+        (config_path, config_source, next_config),
+        (course_index, index_source, next_index),
+        (target, page_source, next_page),
+    ])
+    return {"ok": True, "url": _source_url(mount_path, source_path), "title": title}
+
+
+def _delete_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: str) -> dict:
+    source_path = payload.get("path")
+    if not isinstance(source_path, str):
+        raise ValueError("path")
+    normalized = posixpath.normpath("/" + source_path).lstrip("/")
+    if normalized != source_path or "/" not in source_path or source_path.endswith("/index.md"):
+        raise ValueError("path")
+    course_slug, filename = source_path.split("/", 1)
+    course_slug = _clean_slug(course_slug, "course")
+    page_slug = filename[:-3]
+    if not SLUG_PATTERN.fullmatch(page_slug):
+        raise ValueError("path")
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    _check_structure_revision(payload, config_source, home_source)
+    entry = _page_navigation_entry(config_source, course_slug, source_path)
+    confirmation = _clean_text(payload.get("confirmation"), "confirmation", 100)
+    if confirmation != entry["title"]:
+        raise ValueError("confirmation")
+    target = os.path.realpath(os.path.join(docs_dir, source_path))
+    course_index = os.path.join(docs_dir, course_slug, "index.md")
+    if (os.path.commonpath([os.path.realpath(docs_dir), target]) != os.path.realpath(docs_dir)
+            or not os.path.isfile(target) or not os.path.isfile(course_index)):
+        raise LookupError(source_path)
+    with open(course_index, encoding="utf-8") as stream:
+        index_source = stream.read()
+    next_config = config_source[:entry["start"]] + config_source[entry["end"]:]
+    next_index = _update_course_page_entry(index_source, page_slug)
+    recovery = _recovery_target(docs_dir, f"{course_slug}-{filename}")
+    os.replace(target, recovery)
+    try:
+        _write_transaction([
+            (config_path, config_source, next_config),
+            (course_index, index_source, next_index),
+        ])
+    except OSError:
+        try:
+            os.replace(recovery, target)
+        except OSError:
+            pass
+        raise
+    return {
+        "ok": True, "url": f"{mount_path}{course_slug}/",
+        "recovery": os.path.relpath(recovery, os.path.dirname(docs_dir)),
+    }
+
+
+def _delete_course(payload: dict, *, docs_dir: str, config_path: str, mount_path: str) -> dict:
+    course_slug = _clean_slug(payload.get("course"), "course")
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    _check_structure_revision(payload, config_source, home_source)
+    course = _course_by_slug(config_source, course_slug)
+    confirmation = _clean_text(payload.get("confirmation"), "confirmation", 80)
+    if confirmation != course["title"]:
+        raise ValueError("confirmation")
+    course_dir = os.path.realpath(os.path.join(docs_dir, course_slug))
+    if (os.path.commonpath([os.path.realpath(docs_dir), course_dir]) != os.path.realpath(docs_dir)
+            or not os.path.isdir(course_dir)):
+        raise LookupError(course_slug)
+    next_config = config_source[:course["start"]] + config_source[course["end"]:]
+    next_home = _remove_home_card(home_source, course_slug)
+    recovery = _recovery_target(docs_dir, course_slug)
+    os.replace(course_dir, recovery)
+    try:
+        _write_transaction([
+            (config_path, config_source, next_config),
+            (os.path.join(docs_dir, "index.md"), home_source, next_home),
+        ])
+    except OSError:
+        try:
+            os.replace(recovery, course_dir)
+        except OSError:
+            pass
+        raise
+    return {
+        "ok": True, "url": mount_path,
+        "recovery": os.path.relpath(recovery, os.path.dirname(docs_dir)),
+    }
+
+
 def on_serve(server, *, config, builder):
     """Add narrowly scoped source and site-structure routes to ``mkdocs serve``."""
     original_app = server.get_app()
@@ -522,6 +854,22 @@ def on_serve(server, *, config, builder):
                     result = _create_page(
                         payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
                     )
+                elif action == "renameCourse":
+                    result = _rename_course(
+                        payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
+                    )
+                elif action == "renamePage":
+                    result = _rename_page(
+                        payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
+                    )
+                elif action == "deletePage":
+                    result = _delete_page(
+                        payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
+                    )
+                elif action == "deleteCourse":
+                    result = _delete_course(
+                        payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
+                    )
                 else:
                     raise ValueError("action")
             except ValueError as error:
@@ -534,7 +882,9 @@ def on_serve(server, *, config, builder):
                 return _json_response(
                     start_response,
                     "409 Conflict",
-                    {"error": "exists", "message": str(error) if action == "reorderCourses" else "这个课程或页面已经存在，请刷新检查；已有内容不会覆盖。"},
+                    {"error": "exists", "message": str(error) if action in {
+                        "reorderCourses", "renameCourse", "renamePage", "deletePage", "deleteCourse"
+                    } else "这个课程或页面已经存在，请刷新检查；已有内容不会覆盖。"},
                 )
             except LookupError:
                 return _json_response(
@@ -548,7 +898,11 @@ def on_serve(server, *, config, builder):
                     "500 Internal Server Error",
                     {"error": "write", "message": "写入站点结构失败，原文件已尽量保留。"},
                 )
-            return _json_response(start_response, "200 OK" if action in {"status", "reorderCourses"} else "201 Created", result)
+            return _json_response(
+                start_response,
+                "201 Created" if action in {"createCourse", "createPage"} else "200 OK",
+                result,
+            )
 
         try:
             rel_path = payload["path"]

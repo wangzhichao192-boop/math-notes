@@ -16,3 +16,7 @@
 5. [Some Fundamental Theorems](fundamental-theorems.md) — Tarski–Vaught 检验、Löwenheim–Skolem 定理
 6. [Ultraproducts](ultraproducts.md) — 滤子、超滤子、Łoś 定理、紧致性
 7. [RCF and Hilbert's 17th Problem](rcf-hilbert.md) — 实闭域
+
+## 教材
+
+- [Martin Hils 与 François Loeser — *A First Journey through Logic*](a-first-journey-through-logic.pdf)

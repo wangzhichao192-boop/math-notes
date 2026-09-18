@@ -43,15 +43,17 @@ theme:
 
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
-  - stylesheets/extra.css?v=20260914-1
-  - stylesheets/editor.css?v=20260914-2
+  - stylesheets/extra.css?v=20260917-3
+  - stylesheets/editor.css?v=20260917-3
+  - stylesheets/theme-picker.css?v=20260918-1
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
   - javascripts/numbering.js?v=20260914-1
-  - javascripts/editor.js?v=20260914-2
+  - javascripts/editor.js?v=20260915-1
+  - javascripts/theme-picker.js?v=20260918-3
 
 markdown_extensions:
   - admonition
@@ -125,6 +127,7 @@ nav:
       - abstract-algebra/index.md
       - "Sets, Cardinality, Choice, and Quotients": abstract-algebra/lesson1.md
       - "Integers, Groups, and Homomorphisms": abstract-algebra/integers-groups-and-homomorphisms.md
+      - "Subgroups, Quotients, and Applications": abstract-algebra/subgroups-and-quotients.md
   - 几何与拓扑:
       - geometry-topology/index.md
       - Invitation: geometry-topology/invitation.md

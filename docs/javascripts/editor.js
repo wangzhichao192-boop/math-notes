@@ -84,8 +84,13 @@
     return result;
   }
 
-  function queueNavigation(url) {
+  function queueNavigation(url, forceReload = false) {
     const target = new URL(url, location.href).href;
+    if (forceReload && location.href.split("#")[0] === target.split("#")[0]) {
+      sessionStorage.removeItem(PENDING_NAVIGATION_KEY);
+      setTimeout(() => location.assign(target), 700);
+      return;
+    }
     sessionStorage.setItem(PENDING_NAVIGATION_KEY, target);
     resumePendingNavigation();
   }
@@ -724,6 +729,17 @@
     const pageButton = payload.courseSlug
       ? '<button type="button" class="mn-typora-button mn-typora-button--structure" data-action="create-page">＋ 新页面</button>'
       : "";
+    const isLesson = payload.courseSlug && !payload.sourcePath.endsWith("/index.md");
+    const management = payload.courseSlug ? `
+        <details class="mn-typora-more mn-typora-manage">
+          <summary class="mn-typora-button">管理</summary>
+          <div class="mn-typora-more__menu">
+            ${isLesson ? '<button type="button" class="mn-typora-button" data-action="rename-page">重命名当前页面</button>' : ""}
+            <button type="button" class="mn-typora-button" data-action="rename-course">重命名当前课程</button>
+            ${isLesson ? '<button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-page">删除当前页面…</button>' : ""}
+            <button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-course">删除当前课程…</button>
+          </div>
+        </details>` : "";
     return `
       <div class="mn-typora-toolbar__identity">
         <span class="mn-typora-toolbar__dot" aria-hidden="true"></span>
@@ -735,6 +751,7 @@
         ${pageButton}
         <button type="button" class="mn-typora-button mn-typora-button--structure" data-action="create-course">＋ 新课程</button>
         <button type="button" class="mn-typora-button mn-typora-button--structure" data-action="reorder-courses">课程排序</button>
+        ${management}
         <button type="button" class="mn-typora-button" data-action="source">源码</button>
         <details class="mn-typora-more">
           <summary class="mn-typora-button">更多</summary>
@@ -754,6 +771,20 @@
     if (!state?.structureDialog) return;
     state.structureDialog.hidden = true;
     state.view.focus();
+  }
+
+  function ensureStructureDialog(state) {
+    if (!state.structureDialog) {
+      const dialog = document.createElement("div");
+      dialog.className = "mn-structure-dialog";
+      dialog.hidden = true;
+      dialog.addEventListener("click", (event) => {
+        if (event.target.closest("[data-structure-close]")) closeStructureDialog(state);
+      });
+      state.shell.appendChild(dialog);
+      state.structureDialog = dialog;
+    }
+    return state.structureDialog;
   }
 
   function structureDialogMarkup(mode, payload) {
@@ -798,17 +829,7 @@
       setStatus(state, "请先进入某个课程，再新建页面", "error");
       return;
     }
-    if (!state.structureDialog) {
-      const dialog = document.createElement("div");
-      dialog.className = "mn-structure-dialog";
-      dialog.hidden = true;
-      dialog.addEventListener("click", (event) => {
-        if (event.target.closest("[data-structure-close]")) closeStructureDialog(state);
-      });
-      state.shell.appendChild(dialog);
-      state.structureDialog = dialog;
-    }
-    const dialog = state.structureDialog;
+    const dialog = ensureStructureDialog(state);
     if (mode === "order") {
       openCourseOrder(state, dialog);
       return;
@@ -927,6 +948,161 @@
         render();
       }
     });
+  }
+
+  function currentCourse(state, courses = state.payload.courses || []) {
+    return courses.find(course => course.slug === state.payload.courseSlug);
+  }
+
+  async function saveBeforeStructureChange(state) {
+    if (!writeDraft(state)) return false;
+    if (state.view.state.doc.toString() === state.savedSource) return true;
+    const saved = await saveSource(state);
+    return saved && state.view.state.doc.toString() === state.savedSource;
+  }
+
+  function clearCurrentEditorDraft(state) {
+    clearTimeout(state.draftTimer);
+    try { localStorage.removeItem(draftKey(state.payload.sourcePath)); } catch (_) {}
+    try { sessionStorage.removeItem(RESUME_KEY); } catch (_) {}
+  }
+
+  async function openRenameDialog(state, kind) {
+    if (!state.payload.manageEndpoint || !state.payload.courseSlug) return;
+    const isCourse = kind === "course";
+    const course = currentCourse(state);
+    const oldTitle = isCourse ? course?.title : state.payload.pageTitle;
+    if (!oldTitle) {
+      setStatus(state, "没有读到当前名称，请刷新后重试", "error");
+      return;
+    }
+    const dialog = ensureStructureDialog(state);
+    dialog.innerHTML = `
+      <div class="mn-structure-dialog__backdrop" data-structure-close></div>
+      <section class="mn-structure-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="mn-structure-title">
+        <button type="button" class="mn-structure-dialog__close" data-structure-close aria-label="关闭">×</button>
+        <span class="mn-structure-dialog__eyebrow">站点管理</span>
+        <h2 id="mn-structure-title">重命名${isCourse ? "课程" : "页面"}</h2>
+        <p>${isCourse
+          ? "新名称会同步到顶部导航、主页课程卡片和课程首页；网页地址保持不变。"
+          : "新名称会同步到导航、课程目录和页面标题；网页地址保持不变。"}</p>
+        <form class="mn-structure-form">
+          <label>
+            <span>${isCourse ? "课程名称" : "页面名称"}</span>
+            <input name="title" required maxlength="${isCourse ? 80 : 100}" autocomplete="off" value="${escapeHtml(oldTitle)}">
+            <small>地址和已有链接不会改变</small>
+          </label>
+          <div class="mn-structure-form__error" role="alert" hidden></div>
+          <div class="mn-structure-form__actions">
+            <button type="button" class="mn-structure-cancel" data-structure-close>取消</button>
+            <button type="submit" class="mn-structure-submit">保存名称</button>
+          </div>
+        </form>
+      </section>`;
+    dialog.hidden = false;
+    const form = dialog.querySelector("form");
+    const input = form.elements.title;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submit = form.querySelector("[type=submit]");
+      const error = form.querySelector(".mn-structure-form__error");
+      submit.disabled = true;
+      error.hidden = true;
+      try {
+        if (!await saveBeforeStructureChange(state)) throw new Error("请先解决当前页面的保存问题，再重命名。");
+        const status = await manageRequest(state.payload, { action: "status" });
+        const result = await manageRequest(state.payload, {
+          action: isCourse ? "renameCourse" : "renamePage",
+          course: state.payload.courseSlug,
+          path: state.payload.sourcePath,
+          title: input.value,
+          baseRevision: status.structureRevision
+        });
+        clearCurrentEditorDraft(state);
+        setStatus(state, "名称已同步，正在刷新页面…", "saved");
+        queueNavigation(result.url, true);
+      } catch (requestError) {
+        error.textContent = requestError.message || "重命名失败，请稍后重试。";
+        error.hidden = false;
+        submit.disabled = false;
+      }
+    });
+    requestAnimationFrame(() => { input.focus(); input.select(); });
+  }
+
+  async function openDeleteDialog(state, kind) {
+    if (!state.payload.manageEndpoint || !state.payload.courseSlug) return;
+    const isCourse = kind === "course";
+    let status;
+    try {
+      status = await manageRequest(state.payload, { action: "status" });
+    } catch (requestError) {
+      setStatus(state, requestError.message, "error");
+      return;
+    }
+    const course = currentCourse(state, status.courses);
+    const expected = isCourse ? course?.title : state.payload.pageTitle;
+    if (!expected) {
+      setStatus(state, "没有读到要删除的名称，请刷新后重试", "error");
+      return;
+    }
+    const dialog = ensureStructureDialog(state);
+    const impact = isCourse
+      ? `会从主页和导航移除整门课程，其中包含 ${course.pageCount || 0} 个页面。`
+      : "会从课程目录和导航移除这个页面。";
+    dialog.innerHTML = `
+      <div class="mn-structure-dialog__backdrop" data-structure-close></div>
+      <section class="mn-structure-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="mn-structure-title">
+        <button type="button" class="mn-structure-dialog__close" data-structure-close aria-label="关闭">×</button>
+        <span class="mn-structure-dialog__eyebrow mn-structure-dialog__eyebrow--danger">谨慎操作</span>
+        <h2 id="mn-structure-title">删除${isCourse ? "课程" : "页面"}</h2>
+        <div class="mn-structure-warning">
+          <strong>${escapeHtml(expected)}</strong>
+          <span>${impact}源文件会移到项目内的回收目录，不会立即永久删除。</span>
+        </div>
+        <form class="mn-structure-form">
+          <label>
+            <span>输入“${escapeHtml(expected)}”确认</span>
+            <input name="confirmation" required maxlength="${isCourse ? 80 : 100}" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="mn-structure-form__error" role="alert" hidden></div>
+          <div class="mn-structure-form__actions">
+            <button type="button" class="mn-structure-cancel" data-structure-close>取消</button>
+            <button type="submit" class="mn-structure-submit mn-structure-submit--danger" disabled>移到回收目录</button>
+          </div>
+        </form>
+      </section>`;
+    dialog.hidden = false;
+    const form = dialog.querySelector("form");
+    const confirmation = form.elements.confirmation;
+    const submit = form.querySelector("[type=submit]");
+    confirmation.addEventListener("input", () => { submit.disabled = confirmation.value !== expected; });
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (confirmation.value !== expected) return;
+      const error = form.querySelector(".mn-structure-form__error");
+      submit.disabled = true;
+      error.hidden = true;
+      try {
+        if (!await saveBeforeStructureChange(state)) throw new Error("请先解决当前页面的保存问题，再删除。");
+        const fresh = await manageRequest(state.payload, { action: "status" });
+        const result = await manageRequest(state.payload, {
+          action: isCourse ? "deleteCourse" : "deletePage",
+          course: state.payload.courseSlug,
+          path: state.payload.sourcePath,
+          confirmation: confirmation.value,
+          baseRevision: fresh.structureRevision
+        });
+        clearCurrentEditorDraft(state);
+        setStatus(state, "已移到回收目录，正在返回…", "saved");
+        queueNavigation(result.url);
+      } catch (requestError) {
+        error.textContent = requestError.message || "删除失败，请稍后重试。";
+        error.hidden = false;
+        submit.disabled = confirmation.value !== expected;
+      }
+    });
+    requestAnimationFrame(() => confirmation.focus());
   }
 
   function downloadMarkdown(source, filename) {
@@ -1517,7 +1693,7 @@
     toolbar.addEventListener("click", (event) => {
       const action = event.target.closest("[data-action]")?.dataset.action;
       if (!action) return;
-      toolbar.querySelector(".mn-typora-more")?.removeAttribute("open");
+      toolbar.querySelectorAll(".mn-typora-more").forEach(menu => menu.removeAttribute("open"));
       if (modules.writingCommands[action]) {
         modules.writingCommands[action](state.view);
         state.view.focus();
@@ -1529,6 +1705,10 @@
       if (action === "create-course") openStructureDialog(state, "course");
       if (action === "create-page") openStructureDialog(state, "page");
       if (action === "reorder-courses") openStructureDialog(state, "order");
+      if (action === "rename-course") openRenameDialog(state, "course");
+      if (action === "rename-page") openRenameDialog(state, "page");
+      if (action === "delete-course") openDeleteDialog(state, "course");
+      if (action === "delete-page") openDeleteDialog(state, "page");
       if (action === "source") {
         state.visual = !state.visual;
         state.view.dispatch({ effects: visualCompartment.reconfigure(state.visual ? [visualExtension] : []) });
