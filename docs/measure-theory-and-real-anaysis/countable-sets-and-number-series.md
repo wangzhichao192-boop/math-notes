@@ -1,5 +1,11 @@
 # Countability, Series, and the Kurzweil–Henstock Integral
 
+This chapter develops the countability and series results needed for real
+analysis, then builds the Kurzweil–Henstock integral from interval divisions
+and gauges. After establishing its structural properties—including
+subdivision, finite additivity, and stability under uniform limits—it closes
+with a local interval estimate for differentiable functions.
+
 ## Countability and Number Series
 
 !!! notation "Notation (Standard sets and sequences)"
@@ -1018,3 +1024,456 @@
     $$
 
     Hence $g$ is integrable with the same integral as $f$.
+
+## Subdivisions and Finite Additivity
+
+!!! definition "Definition (Kurzweil–Henstock null set)"
+    <a id="def-1-11-1"></a>
+    A set $E\subseteq I$ is **Kurzweil–Henstock null** if, whenever
+    $f,g:I\to\mathbb{R}$ satisfy $f\in\operatorname{KH}(I)$ and
+
+    $$
+    \{x\in I:f(x)\neq g(x)\}\subseteq E,
+    $$
+
+    then $g\in\operatorname{KH}(I)$ and $\int_I g=\int_I f$. The family of
+    all such sets is denoted by $\mathcal E_{\mathrm{null},\mathrm{KH}}(I)$.
+
+!!! corollary "Corollary (Countable sets are KH-null)"
+    <a id="cor-1-11-2"></a>
+    Every countable subset of $I$ belongs to
+    $\mathcal E_{\mathrm{null},\mathrm{KH}}(I)$.
+
+??? proof "Proof"
+    This is exactly [Theorem 1.10.2](#thm-1-10-2), because every subset of a
+    countable set is countable.
+
+!!! lemma "Lemma (Division induced on a subcell)"
+    <a id="lem-1-11-3"></a>
+    Let $I$ be a compact cell, let $\Delta$ be a division of $I$, and let
+    $J\subseteq I$ be a compact cell. Define
+
+    $$
+    \Delta_J
+    :=\{J\cap K:K\in\Delta,
+    \ \operatorname{int}(J\cap K)\neq\varnothing\}.
+    $$
+
+    Then $\Delta_J$ is a division of $J$, and
+
+    $$
+    \lambda(J)
+    =\sum_{\substack{K\in\Delta\\
+    \operatorname{int}(J\cap K)\neq\varnothing}}
+    \lambda(J\cap K).
+    $$
+
+??? proof "Proof"
+    If $\operatorname{int}(J\cap K)\neq\varnothing$, then $J\cap K$ is a
+    nondegenerate compact interval, hence a compact cell. Distinct members of
+    $\Delta_J$ are non-overlapping because their parent cells in $\Delta$ are
+    non-overlapping.
+
+    Every $x\in\operatorname{int}(J)$ belongs to some $K\in\Delta$, and then
+    $x\in J\cap K\in\Delta_J$. Thus
+
+    $$
+    \operatorname{int}(J)
+    \subseteq\bigcup\Delta_J\subseteq J.
+    $$
+
+    The middle set is a finite union of compact sets and is therefore closed;
+    it contains $\overline{\operatorname{int}(J)}=J$. Hence its union is
+    exactly $J$. The length identity now follows from additivity of interval
+    length, [Proposition 1.7.4](#prop-1-7-4).
+
+!!! theorem "Theorem (Subordinate tagged divisions)"
+    <a id="thm-1-11-4"></a>
+    Let $\Delta$ be a division of a compact cell $I$. There is a gauge
+    $\delta_\Delta$ on $I$ with the following property. For every
+    $\delta_\Delta$-fine tagged division $\Pi$ of $I$, there are tagged
+    divisions $\Pi_K$ of $K$, one for each $K\in\Delta$, such that, with
+
+    $$
+    \widetilde\Pi:=\bigcup_{K\in\Delta}\Pi_K,
+    $$
+
+    the following hold.
+
+    1. $\widetilde\Pi$ is a tagged division of $I$.
+    2. For every $f:I\to\mathbb{R}$,
+
+       $$
+       S(\Pi,f)=S(\widetilde\Pi,f)
+       =\sum_{K\in\Delta}S(\Pi_K,f|_K).
+       $$
+
+    3. If $\eta$ is any gauge on $I$ and $\Pi$ is also $\eta$-fine, then
+       $\widetilde\Pi$ is $\eta$-fine and each $\Pi_K$ is
+       $\eta|_K$-fine.
+
+??? proof "Proof"
+    Let $F$ be the finite set of all endpoints of cells in $\Delta$. Since
+    $I$ is nondegenerate, $F$ contains at least two points. Define
+
+    $$
+    \delta_\Delta(x):=
+    \begin{cases}
+    \operatorname{dist}(x,F),&x\notin F,\\
+    \operatorname{dist}(x,F\setminus\{x\}),&x\in F.
+    \end{cases}
+    $$
+
+    This is positive, so it is a gauge. Its key property is
+
+    $$
+    x\notin K\in\Delta
+    \quad\Longrightarrow\quad
+    \delta_\Delta(x)\leq\operatorname{dist}(x,K).
+    \tag{1}
+    $$
+
+    Indeed, an endpoint of $K$ lies between $x$ and $K$ itself; if $x$ is
+    that endpoint it belongs to $K$, while otherwise the relevant endpoint
+    belongs to $F\setminus\{x\}$.
+
+    Let $\Pi$ be $\delta_\Delta$-fine. For $K\in\Delta$, put
+
+    $$
+    \Pi_K:=\{(J\cap K,x):(J,x)\in\Pi,
+    \ \operatorname{int}(J\cap K)\neq\varnothing\}.
+    $$
+
+    By [Lemma 1.11.3](#lem-1-11-3), the component cells of $\Pi_K$ form a
+    division of $K$. It remains to check that every retained tag lies in its
+    new cell. Suppose $(J\cap K,x)\in\Pi_K$ but $x\notin K$. Choose
+    $y\in\operatorname{int}(J\cap K)$. Since
+    $J\subseteq[x-\delta_\Delta(x),x+\delta_\Delta(x)]$ and $y$ is an
+    interior point of $J$, one has
+
+    $$
+    |x-y|<\delta_\Delta(x).
+    $$
+
+    On the other hand, (1) gives
+    $\delta_\Delta(x)\leq\operatorname{dist}(x,K)\leq|x-y|$, a
+    contradiction. Thus $x\in J\cap K$, so $\Pi_K$ is a tagged division of
+    $K$. The gluing lemma now shows that $\widetilde\Pi$ is a tagged division
+    of $I$.
+
+    For each $(J,x)\in\Pi$, Lemma 1.11.3 applied to $J$ gives
+
+    $$
+    \lambda(J)
+    =\sum_{\substack{K\in\Delta\\
+    \operatorname{int}(J\cap K)\neq\varnothing}}
+    \lambda(J\cap K).
+    $$
+
+    Therefore the finite sums may be regrouped as
+
+    $$
+    \begin{aligned}
+    S(\Pi,f)
+    &=\sum_{(J,x)\in\Pi}f(x)
+      \sum_{\substack{K\in\Delta\\
+      \operatorname{int}(J\cap K)\neq\varnothing}}
+      \lambda(J\cap K)\\
+    &=\sum_{K\in\Delta}S(\Pi_K,f|_K)
+    =S(\widetilde\Pi,f).
+    \end{aligned}
+    $$
+
+    Finally, if $\Pi$ is $\eta$-fine, every new component
+    $J\cap K$ is contained in its original component $J$, hence in
+    $[x-\eta(x),x+\eta(x)]$. This proves (3).
+
+!!! theorem "Theorem (Finite additivity)"
+    <a id="thm-1-11-5"></a>
+    Let $\Delta=\{I_1,\ldots,I_N\}$ be a division of a compact cell $I$, and
+    let $f:I\to\mathbb{R}$. The following are equivalent.
+
+    1. $f\in\operatorname{KH}(I)$.
+    2. $f|_{I_n}\in\operatorname{KH}(I_n)$ for every $1\leq n\leq N$.
+
+    In this case,
+
+    $$
+    \int_I f=\sum_{n=1}^{N}\int_{I_n}f|_{I_n}.
+    $$
+
+??? proof "Proof"
+    The implication (1) $\Rightarrow$ (2) is
+    [Corollary 1.9.8](#cor-1-9-8).
+
+    Conversely, suppose (2) holds and fix $\varepsilon>0$. Let
+    $\delta_\Delta$ be the gauge from
+    [Theorem 1.11.4](#thm-1-11-4). For each $n$, choose a gauge $\delta_n$
+    on $I_n$ such that every $\delta_n$-fine tagged division $\Pi_n$ of
+    $I_n$ satisfies
+
+    $$
+    \left|S(\Pi_n,f|_{I_n})-\int_{I_n}f|_{I_n}\right|
+    <\frac{\varepsilon}{N}.
+    $$
+
+    Extend $\delta_n$ to a gauge $\widetilde\delta_n$ on $I$ by assigning
+    arbitrary positive values outside $I_n$, and define
+
+    $$
+    \delta:=\min\{\delta_\Delta,
+    \widetilde\delta_1,\ldots,\widetilde\delta_N\}.
+    $$
+
+    If $\Pi$ is a $\delta$-fine tagged division of $I$, Theorem 1.11.4
+    supplies $\delta_n$-fine tagged divisions $\Pi_n$ of the $I_n$ and
+    preserves the Riemann sum. Hence
+
+    $$
+    \begin{aligned}
+    \left|S(\Pi,f)-\sum_{n=1}^{N}\int_{I_n}f|_{I_n}\right|
+    &\leq\sum_{n=1}^{N}
+    \left|S(\Pi_n,f|_{I_n})-\int_{I_n}f|_{I_n}\right|\\
+    &<\varepsilon.
+    \end{aligned}
+    $$
+
+    This proves both the integrability of $f$ and the stated formula.
+
+!!! corollary "Corollary (Extension by zero)"
+    <a id="cor-1-11-6"></a>
+    Let $J\subseteq I$ be compact cells and let $f:J\to\mathbb{R}$. Define
+    $\widetilde f:I\to\mathbb{R}$ by
+
+    $$
+    \widetilde f(x):=
+    \begin{cases}
+    f(x),&x\in J,\\
+    0,&x\notin J.
+    \end{cases}
+    $$
+
+    Then $f\in\operatorname{KH}(J)$ if and only if
+    $\widetilde f\in\operatorname{KH}(I)$, and in that case
+
+    $$
+    \int_J f=\int_I\widetilde f.
+    $$
+
+??? proof "Proof"
+    If $\widetilde f$ is integrable on $I$, its restriction to $J$ is
+    integrable by Corollary 1.9.8.
+
+    Conversely, divide $I$ into $J$ and the at most two nondegenerate compact
+    cells lying to its left and right. On each complementary cell,
+    $\widetilde f$ differs from the zero function at most at the shared
+    endpoint. Thus it is integrable there with integral zero by
+    [Theorem 1.10.2](#thm-1-10-2). Finite additivity gives the result.
+
+## Regulated Functions and Uniform Limits
+
+!!! definition "Definition (Step and regulated functions)"
+    <a id="def-1-12-1"></a>
+    A function $f:I\to\mathbb{R}$ on a compact cell is a **step function** if
+    there is a division $\Delta$ of $I$ such that $f$ is constant on
+    $\operatorname{int}(J)$ for every $J\in\Delta$.
+
+    A function $f:I\to\mathbb{R}$ is **regulated** if it is the uniform limit
+    of a sequence of step functions.
+
+!!! proposition "Proposition (Step functions are integrable)"
+    <a id="prop-1-12-2"></a>
+    Every step function on a compact cell $I$ is Kurzweil–Henstock
+    integrable. More precisely, if $\Delta$ witnesses that $f$ is a step
+    function and $c_J$ is the constant value of $f$ on
+    $\operatorname{int}(J)$, then
+
+    $$
+    \int_I f=\sum_{J\in\Delta}c_J\lambda(J).
+    $$
+
+??? proof "Proof"
+    For each $J\in\Delta$, the restriction $f|_J$ differs from the constant
+    function $c_J$ only at the two endpoints of $J$. By invariance under
+    countable modification,
+
+    $$
+    f|_J\in\operatorname{KH}(J),
+    \qquad
+    \int_J f|_J=c_J\lambda(J).
+    $$
+
+    The conclusion follows from [finite additivity](#thm-1-11-5).
+
+!!! theorem "Theorem (Uniform limits of KH-integrable functions)"
+    <a id="thm-1-12-3"></a>
+    Let $(f_n)$ be a sequence in $\operatorname{KH}(I)$ that converges
+    uniformly on $I$ to $f:I\to\mathbb{R}$. Then
+    $f\in\operatorname{KH}(I)$.
+
+??? proof "Proof"
+    First observe that if $h:I\to\mathbb{R}$ is bounded and $\Pi$ is a
+    tagged division of $I$, then
+
+    $$
+    |S(\Pi,h)|
+    \leq\sum_{(J,x)\in\Pi}|h(x)|\lambda(J)
+    \leq\|h\|_\infty\lambda(I),
+    \tag{1}
+    $$
+
+    because the component cells of $\Pi$ form a division of $I$.
+
+    We verify the Cauchy criterion for $f$. Given $\varepsilon>0$, choose
+    $n$ so large that
+
+    $$
+    \|f-f_n\|_\infty<\frac{\varepsilon}{4\lambda(I)}.
+    $$
+
+    Since $f_n$ is integrable, its Cauchy criterion supplies a gauge $\delta$
+    such that any two $\delta$-fine tagged divisions $\Pi$ and
+    $\widetilde\Pi$ satisfy
+
+    $$
+    |S(\Pi,f_n)-S(\widetilde\Pi,f_n)|<\frac{\varepsilon}{2}.
+    $$
+
+    Applying (1) to $f-f_n$ on each division gives
+
+    $$
+    \begin{aligned}
+    |S(\Pi,f)-S(\widetilde\Pi,f)|
+    &\leq |S(\Pi,f-f_n)|
+      +|S(\Pi,f_n)-S(\widetilde\Pi,f_n)|\\
+    &\qquad +|S(\widetilde\Pi,f_n-f)|\\
+    &<\frac{\varepsilon}{4}
+      +\frac{\varepsilon}{2}
+      +\frac{\varepsilon}{4}
+    =\varepsilon.
+    \end{aligned}
+    $$
+
+    Hence $f$ is Kurzweil–Henstock integrable by
+    [Theorem 1.9.7](#thm-1-9-7).
+
+!!! corollary "Corollary (Regulated functions are integrable)"
+    <a id="cor-1-12-4"></a>
+    Every regulated function on a compact cell is Kurzweil–Henstock
+    integrable.
+
+??? proof "Proof"
+    A regulated function is, by definition, a uniform limit of step
+    functions. Apply Proposition 1.12.2 and Theorem 1.12.3.
+
+## Differentiability Estimates
+
+!!! lemma "Lemma (Two-sided interval estimate for differentiability)"
+    <a id="lem-1-13-1"></a>
+    Let $F:I\to\mathbb{R}$ be defined on a compact cell, let $x\in I$, and
+    let $\alpha\in\mathbb{R}$. The following are equivalent.
+
+    1. $F$ is differentiable at $x$ relative to $I$, with
+       $F'(x)=\alpha$.
+    2. For every $\varepsilon>0$, there is $\delta>0$ such that, whenever
+       $y,z\in I$ satisfy
+
+       $$
+       y\leq x\leq z,
+       \qquad
+       \max\{|x-y|,|z-x|\}<\delta,
+       $$
+
+       one has
+
+       $$
+       |F(z)-F(y)-\alpha(z-y)|
+       <\varepsilon|z-y|.
+       $$
+
+??? proof "Proof"
+    Suppose first that $F'(x)=\alpha$. Given $\varepsilon>0$, choose
+    $\delta>0$ so that, for $u\in I$ with $0<|u-x|<\delta$,
+
+    $$
+    |F(u)-F(x)-\alpha(u-x)|
+    <\varepsilon|u-x|.
+    $$
+
+    For $y\leq x\leq z$ as in (2), decompose
+
+    $$
+    \begin{aligned}
+    F(z)-F(y)-\alpha(z-y)
+    &=\bigl(F(z)-F(x)-\alpha(z-x)\bigr)\\
+    &\quad+\bigl(F(x)-F(y)-\alpha(x-y)\bigr).
+    \end{aligned}
+    $$
+
+    The two terms are bounded in absolute value by
+    $\varepsilon(z-x)$ and $\varepsilon(x-y)$, respectively. Their sum is
+    $\varepsilon(z-y)$, proving (2); the cases $y=x$ or $z=x$ are included
+    by interpreting the corresponding term as zero.
+
+    Conversely, apply (2) with $(y,z)=(x,x+h)$ when $h>0$, and with
+    $(y,z)=(x+h,x)$ when $h<0$. In both cases,
+
+    $$
+    |F(x+h)-F(x)-\alpha h|<\varepsilon|h|,
+    $$
+
+    which is the definition of differentiability at $x$ relative to $I$.
+
+!!! example "Example (Why the points must straddle $x$)"
+    <a id="ex-1-13-2"></a>
+    Define $F:[-1,1]\to\mathbb{R}$ by
+
+    $$
+    F(x):=
+    \begin{cases}
+    x^2\sin(1/x^2),&x\neq0,\\
+    0,&x=0.
+    \end{cases}
+    $$
+
+    Then $F$ is differentiable everywhere and $F'(0)=0$, but the conclusion
+    of Lemma 1.13.1 becomes false if $y$ and $z$ are allowed to lie on the
+    same side of $x=0$.
+
+??? proof "Proof"
+    At the origin,
+
+    $$
+    \frac{F(h)-F(0)}{h}=h\sin(1/h^2)\longrightarrow0.
+    $$
+
+    For $x\neq0$,
+
+    $$
+    F'(x)=2x\sin(1/x^2)-\frac{2}{x}\cos(1/x^2).
+    $$
+
+    With
+
+    $$
+    \xi_n:=\frac{1}{\sqrt{(2n+1)\pi}},
+    $$
+
+    one has $\xi_n\downarrow0$ and
+
+    $$
+    F'(\xi_n)=\frac{2}{\xi_n}\longrightarrow+\infty.
+    $$
+
+    Since $F$ is differentiable at each $\xi_n$, there are arbitrarily short
+    intervals $[y_n,z_n]$ containing $\xi_n$ and lying entirely to the right
+    of $0$ whose secant slopes are as close to $F'(\xi_n)$ as desired. Thus
+    $y_n,z_n\to0$ while
+
+    $$
+    \frac{|F(z_n)-F(y_n)|}{|z_n-y_n|}\longrightarrow+\infty.
+    $$
+
+    No estimate with $\alpha=F'(0)=0$ can therefore hold for arbitrary
+    nearby $y,z$ unless they are required to lie on opposite sides of $0$
+    (with equality allowed).

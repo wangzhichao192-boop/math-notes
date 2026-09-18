@@ -86,8 +86,9 @@ docs/<subject>/
   navigation, and overview material.
 - Aim for the style of a concise graduate-level mathematics textbook or set of
   course notes, rather than a chronological record of a lecture.
-- Begin each chapter with a short paragraph stating its subject, scope, and
-  main line of development. Organise the rest by conceptual dependency.
+- At the beginning of a chapter or section, add a short orienting paragraph
+  when useful, stating its subject, scope, motivation, or main line of
+  development. Organise the rest by conceptual dependency.
 - Make definitions precise, state all assumptions, and introduce notation
   before or when it is first used. Bold key terms.
 - Keep the prose concise and information-dense. Avoid decorative language,
