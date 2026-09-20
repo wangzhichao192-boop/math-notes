@@ -498,7 +498,7 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 .mn-cm-lemma { --mn-block-color: #00a991; }
 .mn-cm-proposition { --mn-block-color: #20a151; }
 .mn-cm-corollary { --mn-block-color: #ef7c1a; }
-.mn-cm-example { --mn-block-color: #448aff; }
+.mn-cm-example { --mn-block-color: #d4a72c; }
 .mn-cm-remark { --mn-block-color: #71808a; }
 .mn-cm-proof { --mn-block-color: #929a9f; border-left-style: dashed; }
 .mn-cm-color-definition { color: #2962ff; }
@@ -506,9 +506,12 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 .mn-cm-color-lemma { color: #00897b; }
 .mn-cm-color-proposition { color: #2e7d32; }
 .mn-cm-color-corollary { color: #d85f00; }
-.mn-cm-color-example { color: #2962ff; }
+.mn-cm-color-example { color: #a97800; }
 .mn-cm-color-remark { color: #56646c; }
 .mn-cm-color-proof { color: #7d858a; }
+
+[data-md-color-scheme="slate"] .mn-cm-example { --mn-block-color: #d6b46f; }
+[data-md-color-scheme="slate"] .mn-cm-color-example { color: #d6b46f; }
 
 .mn-typora-menu {
   position: fixed;

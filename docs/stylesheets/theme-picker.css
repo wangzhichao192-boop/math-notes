@@ -201,6 +201,33 @@ body[data-mn-style] .md-typeset blockquote {
   border-left-color: color-mix(in srgb, var(--mn-theme-accent) 52%, transparent);
 }
 
+@media screen and (max-width: 76.234375em) {
+  body[data-mn-style] .md-nav--primary,
+  body[data-mn-style] .md-nav--primary .md-nav,
+  body[data-mn-style] .md-nav--primary .md-nav__title ~ .md-nav__list {
+    background-color: var(--mn-theme-bg);
+  }
+  body[data-mn-style] .md-nav--primary .md-nav__title {
+    border-bottom: 1px solid var(--mn-theme-fg-lightest);
+    color: var(--mn-theme-fg-light);
+    background-color: color-mix(in srgb, var(--mn-theme-surface) 90%, var(--mn-theme-accent) 10%);
+    box-shadow: none;
+  }
+  body[data-mn-style] .md-nav--primary .md-nav__title[for="__drawer"] {
+    color: var(--mn-theme-fg);
+    background-color: var(--mn-theme-header);
+  }
+  body[data-mn-style] .md-nav--primary .md-nav__item {
+    border-top-color: var(--mn-theme-fg-lightest);
+  }
+  body[data-mn-style] .md-nav--primary .md-nav__link {
+    color: var(--mn-theme-fg-light);
+  }
+  body[data-mn-style] .md-nav--primary .md-nav__item--active > .md-nav__link {
+    color: var(--mn-theme-accent);
+  }
+}
+
 body[data-mn-style] .md-logo {
   position: relative;
 }

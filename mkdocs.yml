@@ -43,16 +43,16 @@ theme:
 
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
-  - stylesheets/extra.css?v=20260917-3
-  - stylesheets/editor.css?v=20260917-3
-  - stylesheets/theme-picker.css?v=20260918-1
+  - stylesheets/extra.css?v=20260920-1
+  - stylesheets/editor.css?v=20260920-1
+  - stylesheets/theme-picker.css?v=20260920-1
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
   - javascripts/numbering.js?v=20260914-1
-  - javascripts/editor.js?v=20260915-1
+  - javascripts/editor.js?v=20260920-1
   - javascripts/theme-picker.js?v=20260918-3
 
 markdown_extensions:
@@ -138,7 +138,7 @@ nav:
       - Hyperbolic Geometry: geometry-topology/hyperbolic-geometry.md
   - "测度论与实分析":
       - measure-theory-and-real-anaysis/index.md
-      - Countability, Series, and the Kurzweil–Henstock Integral: measure-theory-and-real-anaysis/countable-sets-and-number-series.md
+      - "Kurzweil–Henstock Integral": measure-theory-and-real-anaysis/countable-sets-and-number-series.md
   - 概率论:
       - probability/index.md
       - Foundations of Probability: probability/lesson1.md
@@ -158,6 +158,8 @@ nav:
       - "Inclusion–Exclusion and Restricted Counting": combinatorics/inclusion-exclusion.md
   - "常微分方程":
       - ode/index.md
-      - "Models, Geometry, and Well-Posedness": ode/models-geometry-and-well-posedness.md
+      - "Basic Concepts": ode/models-geometry-and-well-posedness.md
+      - "First-Order Equations": ode/first-order-equations.md
+      - "Local Theory": ode/local-theory.md
   - 参考:
       - 写作指南: WRITING_GUIDE.md

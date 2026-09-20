@@ -1350,7 +1350,53 @@
     state.mathPopover = null;
   }
 
-  async function enterEditor(payload, generation) {
+  function captureReadingAnchor(article, source, modules) {
+    const sourceHeadings = modules.extractHeadings(source);
+    const renderedHeadings = Array.from(article.querySelectorAll("h1, h2, h3, h4"));
+    if (!sourceHeadings.length || !renderedHeadings.length) return null;
+
+    const viewportY = Math.min(Math.max(window.innerHeight * 0.38, 120), window.innerHeight - 80);
+    const documentY = window.scrollY + viewportY;
+    const headingTops = renderedHeadings.map(heading => heading.getBoundingClientRect().top + window.scrollY);
+    let renderedIndex = 0;
+    headingTops.forEach((top, index) => {
+      if (top <= documentY) renderedIndex = index;
+    });
+
+    const renderedHeading = renderedHeadings[renderedIndex];
+    const renderedTitle = (renderedHeading.textContent || "").replace(/¶/g, "").trim();
+    const renderedLevel = Number(renderedHeading.tagName.slice(1));
+    let sourceIndex = sourceHeadings.findIndex(heading =>
+      heading.level === renderedLevel && heading.title === renderedTitle);
+    if (sourceIndex < 0 && renderedHeadings.length === sourceHeadings.length) sourceIndex = renderedIndex;
+    if (sourceIndex < 0) return null;
+
+    const sectionTop = headingTops[renderedIndex];
+    const articleBottom = article.getBoundingClientRect().bottom + window.scrollY;
+    const sectionBottom = headingTops[renderedIndex + 1] ?? articleBottom;
+    const progress = sectionBottom > sectionTop
+      ? Math.max(0, Math.min(1, (documentY - sectionTop) / (sectionBottom - sectionTop)))
+      : 0;
+    const sourceFrom = sourceHeadings[sourceIndex].contentFrom;
+    const sourceTo = sourceHeadings[sourceIndex + 1]?.from ?? source.length;
+    return {
+      position: Math.round(sourceFrom + (sourceTo - sourceFrom) * progress),
+      viewportY
+    };
+  }
+
+  function restoreReadingAnchor(state, anchor) {
+    if (!anchor) return;
+    const position = Math.max(0, Math.min(state.view.state.doc.length, anchor.position));
+    state.view.dispatch({ selection: { anchor: position }, scrollIntoView: true });
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (state.destroyed) return;
+      const coordinates = state.view.coordsAtPos(position, 1);
+      if (coordinates) window.scrollBy(0, coordinates.top - anchor.viewportY);
+    }));
+  }
+
+  async function enterEditor(payload, generation, preserveReadingPosition = false) {
     if (!LOCAL_HOSTS.has(location.hostname)) return;
     if (activeEditor || openingGeneration === generation) return;
     openingGeneration = generation;
@@ -1386,6 +1432,9 @@
     if (draft && draft.source !== payload.source && (draftCompatible || confirm("发现基于旧版本的浏览器草稿。要恢复它吗？恢复后不会覆盖磁盘上的新版本，可先导出对照。"))) {
       source = draft.source;
     }
+    const readingAnchor = preserveReadingPosition && source === payload.source
+      ? captureReadingAnchor(article, source, modules)
+      : null;
 
     const originalHtml = article.innerHTML;
     article.innerHTML = "";
@@ -1728,6 +1777,7 @@
       if (!event.target.closest(".mn-typora-menu, [data-action=add]")) hideMenu(state);
     });
     state.view.focus();
+    restoreReadingAnchor(state, readingAnchor);
     scheduleMathPopover(state);
   }
 
@@ -1768,7 +1818,7 @@
     if (!shortcut || event.repeat || !currentPayload) return;
     event.preventDefault();
     if (activeEditor) leaveEditor(activeEditor);
-    else enterEditor(currentPayload, pageGeneration);
+    else enterEditor(currentPayload, pageGeneration, true);
   });
 
   document$.subscribe(initialize);

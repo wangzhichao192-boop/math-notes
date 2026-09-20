@@ -1,10 +1,10 @@
-# Models, Geometry, and Well-Posedness
+# Basic Concepts
 
-An ordinary differential equation describes how a quantity changes along one independent variable. This chapter develops the vocabulary needed to read such equations, connects equations with direction fields and phase space, and separates three questions that are often confused: whether a solution exists, whether it is unique, and whether it has an elementary formula.
+An ordinary differential equation describes how a quantity changes along one independent variable. This chapter introduces the basic language of ODEs, their geometric interpretation, and the distinction between explicit solvability and well-posedness.
 
 The emphasis is practical: identify the structure first, then choose an analytic, geometric, or numerical tool suited to the question.
 
-## Differential Equations as Models
+## Differential Equations
 
 !!! definition "Definition (Ordinary differential equation)"
     <a id="def-ordinary-differential-equation"></a>
@@ -97,13 +97,35 @@ The same mathematical language describes systems from mechanics, population dyna
 
     Thus the temperature difference $T-T_a$ decays exponentially.
 
+!!! example "Example (Drug elimination)"
+    If $C(t)$ is the concentration of a drug and the body removes a fixed fraction of the present amount per unit time, then
+
+    $$
+    C'(t)=-kC(t),
+    \qquad k>0.
+    $$
+
+    Hence $C(t)=C_0e^{-kt}$. The same proportional-change law produces exponential growth when the coefficient is positive and exponential decay when it is negative.
+
 These examples suggest three complementary ways to study an ODE.
 
 + **Analytic methods** seek exact or implicit formulas.
 + **Qualitative methods** infer monotonicity, equilibria, oscillation, and long-time behavior without solving explicitly.
 + **Numerical methods** approximate a selected solution from initial data.
 
-## Order, Linearity, and Solutions
+These models belong to a common cycle:
+
+$$
+\text{phenomenon}
+\longrightarrow\text{assumptions}
+\longrightarrow\text{ODE}
+\longrightarrow\text{analysis or computation}
+\longrightarrow\text{prediction}.
+$$
+
+Comparison with data may then force a revision of the assumptions. The equation is therefore a model of the mechanisms relevant to a question, not the phenomenon itself. The same viewpoint applies in epidemiology, circuits, chemical kinetics, control, economics, and orbital mechanics.
+
+The models above lead to a common set of structural questions: what is the order of the equation, is it linear, and what counts as a solution?
 
 !!! definition "Definition (Order)"
     <a id="def-order"></a>
@@ -202,6 +224,15 @@ These examples suggest three complementary ways to study an ODE.
 
     If a unique solution exists, these $n$ conditions determine the $n$ free constants locally.
 
+!!! example "Example (Selecting one trajectory)"
+    The equation $y'=2y$ has the family $y=Ce^{2t}$. The initial condition $y(0)=3$ selects the single solution
+
+    $$
+    y(t)=3e^{2t}.
+    $$
+
+    The differential equation gives the law of evolution; the initial condition specifies where that evolution begins.
+
 The reverse problem is also useful: a family of curves can determine an ODE by eliminating its parameters.
 
 !!! example "Example (Eliminating parameters)"
@@ -221,7 +252,7 @@ The reverse problem is also useful: a family of curves can determine an ODE by e
 
     The parameter Jacobian is $x^2$, so the family is regular on intervals not containing $x=0$.
 
-## Integral Curves and Direction Fields
+## Geometric Interpretation
 
 For a first-order equation in explicit form,
 
@@ -316,7 +347,7 @@ $$
 
     The approximation $25/16=1.5625$ is below the exact value $e^{1/2}\approx1.6487$. Decreasing $h$ usually improves the approximation, but a complete error analysis requires additional hypotheses on $f$.
 
-## Phase Space
+The same geometric viewpoint applies to higher-order equations after they are rewritten as first-order systems. Their solutions then appear as trajectories in phase space.
 
 A higher-order scalar equation can be rewritten as a first-order system. If
 
@@ -363,7 +394,7 @@ The vector $u=(u_1,\ldots,u_n)$ is the **state**, and the space of all states is
 
     is constant, because $dE/dt=mv v'+kx x'=0$. Hence nonzero phase trajectories are ellipses. The graph $t\mapsto x(t)$ oscillates, while the phase trajectory records position and velocity simultaneously.
 
-## Recognizing Solvable Forms
+## Solvability and Uniqueness
 
 The word *solve* can mean an explicit formula, an implicit relation, a convergent approximation, or a qualitative description. These outcomes should not be conflated.
 
@@ -430,7 +461,7 @@ $$
 
 has a locally unique solution through every initial point, yet its general solution is not obtainable by elementary quadrature. Direction fields, comparison arguments, series, and numerical methods are therefore not substitutes of last resort; they are central ways of understanding ODEs.
 
-## Existence, Uniqueness, and Maximal Intervals
+Explicit solvability is only one issue. For an initial value problem, existence, uniqueness, and continuation must be considered separately.
 
 For an IVP $y'=f(x,y)$, $y(x_0)=y_0$, ask three questions in order.
 
@@ -499,7 +530,9 @@ For an IVP $y'=f(x,y)$, $y(x_0)=y_0$, ask three questions in order.
 
 The practical lesson is that an ODE is more than a symbolic integration problem. Its geometry, initial data, regularity, and interval of definition are part of the problem from the beginning.
 
-## References
+---
 
-+ *Ordinary Differential Equations*, lecture notes, Sections 1.0--1.2.
-+ 柳彬，《常微分方程》，北京大学出版社，2021，第 1 章，并参考第 3 章关于存在性与唯一性的例子。
+**Sources.**
+
++ Instructor materials, Lecture 1 Parts 1--2: models, the basic language of ODEs, solution families, initial value problems, and direction fields.
++ 柳彬，《常微分方程》，北京大学出版社，2021，Chapter 1; used for supplementary examples and terminology checks.

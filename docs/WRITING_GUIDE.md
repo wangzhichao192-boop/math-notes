@@ -194,6 +194,28 @@ Collapsible proofs are `???` (instead of `!!!`) and the content follows the same
     The intersection inclusion follows from ...
 ```
 
+### 3.5 Ideas use `??? idea "Idea"`
+
+Use an `idea` block for an optional proof strategy, heuristic, or conceptual
+road map that helps the reader without forming part of the main exposition.
+A proof strategy belongs in this block instead of an ordinary bold paragraph.
+Use idea blocks sparingly: add one only when it gives a genuinely useful
+conceptual shortcut that is not already clear from the proof itself.
+
+Idea blocks are **always collapsed by default**. Use `???`, never `!!!` or
+`???+`:
+
+```markdown
+??? idea "Idea"
+    Rewrite the differential equation as an integral equation, construct
+    successive approximations, and use the Lipschitz bound to prove uniform
+    convergence.
+```
+
+The title is always `"Idea"`; there is no alternative title. The block is not
+numbered. Do not attach an idea block mechanically to every proof. A complete
+proof still uses `??? proof "Proof"`.
+
 ---
 
 ## 4. Admonition skeleton
@@ -228,7 +250,7 @@ Do **not** write:
 The site automatically prepends a `chapter.section.block` number to each
 theorem-style title. Definitions, theorems, propositions, lemmas, corollaries,
 examples, and remarks share one block counter. A new `##` heading resets the
-block counter; proofs and ordinary notes are not numbered.
+block counter; proofs, ideas, and ordinary notes are not numbered.
 
 ```markdown
 !!! definition "Definition (Composition law)"
@@ -248,6 +270,9 @@ block counter; proofs and ordinary notes are not numbered.
 
 ??? proof "Proof"
     Optional collapsible proof.
+
+??? idea "Idea"
+    Optional strategy or conceptual road map.
 ```
 
 An `<a id="...">` anchor is optional and is used only as a stable link target.
@@ -327,7 +352,7 @@ $EDITOR docs/<subject>/<topic>.md
 node scripts/check_math.js
 
 # 3. Preview locally
-mkdocs serve   # http://127.0.0.1:8000
+mkdocs serve -a 127.0.0.1:8765   # http://127.0.0.1:8765/math-notes/
 ```
 ---
 
@@ -339,5 +364,6 @@ mkdocs serve   # http://127.0.0.1:8000
 | Block math (own paragraph, **not** inside a list) | `$$ ... $$` — blank line before **and** after; none before the closing `$$` |
 | Definition / Theorem / Lemma / etc. | `!!! <kind> "Title"` then 4-space-indented body |
 | Collapsible proof | `??? proof "Proof"` |
+| Collapsible idea or proof strategy | `??? idea "Idea"` — use sparingly |
 | Cross-reference | `[the definition](#def-composition-law)` same page · `[the theorem](groups.md#thm-first-isomorphism)` cross-file |
 | Optional stable anchor | `<a id="def-composition-law"></a>` right after the admonition title |

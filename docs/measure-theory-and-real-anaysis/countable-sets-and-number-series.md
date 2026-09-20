@@ -1,10 +1,10 @@
-# Countability, Series, and the Kurzweil–Henstock Integral
+# Kurzweil–Henstock Integral
 
 This chapter develops the countability and series results needed for real
 analysis, then builds the Kurzweil–Henstock integral from interval divisions
 and gauges. After establishing its structural properties—including
-subdivision, finite additivity, and stability under uniform limits—it closes
-with a local interval estimate for differentiable functions.
+subdivision, finite additivity, and stability under uniform limits—it develops
+the fundamental theorem of calculus and change-of-variables formulas.
 
 ## Countability and Number Series
 
@@ -614,7 +614,7 @@ with a local interval estimate for differentiable functions.
 
     Letting $\varepsilon\downarrow0$ proves the claim.
 
-## Gauges and Kurzweil–Henstock Integration
+## Gauges and K-H Integration
 
 !!! definition "Definition (Gauge)"
     <a id="def-1-8-1"></a>
@@ -655,6 +655,18 @@ with a local interval estimate for differentiable functions.
     $$
     J\subseteq[x-\delta(x),x+\delta(x)].
     $$
+
+!!! note "McShane-type divisions"
+    A **$\delta$-fine $M$-division** has the same component-cell and covering
+    requirements as a $\delta$-fine $P$-division, but its pairs $(J,x)$ are
+    only required to satisfy $x\in I$ and
+
+    $$
+    J\subseteq[x-\delta(x),x+\delta(x)];
+    $$
+
+    the condition $x\in J$ is dropped. Thus the tag still controls the size
+    of its cell, but need not lie inside that cell.
 
 !!! lemma "Lemma (Multiplicity of a tag)"
     <a id="lem-1-8-4"></a>
@@ -1477,3 +1489,566 @@ with a local interval estimate for differentiable functions.
     No estimate with $\alpha=F'(0)=0$ can therefore hold for arbitrary
     nearby $y,z$ unless they are required to lie on opposite sides of $0$
     (with equality allowed).
+
+!!! theorem "Theorem (Fundamental theorem of calculus)"
+    <a id="thm-1-13-3"></a>
+    Let $I$ be a compact cell and let $F:I\to\mathbb{R}$ be differentiable
+    everywhere relative to $I$. Then $F'\in\operatorname{KH}(I)$ and
+
+    $$
+    \int_I F'=F(\max I)-F(\min I).
+    $$
+
+??? proof "Proof"
+    Write $a=\min I$ and $b=\max I$. Fix $\varepsilon>0$. For every
+    $x\in I$, Lemma 1.13.1 supplies $\delta(x)>0$ such that, whenever
+    $y\leq x\leq z$ and $|x-y|,|z-x|\leq\delta(x)$,
+
+    $$
+    |F(z)-F(y)-F'(x)(z-y)|
+    <\frac{\varepsilon}{\lambda(I)}(z-y).
+    $$
+
+    Thus $\delta$ is a gauge on $I$. If $\Pi$ is a $\delta$-fine tagged
+    division, then for each $(J,x)\in\Pi$ the endpoints of $J$ straddle $x$,
+    so
+
+    $$
+    \left|F(\max J)-F(\min J)-F'(x)\lambda(J)\right|
+    <\frac{\varepsilon}{\lambda(I)}\lambda(J).
+    $$
+
+    The increments of $F$ telescope over the component cells of $\Pi$:
+
+    $$
+    F(b)-F(a)
+    =\sum_{(J,x)\in\Pi}
+    \bigl(F(\max J)-F(\min J)\bigr).
+    $$
+
+    Consequently,
+
+    $$
+    \begin{aligned}
+    |F(b)-F(a)-S(\Pi,F')|
+    &\leq\sum_{(J,x)\in\Pi}
+    \left|F(\max J)-F(\min J)-F'(x)\lambda(J)\right|\\
+    &<\frac{\varepsilon}{\lambda(I)}
+    \sum_{(J,x)\in\Pi}\lambda(J)
+    =\varepsilon.
+    \end{aligned}
+    $$
+
+    This is precisely the defining estimate for the stated integral.
+
+!!! example "Example (An unbounded derivative)"
+    <a id="ex-1-13-4"></a>
+    For the function
+
+    $$
+    F(x)=
+    \begin{cases}
+    x^2\sin(1/x^2),&x\neq0,\\
+    0,&x=0,
+    \end{cases}
+    \qquad -1\leq x\leq1,
+    $$
+
+    the derivative displayed in Example 1.13.2 is unbounded near $0$.
+    Nevertheless the fundamental theorem shows that $F'$ is
+    Kurzweil–Henstock integrable and
+
+    $$
+    \int_{[-1,1]}F'=F(1)-F(-1)=0.
+    $$
+
+    This illustrates that the Kurzweil–Henstock integral recovers every
+    everywhere-defined derivative, including derivatives that are unbounded.
+
+!!! theorem "Theorem (Fundamental theorem with countably many exceptional points)"
+    <a id="thm-1-13-5"></a>
+    Let $I$ be a compact cell and let $F:I\to\mathbb{R}$ be continuous.
+    Assume that
+
+    $$
+    D:=I\setminus\{x\in I:F\text{ is differentiable at }x\}
+    $$
+
+    is countable. Define the zero-filled derivative $f:I\to\mathbb{R}$ by
+
+    $$
+    f(x):=
+    \begin{cases}
+    F'(x),&x\notin D,\\
+    0,&x\in D.
+    \end{cases}
+    $$
+
+    Then $f\in\operatorname{KH}(I)$ and
+
+    $$
+    \int_I f=F(\max I)-F(\min I).
+    $$
+
+??? proof "Proof"
+    If $D=\varnothing$, this is Theorem 1.13.3. Otherwise choose an injection
+    $m:D\to\mathbb{N}_{+}$. Fix $\varepsilon>0$ and put
+
+    $$
+    \rho:=\frac{\varepsilon}{\lambda(I)+4}.
+    $$
+
+    If $x\notin D$, use Lemma 1.13.1 to choose $\delta(x)>0$ so that every
+    compact cell $J\subseteq I$ satisfying
+    $x\in J\subseteq[x-\delta(x),x+\delta(x)]$ obeys
+
+    $$
+    \left|F(\max J)-F(\min J)-f(x)\lambda(J)\right|
+    <\rho\lambda(J).
+    \tag{1}
+    $$
+
+    If $x\in D$, continuity of $F$ at $x$ gives $\delta(x)>0$ such that
+
+    $$
+    |F(y)-F(x)|<\frac{\rho}{2^{m(x)}}
+    \quad\text{whenever}\quad
+    y\in I, |x-y|\leq\delta(x).
+    \tag{2}
+    $$
+
+    Let $\Pi$ be a $\delta$-fine tagged division. Telescoping and the
+    definition $f|_D=0$ give
+
+    $$
+    \begin{aligned}
+    |F(\max I)-F(\min I)-S(\Pi,f)|
+    &\leq
+    \sum_{\substack{(J,x)\in\Pi\\x\notin D}}
+    \left|F(\max J)-F(\min J)-f(x)\lambda(J)\right|\\
+    &\quad+
+    \sum_{\substack{(J,x)\in\Pi\\x\in D}}
+    |F(\max J)-F(\min J)|.
+    \end{aligned}
+    $$
+
+    The first sum is smaller than $\rho\lambda(I)$ by (1). If $x\in D$
+    and $(J,x)\in\Pi$, both endpoints of $J$ lie within $\delta(x)$ of $x$,
+    so (2) and the triangle inequality give
+
+    $$
+    |F(\max J)-F(\min J)|
+    <\frac{2\rho}{2^{m(x)}}.
+    $$
+
+    By Lemma 1.8.4, a fixed tag occurs in at most two members of $\Pi$.
+    Since $m$ is injective, the exceptional contribution is at most
+
+    $$
+    \sum_{x\in D}2\cdot\frac{2\rho}{2^{m(x)}}
+    \leq4\rho\sum_{n=1}^{\infty}2^{-n}=4\rho.
+    $$
+
+    Hence
+
+    $$
+    |F(\max I)-F(\min I)-S(\Pi,f)|
+    <\rho\bigl(\lambda(I)+4\bigr)=\varepsilon,
+    $$
+
+    proving both integrability and the formula.
+
+!!! definition "Definition (Exceptional sets for the fundamental theorem)"
+    <a id="def-1-13-6"></a>
+    Let $\mathcal E_{\mathrm{FTC}}(I)$ be the family of sets
+    $E\in\mathcal E_{\mathrm{null},\mathrm{KH}}(I)$ with the following
+    property: whenever $F:I\to\mathbb{R}$ is continuous and differentiable
+    on $I\setminus E$, its zero-filled derivative is KH-integrable and
+
+    $$
+    \int_I F'=F(\max I)-F(\min I).
+    $$
+
+    Theorem 1.13.5 and Corollary 1.11.2 show that every countable subset of
+    $I$ belongs to $\mathcal E_{\mathrm{FTC}}(I)$.
+
+!!! corollary "Corollary (Cantor's constant-function theorem)"
+    <a id="cor-1-13-7"></a>
+    Let $F:I\to\mathbb{R}$ be continuous and differentiable except at
+    countably many points. If $F'(x)=0$ wherever the derivative exists, then
+    $F$ is constant.
+
+??? proof "Proof"
+    Write $I=[a,b]$. For any $x\in I$, apply Theorem 1.13.5 to the restriction
+    of $F$ to $[a,x]$ when $x>a$; the case $x=a$ is immediate. Its
+    zero-filled derivative is identically zero, and therefore
+
+    $$
+    F(x)-F(a)=\int_{[a,x]}0=0.
+    $$
+
+    Thus $F(x)=F(a)$ for every $x\in I$.
+
+## Change of Variables
+
+The change-of-variables formula is first established for a monotone
+reparametrisation. Finite additivity then extends it to continuous maps with
+finitely many monotonicity pieces, where the Banach indicatrix records how
+often the parametrisation covers each value.
+
+!!! lemma "Lemma (Transporting tagged divisions)"
+    <a id="lem-1-14-1"></a>
+    Let $I$ and $\widetilde I$ be compact cells, and let
+    $\phi:I\to\widetilde I$ be a continuous monotone bijection. If $\Pi$ is
+    a tagged division of $I$, then
+
+    $$
+    \widetilde\Pi
+    :=\{(\phi(J),\phi(x)):(J,x)\in\Pi\}
+    $$
+
+    is a tagged division of $\widetilde I$.
+
+??? proof "Proof"
+    The continuous image of a compact interval under a monotone map is the
+    compact interval with the corresponding endpoint values, so every
+    $\phi(J)$ is a compact cell. Injectivity ensures that images of
+    non-overlapping component cells remain non-overlapping and that
+    $\phi(x)\in\phi(J)$. Finally,
+
+    $$
+    \bigcup_{(J,x)\in\Pi}\phi(J)
+    =\phi\left(\bigcup_{(J,x)\in\Pi}J\right)
+    =\phi(I)=\widetilde I.
+    $$
+
+!!! theorem "Theorem (Monotone change of variables)"
+    <a id="thm-1-14-2"></a>
+    Let $I$ and $\widetilde I$ be compact cells, let
+    $f\in\operatorname{KH}(\widetilde I)$, and let
+    $\phi:I\to\widetilde I$ be a continuous monotone bijection.
+
+    If $\phi$ is differentiable everywhere on $I$, then
+
+    $$
+    (f\circ\phi)|\phi'|\in\operatorname{KH}(I),
+    \qquad
+    \int_I(f\circ\phi)|\phi'|=\int_{\widetilde I}f.
+    \tag{1}
+    $$
+
+    The same conclusion holds when $\phi$ fails to be differentiable at only
+    countably many points, provided $\phi'$ is defined to be $0$ there.
+
+??? proof "Proof — the everywhere-differentiable case"
+    Fix $\varepsilon>0$. Choose a gauge $\widetilde\delta$ on
+    $\widetilde I$ such that every $\widetilde\delta$-fine tagged division
+    $\widetilde\Pi$ satisfies
+
+    $$
+    \left|\int_{\widetilde I}f-S(\widetilde\Pi,f)\right|
+    <\frac{\varepsilon}{2}.
+    \tag{2}
+    $$
+
+    Because $\phi$ is continuous on compact $I$, it is uniformly continuous.
+    Hence there is a function
+    $\eta:\mathbb{R}_{>0}\to\mathbb{R}_{>0}$ such that
+
+    $$
+    |u-v|\leq\eta(s)
+    \quad\Longrightarrow\quad
+    |\phi(u)-\phi(v)|\leq s
+    \qquad(u,v\in I).
+    $$
+
+    Define
+
+    $$
+    \delta_1(x):=\eta\bigl(\widetilde\delta(\phi(x))\bigr).
+    $$
+
+    If $\Pi$ is $\delta_1$-fine, then the transported division from
+    Lemma 1.14.1 is $\widetilde\delta$-fine.
+
+    For $x\in I$, set
+
+    $$
+    r(x):=
+    \frac{\varepsilon}
+    {2\bigl(1+\lambda(I)\bigr)\bigl(1+|f(\phi(x))|\bigr)}.
+    $$
+
+    Differentiability of $\phi$ and Lemma 1.13.1 give a second gauge
+    $\delta_2$ such that, whenever
+    $x\in J\subseteq[x-\delta_2(x),x+\delta_2(x)]$,
+
+    $$
+    \left|\lambda(\phi(J))-|\phi'(x)|\lambda(J)\right|
+    <r(x)\lambda(J).
+    \tag{3}
+    $$
+
+    The absolute values account for either orientation of $\phi$. Let
+    $\delta=\min\{\delta_1,\delta_2\}$ and let $\Pi$ be a $\delta$-fine
+    tagged division. Then
+
+    $$
+    \begin{aligned}
+    &\left|\int_{\widetilde I}f
+      -S\bigl(\Pi,(f\circ\phi)|\phi'|\bigr)\right|\\
+    &\quad\leq
+    \left|\int_{\widetilde I}f-S(\widetilde\Pi,f)\right|\\
+    &\qquad+
+    \sum_{(J,x)\in\Pi}|f(\phi(x))|
+    \left|\lambda(\phi(J))-|\phi'(x)|\lambda(J)\right|\\
+    &\quad<\frac{\varepsilon}{2}
+      +\frac{\varepsilon}{2(1+\lambda(I))}
+       \sum_{(J,x)\in\Pi}\lambda(J)
+    <\varepsilon.
+    \end{aligned}
+    $$
+
+    This proves (1).
+
+??? proof "Proof — countably many exceptional points"
+    Let $D$ be the exceptional set and choose an injection
+    $m:D\to\mathbb N_+$. Retain the gauge $\delta_1$ above. At points
+    $x\notin D$, choose $\delta_2(x)$ from (3), with its error budget reduced
+    by a factor of $2$. At $x\in D$, continuity of $\phi$ supplies
+    $\delta_2(x)>0$ such that
+
+    $$
+    |\phi(y)-\phi(x)|
+    <\frac{\varepsilon}
+    {2^{m(x)+4}\bigl(1+|f(\phi(x))|\bigr)}
+    \quad\text{if}\quad |x-y|\leq\delta_2(x).
+    \tag{4}
+    $$
+
+    Set $\delta=\min\{\delta_1,\delta_2\}$. For a $\delta$-fine tagged
+    division, the terms tagged outside $D$ are estimated as before. If
+    $(J,x)$ is tagged at $x\in D$, then $\phi'(x)=0$ by convention, while
+    (4) gives
+
+    $$
+    \lambda(\phi(J))
+    <\frac{2\varepsilon}
+    {2^{m(x)+4}\bigl(1+|f(\phi(x))|\bigr)}.
+    $$
+
+    A tag occurs at most twice, so the total contribution of all exceptional
+    tags is bounded by
+
+    $$
+    \sum_{x\in D}2|f(\phi(x))|
+    \frac{2\varepsilon}
+    {2^{m(x)+4}\bigl(1+|f(\phi(x))|\bigr)}
+    \leq\frac{\varepsilon}{4}.
+    $$
+
+    Together with (2) and the reduced regular-point error, the total error is
+    smaller than $\varepsilon$. Thus (1) remains valid.
+
+!!! definition "Definition (Banach indicatrix)"
+    <a id="def-1-14-3"></a>
+    For a map $\phi:I\to\mathbb{R}$ and $y\in\mathbb{R}$, its
+    **multiplicity function**, or **Banach indicatrix**, is
+
+    $$
+    N(\phi,y):=
+    \begin{cases}
+    \#\phi^{-1}(\{y\}),&\phi^{-1}(\{y\})\text{ is finite},\\
+    +\infty,&\phi^{-1}(\{y\})\text{ is infinite}.
+    \end{cases}
+    $$
+
+    If $\phi$ is injective, then
+    $N(\phi,\cdot)=\mathbf 1_{\phi(I)}$.
+
+    If $\Gamma$ is a finite division of $I$, then
+
+    $$
+    N(\phi,y)=\sum_{K\in\Gamma}N(\phi|_K,y)
+    $$
+
+    except possibly at the finitely many values attained at common endpoints
+    of cells in $\Gamma$, where the right-hand side may count the same domain
+    point twice.
+
+!!! theorem "Theorem (Piecewise-monotone area formula)"
+    <a id="thm-1-14-4"></a>
+    Let $I$ and $\widetilde I$ be compact cells, and let
+    $\phi:I\to\widetilde I$ be continuous and piecewise strictly monotone:
+    there is a finite division $\Gamma$ of $I$ such that every restriction
+    $\phi|_K$ is a monotone bijection from $K$ onto $\phi(K)$. Assume that
+    $\phi$ is differentiable except at countably many points, with
+    $\phi'=0$ at the exceptional points. If
+    $f\in\operatorname{KH}(\widetilde I)$, then
+
+    $$
+    (f\circ\phi)|\phi'|\in\operatorname{KH}(I),
+    \qquad
+    fN(\phi,\cdot)\in\operatorname{KH}(\widetilde I),
+    $$
+
+    and
+
+    $$
+    \int_I(f\circ\phi)|\phi'|
+    =\int_{\widetilde I}f(y)N(\phi,y)\,dy.
+    \tag{5}
+    $$
+
+??? proof "Proof"
+    For each $K\in\Gamma$, restriction to the compact cell $\phi(K)$ and
+    Theorem 1.14.2 give
+
+    $$
+    \int_K(f\circ\phi)|\phi'|
+    =\int_{\phi(K)}f.
+    \tag{6}
+    $$
+
+    Finite additivity therefore makes the left-hand integrand in (5)
+    KH-integrable and gives
+
+    $$
+    \int_I(f\circ\phi)|\phi'|
+    =\sum_{K\in\Gamma}\int_{\phi(K)}f.
+    \tag{7}
+    $$
+
+    Away from the finite set of images of the partition endpoints, strict
+    monotonicity on each piece yields
+
+    $$
+    N(\phi,y)=\sum_{K\in\Gamma}\mathbf 1_{\phi(K)}(y).
+    $$
+
+    Consequently $fN(\phi,\cdot)$ differs at only finitely many points from
+
+    $$
+    \sum_{K\in\Gamma}f\mathbf 1_{\phi(K)}.
+    $$
+
+    Each summand is the zero extension of $f|_{\phi(K)}$ and is integrable by
+    Corollary 1.11.6. Invariance under finite modification and (7) now give
+    both the asserted integrability and formula (5).
+
+!!! definition "Definition (Oriented integrals and oriented multiplicity)"
+    <a id="def-1-14-5"></a>
+    For $a,b$ in a compact interval on which $f$ is KH-integrable, define
+
+    $$
+    \int_a^b f:=
+    \begin{cases}
+    \displaystyle\int_{[a,b]}f,&a<b,\\
+    0,&a=b,\\
+    \displaystyle-\int_{[b,a]}f,&a>b.
+    \end{cases}
+    $$
+
+    Let $\phi:I\to\mathbb{R}$ be continuous and piecewise strictly
+    monotone. Its local orientation is
+
+    $$
+    \sigma(\phi,x):=
+    \begin{cases}
+    1,&\phi\text{ is strictly increasing near }x,\\
+    -1,&\phi\text{ is strictly decreasing near }x,\\
+    0,&\text{otherwise},
+    \end{cases}
+    $$
+
+    where neighbourhoods are relative to $I$. The **oriented multiplicity**
+    is
+
+    $$
+    N_{\mathrm{or}}(\phi,y)
+    :=\sum_{x\in\phi^{-1}(\{y\})}\sigma(\phi,x).
+    $$
+
+!!! theorem "Theorem (Oriented change of variables)"
+    <a id="thm-1-14-6"></a>
+    Let $I=[a,b]$ and let $\widetilde I$ be a compact cell. Suppose that
+    $\phi:I\to\widetilde I$ is continuous and piecewise strictly monotone,
+    and differentiable except at countably many points. If
+    $f\in\operatorname{KH}(\widetilde I)$, then, after setting $\phi'=0$ at
+    the exceptional points,
+
+    $$
+    (f\circ\phi)\phi'\in\operatorname{KH}(I)
+    $$
+
+    and
+
+    $$
+    \int_a^b(f\circ\phi)(x)\phi'(x)\,dx
+    =\int_{\phi(a)}^{\phi(b)}f(y)\,dy.
+    \tag{8}
+    $$
+
+    Equivalently,
+
+    $$
+    \int_I(f\circ\phi)\phi'
+    =\int_{\widetilde I}f(y)N_{\mathrm{or}}(\phi,y)\,dy.
+    \tag{9}
+    $$
+
+??? proof "Proof"
+    Order the cells of a monotonicity division as
+    $K_j=[x_{j-1},x_j]$, where
+    $a=x_0<\cdots<x_N=b$. On $K_j$, Theorem 1.14.2 and the sign of
+    $\phi'$ give
+
+    $$
+    \int_{x_{j-1}}^{x_j}(f\circ\phi)\phi'
+    =\int_{\phi(x_{j-1})}^{\phi(x_j)}f.
+    $$
+
+    Finite additivity on the left and cancellation of successive oriented
+    integrals on the right yield
+
+    $$
+    \sum_{j=1}^{N}
+    \int_{\phi(x_{j-1})}^{\phi(x_j)}f
+    =\int_{\phi(a)}^{\phi(b)}f,
+    $$
+
+    proving (8). Alternatively, summing the signed indicator of each image
+    cell shows, away from finitely many endpoint values, that
+    $N_{\mathrm{or}}(\phi,\cdot)$ is the oriented indicator from $\phi(a)$
+    to $\phi(b)$. Finite-modification invariance gives (9).
+
+!!! remark "Remark (Orientation matters)"
+    <a id="rem-1-14-7"></a>
+    If $\phi$ is decreasing, the unoriented formula reads
+
+    $$
+    \int_{[a,b]}(f\circ\phi)|\phi'|
+    =\int_{[\phi(b),\phi(a)]}f.
+    $$
+
+    The signed formula instead has
+
+    $$
+    \int_a^b(f\circ\phi)\phi'
+    =-\int_{[\phi(b),\phi(a)]}f
+    =\int_{\phi(a)}^{\phi(b)}f.
+    $$
+
+    Thus oriented endpoint notation makes the same substitution law valid
+    for increasing, decreasing, and piecewise-monotone maps.
+
+!!! note "Further directions"
+    For $f\in\operatorname{KH}([a,b])$, the indefinite integral
+
+    $$
+    x\longmapsto\int_a^x f
+    $$
+
+    leads to the Saks–Henstock lemma and the Hake theorem. These results
+    refine the control of sums over partial and $M$-divisions. The same
+    fundamental-theorem framework also leads to integration by parts.

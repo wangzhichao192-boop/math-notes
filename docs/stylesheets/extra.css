@@ -177,6 +177,16 @@
   background-color: rgba(255, 109, 0, 0.1);
 }
 
+/* Example — amber */
+.md-typeset .admonition.example,
+.md-typeset details.example {
+  border-color: #d4a72c;
+}
+.md-typeset .example > .admonition-title,
+.md-typeset details.example > summary {
+  background-color: rgba(212, 167, 44, 0.12);
+}
+
 /* Remark — slate */
 .md-typeset .admonition.remark,
 .md-typeset details.remark {
@@ -197,6 +207,16 @@
 .md-typeset .proof > .admonition-title,
 .md-typeset details.proof > summary {
   background-color: rgba(158, 158, 158, 0.12);
+}
+
+/* Idea — collapsible OI-Wiki-style hint */
+.md-typeset .admonition.idea,
+.md-typeset details.idea {
+  border-color: #009688;
+}
+.md-typeset .idea > .admonition-title,
+.md-typeset details.idea > summary {
+  background-color: rgba(0, 150, 136, 0.1);
 }
 
 /* =====================================================================
@@ -292,13 +312,13 @@
   box-shadow: 0 0 0 1px rgba(185, 196, 207, 0.05);
 }
 [data-md-color-scheme="slate"] .md-typeset .admonition.definition,
-[data-md-color-scheme="slate"] .md-typeset details.definition,
-[data-md-color-scheme="slate"] .md-typeset .admonition.example,
-[data-md-color-scheme="slate"] .md-typeset details.example { border-color: #6f9edc; }
+[data-md-color-scheme="slate"] .md-typeset details.definition { border-color: #6f9edc; }
 [data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title,
-[data-md-color-scheme="slate"] .md-typeset details.definition > summary,
+[data-md-color-scheme="slate"] .md-typeset details.definition > summary { background-color: rgba(111, 158, 220, 0.13); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.example,
+[data-md-color-scheme="slate"] .md-typeset details.example { border-color: #d6b46f; }
 [data-md-color-scheme="slate"] .md-typeset .example > .admonition-title,
-[data-md-color-scheme="slate"] .md-typeset details.example > summary { background-color: rgba(111, 158, 220, 0.13); }
+[data-md-color-scheme="slate"] .md-typeset details.example > summary { background-color: rgba(214, 180, 111, 0.14); }
 [data-md-color-scheme="slate"] .md-typeset .admonition.theorem,
 [data-md-color-scheme="slate"] .md-typeset details.theorem { border-color: #9a82d4; }
 [data-md-color-scheme="slate"] .md-typeset .theorem > .admonition-title,
@@ -323,6 +343,10 @@
 [data-md-color-scheme="slate"] .md-typeset details.proof { border-color: #73807d; }
 [data-md-color-scheme="slate"] .md-typeset .proof > .admonition-title,
 [data-md-color-scheme="slate"] .md-typeset details.proof > summary { background-color: rgba(115, 128, 125, 0.11); }
+[data-md-color-scheme="slate"] .md-typeset .admonition.idea,
+[data-md-color-scheme="slate"] .md-typeset details.idea { border-color: #63b8ad; }
+[data-md-color-scheme="slate"] .md-typeset .idea > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details.idea > summary { background-color: rgba(99, 184, 173, 0.13); }
 
 /* =====================================================================
    Header and tabs — OI-Wiki-inspired light surface with a teal active cue.
@@ -614,7 +638,7 @@
 }
 .md-typeset .admonition.example > .admonition-title::before,
 .md-typeset details.example > summary::before {
-  background-color: #2962ff;
+  background-color: #a97800;
   -webkit-mask-image: var(--md-admonition-icon--example);
   mask-image: var(--md-admonition-icon--example);
 }
@@ -623,6 +647,12 @@
   background-color: #9e9e9e;
   -webkit-mask-image: var(--md-admonition-icon--note);
   mask-image: var(--md-admonition-icon--note);
+}
+.md-typeset .admonition.idea > .admonition-title::before,
+.md-typeset details.idea > summary::before {
+  background-color: #009688;
+  -webkit-mask-image: var(--md-admonition-icon--tip);
+  mask-image: var(--md-admonition-icon--tip);
 }
 
 /* number injected by numbering.js, coloured per admonition type */
@@ -640,20 +670,20 @@
 .md-typeset .admonition.remark .mn-thm-num,
 .md-typeset details.remark .mn-thm-num          { color: #455a64; font-style: italic; }
 .md-typeset .admonition.example .mn-thm-num,
-.md-typeset details.example .mn-thm-num          { color: #2962ff; }
+.md-typeset details.example .mn-thm-num          { color: #a97800; }
 
 /* Keep the light palette above intact; soften semantic accents only in slate. */
 [data-md-color-scheme="slate"] .md-logo img {
   filter: hue-rotate(35deg) saturate(55%) brightness(1.3);
 }
 [data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title::before,
-[data-md-color-scheme="slate"] .md-typeset details.definition > summary::before,
+[data-md-color-scheme="slate"] .md-typeset details.definition > summary::before { background-color: #7f9fc8; }
 [data-md-color-scheme="slate"] .md-typeset .example > .admonition-title::before,
-[data-md-color-scheme="slate"] .md-typeset details.example > summary::before { background-color: #7f9fc8; }
+[data-md-color-scheme="slate"] .md-typeset details.example > summary::before { background-color: #d6b46f; }
 [data-md-color-scheme="slate"] .md-typeset .definition .mn-thm-num,
-[data-md-color-scheme="slate"] .md-typeset details.definition .mn-thm-num,
+[data-md-color-scheme="slate"] .md-typeset details.definition .mn-thm-num { color: #7f9fc8; }
 [data-md-color-scheme="slate"] .md-typeset .example .mn-thm-num,
-[data-md-color-scheme="slate"] .md-typeset details.example .mn-thm-num { color: #7f9fc8; }
+[data-md-color-scheme="slate"] .md-typeset details.example .mn-thm-num { color: #d6b46f; }
 [data-md-color-scheme="slate"] .md-typeset .theorem > .admonition-title::before,
 [data-md-color-scheme="slate"] .md-typeset details.theorem > summary::before { background-color: #a18cc4; }
 [data-md-color-scheme="slate"] .md-typeset .theorem .mn-thm-num,
@@ -674,3 +704,5 @@
 [data-md-color-scheme="slate"] .md-typeset details.remark > summary::before { background-color: #82908e; }
 [data-md-color-scheme="slate"] .md-typeset .remark .mn-thm-num,
 [data-md-color-scheme="slate"] .md-typeset details.remark .mn-thm-num { color: #82908e; }
+[data-md-color-scheme="slate"] .md-typeset .idea > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.idea > summary::before { background-color: #78c7bd; }
