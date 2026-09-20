@@ -100,7 +100,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     Distinct fibres are disjoint, hence $g:S\to\mathbb{N}$ is injective.
     Finally, if $g:S\to\mathbb{N}$ is injective, then $g$ is a bijection from
     $S$ onto the subset $g(S)\subseteq\mathbb{N}$. By
-    [Theorem 1.1.3](#thm-1-1-3), $g(S)$ and therefore $S$ are countable.
+    [Theorem](#thm-1-1-3), $g(S)$ and therefore $S$ are countable.
 
 !!! theorem "Theorem (Finite products of countable sets)"
     <a id="thm-1-1-5"></a>
@@ -112,7 +112,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     For $m=2$, choose injections $S_1\to\mathbb{N}$ and
     $S_2\to\mathbb{N}$. Their product embeds $S_1\times S_2$ into
     $\mathbb{N}^2$, which is countable by
-    [Theorem 1.1.2](#thm-1-1-2). The general result follows by induction on
+    [Theorem](#thm-1-1-2). The general result follows by induction on
     $m$.
 
     If every factor is nonempty and one factor is infinite, fixing one point
@@ -131,7 +131,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $$
 
     is surjective, $\mathbb{Q}$ is countable by
-    [Theorem 1.1.4](#thm-1-1-4). It is infinite because it contains
+    [Theorem](#thm-1-1-4). It is infinite because it contains
     $\mathbb{N}$, so it is countably infinite.
 
 !!! theorem "Theorem (Countable unions of countable sets)"
@@ -206,7 +206,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $\{0,1\}^{\mathbb{N}}\to\mathbb{N}^{\mathbb{N}}$. If
     $\mathbb{N}^{\mathbb{N}}$ were countable, its subset
     $\{0,1\}^{\mathbb{N}}$ would be countable, contrary to
-    [Theorem 1.2.2](#thm-1-2-2).
+    [Theorem](#thm-1-2-2).
 
 !!! definition "Definition (Cauchy sequence)"
     <a id="def-1-3-1"></a>
@@ -357,7 +357,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
 
 ??? proof "Proof"
     The implication (1) $\Rightarrow$ (2) is
-    [Proposition 1.4.1](#prop-1-4-1).
+    [Proposition](#prop-1-4-1).
 
     For the converse, suppose that $\sum a_n$ converges but not absolutely.
     Let $a_n^+=\max\{a_n,0\}$ and $a_n^-:=\max\{-a_n,0\}$. Since
@@ -374,7 +374,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     original orders. Append positive terms until the partial sum exceeds $1$,
     then one unused nonpositive term; append further positive terms until it
     exceeds $2$, then the next nonpositive term; and continue. As in
-    [Example 1.4.2](#ex-1-4-2), require at least one new positive term at every
+    [Example](#ex-1-4-2), require at least one new positive term at every
     stage. Since $a_n\to0$, the partial sum after the single nonpositive term
     at stage $r$ is still greater than $r-o(1)$. The resulting rearrangement
     uses every term and diverges to $+\infty$, contradicting commutative
@@ -457,7 +457,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     \leq3^{-n}\operatorname{diam}(I_0).
     $$
 
-    By [Theorem 1.5.2](#thm-1-5-2), the intersection of the $I_n$ is a
+    By [Theorem](#thm-1-5-2), the intersection of the $I_n$ is a
     singleton $\{x\}$. Since $I_0\subseteq I$, there is $m$ with $x=x_m$.
     But $x\in I_m$ while $x_m\notin I_m$, a contradiction.
 
@@ -560,7 +560,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $$
 
 ??? proof "Proof"
-    Order the cells as in [Lemma 1.7.3](#lem-1-7-3). Their lengths telescope:
+    Order the cells as in [Lemma](#lem-1-7-3). Their lengths telescope:
 
     $$
     \sum_{n=1}^{N}\lambda(I_n)
@@ -676,7 +676,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
 ??? proof "Proof"
     If $(J_1,x),(J_2,x),(J_3,x)\in\Pi$, then $x$ belongs to three pairwise
     non-overlapping cells. This contradicts the elementary interval geometry
-    in [Proposition 1.6.2](#prop-1-6-2).
+    in [Proposition](#prop-1-6-2).
 
 !!! proposition "Proposition (Gauges bounded away from zero)"
     <a id="prop-1-8-5"></a>
@@ -863,7 +863,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     For monotonicity, choose gauges $\delta_1,\delta_2$ controlling the sums
     of $f_1,f_2$ within $\varepsilon$, and use Cousin's lemma for
     $\delta=\min\{\delta_1,\delta_2\}$. For a $\delta$-fine tagged division
-    $\Pi$, Proposition 1.9.2 gives $S(\Pi,f_1)\leq S(\Pi,f_2)$, whence
+    $\Pi$, [Proposition](#prop-1-9-2) gives $S(\Pi,f_1)\leq S(\Pi,f_2)$, whence
 
     $$
     \int_I f_1-\int_I f_2
@@ -929,14 +929,14 @@ the fundamental theorem of calculus and change-of-variables formulas.
 ??? proof "Proof"
     Apply the Cauchy criterion. Given $\varepsilon>0$, choose a gauge
     $\delta$ on $I$ satisfying condition (2) of
-    [Theorem 1.9.7](#thm-1-9-7). The complement of the interior of $J$ in
+    [Theorem](#thm-1-9-7). The complement of the interior of $J$ in
     $I$ consists of at most two compact cells, after degenerate pieces are
     discarded. Use Cousin's lemma to fix a $\delta$-fine tagged division on
     each of these cells.
 
     If $\Pi$ and $\widetilde\Pi$ are arbitrary $\delta|_J$-fine tagged
     divisions of $J$, glue each of them to the fixed complementary divisions.
-    By [Lemma 1.8.6](#lem-1-8-6), the results are $\delta$-fine tagged
+    By [Lemma](#lem-1-8-6), the results are $\delta$-fine tagged
     divisions of $I$. Their complementary Riemann sums cancel, so
 
     $$
@@ -968,7 +968,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
 
     If $\Pi$ is a $\delta$-fine tagged division, only rational tags
     contribute to the Riemann sum. Each fixed tag occurs at most twice by
-    [Lemma 1.8.4](#lem-1-8-4), and a cell tagged by $x$ has length at most
+    [Lemma](#lem-1-8-4), and a cell tagged by $x$ has length at most
     $2\delta(x)$. Consequently,
 
     $$
@@ -1057,7 +1057,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $\mathcal E_{\mathrm{null},\mathrm{KH}}(I)$.
 
 ??? proof "Proof"
-    This is exactly [Theorem 1.10.2](#thm-1-10-2), because every subset of a
+    This is exactly [Theorem](#thm-1-10-2), because every subset of a
     countable set is countable.
 
 !!! lemma "Lemma (Division induced on a subcell)"
@@ -1097,7 +1097,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     The middle set is a finite union of compact sets and is therefore closed;
     it contains $\overline{\operatorname{int}(J)}=J$. Hence its union is
     exactly $J$. The length identity now follows from additivity of interval
-    length, [Proposition 1.7.4](#prop-1-7-4).
+    length, [Proposition](#prop-1-7-4).
 
 !!! theorem "Theorem (Subordinate tagged divisions)"
     <a id="thm-1-11-4"></a>
@@ -1156,7 +1156,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     \ \operatorname{int}(J\cap K)\neq\varnothing\}.
     $$
 
-    By [Lemma 1.11.3](#lem-1-11-3), the component cells of $\Pi_K$ form a
+    By [Lemma](#lem-1-11-3), the component cells of $\Pi_K$ form a
     division of $K$. It remains to check that every retained tag lies in its
     new cell. Suppose $(J\cap K,x)\in\Pi_K$ but $x\notin K$. Choose
     $y\in\operatorname{int}(J\cap K)$. Since
@@ -1173,7 +1173,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $K$. The gluing lemma now shows that $\widetilde\Pi$ is a tagged division
     of $I$.
 
-    For each $(J,x)\in\Pi$, Lemma 1.11.3 applied to $J$ gives
+    For each $(J,x)\in\Pi$, [Lemma](#lem-1-11-3) applied to $J$ gives
 
     $$
     \lambda(J)
@@ -1216,11 +1216,11 @@ the fundamental theorem of calculus and change-of-variables formulas.
 
 ??? proof "Proof"
     The implication (1) $\Rightarrow$ (2) is
-    [Corollary 1.9.8](#cor-1-9-8).
+    [Corollary](#cor-1-9-8).
 
     Conversely, suppose (2) holds and fix $\varepsilon>0$. Let
     $\delta_\Delta$ be the gauge from
-    [Theorem 1.11.4](#thm-1-11-4). For each $n$, choose a gauge $\delta_n$
+    [Theorem](#thm-1-11-4). For each $n$, choose a gauge $\delta_n$
     on $I_n$ such that every $\delta_n$-fine tagged division $\Pi_n$ of
     $I_n$ satisfies
 
@@ -1237,7 +1237,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     \widetilde\delta_1,\ldots,\widetilde\delta_N\}.
     $$
 
-    If $\Pi$ is a $\delta$-fine tagged division of $I$, Theorem 1.11.4
+    If $\Pi$ is a $\delta$-fine tagged division of $I$, [Theorem](#thm-1-11-4)
     supplies $\delta_n$-fine tagged divisions $\Pi_n$ of the $I_n$ and
     preserves the Riemann sum. Hence
 
@@ -1274,13 +1274,13 @@ the fundamental theorem of calculus and change-of-variables formulas.
 
 ??? proof "Proof"
     If $\widetilde f$ is integrable on $I$, its restriction to $J$ is
-    integrable by Corollary 1.9.8.
+    integrable by [Corollary](#cor-1-9-8).
 
     Conversely, divide $I$ into $J$ and the at most two nondegenerate compact
     cells lying to its left and right. On each complementary cell,
     $\widetilde f$ differs from the zero function at most at the shared
     endpoint. Thus it is integrable there with integral zero by
-    [Theorem 1.10.2](#thm-1-10-2). Finite additivity gives the result.
+    [Theorem](#thm-1-10-2). Finite additivity gives the result.
 
 ## Regulated Functions and Uniform Limits
 
@@ -1367,7 +1367,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $$
 
     Hence $f$ is Kurzweil–Henstock integrable by
-    [Theorem 1.9.7](#thm-1-9-7).
+    [Theorem](#thm-1-9-7).
 
 !!! corollary "Corollary (Regulated functions are integrable)"
     <a id="cor-1-12-4"></a>
@@ -1376,11 +1376,12 @@ the fundamental theorem of calculus and change-of-variables formulas.
 
 ??? proof "Proof"
     A regulated function is, by definition, a uniform limit of step
-    functions. Apply Proposition 1.12.2 and Theorem 1.12.3.
+    functions. Apply [Proposition](#prop-1-12-2) and [Theorem](#thm-1-12-3).
 
 ## Differentiability Estimates
 
 !!! lemma "Lemma (Two-sided interval estimate for differentiability)"
+    <a id="lem-two-sided-interval-estimate-for-differentiability"></a>
     <a id="lem-1-13-1"></a>
     Let $F:I\to\mathbb{R}$ be defined on a compact cell, let $x\in I$, and
     let $\alpha\in\mathbb{R}$. The following are equivalent.
@@ -1449,7 +1450,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $$
 
     Then $F$ is differentiable everywhere and $F'(0)=0$, but the conclusion
-    of Lemma 1.13.1 becomes false if $y$ and $z$ are allowed to lie on the
+    of [Lemma](#lem-two-sided-interval-estimate-for-differentiability) becomes false if $y$ and $z$ are allowed to lie on the
     same side of $x=0$.
 
 ??? proof "Proof"
@@ -1501,7 +1502,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
 
 ??? proof "Proof"
     Write $a=\min I$ and $b=\max I$. Fix $\varepsilon>0$. For every
-    $x\in I$, Lemma 1.13.1 supplies $\delta(x)>0$ such that, whenever
+    $x\in I$, [Lemma](#lem-two-sided-interval-estimate-for-differentiability) supplies $\delta(x)>0$ such that, whenever
     $y\leq x\leq z$ and $|x-y|,|z-x|\leq\delta(x)$,
 
     $$
@@ -1554,7 +1555,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     \qquad -1\leq x\leq1,
     $$
 
-    the derivative displayed in Example 1.13.2 is unbounded near $0$.
+    the derivative displayed in [Example](#ex-1-13-2) is unbounded near $0$.
     Nevertheless the fundamental theorem shows that $F'$ is
     Kurzweil–Henstock integrable and
 
@@ -1591,14 +1592,14 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $$
 
 ??? proof "Proof"
-    If $D=\varnothing$, this is Theorem 1.13.3. Otherwise choose an injection
+    If $D=\varnothing$, this is [Theorem](#thm-1-13-3). Otherwise choose an injection
     $m:D\to\mathbb{N}_{+}$. Fix $\varepsilon>0$ and put
 
     $$
     \rho:=\frac{\varepsilon}{\lambda(I)+4}.
     $$
 
-    If $x\notin D$, use Lemma 1.13.1 to choose $\delta(x)>0$ so that every
+    If $x\notin D$, use [Lemma](#lem-two-sided-interval-estimate-for-differentiability) to choose $\delta(x)>0$ so that every
     compact cell $J\subseteq I$ satisfying
     $x\in J\subseteq[x-\delta(x),x+\delta(x)]$ obeys
 
@@ -1641,7 +1642,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     <\frac{2\rho}{2^{m(x)}}.
     $$
 
-    By Lemma 1.8.4, a fixed tag occurs in at most two members of $\Pi$.
+    By [Lemma](#lem-1-8-4), a fixed tag occurs in at most two members of $\Pi$.
     Since $m$ is injective, the exceptional contribution is at most
 
     $$
@@ -1669,7 +1670,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     \int_I F'=F(\max I)-F(\min I).
     $$
 
-    Theorem 1.13.5 and Corollary 1.11.2 show that every countable subset of
+    [Theorem](#thm-1-13-5) and [Corollary](#cor-1-11-2) show that every countable subset of
     $I$ belongs to $\mathcal E_{\mathrm{FTC}}(I)$.
 
 !!! corollary "Corollary (Cantor's constant-function theorem)"
@@ -1679,7 +1680,7 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $F$ is constant.
 
 ??? proof "Proof"
-    Write $I=[a,b]$. For any $x\in I$, apply Theorem 1.13.5 to the restriction
+    Write $I=[a,b]$. For any $x\in I$, apply [Theorem](#thm-1-13-5) to the restriction
     of $F$ to $[a,x]$ when $x>a$; the case $x=a$ is immediate. Its
     zero-filled derivative is identically zero, and therefore
 
@@ -1769,7 +1770,7 @@ often the parametrisation covers each value.
     $$
 
     If $\Pi$ is $\delta_1$-fine, then the transported division from
-    Lemma 1.14.1 is $\widetilde\delta$-fine.
+    [Lemma](#lem-1-14-1) is $\widetilde\delta$-fine.
 
     For $x\in I$, set
 
@@ -1779,7 +1780,7 @@ often the parametrisation covers each value.
     {2\bigl(1+\lambda(I)\bigr)\bigl(1+|f(\phi(x))|\bigr)}.
     $$
 
-    Differentiability of $\phi$ and Lemma 1.13.1 give a second gauge
+    Differentiability of $\phi$ and [Lemma](#lem-two-sided-interval-estimate-for-differentiability) give a second gauge
     $\delta_2$ such that, whenever
     $x\in J\subseteq[x-\delta_2(x),x+\delta_2(x)]$,
 
@@ -1902,7 +1903,7 @@ often the parametrisation covers each value.
 
 ??? proof "Proof"
     For each $K\in\Gamma$, restriction to the compact cell $\phi(K)$ and
-    Theorem 1.14.2 give
+    [Theorem](#thm-1-14-2) give
 
     $$
     \int_K(f\circ\phi)|\phi'|
@@ -1933,7 +1934,7 @@ often the parametrisation covers each value.
     $$
 
     Each summand is the zero extension of $f|_{\phi(K)}$ and is integrable by
-    Corollary 1.11.6. Invariance under finite modification and (7) now give
+    [Corollary](#cor-1-11-6). Invariance under finite modification and (7) now give
     both the asserted integrability and formula (5).
 
 !!! definition "Definition (Oriented integrals and oriented multiplicity)"
@@ -2000,7 +2001,7 @@ often the parametrisation covers each value.
 ??? proof "Proof"
     Order the cells of a monotonicity division as
     $K_j=[x_{j-1},x_j]$, where
-    $a=x_0<\cdots<x_N=b$. On $K_j$, Theorem 1.14.2 and the sign of
+    $a=x_0<\cdots<x_N=b$. On $K_j$, [Theorem](#thm-1-14-2) and the sign of
     $\phi'$ give
 
     $$

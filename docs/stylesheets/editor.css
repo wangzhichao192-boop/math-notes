@@ -336,6 +336,8 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 .mn-typora-surface .cm-editor.cm-focused { outline: none; }
 .mn-typora-surface .cm-scroller { overflow: visible; font-family: inherit; line-height: 1.8; }
 .mn-typora-surface .cm-content {
+  width: 100%;
+  min-width: 0;
   min-height: 55vh;
   padding: 0.25rem 0 2rem;
   caret-color: var(--mn-editor-accent);
@@ -396,7 +398,8 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 
 .mn-cm-math { color: var(--md-default-fg-color); cursor: text; touch-action: manipulation; }
 .mn-cm-math--inline { display: inline-block; min-width: 0.5em; min-height: 1.35em; padding: 0.04em 0.11em; vertical-align: -0.08em; }
-.mn-cm-math--display { width: 100%; min-height: 2.75rem; margin: 0.55rem 0; padding: 0.65rem 1rem; overflow-x: auto; text-align: center; }
+.mn-cm-math--display { width: 100%; min-width: 0; max-width: 100%; min-height: 2.75rem; margin: 0.55rem 0; padding: 0.65rem 1rem; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; text-align: center; -webkit-overflow-scrolling: touch; }
+.mn-cm-math--display > .katex-display { width: max-content; min-width: 100%; margin: 0; overflow: visible; }
 .mn-cm-math--in-admonition {
   margin: 0;
   border-left: 3px solid var(--mn-block-color);

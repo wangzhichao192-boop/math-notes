@@ -79,9 +79,9 @@ return throughout the course.
     Moreover, if $I \neq \varnothing$,
     $\displaystyle f\!\Big(\bigcap_{i \in I} A_i\Big) \subseteq \bigcap_{i \in I} f(A_i).$
 
-??? proof "Proof (Using [Proposition 3.3.4](#prop-3-3-4) and)"
-    Using [Proposition 3.3.4](#prop-3-3-4) and
-    [Corollary 2.6.3 / 2.7.4](set-theory.md#cor-2-6-3),
+??? proof "Proof (Using [Proposition](#prop-3-3-4) and)"
+    Using [Proposition](#prop-3-3-4) and
+    [Corollary](set-theory.md#cor-2-6-3),
 
     $$
     f\!\Big(\bigcup_i A_i\Big)
@@ -172,4 +172,3 @@ return throughout the course.
     f \circ \operatorname{Id}_{D_f} = f = \operatorname{Id}_{A_f} \circ f
     $$
     for any correspondence $f$.
-

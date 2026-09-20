@@ -86,17 +86,48 @@
 }
 
 /* ----- KaTeX math ----- */
-.katex-display {
+/*
+ * Keep scrolling on Arithmatex's outer wrapper, not on `.katex-display`.
+ * KaTeX positions equation tags against the display box and centres the
+ * formula inside it. Making that same box scrollable clips the negative side
+ * of a wide centred formula and leaves tags floating over the expression at
+ * some viewport widths (especially in WebKit).
+ */
+.md-typeset div.arithmatex {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.6em 0;
-  margin: 0.6em 0;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
+
+/* The generated shape is `.arithmatex > span > .katex-display`. Give the
+ * formula an intrinsic-width canvas which is at least as wide as the text
+ * column. Short formulae remain centred; long ones scroll without being cut
+ * in half, and their equation numbers stay attached to the far edge. */
+.md-typeset div.arithmatex > span {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+}
+
+.md-typeset div.arithmatex .katex-display {
+  min-width: 100%;
+  margin: 0.6em 0;
+  padding: 0.6em 0;
+  overflow: visible;
+}
+
+/* KaTeX takes equation tags out of normal flow. On a shrink-to-fit formula
+ * canvas that would otherwise put the tag on top of the last term. Symmetric
+ * breathing room preserves the mathematical centre while reserving a stable
+ * lane for the number at every viewport width. */
+.md-typeset div.arithmatex .katex-display:has(.tag) > .katex > .katex-html {
+  padding-inline: 2.5em;
+}
+
 .md-typeset .katex {
   font-size: 1.08em;
-  /* Slightly tighter so subscripts and superscripts sit nicely with
-     the surrounding prose. */
-  line-height: 1.05;
 }
 
 /* =====================================================================

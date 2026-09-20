@@ -291,14 +291,21 @@ position of the theorem-style block in that section. Moving a chapter, section,
 or block therefore renumbers it automatically. Anchors never control the
 displayed number. Existing numeric anchors remain valid as legacy links.
 
-**Cross-references** are ordinary Markdown links. Prefer a descriptive label so
-the prose remains correct after automatic renumbering:
+**Cross-references** are ordinary Markdown links, but their source must not
+contain a manually typed number. Write only the block type and a stable,
+descriptive anchor; the site calculates and inserts the target block's current
+number. This works both within one page and across pages:
 
-- same page: `[the composition-law definition](#def-composition-law)`
+- same page: `[Definition](#def-composition-law)`
 - same course, another file:
-  `[Cantor--Bernstein](set-theory.md#thm-cantor-bernstein)`
+  `[Theorem](set-theory.md#thm-cantor-bernstein)`
 - another course:
-  `[Schur's lemma](../abstract-algebra/representations.md#lem-schur)`
+  `[Lemma](../abstract-algebra/representations.md#lem-schur)`
+
+For example, `[Lemma](#lem-schur)` may render as `Lemma 2.4.3`; if an earlier
+block is inserted or deleted, the displayed number changes automatically while
+the Markdown source and link target remain unchanged. Never write forms such
+as `[Lemma 2.4.3](#lem-schur)` or plain `Lemma 2.4.3`.
 
 Cross-file links keep the `.md` extension so mkdocs resolves them.
 
