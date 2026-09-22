@@ -419,7 +419,7 @@
   content: "";
 }
 
-@media screen and (min-width: 76.25em) {
+@media screen and (min-width: 1220px) {
   [data-md-color-scheme="default"] .md-header:not(.md-header--shadow) {
     box-shadow: none;
   }
@@ -602,28 +602,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-@media screen and (max-width: 76.234375em) {
+@media screen and (max-width: 1219.75px) {
   .mn-recent-updates-mobile {
     display: block;
   }
 }
 
-@media screen and (min-width: 76.25em) {
-  /* Safari/WebKit can drop the first paint of an `overflow: hidden` layer
-     that lives inside a 3D-transformed ancestor (here, the fixed
-     `.md-sidebar--primary` carries `transform: translateX(0)` for the
-     mobile drawer). Promote the scrollwrap to its own composited layer
-     so it paints on the first frame instead of waiting for a scroll /
-     hover / focus interaction. The 3D promotion is visually a no-op
-     (`translateZ(0)` is equivalent to `translate(0,0)`), and the mobile
-     drawer animation is driven by a transform on `.md-sidebar--primary`,
-     not on the scrollwrap, so this does not conflict with it. */
-  .md-sidebar--primary .md-sidebar__scrollwrap {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    will-change: transform;
-  }
-
+@media screen and (min-width: 1220px) {
   .mn-recent-updates {
     display: block !important;
   }

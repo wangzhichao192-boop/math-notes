@@ -201,7 +201,7 @@ body[data-mn-style] .md-typeset blockquote {
   border-left-color: color-mix(in srgb, var(--mn-theme-accent) 52%, transparent);
 }
 
-@media screen and (max-width: 76.234375em) {
+@media screen and (max-width: 1219.75px) {
   body[data-mn-style] .md-nav--primary,
   body[data-mn-style] .md-nav--primary .md-nav,
   body[data-mn-style] .md-nav--primary .md-nav__title ~ .md-nav__list {

@@ -530,9 +530,3 @@ For an IVP $y'=f(x,y)$, $y(x_0)=y_0$, ask three questions in order.
 
 The practical lesson is that an ODE is more than a symbolic integration problem. Its geometry, initial data, regularity, and interval of definition are part of the problem from the beginning.
 
----
-
-**Sources.**
-
-+ Instructor materials, Lecture 1 Parts 1--2: models, the basic language of ODEs, solution families, initial value problems, and direction fields.
-+ 柳彬，《常微分方程》，北京大学出版社，2021，Chapter 1; used for supplementary examples and terminology checks.

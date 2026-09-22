@@ -422,11 +422,3 @@ is a parametrized family of solutions.
     $$
     y=\pm e^{x-1/2}.
     $$
-
----
-
-**Sources.**
-
-+ Instructor manuscript, Lecture 2: exact, separable, homogeneous, and linear equations.
-+ Instructor manuscript, Lecture 3: implicit equations and the worked examples based on differentiation and parametrization.
-+ 柳彬，《常微分方程》，北京大学出版社，2021，Chapter 2; used for supplementary explanation and checks of the solution methods.

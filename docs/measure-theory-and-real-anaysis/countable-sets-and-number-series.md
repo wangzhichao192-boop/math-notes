@@ -1541,6 +1541,13 @@ the fundamental theorem of calculus and change-of-variables formulas.
     $$
 
     This is precisely the defining estimate for the stated integral.
+!!! remark "Remark"
+    Recall the usual Fundamental Theorem of Calculus: if $F \in C^1( [ a,b ] )$, then
+    $$
+    \int_a^b F'(x) \,dx =F(b)-F(a).
+    $$
+    The KH version is stronger: it only assumes that $F$ is differentiable everywhere. No continuity, boundness, or intergrability assumption on $F'$ is required in advance. The theorem itself guarantees that $F' \in \operatorname{KH}([a,b])$ and hence the equality holds.
+
 
 !!! example "Example (An unbounded derivative)"
     <a id="ex-1-13-4"></a>

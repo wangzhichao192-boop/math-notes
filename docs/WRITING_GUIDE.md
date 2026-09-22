@@ -27,6 +27,20 @@ docs/<subject>/
   short lesson may form only part of a chapter; several related lessons may be
   merged into one chapter; an unusually long lesson may be split across
   chapters when a well-edited academic book would do so.
+- The supplied slides may stop in the middle of a mathematical unit simply
+  because the class period ended. When the available source is incomplete,
+  treat the current chapter and section structure as **provisional** rather
+  than assuming that the last slide marks a chapter or section boundary.
+- Do not choose an artificially narrow chapter or section title merely to fit
+  the slides currently available, and do not write an opening overview as if
+  the unit were already complete. Anticipate that later slides may extend the
+  same unit and require a broader title, a different boundary, or a revised
+  line of development.
+- When new material completes or extends the same mathematical unit, merge it
+  into the existing chapter or section when appropriate. Then reconsider and,
+  if necessary, revise the chapter title, section titles, opening orienting
+  paragraphs, course index, and navigation labels so that they describe the
+  combined finished exposition rather than the history of separate uploads.
 - Use one `#` heading for the chapter title. Within that page, each `##`
   heading is a genuine book **section** (also informally called a subchapter).
   The number of `##` headings should resemble the section count of a normal

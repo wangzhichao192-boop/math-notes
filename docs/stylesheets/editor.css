@@ -32,7 +32,7 @@
   color: #f0efeb;
 }
 
-[data-md-color-scheme="slate"] .mn-typora-toolbar__actions > .mn-typora-button--structure {
+[data-md-color-scheme="slate"] .mn-typora-toolbar__tools > .mn-typora-button--structure {
   border: 1px solid rgba(143, 170, 197, 0.1);
   color: #a8bed2;
   background: rgba(143, 170, 197, 0.08);
@@ -97,7 +97,7 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 
 .mn-editor-outline { display: none; }
 
-@media screen and (min-width: 76.25em) {
+@media screen and (min-width: 1220px) {
   body.mn-typora-editing .md-sidebar--primary > .md-sidebar__scrollwrap { display: none; }
   body.mn-typora-editing .md-sidebar--primary { overflow: visible; }
   body.mn-typora-editing .mn-editor-outline {
@@ -179,51 +179,59 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
   position: sticky;
   top: 3rem;
   z-index: 8;
-  display: flex;
-  gap: 0.65rem;
+  display: grid;
+  grid-template-columns: auto minmax(7rem, 1fr) auto auto;
+  gap: 0.3rem;
   align-items: center;
-  justify-content: space-between;
-  min-height: 3rem;
-  margin: 0 0 1rem;
-  padding: 0.48rem 0.55rem 0.48rem 0.75rem;
+  min-height: 2.65rem;
+  margin: 0 0 0.7rem;
+  padding: 0.28rem 0.35rem 0.28rem 0.55rem;
   border: 1px solid var(--mn-editor-border);
-  border-radius: 0.85rem;
+  border-radius: 0.72rem;
   background: color-mix(in srgb, var(--mn-editor-surface) 93%, transparent);
   box-shadow: 0 3px 14px rgba(22, 40, 38, 0.045);
   backdrop-filter: blur(14px);
 }
 .mn-typora-toolbar__identity,
-.mn-typora-toolbar__actions { display: flex; align-items: center; }
-.mn-typora-toolbar__identity { gap: 0.55rem; min-width: 0; }
+.mn-typora-toolbar__tools,
+.mn-typora-toolbar__session { display: flex; align-items: center; }
+.mn-typora-toolbar__identity { gap: 0.45rem; min-width: 0; }
 .mn-typora-toolbar__identity > div { min-width: 0; }
 .mn-typora-toolbar__identity strong,
 .mn-typora-toolbar__identity small { display: block; }
-.mn-typora-toolbar__identity strong { font-size: 0.72rem; line-height: 1.2; }
+.mn-typora-toolbar__identity strong { font-size: 0.68rem; line-height: 1.1; }
 .mn-typora-toolbar__identity small {
   overflow: hidden;
-  max-width: 14rem;
-  margin-top: 0.12rem;
+  width: 8.5rem;
+  max-width: 8.5rem;
+  margin-top: 0.08rem;
   color: var(--mn-editor-muted);
-  font-size: 0.52rem;
+  font-size: 0.5rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .mn-typora-toolbar__dot {
-  width: 0.52rem;
-  height: 0.52rem;
+  width: 0.42rem;
+  height: 0.42rem;
   flex: 0 0 auto;
   border-radius: 50%;
   background: var(--mn-editor-accent);
-  box-shadow: 0 0 0 0.2rem var(--mn-editor-accent-soft);
+  box-shadow: 0 0 0 0.16rem var(--mn-editor-accent-soft);
 }
-.mn-typora-toolbar__actions { gap: 0.25rem; flex-wrap: wrap; justify-content: flex-end; }
+.mn-typora-toolbar__tools {
+  min-width: 0;
+  gap: 0.08rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.mn-typora-toolbar__tools::-webkit-scrollbar { display: none; }
+.mn-typora-toolbar__session { gap: 0.06rem; flex: 0 0 auto; }
 .mn-typora-status {
-  width: 8rem;
-  max-width: 11rem;
-  margin-right: 0.3rem;
   overflow: hidden;
   color: var(--mn-editor-muted);
-  font-size: 0.55rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -231,9 +239,9 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 .mn-typora-status[data-kind="pending"] { color: #a56a19; }
 
 .mn-typora-button {
-  min-width: 2.3rem;
-  min-height: 2.3rem;
-  padding: 0.38rem 0.62rem;
+  min-width: 2.1rem;
+  min-height: 2rem;
+  padding: 0.3rem 0.5rem;
   border: 0;
   border-radius: 0.48rem;
   color: var(--md-default-fg-color--light);
@@ -263,20 +271,23 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
   color: color-mix(in srgb, var(--mn-editor-accent) 80%, var(--md-default-fg-color));
   font-weight: 600;
 }
-.mn-typora-toolbar__actions > .mn-typora-button--structure {
+.mn-typora-toolbar__tools > .mn-typora-button--structure {
   background: color-mix(in srgb, var(--mn-editor-accent) 5%, transparent);
 }
-.mn-typora-toolbar__actions > .mn-typora-button--structure:hover {
+.mn-typora-toolbar__tools > .mn-typora-button--structure:hover {
   background: var(--mn-editor-accent-soft);
 }
 .mn-typora-button--save { color: #fff; background: var(--mn-editor-accent); font-weight: 600; }
 .mn-typora-button--save:hover { color: #fff; background: color-mix(in srgb, var(--mn-editor-accent) 88%, #000); }
 .mn-typora-button--done { color: var(--md-default-fg-color); font-weight: 600; }
+.mn-typora-button--cancel { color: var(--mn-editor-muted); }
+.mn-typora-button--cancel:hover { color: #b83a34; background: rgba(211, 62, 54, 0.08); }
 .mn-typora-button:disabled { opacity: 0.5; cursor: wait; }
 
-.mn-typora-toolbar .mn-typora-more {
+.md-typeset .mn-typora-toolbar details.mn-typora-more {
   position: relative;
   flex: 0 0 auto;
+  width: 2.5rem;
   margin: 0;
   padding: 0;
   border: 0;
@@ -284,20 +295,24 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
   background: transparent;
   box-shadow: none;
 }
-.mn-typora-toolbar .mn-typora-more > summary {
+.md-typeset .mn-typora-toolbar details.mn-typora-more > summary {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 2rem;
   margin: 0;
+  padding: 0.3rem;
   border: 0;
   background: transparent;
   list-style: none;
 }
-.mn-typora-toolbar .mn-typora-more > summary::-webkit-details-marker { display: none; }
-.mn-typora-toolbar .mn-typora-more > summary::before,
-.mn-typora-toolbar .mn-typora-more > summary::after { display: none; }
-.mn-typora-toolbar .mn-typora-more[open] > summary,
-.mn-typora-toolbar .mn-typora-more > summary:hover { background: var(--mn-editor-accent-soft); }
+.md-typeset .mn-typora-toolbar details.mn-typora-more > summary::-webkit-details-marker { display: none; }
+.md-typeset .mn-typora-toolbar details.mn-typora-more > summary::before,
+.md-typeset .mn-typora-toolbar details.mn-typora-more > summary::after { display: none; }
+.md-typeset .mn-typora-toolbar details.mn-typora-more[open] > summary,
+.md-typeset .mn-typora-toolbar details.mn-typora-more > summary:hover { background: var(--mn-editor-accent-soft); }
 .mn-typora-more__menu {
   position: absolute;
   top: calc(100% + 0.45rem);
@@ -706,27 +721,41 @@ body.mn-typora-editing .md-main__inner { max-width: 72rem; }
 .mn-course-order__row button:focus-visible { outline: 2px solid var(--mn-editor-accent); outline-offset: 2px; }
 
 @media screen and (max-width: 60rem) {
-  .mn-typora-toolbar { top: 2.75rem; align-items: center; }
-  .mn-typora-toolbar__identity small { display: none; }
-  .mn-typora-status { width: 5rem; max-width: 5rem; }
+  .mn-typora-toolbar { top: 2.75rem; grid-template-columns: auto minmax(5rem, 1fr) auto auto; }
+  .mn-typora-toolbar__identity small { width: 5.5rem; max-width: 5.5rem; }
   .mn-typora-shell { width: 100%; }
 }
 
 @media screen and (max-width: 38rem) {
-  .mn-typora-toolbar__identity { display: none; }
-  .mn-typora-toolbar { justify-content: center; min-height: 2.8rem; padding: 0.25rem; }
-  .mn-typora-toolbar__actions { width: 100%; gap: 0.1rem; justify-content: space-between; }
-  .mn-typora-status {
-    order: 1;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0.12rem 0.35rem;
-    font-size: 0.55rem;
-    text-align: right;
+  .mn-typora-toolbar {
+    top: 2.65rem;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 0.12rem;
+    min-height: 2.4rem;
+    margin-bottom: 0.55rem;
+    padding: 0.2rem 0.22rem;
+    border-radius: 0.58rem;
   }
-  .mn-typora-button { min-width: 2.1rem; min-height: 2.2rem; padding-right: 0.32rem; padding-left: 0.32rem; white-space: nowrap; }
-  .mn-typora-toolbar__actions > .mn-typora-button--structure { flex: 1 1 auto; }
+  .mn-typora-toolbar__identity { gap: 0.3rem; padding-left: 0.12rem; }
+  .mn-typora-toolbar__identity strong { font-size: 0.62rem; }
+  .mn-typora-toolbar__identity small { display: none; }
+  .mn-typora-toolbar__dot { width: 0.34rem; height: 0.34rem; box-shadow: none; }
+  .mn-typora-toolbar__tools { gap: 0; }
+  .mn-typora-button { min-width: 1.9rem; min-height: 1.9rem; padding-right: 0.34rem; padding-left: 0.34rem; font-size: 0.58rem; white-space: nowrap; }
+  .mn-typora-toolbar__session .mn-typora-button { min-width: auto; }
+  .mn-typora-status[data-kind="error"] {
+    position: absolute;
+    top: calc(100% + 0.2rem);
+    left: 0.25rem;
+    display: block;
+    width: max-content;
+    max-width: calc(100vw - 0.5rem);
+    padding: 0.18rem 0.35rem;
+    border: 1px solid rgba(195, 70, 61, 0.2);
+    border-radius: 0.35rem;
+    background: var(--mn-editor-surface);
+    box-shadow: var(--mn-editor-shadow);
+  }
   .mn-typora-surface { padding-top: 0.3rem; }
   .mn-typora-surface .cm-line { padding-right: 0.15rem; padding-left: 0.35rem; }
   .mn-typora-menu { right: 0.65rem; left: 0.65rem !important; width: auto; }

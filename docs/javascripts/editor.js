@@ -6,6 +6,7 @@
   const OPENING_STATUS_ID = "mn-typora-opening-status";
   const DRAFT_PREFIX = "mn-typora-draft:v1:";
   const PENDING_NAVIGATION_KEY = "mn-typora-pending-navigation";
+  const EXIT_ANCHOR_KEY = "mn-typora-exit-anchor:v1";
   const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
   const EDITOR_ASSET_URL = new URL("codemirror.bundle.js?v=20260914-1", document.currentScript.src).href;
   const RESUME_KEY = "mn-typora-resume";
@@ -178,6 +179,186 @@
     } catch (_) {
       setStatus(state, "草稿空间不足，请先导出", "error");
       return false;
+    }
+  }
+
+  function normalizeAnchorText(value) {
+    return String(value || "").replace(/\s+/g, " ").trim();
+  }
+
+  function mapPositionBetweenSources(fromSource, toSource, position) {
+    const from = String(fromSource || ""), to = String(toSource || "");
+    const point = Math.max(0, Math.min(from.length, Number(position) || 0));
+    let prefix = 0;
+    const prefixLimit = Math.min(from.length, to.length);
+    while (prefix < prefixLimit && from[prefix] === to[prefix]) prefix += 1;
+    if (point <= prefix) return Math.min(point, to.length);
+
+    let suffix = 0;
+    while (suffix < from.length - prefix && suffix < to.length - prefix &&
+           from[from.length - 1 - suffix] === to[to.length - 1 - suffix]) suffix += 1;
+    if (point >= from.length - suffix) return Math.max(0, to.length - (from.length - point));
+
+    const fromMiddle = Math.max(1, from.length - prefix - suffix);
+    const toMiddle = Math.max(0, to.length - prefix - suffix);
+    const progress = (point - prefix) / fromMiddle;
+    return Math.round(prefix + toMiddle * Math.max(0, Math.min(1, progress)));
+  }
+
+  function sourceProbeAt(source, position) {
+    const before = source.slice(0, position);
+    const lineIndex = before.split("\n").length - 1;
+    const lines = source.split("\n");
+    const candidates = [];
+    for (let distance = 0; distance <= 8; distance += 1) {
+      [lineIndex - distance, lineIndex + distance].forEach((index) => {
+        if (index < 0 || index >= lines.length || candidates.some(item => item.index === index)) return;
+        const raw = lines[index].trim();
+        if (!raw || /^(?:```|~~~|\$\$|\{#)/.test(raw)) return;
+        const admonition = /^(?:!!!|\?\?\?)\s+[\w-]+(?:\s+"([^"]+)")?/.exec(raw);
+        const anchorText = admonition ? (admonition[1] || "") : raw;
+        if (!anchorText) return;
+        const withoutLinks = anchorText
+          .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+          .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+          .replace(/^#{1,6}\s+/, "")
+          .replace(/^[-+*]\s+/, "")
+          .replace(/^\d+[.)]\s+/, "");
+        const segments = withoutLinks
+          .split(/\${1,2}[^$]*\${1,2}/g)
+          .map(part => normalizeAnchorText(part.replace(/[*_`~<>]/g, "").replace(/\\([\\`*_{}\[\]()#+.!-])/g, "$1")))
+          .filter(part => part.length >= 8);
+        segments.forEach(text => candidates.push({ index, distance, text }));
+      });
+    }
+    candidates.sort((a, b) => a.distance - b.distance || b.text.length - a.text.length);
+    return candidates[0]?.text.slice(0, 96) || "";
+  }
+
+  function editorVisualAnchorAt(state, viewportY) {
+    const lines = Array.from(state.surface.querySelectorAll(".cm-line")).map(element => {
+      const rectangle = element.getBoundingClientRect();
+      let sourceText = "";
+      try {
+        const position = state.view.posAtDOM(element, 0);
+        sourceText = state.view.state.doc.lineAt(position).text;
+      } catch (_) {
+        sourceText = renderedPlainText(element);
+      }
+      const admonition = /^(?:!!!|\?\?\?)\s+[\w-]+(?:\s+"([^"]+)")?/.exec(sourceText.trim());
+      let text = (admonition ? (admonition[1] || "") : sourceText)
+        .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+        .replace(/\${1,2}[^$]*\${1,2}/g, " ")
+        .replace(/^(?:!!!|\?\?\?)\s+[\w-]+\s+/, "")
+        .replace(/^#{1,6}\s+/, "")
+        .replace(/^[-+*]\s+/, "")
+        .replace(/^\d+[.)]\s+/, "")
+        .replace(/[*_`~<>]/g, "")
+        .replace(/\\([\\`*_{}\[\]()#+.!-])/g, "$1");
+      const visibleText = renderedPlainText(element);
+      if (normalizeAnchorText(visibleText).length >= 8) text = visibleText;
+      const distance = rectangle.top <= viewportY && rectangle.bottom >= viewportY
+        ? 0
+        : Math.min(Math.abs(rectangle.top - viewportY), Math.abs(rectangle.bottom - viewportY));
+      return {
+        element,
+        rectangle,
+        text: normalizeAnchorText(text),
+        distance,
+        centerDistance: Math.abs(rectangle.top + rectangle.height / 2 - viewportY)
+      };
+    }).filter(item => item.rectangle.height > 0 && item.text.length >= 8);
+    lines.sort((a, b) => a.distance - b.distance || a.centerDistance - b.centerDistance || a.rectangle.height - b.rectangle.height);
+    const surface = state.surface.getBoundingClientRect();
+    const hitLines = [
+      surface.left + surface.width / 2,
+      surface.left + Math.min(48, surface.width / 4),
+      surface.right - Math.min(48, surface.width / 4)
+    ].map(x => document.elementFromPoint(x, viewportY)?.closest?.(".cm-line")).filter(Boolean);
+    const line = lines.find(item => hitLines.includes(item.element)) || lines[0];
+    if (!line) return null;
+    const inset = Math.min(14, line.rectangle.height / 2);
+    const targetY = Math.max(line.rectangle.top + inset, Math.min(line.rectangle.bottom - inset, viewportY));
+    const progress = line.rectangle.height
+      ? Math.max(0, Math.min(1, (targetY - line.rectangle.top) / line.rectangle.height))
+      : 0.5;
+    const length = Math.min(72, line.text.length);
+    const center = Math.round(progress * line.text.length);
+    const start = Math.max(0, Math.min(line.text.length - length, center - Math.round(length / 2)));
+    return { viewportY: targetY, probe: line.text.slice(start, start + length).trim() };
+  }
+
+  function captureEditorExitAnchor(state, targetSource = null) {
+    if (!state?.view) return null;
+    const currentSource = state.view.state.doc.toString();
+    const finalSource = targetSource == null ? currentSource : String(targetSource);
+    const selection = state.view.state.selection.main;
+    const toolbarBottom = state.toolbar.getBoundingClientRect().bottom;
+    const contentTop = Math.min(window.innerHeight - 80, Math.max(80, toolbarBottom + 18));
+    let viewportY = Math.max(contentTop, Math.min(window.innerHeight - 70, window.innerHeight / 2));
+    let currentPosition = null;
+
+    if (state.cursorUsed) {
+      const coordinates = state.view.coordsAtPos(selection.head, 1);
+      if (coordinates && coordinates.bottom >= contentTop && coordinates.top <= window.innerHeight - 40) {
+        currentPosition = selection.head;
+        viewportY = Math.max(contentTop, Math.min(window.innerHeight - 70, (coordinates.top + coordinates.bottom) / 2));
+      }
+    }
+    if (!Number.isInteger(currentPosition)) {
+      const surface = state.surface.getBoundingClientRect();
+      currentPosition = state.view.posAtCoords({
+        x: Math.max(surface.left + 8, Math.min(surface.right - 8, (surface.left + surface.right) / 2)),
+        y: viewportY
+      }, false);
+    }
+    if (!Number.isInteger(currentPosition)) currentPosition = selection.head;
+
+    const position = mapPositionBetweenSources(currentSource, finalSource, currentPosition);
+    const headings = state.modules.extractHeadings(finalSource);
+    let heading = null, nextHeading = null;
+    headings.forEach((candidate, index) => {
+      if (candidate.from <= position) {
+        heading = candidate;
+        nextHeading = headings[index + 1] || null;
+      }
+    });
+    const sectionFrom = heading?.contentFrom ?? 0;
+    const sectionTo = nextHeading?.from ?? finalSource.length;
+    const visualAnchor = state.cursorUsed ? null : editorVisualAnchorAt(state, viewportY);
+    const anchor = {
+      kind: "editor",
+      sourcePath: state.payload.sourcePath,
+      position,
+      viewportY: visualAnchor?.viewportY ?? viewportY,
+      probe: visualAnchor?.probe || sourceProbeAt(finalSource, position),
+      headingTitle: heading?.title || "",
+      headingLevel: heading?.level || 0,
+      sectionProgress: sectionTo > sectionFrom
+        ? Math.max(0, Math.min(1, (position - sectionFrom) / (sectionTo - sectionFrom)))
+        : 0,
+      updatedAt: Date.now()
+    };
+    return anchor;
+  }
+
+  function rememberExitAnchor(anchor) {
+    if (!anchor) return;
+    try { sessionStorage.setItem(EXIT_ANCHOR_KEY, JSON.stringify(anchor)); } catch (_) {}
+  }
+
+  function readExitAnchor(payload) {
+    try {
+      const anchor = JSON.parse(sessionStorage.getItem(EXIT_ANCHOR_KEY));
+      if (!anchor || anchor.sourcePath !== payload.sourcePath ||
+          Date.now() - Number(anchor.updatedAt || 0) > 120000) {
+        sessionStorage.removeItem(EXIT_ANCHOR_KEY);
+        return null;
+      }
+      return anchor;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -731,37 +912,34 @@
       : "";
     const isLesson = payload.courseSlug && !payload.sourcePath.endsWith("/index.md");
     const management = payload.courseSlug ? `
-        <details class="mn-typora-more mn-typora-manage">
-          <summary class="mn-typora-button">管理</summary>
-          <div class="mn-typora-more__menu">
-            ${isLesson ? '<button type="button" class="mn-typora-button" data-action="rename-page">重命名当前页面</button>' : ""}
-            <button type="button" class="mn-typora-button" data-action="rename-course">重命名当前课程</button>
-            ${isLesson ? '<button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-page">删除当前页面…</button>' : ""}
-            <button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-course">删除当前课程…</button>
-          </div>
-        </details>` : "";
+        ${isLesson ? '<button type="button" class="mn-typora-button" data-action="rename-page">重命名当前页面</button>' : ""}
+        <button type="button" class="mn-typora-button" data-action="rename-course">重命名当前课程</button>
+        ${isLesson ? '<button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-page">删除当前页面…</button>' : ""}
+        <button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-course">删除当前课程…</button>` : "";
     return `
-      <div class="mn-typora-toolbar__identity">
+      <div class="mn-typora-toolbar__identity" title="${escapeHtml(payload.sourcePath)}">
         <span class="mn-typora-toolbar__dot" aria-hidden="true"></span>
-        <div><strong>编辑模式</strong><small>${escapeHtml(payload.sourcePath)}</small></div>
+        <div><strong>编辑</strong><small class="mn-typora-status" role="status">正在载入编辑器…</small></div>
       </div>
-      <div class="mn-typora-toolbar__actions">
-        <span class="mn-typora-status" role="status">正在载入编辑器…</span>
+      <div class="mn-typora-toolbar__tools" role="group" aria-label="编辑工具">
         <button type="button" class="mn-typora-button mn-typora-button--add" data-action="add">＋ 添加块</button>
         ${pageButton}
         <button type="button" class="mn-typora-button mn-typora-button--structure" data-action="create-course">＋ 新课程</button>
         <button type="button" class="mn-typora-button mn-typora-button--structure" data-action="reorder-courses">课程排序</button>
-        ${management}
+      </div>
+      <details class="mn-typora-more">
+        <summary class="mn-typora-button">更多</summary>
+        <div class="mn-typora-more__menu">
         <button type="button" class="mn-typora-button" data-action="source">源码</button>
-        <details class="mn-typora-more">
-          <summary class="mn-typora-button">更多</summary>
-          <div class="mn-typora-more__menu">
         <button type="button" class="mn-typora-button" data-action="bold">加粗 · ⌘/Ctrl B</button>
         <button type="button" class="mn-typora-button" data-action="italic">斜体 · ⌘/Ctrl I</button>
         <button type="button" class="mn-typora-button" data-action="math">行内公式 · ⌘/Ctrl ⇧M</button>
         <button type="button" class="mn-typora-button" data-action="export">导出</button>
-          </div>
-        </details>
+        ${management}
+        </div>
+      </details>
+      <div class="mn-typora-toolbar__session" role="group" aria-label="保存与退出">
+        <button type="button" class="mn-typora-button mn-typora-button--cancel" data-action="cancel" title="放弃上次保存后的修改并退出">取消</button>
         <button type="button" class="mn-typora-button mn-typora-button--save" data-action="save">保存</button>
         <button type="button" class="mn-typora-button mn-typora-button--done" data-action="done">完成</button>
       </div>`;
@@ -1156,20 +1334,192 @@
     }
   }
 
-  async function leaveEditor(state) {
-    if (state.saving || state.leaving) return;
-    if (!writeDraft(state)) return;
-    if (state.view.state.doc.toString() !== state.savedSource) {
-      state.leaving = true;
-      const saved = await saveSource(state);
-      state.leaving = false;
-      if (!saved || state.destroyed) return;
-      if (state.view.state.doc.toString() !== state.savedSource) {
-        setStatus(state, "刚才保存期间还有新输入，已保留草稿；继续写或再次完成", "pending");
-        state.view.focus();
-        return;
+  function probeRangeRect(element, probe) {
+    const target = normalizeAnchorText(probe);
+    if (!target) return null;
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        return parent?.closest(".katex-mathml, script, style")
+          ? NodeFilter.FILTER_REJECT
+          : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    let normalized = "";
+    const positions = [];
+    let previousWasSpace = false;
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const value = node.nodeValue || "";
+      for (let offset = 0; offset < value.length; offset += 1) {
+        const character = value[offset];
+        if (/\s/.test(character)) {
+          if (previousWasSpace || !normalized) continue;
+          normalized += " ";
+          positions.push({ node, offset });
+          previousWasSpace = true;
+        } else {
+          normalized += character;
+          positions.push({ node, offset });
+          previousWasSpace = false;
+        }
       }
     }
+    const index = normalized.indexOf(target);
+    if (index < 0 || !positions[index] || !positions[index + target.length - 1]) return null;
+    const range = document.createRange();
+    range.setStart(positions[index].node, positions[index].offset);
+    const end = positions[index + target.length - 1];
+    range.setEnd(end.node, Math.min((end.node.nodeValue || "").length, end.offset + 1));
+    const rectangles = Array.from(range.getClientRects());
+    return rectangles[Math.floor((rectangles.length - 1) / 2)] || range.getBoundingClientRect();
+  }
+
+  function renderedAnchorCandidates(article) {
+    return Array.from(article.querySelectorAll(
+      "h1, h2, h3, h4, p, li, pre, table, summary, .admonition-title"
+    )).filter(element => {
+      const rectangle = element.getBoundingClientRect();
+      return rectangle.height > 0 && rectangle.width > 0;
+    });
+  }
+
+  function renderedPlainText(element) {
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        return parent?.closest(".katex, .arithmatex, .headerlink, script, style")
+          ? NodeFilter.FILTER_REJECT
+          : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    let text = "";
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) text += ` ${node.nodeValue || ""}`;
+    return normalizeAnchorText(text);
+  }
+
+  function captureRenderedAnchor(payload, article) {
+    if (!payload || !article) return null;
+    const viewportY = Math.max(96, Math.min(window.innerHeight - 72, window.innerHeight / 2));
+    const candidates = renderedAnchorCandidates(article);
+    if (!candidates.length) return null;
+    let blockIndex = -1;
+    let bestDistance = Infinity;
+    candidates.forEach((element, index) => {
+      if (renderedPlainText(element).length < 8) return;
+      const rectangle = element.getBoundingClientRect();
+      const distance = rectangle.top <= viewportY && rectangle.bottom >= viewportY
+        ? 0
+        : Math.min(Math.abs(rectangle.top - viewportY), Math.abs(rectangle.bottom - viewportY));
+      if (distance < bestDistance || (distance === 0 && rectangle.height < candidates[blockIndex]?.getBoundingClientRect().height)) {
+        bestDistance = distance;
+        blockIndex = index;
+      }
+    });
+    if (blockIndex < 0) blockIndex = 0;
+    const block = candidates[blockIndex];
+    const blockRectangle = block.getBoundingClientRect();
+    const headings = Array.from(article.querySelectorAll("h1, h2, h3, h4"));
+    let heading = null, nextHeading = null;
+    headings.forEach((candidate, index) => {
+      if (candidate.getBoundingClientRect().top <= viewportY) {
+        heading = candidate;
+        nextHeading = headings[index + 1] || null;
+      }
+    });
+    const sectionTop = heading ? window.scrollY + heading.getBoundingClientRect().top : window.scrollY + article.getBoundingClientRect().top;
+    const sectionBottom = nextHeading
+      ? window.scrollY + nextHeading.getBoundingClientRect().top
+      : window.scrollY + article.getBoundingClientRect().bottom;
+    const documentY = window.scrollY + viewportY;
+    const plainText = renderedPlainText(block);
+    return {
+      kind: "reading",
+      sourcePath: payload.sourcePath,
+      viewportY,
+      probe: plainText.length >= 8 ? plainText.slice(0, 96) : "",
+      blockIndex,
+      blockTag: block.tagName,
+      blockProgress: blockRectangle.height
+        ? Math.max(0, Math.min(1, (viewportY - blockRectangle.top) / blockRectangle.height))
+        : 0.5,
+      headingTitle: heading ? normalizeAnchorText((heading.textContent || "").replace(/¶/g, "")) : "",
+      headingLevel: heading ? Number(heading.tagName.slice(1)) : 0,
+      sectionProgress: sectionBottom > sectionTop
+        ? Math.max(0, Math.min(1, (documentY - sectionTop) / (sectionBottom - sectionTop)))
+        : 0,
+      updatedAt: Date.now()
+    };
+  }
+
+  function renderedAnchorDocumentY(article, anchor) {
+    if (Number.isInteger(anchor.blockIndex)) {
+      const candidates = renderedAnchorCandidates(article);
+      const block = candidates[anchor.blockIndex];
+      if (block && (!anchor.blockTag || block.tagName === anchor.blockTag)) {
+        const rectangle = block.getBoundingClientRect();
+        return window.scrollY + rectangle.top +
+          Math.max(0, Math.min(1, Number(anchor.blockProgress) || 0)) * rectangle.height;
+      }
+    }
+    if (anchor.probe) {
+      const candidates = Array.from(article.querySelectorAll("h1, h2, h3, h4, p, li, summary, .admonition-title"));
+      const normalizedProbe = normalizeAnchorText(anchor.probe);
+      const element = candidates.find(candidate => renderedPlainText(candidate).includes(normalizedProbe));
+      if (element) {
+        const rectangle = probeRangeRect(element, normalizedProbe) || element.getBoundingClientRect();
+        return window.scrollY + rectangle.top + rectangle.height / 2;
+      }
+    }
+
+    if (anchor.headingTitle) {
+      const headings = Array.from(article.querySelectorAll("h1, h2, h3, h4"));
+      const headingIndex = headings.findIndex(heading =>
+        Number(heading.tagName.slice(1)) === Number(anchor.headingLevel) &&
+        normalizeAnchorText((heading.textContent || "").replace(/¶/g, "")) === normalizeAnchorText(anchor.headingTitle));
+      if (headingIndex >= 0) {
+        const sectionTop = window.scrollY + headings[headingIndex].getBoundingClientRect().top;
+        const sectionBottom = headingIndex + 1 < headings.length
+          ? window.scrollY + headings[headingIndex + 1].getBoundingClientRect().top
+          : window.scrollY + article.getBoundingClientRect().bottom;
+        return sectionTop + Math.max(0, Math.min(1, Number(anchor.sectionProgress) || 0)) *
+          Math.max(0, sectionBottom - sectionTop);
+      }
+    }
+    return null;
+  }
+
+  function restoreRenderedAnchor(payload, article, explicitAnchor = null) {
+    const anchor = explicitAnchor || readExitAnchor(payload);
+    if (!anchor || !article) return;
+    try { sessionStorage.removeItem(EXIT_ANCHOR_KEY); } catch (_) {}
+    const startedAt = performance.now();
+    let cancelled = false;
+    const cancel = () => { cancelled = true; };
+    const cancelEvents = ["wheel", "touchstart", "pointerdown", "keydown"];
+    cancelEvents.forEach(type => window.addEventListener(type, cancel, { once: true, passive: true, capture: true }));
+    const cleanup = () => cancelEvents.forEach(type => window.removeEventListener(type, cancel, { capture: true }));
+    setTimeout(cleanup, 950);
+    const restore = () => {
+      if (cancelled) return cleanup();
+      const documentY = renderedAnchorDocumentY(article, anchor);
+      if (!Number.isFinite(documentY)) return;
+      const desired = Math.max(0, documentY - anchor.viewportY);
+      const difference = desired - window.scrollY;
+      if (Math.abs(difference) > 0.75) window.scrollTo(0, desired);
+      if (performance.now() - startedAt < 900) requestAnimationFrame(restore);
+      else cleanup();
+    };
+    requestAnimationFrame(restore);
+    if (document.fonts?.ready) {
+      document.fonts.ready
+        .then(() => {
+          if (!cancelled) requestAnimationFrame(restore);
+        })
+        .catch(() => {});
+    }
+  }
+
+  function teardownEditor(state, anchor) {
     sessionStorage.removeItem(RESUME_KEY);
     hideMenu(state);
     clearTimeout(state.draftTimer);
@@ -1181,9 +1531,42 @@
     state.article.innerHTML = state.originalHtml;
     document.body.classList.remove("mn-typora-editing");
     activeEditor = null;
+    const needsReload = deferredReload || state.savedSource !== state.payload.source;
+    if (needsReload) {
+      rememberExitAnchor(anchor);
+      location.reload();
+      return;
+    }
     window.MathNotes?.renderMath?.(state.article);
     window.MathNotes?.numberBlocks?.(document.body);
-    if (deferredReload || state.savedSource !== state.payload.source) location.reload();
+    restoreRenderedAnchor(state.payload, state.article, anchor);
+  }
+
+  async function leaveEditor(state) {
+    if (state.saving || state.leaving) return;
+    let exitAnchor = captureEditorExitAnchor(state);
+    if (!writeDraft(state)) return;
+    if (state.view.state.doc.toString() !== state.savedSource) {
+      state.leaving = true;
+      const saved = await saveSource(state);
+      state.leaving = false;
+      if (!saved || state.destroyed) return;
+      if (state.view.state.doc.toString() !== state.savedSource) {
+        setStatus(state, "刚才保存期间还有新输入，已保留草稿；继续写或再次完成", "pending");
+        state.view.focus();
+        return;
+      }
+      exitAnchor = captureEditorExitAnchor(state);
+    }
+    teardownEditor(state, exitAnchor);
+  }
+
+  function cancelEditor(state) {
+    if (state.saving || state.leaving) return;
+    const exitAnchor = captureEditorExitAnchor(state, state.savedSource);
+    state.pendingSource = null;
+    clearCurrentEditorDraft(state);
+    teardownEditor(state, exitAnchor);
   }
 
   function setOpeningStatus(visible) {
@@ -1245,6 +1628,7 @@
       if (!button) return;
       const heading = (state.outlineHeadings || []).find(item => item.from === Number(button.dataset.outlinePosition));
       if (!heading) return;
+      state.cursorUsed = true;
       state.view.dispatch({ selection: { anchor: heading.contentFrom }, scrollIntoView: true });
       state.view.focus();
       updateOutlineActive(state);
@@ -1350,7 +1734,46 @@
     state.mathPopover = null;
   }
 
+  function sourceLineAnchorText(rawLine) {
+    const raw = String(rawLine || "").trim();
+    const admonition = /^(?:!!!|\?\?\?)\s+[\w-]+(?:\s+"([^"]+)")?/.exec(raw);
+    return normalizeAnchorText((admonition ? (admonition[1] || "") : raw)
+      .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/\${1,2}[^$]*\${1,2}/g, " ")
+      .replace(/^#{1,6}\s+/, "")
+      .replace(/^[-+*]\s+/, "")
+      .replace(/^\d+[.)]\s+/, "")
+      .replace(/[*_`~<>]/g, "")
+      .replace(/\\([\\`*_{}\[\]()#+.!-])/g, "$1"));
+  }
+
+  function sourcePositionForRenderedAnchor(source, anchor) {
+    const target = normalizeAnchorText(anchor?.probe);
+    if (!target) return null;
+    const lines = String(source || "").split("\n");
+    let offset = 0;
+    let best = null;
+    lines.forEach(raw => {
+      const clean = sourceLineAnchorText(raw);
+      const matches = clean.length >= 8 && (target.includes(clean) || clean.includes(target));
+      if (matches) {
+        const score = Math.min(clean.length, target.length);
+        if (!best || score > best.score) best = { offset, raw, score };
+      }
+      offset += raw.length + 1;
+    });
+    if (!best) return null;
+    const progress = Math.max(0, Math.min(1, Number(anchor.blockProgress) || 0));
+    return best.offset + Math.round(best.raw.length * progress);
+  }
+
   function captureReadingAnchor(article, source, modules) {
+    const visualAnchor = captureRenderedAnchor({ sourcePath: "" }, article);
+    const visualPosition = sourcePositionForRenderedAnchor(source, visualAnchor);
+    if (Number.isInteger(visualPosition)) {
+      return { position: visualPosition, viewportY: visualAnchor.viewportY };
+    }
     const sourceHeadings = modules.extractHeadings(source);
     const renderedHeadings = Array.from(article.querySelectorAll("h1, h2, h3, h4"));
     if (!sourceHeadings.length || !renderedHeadings.length) return null;
@@ -1396,7 +1819,7 @@
     }));
   }
 
-  async function enterEditor(payload, generation, preserveReadingPosition = false) {
+  async function enterEditor(payload, generation, preserveReadingPosition = false, explicitReadingAnchor = null) {
     if (!LOCAL_HOSTS.has(location.hostname)) return;
     if (activeEditor || openingGeneration === generation) return;
     openingGeneration = generation;
@@ -1432,9 +1855,9 @@
     if (draft && draft.source !== payload.source && (draftCompatible || confirm("发现基于旧版本的浏览器草稿。要恢复它吗？恢复后不会覆盖磁盘上的新版本，可先导出对照。"))) {
       source = draft.source;
     }
-    const readingAnchor = preserveReadingPosition && source === payload.source
+    const readingAnchor = explicitReadingAnchor || (preserveReadingPosition && source === payload.source
       ? captureReadingAnchor(article, source, modules)
-      : null;
+      : null);
 
     const originalHtml = article.innerHTML;
     article.innerHTML = "";
@@ -1466,7 +1889,11 @@
       blockTabStop: null,
       structureDialog: null, view: null, outline: null, outlineHeadings: [], outlineTimer: null,
       mathRanges: [], mathPopover: null, mathPopoverFrame: null, mathPopoverListener: null,
-      mathPopoverSignature: "", activeMathRange: null
+      mathPopoverSignature: "", activeMathRange: null,
+      // A restored selection is only historical state. Until the user clicks
+      // or types in this editing session, leaving should preserve the viewport
+      // center rather than jump to that old caret.
+      cursorUsed: false
     };
 
     const updateListener = modules.EditorView.updateListener.of((update) => {
@@ -1485,6 +1912,7 @@
         }
       }
       if (update.docChanged) {
+        state.cursorUsed = true;
         setStatus(state, "正在保存草稿…", "pending");
         clearTimeout(state.draftTimer);
         state.draftTimer = setTimeout(() => writeDraft(state), 350);
@@ -1662,6 +2090,7 @@
     const interactionHandler = modules.EditorView.domEventHandlers({
       pointerdown(event, view) {
         const position = visualPositionAtEvent(event, view);
+        if (Number.isInteger(position)) state.cursorUsed = true;
         pendingVisualPointer = Number.isInteger(position)
           ? { position, x: event.clientX, y: event.clientY }
           : null;
@@ -1669,6 +2098,9 @@
       },
       keydown(event) {
         if (event.isComposing || state.view.composing || event.keyCode === 229) return false;
+        if (!event.metaKey && !event.ctrlKey && !event.altKey && !["Shift", "Control", "Alt", "Meta"].includes(event.key)) {
+          state.cursorUsed = true;
+        }
         const stop = state.blockTabStop;
         const selection = state.view.state.selection.main;
         if (stop && !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey &&
@@ -1771,6 +2203,7 @@
         setStatus(state, "Markdown 已导出", "saved");
       }
       if (action === "save") saveSource(state);
+      if (action === "cancel") cancelEditor(state);
       if (action === "done") leaveEditor(state);
     });
     shell.addEventListener("mousedown", (event) => {
@@ -1799,7 +2232,16 @@
     const payload = readPayload();
     if (!payload || !LOCAL_HOSTS.has(location.hostname)) return;
     currentPayload = payload;
-    if (sessionStorage.getItem(RESUME_KEY) === payload.sourcePath) enterEditor(payload, generation);
+    const exitAnchor = readExitAnchor(payload);
+    if (sessionStorage.getItem(RESUME_KEY) === payload.sourcePath) {
+      if (exitAnchor) sessionStorage.removeItem(EXIT_ANCHOR_KEY);
+      const editorAnchor = exitAnchor?.kind === "editor"
+        ? { position: exitAnchor.position, viewportY: exitAnchor.viewportY }
+        : null;
+      enterEditor(payload, generation, false, editorAnchor);
+    } else {
+      restoreRenderedAnchor(payload, document.querySelector(".md-content article.md-typeset"), exitAnchor);
+    }
     const preload = () => {
       if (generation === pageGeneration) loadEditorModules().catch(() => {});
     };
@@ -1821,9 +2263,22 @@
     else enterEditor(currentPayload, pageGeneration, true);
   });
 
+  function rememberCurrentViewAnchor() {
+    if (!currentPayload) return;
+    const existing = readExitAnchor(currentPayload);
+    if (existing && Date.now() - Number(existing.updatedAt || 0) < 2000) return;
+    if (activeEditor) {
+      rememberExitAnchor(captureEditorExitAnchor(activeEditor));
+      writeDraft(activeEditor);
+      return;
+    }
+    const article = document.querySelector(".md-content article.md-typeset");
+    rememberExitAnchor(captureRenderedAnchor(currentPayload, article));
+  }
+
   document$.subscribe(initialize);
-  window.addEventListener("pagehide", () => { if (activeEditor) writeDraft(activeEditor); });
-  window.addEventListener("beforeunload", () => { if (activeEditor) writeDraft(activeEditor); });
+  window.addEventListener("pagehide", rememberCurrentViewAnchor);
+  window.addEventListener("beforeunload", rememberCurrentViewAnchor);
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && activeEditor) writeDraft(activeEditor);
   });

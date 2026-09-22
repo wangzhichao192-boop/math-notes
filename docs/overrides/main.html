@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <script>
+    /*
+     * Material expresses its responsive breakpoints in em. Desktop Safari
+     * applies page zoom to em-based media queries differently from px-based
+     * queries, which can make the navigation breakpoint appear to move after
+     * zooming or reloading. Rewrite only Material's two sidebar breakpoints to
+     * their exact 16px equivalents before the first body paint. The original
+     * three-stage layout (two sidebars / TOC only / drawer only) is unchanged.
+     */
+    (() => {
+      const replacements = [
+        [/76\.25em/g, "1220px"],
+        [/76\.234375em/g, "1219.75px"],
+        [/60em/g, "960px"],
+        [/59\.984375em/g, "959.75px"]
+      ]
+
+      const rewrite = rules => {
+        for (const rule of rules) {
+          if (rule.media) {
+            let query = rule.media.mediaText
+            for (const [pattern, value] of replacements)
+              query = query.replace(pattern, value)
+            rule.media.mediaText = query
+          }
+          if (rule.cssRules) rewrite(rule.cssRules)
+        }
+      }
+
+      for (const sheet of document.styleSheets) {
+        if (!/\/assets\/stylesheets\/(?:main|palette)\./.test(sheet.href || ""))
+          continue
+        try {
+          rewrite(sheet.cssRules)
+        } catch (_) {
+          /* A stylesheet that cannot expose its CSSOM is left untouched. */
+        }
+      }
+
+      document.documentElement.dataset.mnBreakpoints = "px"
+    })()
+  </script>
+{% endblock %}

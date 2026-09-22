@@ -361,6 +361,23 @@ definition of a group and study the maps that preserve it.
     A **permutation** of a set $X$ is a bijection $X\to X$. The set of all
     permutations is the group $\operatorname{Sym}(X)$ under composition.
     If $X=\{1,\ldots,n\}$, write $S_n$.
+!!! remark "Remark"
+    A permutation $\sigma\in S_n$ can be written in **two-line notation**:
+
+    $$
+    \sigma=\begin{pmatrix} 1&2&\cdots&n \\ \sigma(1)&\sigma(2)&\cdots&\sigma(n) \end{pmatrix}.
+    $$
+
+    It is often more convenient to use **cycle notation**: a cycle $(a_1a_2\cdots a_k)$ means
+
+    $$
+    a_1\mapsto a_2,\quad a_2\mapsto a_3,\quad a_2\mapsto a_3,\quad a_k\mapsto a_1,
+    $$
+
+    while all other elements are fixed. Disjoint cycles may be written next to each other, and fixed points are usually omitted.
+    For example, $\sigma=\left(\begin{smallmatrix}1&2&3&4&5\\2&3&1&5&4\end{smallmatrix}\right)$ can be wrote as $\sigma=(123)(45)$.  
+
+
 
 !!! example "Example (Noncommutativity of $S_3$)"
     <a id="ex-s3-noncommutative"></a>
@@ -399,6 +416,8 @@ definition of a group and study the maps that preserve it.
     $f(xy)=f(x)f(y)$ for all $x,y\in G$. A bijective homomorphism is an
     **isomorphism**; in this case write $G\cong H$. An isomorphism
     $G\to G$ is an **automorphism**.
+    
+    We write $\operatorname{Hom}(G,H)$ for the set of group homomorphisms $G\to H$, and $\operatorname{Aut}(G)$ for the group of automorphisms $G\to G$, with composition as the group operation.
 
 !!! proposition "Proposition (Preservation laws)"
     <a id="prop-homomorphism-preservation"></a>
