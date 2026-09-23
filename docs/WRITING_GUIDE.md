@@ -41,10 +41,14 @@ docs/<subject>/
   if necessary, revise the chapter title, section titles, opening orienting
   paragraphs, course index, and navigation labels so that they describe the
   combined finished exposition rather than the history of separate uploads.
-- Use one `#` heading for the chapter title. Within that page, each `##`
-  heading is a genuine book **section** (also informally called a subchapter).
-  The number of `##` headings should resemble the section count of a normal
-  academic chapter covering the same material.
+- Use one `#` heading for the page title. An independent course page is a
+  **chapter**; when that page is nested beneath another chapter in the course
+  navigation, it is a **subchapter**. A **part** is a non-clickable navigation
+  label that groups chapters and never gets its own page.
+- Within a chapter or subchapter page, each `##` heading is a genuine book
+  **section**. A `###` heading is a **subsection**. The number of sections
+  should resemble the section count of a normal academic chapter covering the
+  same material.
 - Choose chapter and section boundaries by mathematical scope, conceptual
   dependency, and reading length. Do not create a new chapter or section merely
   because the lecture date changes, the blackboard moves to a new panel, or a
@@ -230,6 +234,19 @@ The title is always `"Idea"`; there is no alternative title. The block is not
 numbered. Do not attach an idea block mechanically to every proof. A complete
 proof still uses `??? proof "Proof"`.
 
+### 3.6 Notation uses `!!! notation "Notation (...)"`
+
+Use a notation block to introduce symbols, naming conventions, or standing
+notational agreements that do not constitute a mathematical definition or
+result. Notation blocks are open by default and are **not numbered**, so they
+do not consume a position in the shared theorem-style block counter.
+
+```markdown
+!!! notation "Notation (Powers in a monoid)"
+    For a monoid $M$, write $M^\times$ for the submonoid of invertible
+    elements and write $x^{\ast n}$ for the $n$-fold product of $x$.
+```
+
 ---
 
 ## 4. Admonition skeleton
@@ -248,6 +265,7 @@ Examples:
 ```markdown
 !!! definition "Definition (Composition law)"
 !!! definition "Equinumerous sets"
+!!! notation "Notation (Powers in a monoid)"
 !!! example "Example"                  # or "Example (Symmetric group)"
 !!! theorem "Theorem (Cantor–Bernstein)"
 !!! lemma "Lemma (Schur)"
@@ -264,7 +282,8 @@ Do **not** write:
 The site automatically prepends a `chapter.section.block` number to each
 theorem-style title. Definitions, theorems, propositions, lemmas, corollaries,
 examples, and remarks share one block counter. A new `##` heading resets the
-block counter; proofs, ideas, and ordinary notes are not numbered.
+block counter; notation blocks, proofs, ideas, and ordinary notes are not
+numbered.
 
 ```markdown
 !!! definition "Definition (Composition law)"

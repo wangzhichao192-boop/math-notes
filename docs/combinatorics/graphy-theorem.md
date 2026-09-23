@@ -342,7 +342,7 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     Choose $y\in S\cap S_0$. Because a connected subgraph of a tree contains the unique path between any two of its vertices, both $x_S$ and $x_{S_0}$ lie on the $r$--$y$ path. The choice of $S_0$ puts $x_{S_0}$ no closer to $r$ than $x_S$. Hence $x_{S_0}$ lies on the $x_S$--$y$ path, which is contained in $S$. Thus $x_{S_0}\in S$ for every $S$.
 
-## Plane Graphs and Euler Characteristic
+## Planar and Euler's Formula
 
 !!! definition "Definition (Drawing, planar graph, and plane graph)"
     <a id="def-planar-plane"></a>

@@ -69,6 +69,7 @@ def _navigation_courses(source):
             "title_end": key_node.end_mark.index,
             "value_node": value_node,
             "page_count": page_count,
+            "outline": _course_outline(next(iter(item.values())), found[0]["slug"]),
         })
     return courses
 
@@ -76,7 +77,10 @@ def _navigation_courses(source):
 def _structure_status(config_path, docs_dir):
     config_source, home_source = _structure_sources(config_path, docs_dir)
     return {"ok": True, "courses": [
-        {"title": item["title"], "slug": item["slug"], "pageCount": item["page_count"]}
+        {
+            "title": item["title"], "slug": item["slug"],
+            "pageCount": item["page_count"], "outline": item["outline"],
+        }
         for item in _navigation_courses(config_source)
     ], "structureRevision": _revision(config_source + "\0" + home_source)}
 
@@ -162,6 +166,55 @@ def _nav_paths(value):
             yield from _nav_paths(item)
 
 
+def _course_outline(children, course_slug: str) -> list[dict]:
+    """Normalize MkDocs navigation into Part/Chapter/Subchapter records."""
+    index_path = f"{course_slug}/index.md"
+
+    def page(item, *, allow_children=True):
+        if not isinstance(item, dict) or len(item) != 1:
+            return None
+        title, value = next(iter(item.items()))
+        if isinstance(value, str) and value.endswith(".md"):
+            return {"type": "chapter", "title": str(title), "path": value, "children": []}
+        if not allow_children or not isinstance(value, list) or not value:
+            return None
+        own_path = value[0] if isinstance(value[0], str) and value[0].endswith(".md") else None
+        if isinstance(value[0], dict) and len(value[0]) == 1:
+            first_title, first_path = next(iter(value[0].items()))
+            if str(first_title) == str(title) and isinstance(first_path, str) and first_path.endswith(".md"):
+                own_path = first_path
+        if not own_path:
+            return None
+        subchapters = []
+        for child in value[1:]:
+            normalized = page(child, allow_children=False)
+            if normalized:
+                normalized["type"] = "subchapter"
+                subchapters.append(normalized)
+        return {
+            "type": "chapter", "title": str(title), "path": own_path,
+            "children": subchapters,
+        }
+
+    outline = []
+    for item in children if isinstance(children, list) else []:
+        if item == index_path:
+            continue
+        normalized = page(item)
+        if normalized:
+            outline.append(normalized)
+            continue
+        if isinstance(item, dict) and len(item) == 1:
+            title, value = next(iter(item.items()))
+            if isinstance(value, list):
+                chapters = [page(child) for child in value]
+                outline.append({
+                    "type": "part", "title": str(title),
+                    "children": [child for child in chapters if child],
+                })
+    return outline
+
+
 def _chapter_number(config, source_path: str) -> int | None:
     """Return the page's one-based chapter position inside its course."""
     if "/" not in source_path or source_path.endswith("/index.md"):
@@ -211,6 +264,7 @@ def on_page_content(html, *, page, config, files):
         "sourceB64": base64.b64encode(source.encode("utf-8")).decode("ascii"),
         "revision": _revision(source),
         "chapterNumber": _chapter_number(config, source_path),
+        "mountPath": _mount_path(config),
         "saveEndpoint": _mount_path(config) + ENDPOINT_NAME,
         "manageEndpoint": _mount_path(config) + MANAGE_ENDPOINT_NAME,
     }
@@ -279,6 +333,130 @@ def _yaml_string(value: str) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
+def _render_course_navigation(title: str, slug: str, outline: list[dict]) -> str:
+    lines = [f"  - {_yaml_string(title)}:", f"      - {slug}/index.md"]
+
+    def render_page(item: dict, indent: int) -> None:
+        prefix = " " * indent
+        children = item.get("children") or []
+        if children:
+            lines.append(f"{prefix}- {_yaml_string(item['title'])}:")
+            lines.append(
+                f"{prefix}    - {_yaml_string(item['title'])}: {item['path']}"
+            )
+            for child in children:
+                lines.append(
+                    f"{prefix}    - {_yaml_string(child['title'])}: {child['path']}"
+                )
+        else:
+            lines.append(f"{prefix}- {_yaml_string(item['title'])}: {item['path']}")
+
+    for item in outline:
+        if item["type"] == "part":
+            lines.append(f"      - {_yaml_string(item['title'])}:")
+            for child in item.get("children") or []:
+                render_page(child, 10)
+        else:
+            render_page(item, 6)
+    return "\n".join(lines) + "\n"
+
+
+def _outline_page_map(outline: list[dict]) -> dict[str, dict]:
+    pages = {}
+    for item in outline:
+        chapters = item.get("children", []) if item.get("type") == "part" else [item]
+        for chapter in chapters:
+            pages[chapter["path"]] = chapter
+            for child in chapter.get("children") or []:
+                pages[child["path"]] = child
+    return pages
+
+
+def _validated_outline(value, existing: list[dict], course_slug: str) -> list[dict]:
+    if not isinstance(value, list) or len(value) > 500:
+        raise ValueError("outline")
+    existing_pages = _outline_page_map(existing)
+    seen = set()
+
+    def clean_page(raw, kind: str, allow_children: bool) -> dict:
+        if not isinstance(raw, dict):
+            raise ValueError("outline")
+        path = raw.get("path")
+        if not isinstance(path, str) or path not in existing_pages or path in seen:
+            raise ValueError("outline")
+        if not path.startswith(f"{course_slug}/") or not path.endswith(".md"):
+            raise ValueError("outline")
+        seen.add(path)
+        children = raw.get("children") or []
+        if not allow_children and children:
+            raise ValueError("outline")
+        cleaned = {
+            "type": kind, "title": existing_pages[path]["title"],
+            "path": path, "children": [],
+        }
+        if allow_children:
+            if not isinstance(children, list):
+                raise ValueError("outline")
+            cleaned["children"] = [clean_page(child, "subchapter", False) for child in children]
+        return cleaned
+
+    cleaned = []
+    for raw in value:
+        if not isinstance(raw, dict):
+            raise ValueError("outline")
+        if raw.get("type") == "part":
+            title = _clean_text(raw.get("title"), "partTitle", 80)
+            children = raw.get("children")
+            if not isinstance(children, list):
+                raise ValueError("outline")
+            cleaned.append({
+                "type": "part", "title": title,
+                "children": [clean_page(child, "chapter", True) for child in children],
+            })
+        elif raw.get("type") == "chapter":
+            cleaned.append(clean_page(raw, "chapter", True))
+        else:
+            raise ValueError("outline")
+    if seen != set(existing_pages):
+        raise ValueError("outline")
+    return cleaned
+
+
+def _save_course_outline(payload: dict, *, docs_dir: str, config_path: str,
+                         mount_path: str) -> dict:
+    course_slug = _clean_slug(payload.get("course"), "course")
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    _check_structure_revision(payload, config_source, home_source)
+    course = _course_by_slug(config_source, course_slug)
+    outline = _validated_outline(payload.get("outline"), course["outline"], course_slug)
+    block = _render_course_navigation(course["title"], course_slug, outline)
+    next_config = config_source[:course["start"]] + block + config_source[course["end"]:]
+    _atomic_write(config_path, next_config)
+    return {
+        "ok": True, "url": f"{mount_path}{course_slug}/", "outline": outline,
+        "structureRevision": _revision(next_config + "\0" + home_source),
+    }
+
+
+def _create_part(payload: dict, *, docs_dir: str, config_path: str,
+                 mount_path: str) -> dict:
+    course_slug = _clean_slug(payload.get("course"), "course")
+    title = _clean_text(payload.get("title"), "title", 80)
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    _check_structure_revision(payload, config_source, home_source)
+    course = _course_by_slug(config_source, course_slug)
+    if any(item["type"] == "part" and item["title"] == title for item in course["outline"]):
+        raise FileExistsError("这个 Part 已经存在。")
+    outline = [*course["outline"], {"type": "part", "title": title, "children": []}]
+    block = _render_course_navigation(course["title"], course_slug, outline)
+    next_config = config_source[:course["start"]] + block + config_source[course["end"]:]
+    _atomic_write(config_path, next_config)
+    return {
+        "ok": True, "outline": outline,
+        "structureRevision": _revision(next_config + "\0" + home_source),
+    }
+
+
 def _markdown_text(value: str) -> str:
     return value.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]").replace("*", "\\*")
 
@@ -322,7 +500,47 @@ def _page_navigation_entry(config_source: str, course_slug: str, source_path: st
                         "title_end": key_node.end_mark.index,
                         "start": line_start,
                         "end": line_end,
+                        "has_children": False,
                     }
+                if (isinstance(value_node, yaml.SequenceNode) and value_node.value
+                        and isinstance(value_node.value[0], yaml.ScalarNode)
+                        and value_node.value[0].value == source_path):
+                    line_start = config_source.rfind("\n", 0, node.start_mark.index) + 1
+                    line_end = config_source.find("\n", value_node.end_mark.index)
+                    if line_end < 0:
+                        line_end = len(config_source)
+                    else:
+                        line_end += 1
+                    return {
+                        "title": str(key_node.value),
+                        "title_start": key_node.start_mark.index,
+                        "title_end": key_node.end_mark.index,
+                        "start": line_start,
+                        "end": line_end,
+                        "has_children": len(value_node.value) > 1,
+                    }
+                if isinstance(value_node, yaml.SequenceNode) and value_node.value:
+                    first = value_node.value[0]
+                    if (isinstance(first, yaml.MappingNode) and first.value
+                            and first.value[0][0].value == key_node.value
+                            and isinstance(first.value[0][1], yaml.ScalarNode)
+                            and first.value[0][1].value == source_path):
+                        line_start = config_source.rfind("\n", 0, node.start_mark.index) + 1
+                        line_end = config_source.find("\n", value_node.end_mark.index)
+                        if line_end < 0:
+                            line_end = len(config_source)
+                        else:
+                            line_end += 1
+                        return {
+                            "title": str(key_node.value),
+                            "title_start": key_node.start_mark.index,
+                            "title_end": key_node.end_mark.index,
+                            "mirror_title_start": first.value[0][0].start_mark.index,
+                            "mirror_title_end": first.value[0][0].end_mark.index,
+                            "start": line_start,
+                            "end": line_end,
+                            "has_children": len(value_node.value) > 1,
+                        }
                 found = find(value_node)
                 if found:
                     return found
@@ -586,11 +804,46 @@ def _create_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: 
         or page_slug == "index"
     ):
         raise FileExistsError(f"{course_slug}/{page_slug}.md")
-    with open(config_path, encoding="utf-8") as config_file:
-        config_source = config_file.read()
+    config_source, home_source = _structure_sources(config_path, docs_dir)
+    if payload.get("baseRevision") is not None:
+        _check_structure_revision(payload, config_source, home_source)
     with open(course_index, encoding="utf-8") as index_file:
         index_source = index_file.read()
-    next_config = _insert_page_navigation(config_source, course_slug, title, page_slug)
+    course = _course_by_slug(config_source, course_slug)
+    outline = json.loads(json.dumps(course["outline"], ensure_ascii=False))
+    new_page = {
+        "type": "chapter", "title": title,
+        "path": f"{course_slug}/{page_slug}.md", "children": [],
+    }
+    kind = payload.get("kind") or "chapter"
+    if kind == "subchapter":
+        parent_path = payload.get("parentPath")
+        parent = None
+        for item in outline:
+            chapters = item.get("children", []) if item.get("type") == "part" else [item]
+            parent = next(
+                (chapter for chapter in chapters if chapter.get("path") == parent_path),
+                parent,
+            )
+        if not parent:
+            raise LookupError(parent_path)
+        new_page["type"] = "subchapter"
+        parent.setdefault("children", []).append(new_page)
+    elif kind == "chapter":
+        part_title = payload.get("partTitle")
+        if part_title:
+            part = next((item for item in outline
+                         if item.get("type") == "part" and item.get("title") == part_title), None)
+            if not part:
+                raise LookupError(part_title)
+            part.setdefault("children", []).append(new_page)
+        else:
+            outline.append(new_page)
+    else:
+        raise ValueError("kind")
+    next_config = (config_source[:course["start"]] +
+                   _render_course_navigation(course["title"], course_slug, outline) +
+                   config_source[course["end"]:])
     next_index = _insert_course_page(index_source, title, page_slug, description)
     page_source = f"# {title}\n"
     if description:
@@ -619,6 +872,8 @@ def _create_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: 
         "ok": True,
         "url": f"{mount_path}{course_slug}/{page_slug}/",
         "path": f"{course_slug}/{page_slug}.md",
+        "outline": outline,
+        "structureRevision": _revision(next_config + "\0" + home_source),
     }
 
 
@@ -673,8 +928,12 @@ def _rename_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: 
         page_source = stream.read()
     with open(course_index, encoding="utf-8") as stream:
         index_source = stream.read()
-    next_config = (config_source[:entry["title_start"]] + _yaml_string(title) +
-                   config_source[entry["title_end"]:])
+    next_config = config_source
+    title_spans = [(entry["title_start"], entry["title_end"])]
+    if "mirror_title_start" in entry:
+        title_spans.append((entry["mirror_title_start"], entry["mirror_title_end"]))
+    for start, end in sorted(title_spans, reverse=True):
+        next_config = next_config[:start] + _yaml_string(title) + next_config[end:]
     next_page = _replace_first_heading(page_source, title)
     next_index = _update_course_page_entry(index_source, page_slug, title)
     _write_transaction([
@@ -700,6 +959,8 @@ def _delete_page(payload: dict, *, docs_dir: str, config_path: str, mount_path: 
     config_source, home_source = _structure_sources(config_path, docs_dir)
     _check_structure_revision(payload, config_source, home_source)
     entry = _page_navigation_entry(config_source, course_slug, source_path)
+    if entry.get("has_children"):
+        raise ValueError("请先移动或删除这个 Chapter 下的 Subchapter")
     confirmation = _clean_text(payload.get("confirmation"), "confirmation", 100)
     if confirmation != entry["title"]:
         raise ValueError("confirmation")
@@ -854,6 +1115,14 @@ def on_serve(server, *, config, builder):
                     result = _create_page(
                         payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
                     )
+                elif action == "createPart":
+                    result = _create_part(
+                        payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
+                    )
+                elif action == "saveCourseOutline":
+                    result = _save_course_outline(
+                        payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
+                    )
                 elif action == "renameCourse":
                     result = _rename_course(
                         payload, docs_dir=docs_dir, config_path=config_path, mount_path=mount_path
@@ -883,7 +1152,8 @@ def on_serve(server, *, config, builder):
                     start_response,
                     "409 Conflict",
                     {"error": "exists", "message": str(error) if action in {
-                        "reorderCourses", "renameCourse", "renamePage", "deletePage", "deleteCourse"
+                        "reorderCourses", "createPart", "saveCourseOutline",
+                        "renameCourse", "renamePage", "deletePage", "deleteCourse"
                     } else "这个课程或页面已经存在，请刷新检查；已有内容不会覆盖。"},
                 )
             except LookupError:
@@ -900,7 +1170,7 @@ def on_serve(server, *, config, builder):
                 )
             return _json_response(
                 start_response,
-                "201 Created" if action in {"createCourse", "createPage"} else "200 OK",
+                "201 Created" if action in {"createCourse", "createPage", "createPart"} else "200 OK",
                 result,
             )
 

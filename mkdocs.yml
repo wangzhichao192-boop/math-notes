@@ -43,8 +43,8 @@ theme:
 
 extra_css:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
-  - stylesheets/extra.css?v=20260921-1
-  - stylesheets/editor.css?v=20260921-2
+  - stylesheets/extra.css?v=20260923-3
+  - stylesheets/editor.css?v=20260923-1
   - stylesheets/theme-picker.css?v=20260921-1
 
 extra_javascript:
@@ -52,7 +52,8 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
   - javascripts/numbering.js?v=20260920-1
-  - javascripts/editor.js?v=20260921-15
+  - javascripts/reference-navigation.js?v=20260923-2
+  - javascripts/editor.js?v=20260922-4
   - javascripts/theme-picker.js?v=20260918-3
 
 markdown_extensions:
@@ -92,6 +93,11 @@ plugins:
       lang:
         - zh
         - en
+      # Mathematical terminology is better served by exact/prefix matching:
+      # Lunr's English stemmer conflicts with the Chinese multi-language
+      # pipeline and drops words such as "functional" and "homomorphism".
+      pipeline: []
+      separator: '[\s\u200b\u3000\-–—、。，．？！；,:!=\[\](){}"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
   - git-revision-date-localized:
       enable_creation_date: true
       enable_git_follow: false
@@ -105,24 +111,26 @@ nav:
   - 首页: index.md
   - 代数与分析基础:
       - algebra-analysis/index.md
-      - Basic Logic: algebra-analysis/basic-logic.md
-      - Set Theory: algebra-analysis/set-theory.md
-      - Correspondence: algebra-analysis/correspondence.md
-      - Binary Relations: algebra-analysis/binary-relations.md
-      - Groups: algebra-analysis/groups.md
-      - Rings and Modules: algebra-analysis/rings-and-modules.md
-      - Limit: algebra-analysis/limit.md
-      - Topology: algebra-analysis/topology.md
-      - Differential Calculus: algebra-analysis/differential-calculus.md
-      - Integral Calculus: algebra-analysis/integral-calculus.md
-      - Category Theory: algebra-analysis/category-theory.md
-      - Bilinear Algebra: algebra-analysis/bilinear-algebra.md
-      - Self-adjoint Operators: algebra-analysis/self-adjoint-operators.md
-      - Multilinear Algebra: algebra-analysis/multilinear-algebra.md
-      - Haar Measures: algebra-analysis/haar-measures.md
-      - Reduction of Endomorphisms: algebra-analysis/reduction-of-endomorphisms.md
-      - Differential Geometry: algebra-analysis/differential-geometry.md
-      - Fourier Series: algebra-analysis/fourier-series.md
+      - FAA I:
+          - Basic Logic: algebra-analysis/basic-logic.md
+          - Set Theory: algebra-analysis/set-theory.md
+          - Correspondence: algebra-analysis/correspondence.md
+          - Binary Relations: algebra-analysis/binary-relations.md
+          - Groups: algebra-analysis/groups.md
+          - Rings and Modules: algebra-analysis/rings-and-modules.md
+          - Limit: algebra-analysis/limit.md
+          - Topology: algebra-analysis/topology.md
+          - Differential Calculus: algebra-analysis/differential-calculus.md
+          - Integral Calculus: algebra-analysis/integral-calculus.md
+      - FAA II:
+          - Category Theory: algebra-analysis/category-theory.md
+          - Bilinear Algebra: algebra-analysis/bilinear-algebra.md
+          - Self-adjoint Operators: algebra-analysis/self-adjoint-operators.md
+          - Multilinear Algebra: algebra-analysis/multilinear-algebra.md
+          - Haar Measures: algebra-analysis/haar-measures.md
+          - Reduction of Endomorphisms: algebra-analysis/reduction-of-endomorphisms.md
+          - Differential Geometry: algebra-analysis/differential-geometry.md
+          - Fourier Series: algebra-analysis/fourier-series.md
   - "抽象代数":
       - abstract-algebra/index.md
       - "Sets, Cardinality, Choice, and Quotients": abstract-algebra/lesson1.md

@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "test:editor": "node --test test_editor_commands.mjs test_editor_syntax.mjs",
+    "test:search": "node test_search_runtime.mjs",
     "build:editor": "esbuild editor-runtime.js --bundle --minify --format=iife --target=es2020 --outfile=../docs/javascripts/codemirror.bundle.js"
   },
   "dependencies": {

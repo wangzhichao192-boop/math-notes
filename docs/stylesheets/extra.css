@@ -168,6 +168,16 @@
   background-color: rgba(68, 138, 255, 0.1);
 }
 
+/* Notation — indigo */
+.md-typeset .admonition.notation,
+.md-typeset details.notation {
+  border-color: #5c6bc0;
+}
+.md-typeset .notation > .admonition-title,
+.md-typeset details.notation > summary {
+  background-color: rgba(92, 107, 192, 0.1);
+}
+
 /* Theorem — purple */
 .md-typeset .admonition.theorem,
 .md-typeset details.theorem {
@@ -512,6 +522,96 @@
   color: var(--mn-accent) !important;
 }
 
+/* Book parts are structural labels, not destinations. In the wide sidebar
+   they follow Material's ordinary hierarchy rhythm; in the narrow drawer
+   their compact blocks use each palette's own surface and accent colours. */
+.md-sidebar--primary .mn-nav-part {
+  margin-top: 0.72rem;
+}
+.md-sidebar--primary .mn-nav-part:first-child {
+  margin-top: 0.28rem;
+}
+.md-sidebar--primary .mn-nav-part__title {
+  display: flex;
+  min-height: 1.34rem;
+  margin: 0 0.42rem 0.16rem 0.12rem;
+  padding: 0.09rem 0.48rem 0.09rem 0.58rem;
+  align-items: center;
+  border: 0;
+  border-left: 0.14rem solid color-mix(
+    in srgb,
+    var(--mn-theme-accent, var(--mn-accent)) 58%,
+    var(--mn-theme-fg-light, var(--md-default-fg-color--light))
+  );
+  border-radius: 0.08rem 0.16rem 0.16rem 0.08rem;
+  color: color-mix(
+    in srgb,
+    var(--mn-theme-fg, var(--md-default-fg-color)) 86%,
+    var(--mn-theme-accent, var(--mn-accent)) 14%
+  );
+  background: color-mix(
+    in srgb,
+    var(--mn-theme-code-bg, var(--md-code-bg-color)) 84%,
+    var(--mn-theme-accent, var(--mn-accent)) 16%
+  );
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1rem;
+  letter-spacing: 0.045em;
+}
+.md-sidebar--primary .mn-nav-part__chapters {
+  margin: 0;
+  padding-left: 0.48rem;
+}
+.md-sidebar--primary .mn-nav-part__chapters > .md-nav__item > .md-nav__link {
+  margin-top: 0.05rem;
+}
+
+/* On desktop, a Part should read like a normal, always-open navigation
+   group. It deliberately has no chevron: the label is not interactive. */
+@media screen and (min-width: 1220px) {
+  .md-sidebar--primary .mn-nav-part {
+    margin-top: 0;
+  }
+  .md-sidebar--primary .mn-nav-part:first-child {
+    margin-top: 0;
+  }
+  .md-sidebar--primary .mn-nav-part__title {
+    min-height: 0;
+    margin: 0.625em 0.4rem 0 0;
+    padding: 0;
+    align-items: flex-start;
+    border: 0;
+    border-radius: 0;
+    color: var(--md-default-fg-color--light);
+    background: transparent;
+    font-size: inherit;
+    font-weight: 700;
+    line-height: inherit;
+    letter-spacing: normal;
+  }
+  .md-sidebar--primary .mn-nav-part__chapters {
+    padding-left: 0.6rem;
+  }
+}
+
+/* Material scrolls the active chapter to the top of the narrow drawer. Keep
+   its Part label visible beneath the drawer title instead of letting that
+   automatic scroll hide the label. The next Part naturally pushes it away. */
+@media screen and (max-width: 1219.75px) {
+  .md-sidebar--primary .md-nav[data-md-level="1"] > .md-nav__list:has(.mn-nav-part) {
+    scroll-padding-top: 1.55rem;
+  }
+  .md-sidebar--primary .mn-nav-part__title {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .md-sidebar--primary .mn-nav-part__chapters > .md-nav__item--active:first-child {
+    scroll-margin-top: 1.55rem;
+  }
+}
+
 /* Homepage sidebar: this remains the active top-level navigation item so
    Material's scrollfix includes it in Safari's initial height calculation. */
 .mn-recent-updates {
@@ -622,6 +722,12 @@
   -webkit-mask-image: var(--md-admonition-icon--note);
   mask-image: var(--md-admonition-icon--note);
 }
+.md-typeset .admonition.notation > .admonition-title::before,
+.md-typeset details.notation > summary::before {
+  background-color: #3949ab;
+  -webkit-mask-image: var(--md-admonition-icon--abstract);
+  mask-image: var(--md-admonition-icon--abstract);
+}
 .md-typeset .admonition.theorem > .admonition-title::before,
 .md-typeset details.theorem > summary::before {
   background-color: #6200ee;
@@ -694,6 +800,8 @@
 }
 [data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title::before,
 [data-md-color-scheme="slate"] .md-typeset details.definition > summary::before { background-color: #7f9fc8; }
+[data-md-color-scheme="slate"] .md-typeset .notation > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset details.notation > summary::before { background-color: #96a6d8; }
 [data-md-color-scheme="slate"] .md-typeset .example > .admonition-title::before,
 [data-md-color-scheme="slate"] .md-typeset details.example > summary::before { background-color: #d6b46f; }
 [data-md-color-scheme="slate"] .md-typeset .definition .mn-thm-num,
@@ -722,3 +830,63 @@
 [data-md-color-scheme="slate"] .md-typeset details.remark .mn-thm-num { color: #82908e; }
 [data-md-color-scheme="slate"] .md-typeset .idea > .admonition-title::before,
 [data-md-color-scheme="slate"] .md-typeset details.idea > summary::before { background-color: #78c7bd; }
+
+/* Diagrams rendered from tikz-cd. */
+.md-typeset .commutative-diagram {
+  display: block;
+  width: min(100%, var(--mn-diagram-width, 14rem));
+  margin: 1rem auto;
+  height: auto;
+}
+[data-md-color-scheme="slate"] .md-typeset .commutative-diagram {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Reference links align whole blocks beneath the sticky header. */
+body.mn-reference-active .md-top { display: none; }
+
+.mn-reference-return {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1.1rem, env(safe-area-inset-bottom));
+  z-index: 11;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  min-height: 2.35rem;
+  padding: 0.48rem 0.78rem;
+  border: 1px solid color-mix(in srgb, var(--mn-accent) 28%, var(--md-default-fg-color--lightest));
+  border-radius: 999px;
+  color: var(--mn-accent);
+  background: color-mix(in srgb, var(--md-default-bg-color) 94%, var(--mn-accent) 6%);
+  box-shadow: 0 0.2rem 0.7rem color-mix(in srgb, var(--md-default-fg-color) 15%, transparent);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: mn-reference-return-in 150ms ease-out both;
+}
+.mn-reference-return:hover,
+.mn-reference-return:focus-visible {
+  border-color: color-mix(in srgb, var(--mn-accent) 58%, transparent);
+  background: color-mix(in srgb, var(--md-default-bg-color) 88%, var(--mn-accent) 12%);
+  outline: none;
+}
+.mn-reference-return svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes mn-reference-return-in {
+  from { opacity: 0; transform: translateY(0.35rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mn-reference-return { animation: none; }
+}

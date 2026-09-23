@@ -10,7 +10,7 @@
 
 ## 目录
 
-### FAA I — Fundamental Algebra & Analysis
+### FAA I — Fundamental Algebra & Analysis I
 
 1. [Basic Logic](basic-logic.md) — 命题、否定、蕴含、biconditional、反证法
 2. [Set Theory](set-theory.md) — 子集、差集、量词、并/交、笛卡尔积

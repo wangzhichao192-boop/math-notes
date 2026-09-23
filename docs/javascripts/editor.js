@@ -12,21 +12,23 @@
   const RESUME_KEY = "mn-typora-resume";
 
   const BLOCKS = [
-    { id: "definition", label: "定义", detail: "概念与术语", marker: "!!!", title: "Definition (Name)", prefix: "def" },
-    { id: "theorem", label: "定理", detail: "核心结论", marker: "!!!", title: "Theorem (Name)", prefix: "thm" },
-    { id: "proposition", label: "命题", detail: "一般结论", marker: "!!!", title: "Proposition (Name)", prefix: "prop" },
-    { id: "lemma", label: "引理", detail: "辅助结论", marker: "!!!", title: "Lemma (Name)", prefix: "lem" },
-    { id: "corollary", label: "推论", detail: "直接推导", marker: "!!!", title: "Corollary (Name)", prefix: "cor" },
-    { id: "proof", label: "证明", detail: "默认可折叠", marker: "???", title: "Proof", prefix: "prf" },
-    { id: "example", label: "例子", detail: "具体说明", marker: "!!!", title: "Example (Name)", prefix: "ex" },
-    { id: "remark", label: "注记", detail: "补充说明", marker: "!!!", title: "Remark", prefix: "rem" },
-    { id: "display-math", label: "公式", detail: "独立公式", special: "math" },
-    { id: "heading", label: "标题", detail: "二级标题", special: "heading" }
+    { id: "definition", label: "definition", marker: "!!!", title: "Definition (Name)", prefix: "def" },
+    { id: "notation", label: "notation", marker: "!!!", title: "Notation (Name)", prefix: "not" },
+    { id: "theorem", label: "theorem", marker: "!!!", title: "Theorem (Name)", prefix: "thm" },
+    { id: "proposition", label: "proposition", marker: "!!!", title: "Proposition (Name)", prefix: "prop" },
+    { id: "lemma", label: "lemma", marker: "!!!", title: "Lemma (Name)", prefix: "lem" },
+    { id: "corollary", label: "corollary", marker: "!!!", title: "Corollary (Name)", prefix: "cor" },
+    { id: "proof", label: "proof", marker: "???", title: "Proof", prefix: "prf" },
+    { id: "idea", label: "idea", marker: "???", title: "Idea", prefix: "idea" },
+    { id: "example", label: "example", marker: "!!!", title: "Example (Name)", prefix: "ex" },
+    { id: "remark", label: "remark", marker: "!!!", title: "Remark", prefix: "rem" },
+    { id: "display-math", label: "formula", symbol: "∑", special: "math" },
+    { id: "heading", label: "heading", symbol: "H₂", special: "heading" }
   ];
 
   const KIND_LABELS = {
-    definition: "Definition", theorem: "Theorem", proposition: "Proposition",
-    lemma: "Lemma", corollary: "Corollary", proof: "Proof",
+    definition: "Definition", notation: "Notation", theorem: "Theorem", proposition: "Proposition",
+    lemma: "Lemma", corollary: "Corollary", proof: "Proof", idea: "Idea",
     example: "Example", remark: "Remark"
   };
   const NUMBERED_KINDS = new Set([
@@ -35,6 +37,7 @@
   ]);
 
   let activeEditor = null;
+  let activeOrganizer = null;
   let currentPayload = null;
   let editorModulesPromise = null;
   let pageGeneration = 0;
@@ -42,7 +45,7 @@
   let pendingNavigationTimer = 0;
   let deferredReload = false;
   window.MathNotesDeferReload = () => {
-    if (!activeEditor && !openingGeneration) return false;
+    if (!activeEditor && !openingGeneration && !activeOrganizer) return false;
     deferredReload = true;
     return true;
   };
@@ -286,7 +289,11 @@
     const length = Math.min(72, line.text.length);
     const center = Math.round(progress * line.text.length);
     const start = Math.max(0, Math.min(line.text.length - length, center - Math.round(length / 2)));
-    return { viewportY: targetY, probe: line.text.slice(start, start + length).trim() };
+    return {
+      viewportY: targetY,
+      probe: line.text.slice(start, start + length).trim(),
+      blockProgress: progress
+    };
   }
 
   function captureEditorExitAnchor(state, targetSource = null) {
@@ -297,22 +304,11 @@
     const toolbarBottom = state.toolbar.getBoundingClientRect().bottom;
     const contentTop = Math.min(window.innerHeight - 80, Math.max(80, toolbarBottom + 18));
     let viewportY = Math.max(contentTop, Math.min(window.innerHeight - 70, window.innerHeight / 2));
-    let currentPosition = null;
-
-    if (state.cursorUsed) {
-      const coordinates = state.view.coordsAtPos(selection.head, 1);
-      if (coordinates && coordinates.bottom >= contentTop && coordinates.top <= window.innerHeight - 40) {
-        currentPosition = selection.head;
-        viewportY = Math.max(contentTop, Math.min(window.innerHeight - 70, (coordinates.top + coordinates.bottom) / 2));
-      }
-    }
-    if (!Number.isInteger(currentPosition)) {
-      const surface = state.surface.getBoundingClientRect();
-      currentPosition = state.view.posAtCoords({
-        x: Math.max(surface.left + 8, Math.min(surface.right - 8, (surface.left + surface.right) / 2)),
-        y: viewportY
-      }, false);
-    }
+    const surface = state.surface.getBoundingClientRect();
+    let currentPosition = state.view.posAtCoords({
+      x: Math.max(surface.left + 8, Math.min(surface.right - 8, (surface.left + surface.right) / 2)),
+      y: viewportY
+    }, false);
     if (!Number.isInteger(currentPosition)) currentPosition = selection.head;
 
     const position = mapPositionBetweenSources(currentSource, finalSource, currentPosition);
@@ -326,13 +322,14 @@
     });
     const sectionFrom = heading?.contentFrom ?? 0;
     const sectionTo = nextHeading?.from ?? finalSource.length;
-    const visualAnchor = state.cursorUsed ? null : editorVisualAnchorAt(state, viewportY);
+    const visualAnchor = editorVisualAnchorAt(state, viewportY);
     const anchor = {
       kind: "editor",
       sourcePath: state.payload.sourcePath,
       position,
       viewportY: visualAnchor?.viewportY ?? viewportY,
       probe: visualAnchor?.probe || sourceProbeAt(finalSource, position),
+      blockProgress: visualAnchor?.blockProgress ?? 0.5,
       headingTitle: heading?.title || "",
       headingLevel: heading?.level || 0,
       sectionProgress: sectionTo > sectionFrom
@@ -415,9 +412,35 @@
     return /^[a-z][\w-]*$/.test(kind) ? kind : "note";
   }
 
-  function createVisualExtension(modules, onAnalysis, chapterNumber = 1) {
+  function createVisualExtension(modules, onAnalysis, chapterNumber = 1, payload = {}) {
     const { Decoration, WidgetType } = modules;
-    let cachedDoc, cachedSyntax, cachedParsed, cachedMath, cachedNumbers;
+    let cachedDoc, cachedSyntax, cachedParsed, cachedMath, cachedNumbers, cachedImages;
+
+    function diagramImages(source, blocked) {
+      const images = [];
+      const expression = /^([ \t]*)!\[([^\]\n]*)\]\(([^)\n]+)\)(?:\{([^}\n]*)\})?[ \t]*$/gm;
+      let match;
+      while ((match = expression.exec(source))) {
+        const from = match.index, to = from + match[0].length;
+        if (blocked.some(range => from < range.to && to > range.from)) continue;
+        const attributes = match[4] || "";
+        if (!/(?:^|\s)\.commutative-diagram(?:\s|$)/.test(attributes)) continue;
+        const width = Number(/--mn-diagram-width:\s*([0-9.]+)rem/.exec(attributes)?.[1] || 14);
+        images.push({
+          from, to, source: match[0], alt: match[2], path: match[3].trim().replace(/^<|>$/g, ""),
+          attributes, width: Math.max(5, Math.min(28, width))
+        });
+      }
+      return images;
+    }
+
+    function imageUrl(path) {
+      if (/^(?:[a-z]+:|\/\/|\/)/i.test(path)) return path;
+      const sourceDirectory = String(payload.sourcePath || "").split("/").slice(0, -1).join("/");
+      const logical = new URL(path, `https://math-notes.invalid/${sourceDirectory}/`).pathname.replace(/^\//, "");
+      const mountPath = payload.mountPath || String(payload.saveEndpoint || "").replace(/[^/]*$/, "") || "/";
+      return `${mountPath}${logical}`.replace(/\/{2,}/g, "/");
+    }
 
     function activateAt(view, event, position) {
       if (typeof event.button === "number" && event.button !== 0) return;
@@ -517,6 +540,72 @@
       ignoreEvent() { return true; }
     }
 
+    class DiagramWidget extends WidgetType {
+      constructor(image) {
+        super();
+        this.image = image;
+      }
+
+      eq(other) {
+        return other.image.source === this.image.source && other.image.from === this.image.from;
+      }
+
+      toDOM(view) {
+        const figure = document.createElement("figure");
+        figure.className = "mn-cm-diagram";
+        figure.dataset.mnSourceFrom = String(this.image.from);
+        figure.style.setProperty("--mn-diagram-width", `${this.image.width}rem`);
+
+        const image = document.createElement("img");
+        image.src = imageUrl(this.image.path);
+        image.alt = this.image.alt;
+        image.draggable = false;
+
+        const controls = document.createElement("div");
+        controls.className = "mn-cm-diagram__controls";
+        controls.setAttribute("aria-label", "调整交换图大小");
+        controls.addEventListener("pointerdown", event => event.stopPropagation());
+        const resize = (delta) => {
+          const width = Math.max(5, Math.min(28, this.image.width + delta));
+          let replacement = this.image.source;
+          if (/--mn-diagram-width:\s*[0-9.]+rem/.test(replacement)) {
+            replacement = replacement.replace(/--mn-diagram-width:\s*[0-9.]+rem/, `--mn-diagram-width: ${width}rem`);
+          } else if (/\}\s*$/.test(replacement)) {
+            replacement = replacement.replace(/\}\s*$/, ` style="--mn-diagram-width: ${width}rem" }`);
+          } else {
+            replacement += `{ style="--mn-diagram-width: ${width}rem" }`;
+          }
+          view.dispatch({ changes: { from: this.image.from, to: this.image.to, insert: replacement } });
+          view.focus();
+        };
+        [["−", -1, "缩小交换图"], ["+", 1, "放大交换图"]].forEach(([label, delta, title]) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = label;
+          button.title = title;
+          button.setAttribute("aria-label", title);
+          button.addEventListener("mousedown", event => {
+            event.preventDefault();
+            event.stopPropagation();
+          });
+          button.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            resize(delta);
+          });
+          controls.appendChild(button);
+        });
+        const size = document.createElement("span");
+        size.textContent = `${this.image.width}rem`;
+        size.title = "当前宽度";
+        controls.insertBefore(size, controls.lastChild);
+        figure.append(image, controls);
+        return figure;
+      }
+
+      ignoreEvent() { return true; }
+    }
+
     function buildDecorations(state) {
       const source = state.doc.toString();
       const decorations = [];
@@ -532,6 +621,7 @@
         cachedDoc = state.doc;
         cachedParsed = modules.parseAdmonitions(source, KIND_LABELS);
         cachedSyntax = modules.analyzeMarkdown(source, cachedParsed.blocks);
+        cachedImages = diagramImages(source, cachedSyntax.code);
         cachedNumbers = automaticBlockNumbers(source, cachedParsed.blocks, chapterNumber);
         const blocked = [...cachedSyntax.code, ...cachedSyntax.inline.filter(item => item.type === "InlineCode")];
         const displayMath = findDisplayMath(source).filter(range => !blocked.some(item => range.from < item.to && range.to > item.from));
@@ -540,6 +630,10 @@
       }
       const parsed = cachedParsed;
       const math = cachedMath;
+      cachedImages.forEach((image) => {
+        if (rangeIsActive(state, image.from, image.to)) return;
+        addReplacement(image.from, image.to, { widget: new DiagramWidget(image), block: true });
+      });
       math.forEach((range) => {
         if (rangeIsActive(state, range.from, range.to)) {
           decorations.push(Decoration.mark({ class: range.display ? "mn-cm-math-source mn-cm-math-source--display" : "mn-cm-math-source" }).range(range.from, range.to));
@@ -676,7 +770,11 @@
 
   function blockText(block, source, position) {
     if (block.special === "math") return { text: "$$\nformula\n$$", select: [3, 10] };
-    if (block.special === "heading") return { text: "## Section title", select: [3, 16] };
+    if (block.special === "heading") {
+      const level = block.level === 3 ? 3 : 2;
+      const label = level === 3 ? "Subsection title" : "Section title";
+      return { text: `${"#".repeat(level)} ${label}`, select: [level + 1, level + 1 + label.length] };
+    }
     const body = block.id === "proof" ? "Write the proof here." : `Write the ${block.id} here.`;
     const text = `${block.marker} ${block.id} "${block.title}"\n    ${body}`;
     const name = text.indexOf("Name");
@@ -698,7 +796,8 @@
       button.type = "button";
       button.className = `mn-typora-menu__item mn-typora-menu__item--${block.id}`;
       button.dataset.block = block.id;
-      button.innerHTML = `<span>${escapeHtml(block.label)}</span><small>${escapeHtml(block.detail)}</small>`;
+      button.setAttribute("aria-label", block.label);
+      button.innerHTML = `<span class="mn-typora-menu__icon${block.symbol ? " mn-typora-menu__icon--text" : ""}" aria-hidden="true">${escapeHtml(block.symbol || "")}</span><span class="mn-typora-menu__label">${escapeHtml(block.label)}</span>`;
       button.addEventListener("mousedown", (event) => event.preventDefault());
       button.addEventListener("click", () => insertBlock(state, block));
       menu.appendChild(button);
@@ -907,25 +1006,15 @@
   }
 
   function toolbarMarkup(payload) {
-    const pageButton = payload.courseSlug
-      ? '<button type="button" class="mn-typora-button mn-typora-button--structure" data-action="create-page">＋ 新页面</button>'
-      : "";
-    const isLesson = payload.courseSlug && !payload.sourcePath.endsWith("/index.md");
-    const management = payload.courseSlug ? `
-        ${isLesson ? '<button type="button" class="mn-typora-button" data-action="rename-page">重命名当前页面</button>' : ""}
-        <button type="button" class="mn-typora-button" data-action="rename-course">重命名当前课程</button>
-        ${isLesson ? '<button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-page">删除当前页面…</button>' : ""}
-        <button type="button" class="mn-typora-button mn-typora-button--danger-text" data-action="delete-course">删除当前课程…</button>` : "";
     return `
       <div class="mn-typora-toolbar__identity" title="${escapeHtml(payload.sourcePath)}">
         <span class="mn-typora-toolbar__dot" aria-hidden="true"></span>
-        <div><strong>编辑</strong><small class="mn-typora-status" role="status">正在载入编辑器…</small></div>
+        <div><strong>编辑本页</strong><small class="mn-typora-status" role="status">正在载入编辑器…</small></div>
       </div>
       <div class="mn-typora-toolbar__tools" role="group" aria-label="编辑工具">
-        <button type="button" class="mn-typora-button mn-typora-button--add" data-action="add">＋ 添加块</button>
-        ${pageButton}
-        <button type="button" class="mn-typora-button mn-typora-button--structure" data-action="create-course">＋ 新课程</button>
-        <button type="button" class="mn-typora-button mn-typora-button--structure" data-action="reorder-courses">课程排序</button>
+        <button type="button" class="mn-typora-button mn-typora-button--add" data-action="section">＋ Section</button>
+        <button type="button" class="mn-typora-button" data-action="subsection">＋ Subsection</button>
+        <button type="button" class="mn-typora-button" data-action="add">＋ 内容块</button>
       </div>
       <details class="mn-typora-more">
         <summary class="mn-typora-button">更多</summary>
@@ -935,7 +1024,6 @@
         <button type="button" class="mn-typora-button" data-action="italic">斜体 · ⌘/Ctrl I</button>
         <button type="button" class="mn-typora-button" data-action="math">行内公式 · ⌘/Ctrl ⇧M</button>
         <button type="button" class="mn-typora-button" data-action="export">导出</button>
-        ${management}
         </div>
       </details>
       <div class="mn-typora-toolbar__session" role="group" aria-label="保存与退出">
@@ -1126,6 +1214,461 @@
         render();
       }
     });
+  }
+
+  function cloneOutline(outline) {
+    return JSON.parse(JSON.stringify(outline || []));
+  }
+
+  function organizerPageLocations(outline) {
+    const locations = [];
+    const visit = (items, parentChapter = null, part = null) => {
+      items.forEach((item, index) => {
+        if (item.type === "part") visit(item.children || [], null, item);
+        else {
+          locations.push({ item, items, index, parentChapter, part });
+          (item.children || []).forEach((child, childIndex) => {
+            locations.push({ item: child, items: item.children, index: childIndex, parentChapter: item, part });
+          });
+        }
+      });
+    };
+    visit(outline);
+    return locations;
+  }
+
+  function organizerLocation(outline, path) {
+    return organizerPageLocations(outline).find((location) => location.item.path === path);
+  }
+
+  function closeOrganizer(suppressReload = false) {
+    if (!activeOrganizer) return;
+    const focusTarget = activeOrganizer.focusTarget;
+    activeOrganizer.shell.remove();
+    activeOrganizer = null;
+    document.body.classList.remove("mn-organizer-open");
+    const needsReload = deferredReload && !suppressReload;
+    deferredReload = false;
+    if (needsReload) {
+      location.reload();
+      return;
+    }
+    focusTarget?.focus?.();
+  }
+
+  function organizerShell(payload) {
+    closeOrganizer();
+    const shell = document.createElement("div");
+    shell.className = "mn-organizer mn-structure-dialog";
+    shell.innerHTML = `
+      <div class="mn-structure-dialog__backdrop" data-organizer-close></div>
+      <section class="mn-structure-dialog__panel mn-organizer__panel" role="dialog" aria-modal="true" aria-labelledby="mn-organizer-title">
+        <button type="button" class="mn-structure-dialog__close" data-organizer-close aria-label="关闭">×</button>
+        <div class="mn-organizer__loading">正在读取目录…</div>
+      </section>`;
+    document.body.appendChild(shell);
+    document.body.classList.add("mn-organizer-open");
+    const state = { payload, shell, focusTarget: document.activeElement, status: null };
+    activeOrganizer = state;
+    shell.addEventListener("click", (event) => {
+      if (event.target.closest("[data-organizer-close]")) closeOrganizer();
+    });
+    return state;
+  }
+
+  function organizerError(state, message) {
+    const error = state.shell.querySelector(".mn-organizer__error");
+    if (!error) return;
+    error.textContent = message;
+    error.hidden = !message;
+  }
+
+  function pageRowMarkup(item, location) {
+    const isSubchapter = Boolean(location.parentChapter);
+    return `
+      <div class="mn-outline-row mn-outline-row--${isSubchapter ? "subchapter" : "chapter"}" data-page-path="${escapeHtml(item.path)}">
+        <span class="mn-outline-row__kind">${isSubchapter ? "Subchapter" : "Chapter"}</span>
+        <strong>${escapeHtml(item.title)}</strong>
+        ${item.children?.length ? `<span class="mn-outline-row__count">${item.children.length}</span>` : ""}
+        <div class="mn-outline-row__actions">
+          <button type="button" data-outline-action="up" title="上移" ${location.index === 0 ? "disabled" : ""}>↑</button>
+          <button type="button" data-outline-action="down" title="下移" ${location.index === location.items.length - 1 ? "disabled" : ""}>↓</button>
+          <button type="button" data-outline-action="move" title="调整层级或所属 Part">移动</button>
+          <button type="button" data-outline-action="rename" title="重命名">改名</button>
+          <button type="button" data-outline-action="delete" title="删除">删除</button>
+        </div>
+      </div>`;
+  }
+
+  function outlineMarkup(outline) {
+    if (!outline.length) return '<div class="mn-organizer__empty">这门课程还没有 Chapter。</div>';
+    return outline.map((item, index) => {
+      if (item.type !== "part") {
+        const location = { items: outline, index, parentChapter: null, part: null };
+        return `<div class="mn-outline-chapter">${pageRowMarkup(item, location)}${(item.children || []).map((child, childIndex) =>
+          pageRowMarkup(child, { items: item.children, index: childIndex, parentChapter: item, part: null })).join("")}</div>`;
+      }
+      return `
+        <section class="mn-outline-part" data-part-index="${index}">
+          <header class="mn-outline-part__header">
+            <span>Part</span><strong>${escapeHtml(item.title)}</strong>
+            <div class="mn-outline-row__actions">
+              <button type="button" data-part-action="up" title="上移" ${index === 0 ? "disabled" : ""}>↑</button>
+              <button type="button" data-part-action="down" title="下移" ${index === outline.length - 1 ? "disabled" : ""}>↓</button>
+              <button type="button" data-part-action="rename">改名</button>
+              <button type="button" data-part-action="delete" ${item.children?.length ? "disabled title=\"请先移出其中的 Chapter\"" : ""}>删除</button>
+            </div>
+          </header>
+          <div class="mn-outline-part__children">${(item.children || []).map((chapter, chapterIndex) => `
+            <div class="mn-outline-chapter">${pageRowMarkup(chapter, { items: item.children, index: chapterIndex, parentChapter: null, part: item })}${(chapter.children || []).map((child, childIndex) =>
+              pageRowMarkup(child, { items: chapter.children, index: childIndex, parentChapter: chapter, part: item })).join("")}</div>`).join("") || '<span class="mn-outline-part__empty">暂无 Chapter</span>'}</div>
+        </section>`;
+    }).join("");
+  }
+
+  function organizerForm(state, mode, target = null) {
+    const inspector = state.shell.querySelector(".mn-organizer__inspector");
+    const parts = state.outline.filter((item) => item.type === "part");
+    const chapters = organizerPageLocations(state.outline).filter((location) => !location.parentChapter);
+    let title = "";
+    let fields = "";
+    let submit = "完成";
+    if (mode === "part") {
+      title = "新建 Part"; submit = "创建 Part";
+      fields = '<label><span>Part 名称</span><input name="title" required maxlength="80" autocomplete="off" placeholder="例如：FAA III"></label>';
+    } else if (mode === "chapter" || mode === "subchapter") {
+      const isSubchapter = mode === "subchapter";
+      title = `新建 ${isSubchapter ? "Subchapter" : "Chapter"}`;
+      submit = `创建 ${isSubchapter ? "Subchapter" : "Chapter"}`;
+      fields = `
+        <label><span>页面标题</span><input name="title" required maxlength="100" autocomplete="off" placeholder="例如：Set Theory"></label>
+        <label><span>页面文件名</span><input name="slug" required maxlength="64" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" autocomplete="off" spellcheck="false" placeholder="set-theory"><small>使用小写英文字母、数字和短横线</small></label>
+        ${isSubchapter ? `<label><span>所属 Chapter</span><select name="parentPath" required>${chapters.map(({ item }) => `<option value="${escapeHtml(item.path)}">${escapeHtml(item.title)}</option>`).join("")}</select></label>` :
+          `<label><span>所属 Part</span><select name="partTitle"><option value="">不放入 Part</option>${parts.map((part) => `<option value="${escapeHtml(part.title)}">${escapeHtml(part.title)}</option>`).join("")}</select></label>`}
+        <label><span>页面简介</span><textarea name="description" maxlength="240" rows="3" placeholder="一句话概括内容（可选）"></textarea></label>`;
+    } else if (mode === "rename-part") {
+      title = "重命名 Part"; submit = "保存名称";
+      fields = `<label><span>Part 名称</span><input name="title" required maxlength="80" autocomplete="off" value="${escapeHtml(target.title)}"></label>`;
+    } else if (mode === "rename-page") {
+      title = `重命名 ${target.type === "subchapter" ? "Subchapter" : "Chapter"}`; submit = "保存名称";
+      fields = `<label><span>页面标题</span><input name="title" required maxlength="100" autocomplete="off" value="${escapeHtml(target.title)}"><small>页面地址保持不变</small></label>`;
+    } else if (mode === "move-page") {
+      title = `移动 ${target.title}`; submit = "应用位置";
+      const otherChapters = chapters.filter(({ item }) => item.path !== target.path);
+      fields = `
+        <label><span>层级</span><select name="kind"><option value="chapter" ${target.type !== "subchapter" ? "selected" : ""}>Chapter</option><option value="subchapter" ${target.type === "subchapter" ? "selected" : ""}>Subchapter</option></select></label>
+        <label data-move-chapter><span>所属 Part</span><select name="partTitle"><option value="">不放入 Part</option>${parts.map((part) => `<option value="${escapeHtml(part.title)}">${escapeHtml(part.title)}</option>`).join("")}</select></label>
+        <label data-move-subchapter><span>所属 Chapter</span><select name="parentPath">${otherChapters.map(({ item }) => `<option value="${escapeHtml(item.path)}">${escapeHtml(item.title)}</option>`).join("")}</select></label>`;
+    } else if (mode === "delete-page") {
+      title = `删除 ${target.title}`; submit = "移到回收目录";
+      fields = `<div class="mn-structure-warning"><strong>${escapeHtml(target.title)}</strong><span>页面源文件会移到项目内的回收目录。</span></div><label><span>输入页面名称确认</span><input name="confirmation" required autocomplete="off"></label>`;
+    }
+    inspector.innerHTML = `
+      <div class="mn-organizer__inspector-head"><strong>${escapeHtml(title)}</strong><button type="button" data-inspector-close aria-label="关闭">×</button></div>
+      <form class="mn-structure-form" data-organizer-form="${mode}">${fields}
+        <div class="mn-structure-form__error" role="alert" hidden></div>
+        <div class="mn-structure-form__actions"><button type="button" class="mn-structure-cancel" data-inspector-close>取消</button><button type="submit" class="mn-structure-submit">${submit}</button></div>
+      </form>`;
+    inspector.hidden = false;
+    const form = inspector.querySelector("form");
+    const firstInput = form.querySelector("input, select");
+    if (mode === "chapter" || mode === "subchapter") {
+      const titleInput = form.elements.title, slugInput = form.elements.slug;
+      let slugEdited = false;
+      slugInput.addEventListener("input", () => { slugEdited = true; });
+      titleInput.addEventListener("input", () => { if (!slugEdited) slugInput.value = suggestedSlug(titleInput.value); });
+    }
+    if (mode === "move-page") {
+      const refresh = () => {
+        form.querySelector("[data-move-chapter]").hidden = form.elements.kind.value !== "chapter";
+        form.querySelector("[data-move-subchapter]").hidden = form.elements.kind.value !== "subchapter";
+      };
+      form.elements.kind.addEventListener("change", refresh);
+      refresh();
+    }
+    form.addEventListener("submit", (event) => submitOrganizerForm(event, state, mode, target));
+    requestAnimationFrame(() => firstInput?.focus());
+  }
+
+  function moveOrganizerPage(state, target, values) {
+    const source = organizerLocation(state.outline, target.path);
+    if (!source) return;
+    target.children = target.children || [];
+    if (values.kind === "subchapter") {
+      if (target.children.length) throw new Error("含有 Subchapter 的 Chapter 不能再降一级。");
+      const parent = organizerLocation(state.outline, values.parentPath)?.item;
+      if (!parent || parent.type === "subchapter") throw new Error("请选择所属 Chapter。");
+      source.items.splice(source.index, 1);
+      target.type = "subchapter";
+      parent.children = parent.children || [];
+      parent.children.push(target);
+    } else {
+      source.items.splice(source.index, 1);
+      target.type = "chapter";
+      const part = state.outline.find((item) => item.type === "part" && item.title === values.partTitle);
+      (part ? part.children : state.outline).push(target);
+    }
+    state.dirty = true;
+  }
+
+  async function submitOrganizerForm(event, state, mode, target) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector("[type=submit]");
+    const error = form.querySelector(".mn-structure-form__error");
+    const values = Object.fromEntries(new FormData(form));
+    submit.disabled = true;
+    error.hidden = true;
+    try {
+      if (mode === "rename-part") {
+        target.title = values.title.trim();
+        state.dirty = true;
+      } else if (mode === "move-page") {
+        moveOrganizerPage(state, target, values);
+      } else if (mode === "rename-page") {
+        const result = await manageRequest(state.payload, {
+          action: "renamePage", course: state.course.slug, path: target.path,
+          title: values.title, baseRevision: state.revision
+        });
+        target.title = result.title;
+        const fresh = await manageRequest(state.payload, { action: "status" });
+        state.revision = fresh.structureRevision;
+      } else if (mode === "delete-page") {
+        if (target.children?.length) throw new Error("请先移动或删除它下面的 Subchapter。");
+        await manageRequest(state.payload, {
+          action: "deletePage", course: state.course.slug, path: target.path,
+          confirmation: values.confirmation, baseRevision: state.revision
+        });
+        const location = organizerLocation(state.outline, target.path);
+        location?.items.splice(location.index, 1);
+        const fresh = await manageRequest(state.payload, { action: "status" });
+        state.revision = fresh.structureRevision;
+      } else {
+        const action = mode === "part" ? "createPart" : "createPage";
+        const result = await manageRequest(state.payload, {
+          action, course: state.course.slug, kind: mode, baseRevision: state.revision, ...values
+        });
+        state.outline = cloneOutline(result.outline);
+        state.revision = result.structureRevision;
+      }
+      state.shell.querySelector(".mn-organizer__inspector").hidden = true;
+      renderCourseOrganizer(state);
+    } catch (requestError) {
+      error.textContent = requestError.message || "操作失败，请稍后重试。";
+      error.hidden = false;
+      submit.disabled = false;
+    }
+  }
+
+  function renderCourseOrganizer(state) {
+    const panel = state.shell.querySelector(".mn-organizer__panel");
+    panel.innerHTML = `
+      <button type="button" class="mn-structure-dialog__close" data-organizer-close aria-label="关闭">×</button>
+      <header class="mn-organizer__header"><div><span class="mn-structure-dialog__eyebrow">课程目录</span><h2 id="mn-organizer-title">${escapeHtml(state.course.title)}</h2></div><kbd>⌘⌥O / Ctrl Alt O</kbd></header>
+      <div class="mn-organizer__toolbar"><button type="button" data-organizer-new="part">＋ Part</button><button type="button" data-organizer-new="chapter">＋ Chapter</button><button type="button" data-organizer-new="subchapter" ${organizerPageLocations(state.outline).some((location) => !location.parentChapter) ? "" : "disabled"}>＋ Subchapter</button></div>
+      <div class="mn-organizer__error" role="alert" hidden></div>
+      <div class="mn-organizer__workspace"><main class="mn-organizer__outline">${outlineMarkup(state.outline)}</main><aside class="mn-organizer__inspector" hidden></aside></div>
+      <footer class="mn-organizer__footer"><span>${state.dirty ? "目录顺序或层级尚未保存" : "Part 不可点击；Chapter 和 Subchapter 都是独立页面"}</span><button type="button" class="mn-structure-submit" data-organizer-save ${state.dirty ? "" : "disabled"}>保存目录</button></footer>`;
+    panel.querySelector(".mn-organizer__toolbar").addEventListener("click", (event) => {
+      const mode = event.target.closest("[data-organizer-new]")?.dataset.organizerNew;
+      if (mode) organizerForm(state, mode);
+    });
+    panel.querySelector(".mn-organizer__outline").addEventListener("click", (event) => handleOutlineAction(event, state));
+    panel.querySelector("[data-organizer-save]").addEventListener("click", () => saveOrganizerOutline(state));
+    panel.querySelector(".mn-organizer__workspace").addEventListener("click", (event) => {
+      if (event.target.closest("[data-inspector-close]")) panel.querySelector(".mn-organizer__inspector").hidden = true;
+    });
+  }
+
+  function handleOutlineAction(event, state) {
+    const pageButton = event.target.closest("[data-outline-action]");
+    const partButton = event.target.closest("[data-part-action]");
+    if (pageButton) {
+      const path = pageButton.closest("[data-page-path]").dataset.pagePath;
+      const location = organizerLocation(state.outline, path);
+      if (!location) return;
+      const action = pageButton.dataset.outlineAction;
+      if (action === "up" || action === "down") {
+        const next = location.index + (action === "up" ? -1 : 1);
+        if (next < 0 || next >= location.items.length) return;
+        [location.items[location.index], location.items[next]] = [location.items[next], location.items[location.index]];
+        state.dirty = true;
+        renderCourseOrganizer(state);
+      } else if (action === "move") organizerForm(state, "move-page", location.item);
+      else if (action === "rename") organizerForm(state, "rename-page", location.item);
+      else if (action === "delete") organizerForm(state, "delete-page", location.item);
+    } else if (partButton) {
+      const index = Number(partButton.closest("[data-part-index]").dataset.partIndex);
+      const part = state.outline[index];
+      const action = partButton.dataset.partAction;
+      if (action === "up" || action === "down") {
+        const next = index + (action === "up" ? -1 : 1);
+        if (next < 0 || next >= state.outline.length) return;
+        [state.outline[index], state.outline[next]] = [state.outline[next], state.outline[index]];
+        state.dirty = true;
+        renderCourseOrganizer(state);
+      } else if (action === "rename") organizerForm(state, "rename-part", part);
+      else if (action === "delete" && !part.children?.length) {
+        state.outline.splice(index, 1);
+        state.dirty = true;
+        renderCourseOrganizer(state);
+      }
+    }
+  }
+
+  async function saveOrganizerOutline(state) {
+    const button = state.shell.querySelector("[data-organizer-save]");
+    button.disabled = true;
+    organizerError(state, "");
+    try {
+      const result = await manageRequest(state.payload, {
+        action: "saveCourseOutline", course: state.course.slug,
+        outline: state.outline, baseRevision: state.revision
+      });
+      state.outline = cloneOutline(result.outline);
+      state.revision = result.structureRevision;
+      state.dirty = false;
+      renderCourseOrganizer(state);
+    } catch (requestError) {
+      organizerError(state, requestError.message);
+      button.disabled = false;
+    }
+  }
+
+  function siteOrganizerForm(state, mode, course = null) {
+    const inspector = state.shell.querySelector(".mn-organizer__inspector");
+    const isNew = mode === "new-course";
+    const isRename = mode === "rename-course";
+    const title = isNew ? "新建课程" : isRename ? "重命名课程" : "删除课程";
+    let fields;
+    if (isNew) {
+      fields = `
+        <label><span>课程名称</span><input name="title" required maxlength="80" autocomplete="off" placeholder="例如：复分析"></label>
+        <label><span>课程目录名</span><input name="slug" required maxlength="64" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" autocomplete="off" spellcheck="false" placeholder="complex-analysis"><small>使用小写英文字母、数字和短横线</small></label>
+        <label><span>主页简介</span><textarea name="description" maxlength="240" rows="3" placeholder="一句话概括内容（可选）"></textarea></label>`;
+    } else if (isRename) {
+      fields = `<label><span>课程名称</span><input name="title" required maxlength="80" autocomplete="off" value="${escapeHtml(course.title)}"><small>课程地址保持不变</small></label>`;
+    } else {
+      fields = `<div class="mn-structure-warning"><strong>${escapeHtml(course.title)}</strong><span>整门课程会从主页和导航移除，源文件会移到项目内的回收目录。</span></div><label><span>输入课程名称确认</span><input name="confirmation" required autocomplete="off"></label>`;
+    }
+    inspector.innerHTML = `
+      <div class="mn-organizer__inspector-head"><strong>${title}</strong><button type="button" data-inspector-close aria-label="关闭">×</button></div>
+      <form class="mn-structure-form">${fields}<div class="mn-structure-form__error" role="alert" hidden></div><div class="mn-structure-form__actions"><button type="button" class="mn-structure-cancel" data-inspector-close>取消</button><button type="submit" class="mn-structure-submit${mode === "delete-course" ? " mn-structure-submit--danger" : ""}">${isNew ? "创建课程" : isRename ? "保存名称" : "移到回收目录"}</button></div></form>`;
+    inspector.hidden = false;
+    const form = inspector.querySelector("form");
+    if (isNew) {
+      const titleInput = form.elements.title, slugInput = form.elements.slug;
+      let slugEdited = false;
+      slugInput.addEventListener("input", () => { slugEdited = true; });
+      titleInput.addEventListener("input", () => { if (!slugEdited) slugInput.value = suggestedSlug(titleInput.value); });
+    }
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submit = form.querySelector("[type=submit]");
+      const error = form.querySelector(".mn-structure-form__error");
+      const values = Object.fromEntries(new FormData(form));
+      submit.disabled = true;
+      error.hidden = true;
+      try {
+        const action = isNew ? "createCourse" : isRename ? "renameCourse" : "deleteCourse";
+        const result = await manageRequest(state.payload, {
+          action, course: course?.slug, path: course ? `${course.slug}/index.md` : undefined,
+          baseRevision: state.revision, ...values
+        });
+        if (isNew) {
+          queueNavigation(result.url);
+          closeOrganizer(true);
+          return;
+        }
+        const fresh = await manageRequest(state.payload, { action: "status" });
+        state.courses = fresh.courses;
+        state.revision = fresh.structureRevision;
+        state.dirty = false;
+        renderSiteOrganizer(state);
+      } catch (requestError) {
+        error.textContent = requestError.message || "操作失败，请稍后重试。";
+        error.hidden = false;
+        submit.disabled = false;
+      }
+    });
+    requestAnimationFrame(() => form.querySelector("input")?.focus());
+  }
+
+  function renderSiteOrganizer(state) {
+    const panel = state.shell.querySelector(".mn-organizer__panel");
+    panel.innerHTML = `
+      <button type="button" class="mn-structure-dialog__close" data-organizer-close aria-label="关闭">×</button>
+      <header class="mn-organizer__header"><div><span class="mn-structure-dialog__eyebrow">网站结构</span><h2 id="mn-organizer-title">管理课程</h2></div><kbd>⌘⌥O / Ctrl Alt O</kbd></header>
+      <div class="mn-organizer__toolbar"><button type="button" data-site-action="new-course">＋ 课程</button></div>
+      <div class="mn-organizer__error" role="alert" hidden></div>
+      <div class="mn-organizer__workspace"><main class="mn-organizer__outline mn-course-manager">${state.courses.map((course, index) => `
+        <div class="mn-outline-row" data-course-slug="${escapeHtml(course.slug)}">
+          <span class="mn-outline-row__kind">Course</span><strong>${escapeHtml(course.title)}</strong><span class="mn-outline-row__count">${course.pageCount || 0}</span>
+          <div class="mn-outline-row__actions"><button type="button" data-course-action="up" ${index === 0 ? "disabled" : ""}>↑</button><button type="button" data-course-action="down" ${index === state.courses.length - 1 ? "disabled" : ""}>↓</button><button type="button" data-course-action="rename">改名</button><button type="button" data-course-action="delete">删除</button></div>
+        </div>`).join("")}</main><aside class="mn-organizer__inspector" hidden></aside></div>
+      <footer class="mn-organizer__footer"><span>${state.dirty ? "课程顺序尚未保存" : "课程管理只放在网站首页"}</span><button type="button" class="mn-structure-submit" data-site-save ${state.dirty ? "" : "disabled"}>保存顺序</button></footer>`;
+    panel.querySelector("[data-site-action=new-course]").addEventListener("click", () => siteOrganizerForm(state, "new-course"));
+    panel.querySelector(".mn-course-manager").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-course-action]");
+      if (!button) return;
+      const slug = button.closest("[data-course-slug]").dataset.courseSlug;
+      const index = state.courses.findIndex((course) => course.slug === slug);
+      const course = state.courses[index];
+      const action = button.dataset.courseAction;
+      if (action === "up" || action === "down") {
+        const next = index + (action === "up" ? -1 : 1);
+        if (next < 0 || next >= state.courses.length) return;
+        [state.courses[index], state.courses[next]] = [state.courses[next], state.courses[index]];
+        state.dirty = true;
+        renderSiteOrganizer(state);
+      } else if (action === "rename") siteOrganizerForm(state, "rename-course", course);
+      else if (action === "delete") siteOrganizerForm(state, "delete-course", course);
+    });
+    panel.querySelector("[data-site-save]").addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      organizerError(state, "");
+      try {
+        await manageRequest(state.payload, {
+          action: "reorderCourses", order: state.courses.map((course) => course.slug),
+          baseRevision: state.revision
+        });
+        const fresh = await manageRequest(state.payload, { action: "status" });
+        state.courses = fresh.courses;
+        state.revision = fresh.structureRevision;
+        state.dirty = false;
+        renderSiteOrganizer(state);
+      } catch (requestError) {
+        organizerError(state, requestError.message);
+        button.disabled = false;
+      }
+    });
+    panel.querySelector(".mn-organizer__workspace").addEventListener("click", (event) => {
+      if (event.target.closest("[data-inspector-close]")) panel.querySelector(".mn-organizer__inspector").hidden = true;
+    });
+  }
+
+  async function openOrganizer(payload) {
+    if (!payload?.manageEndpoint || !LOCAL_HOSTS.has(location.hostname)) return;
+    const state = organizerShell(payload);
+    try {
+      const status = await manageRequest(payload, { action: "status" });
+      if (activeOrganizer !== state) return;
+      state.status = status;
+      state.revision = status.structureRevision;
+      state.course = status.courses.find((course) => course.slug === payload.courseSlug);
+      if (!state.course) {
+        state.courses = status.courses;
+        state.dirty = false;
+        renderSiteOrganizer(state);
+        return;
+      }
+      state.outline = cloneOutline(state.course.outline);
+      state.dirty = false;
+      renderCourseOrganizer(state);
+    } catch (error) {
+      state.shell.querySelector(".mn-organizer__panel").innerHTML = `<button type="button" class="mn-structure-dialog__close" data-organizer-close aria-label="关闭">×</button><div class="mn-organizer__loading mn-organizer__loading--error">${escapeHtml(error.message)}</div>`;
+    }
   }
 
   function currentCourse(state, courses = state.payload.courses || []) {
@@ -1387,13 +1930,14 @@
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
       acceptNode(node) {
         const parent = node.parentElement;
-        return parent?.closest(".katex, .arithmatex, .headerlink, script, style")
+        return parent?.closest(".katex, .arithmatex, .headerlink, .mn-cm-diagram__controls, script, style")
           ? NodeFilter.FILTER_REJECT
           : NodeFilter.FILTER_ACCEPT;
       }
     });
     let text = "";
     for (let node = walker.nextNode(); node; node = walker.nextNode()) text += ` ${node.nodeValue || ""}`;
+    element.querySelectorAll?.("img[alt]").forEach(image => { text += ` ${image.alt}`; });
     return normalizeAnchorText(text);
   }
 
@@ -1466,8 +2010,10 @@
       const normalizedProbe = normalizeAnchorText(anchor.probe);
       const element = candidates.find(candidate => renderedPlainText(candidate).includes(normalizedProbe));
       if (element) {
-        const rectangle = probeRangeRect(element, normalizedProbe) || element.getBoundingClientRect();
-        return window.scrollY + rectangle.top + rectangle.height / 2;
+        const probeRectangle = probeRangeRect(element, normalizedProbe);
+        const rectangle = probeRectangle || element.getBoundingClientRect();
+        const progress = probeRectangle ? 0.5 : Math.max(0, Math.min(1, Number(anchor.blockProgress) || 0.5));
+        return window.scrollY + rectangle.top + rectangle.height * progress;
       }
     }
 
@@ -1772,7 +2318,12 @@
     const visualAnchor = captureRenderedAnchor({ sourcePath: "" }, article);
     const visualPosition = sourcePositionForRenderedAnchor(source, visualAnchor);
     if (Number.isInteger(visualPosition)) {
-      return { position: visualPosition, viewportY: visualAnchor.viewportY };
+      return {
+        position: visualPosition,
+        viewportY: visualAnchor.viewportY,
+        probe: visualAnchor.probe,
+        blockProgress: visualAnchor.blockProgress
+      };
     }
     const sourceHeadings = modules.extractHeadings(source);
     const renderedHeadings = Array.from(article.querySelectorAll("h1, h2, h3, h4"));
@@ -1811,9 +2362,21 @@
   function restoreReadingAnchor(state, anchor) {
     if (!anchor) return;
     const position = Math.max(0, Math.min(state.view.state.doc.length, anchor.position));
-    state.view.dispatch({ selection: { anchor: position }, scrollIntoView: true });
+    const line = state.view.state.doc.lineAt(position);
+    const diagram = /!\[[^\]]*\]\([^)]*\).*\.commutative-diagram/.test(line.text);
+    const selectionPosition = diagram ? Math.min(state.view.state.doc.length, line.to + 1) : position;
+    state.view.dispatch({ selection: { anchor: selectionPosition }, scrollIntoView: true });
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (state.destroyed) return;
+      if (diagram) {
+        const element = state.surface.querySelector(`.mn-cm-diagram[data-mn-source-from="${line.from}"]`);
+        if (element) {
+          const rectangle = element.getBoundingClientRect();
+          const progress = Math.max(0, Math.min(1, Number(anchor.blockProgress) || 0.5));
+          window.scrollBy(0, rectangle.top + rectangle.height * progress - anchor.viewportY);
+          return;
+        }
+      }
       const coordinates = state.view.coordsAtPos(position, 1);
       if (coordinates) window.scrollBy(0, coordinates.top - anchor.viewportY);
     }));
@@ -1879,7 +2442,7 @@
       if (!state) return;
       state.mathRanges = ranges;
       if (state.mathPopover) scheduleMathPopover(state);
-    }, Number(payload.chapterNumber) || 1);
+    }, Number(payload.chapterNumber) || 1, payload);
     state = {
       article, shell, toolbar, surface, payload, originalHtml, modules,
       baseRevision: source === draft?.source && !draftCompatible ? draft.baseRevision : payload.revision,
@@ -2183,13 +2746,8 @@
         state.menu.querySelectorAll("[data-block]").forEach((item) => { item.hidden = false; });
         showMenu(state, "toolbar", event.target.closest("button"));
       }
-      if (action === "create-course") openStructureDialog(state, "course");
-      if (action === "create-page") openStructureDialog(state, "page");
-      if (action === "reorder-courses") openStructureDialog(state, "order");
-      if (action === "rename-course") openRenameDialog(state, "course");
-      if (action === "rename-page") openRenameDialog(state, "page");
-      if (action === "delete-course") openDeleteDialog(state, "course");
-      if (action === "delete-page") openDeleteDialog(state, "page");
+      if (action === "section") insertBlock(state, { special: "heading", level: 2 });
+      if (action === "subsection") insertBlock(state, { special: "heading", level: 3 });
       if (action === "source") {
         state.visual = !state.visual;
         state.view.dispatch({ effects: visualCompartment.reconfigure(state.visual ? [visualExtension] : []) });
@@ -2216,6 +2774,7 @@
 
   function initialize() {
     resumePendingNavigation();
+    closeOrganizer(true);
     const generation = ++pageGeneration;
     currentPayload = null;
     setOpeningStatus(false);
@@ -2250,9 +2809,23 @@
   }
 
   document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && activeOrganizer) {
+      event.preventDefault();
+      closeOrganizer();
+      return;
+    }
     if (event.key === "Escape" && activeEditor?.structureDialog && !activeEditor.structureDialog.hidden) {
       event.preventDefault();
       closeStructureDialog(activeEditor);
+      return;
+    }
+    const organizerShortcut = (event.metaKey || event.ctrlKey) && event.altKey &&
+      !event.shiftKey && event.key.toLowerCase() === "o";
+    if (organizerShortcut && !event.repeat && currentPayload) {
+      event.preventDefault();
+      if (activeOrganizer) closeOrganizer();
+      else if (activeEditor) setStatus(activeEditor, "请先完成本页编辑，再整理课程目录", "pending");
+      else openOrganizer(currentPayload);
       return;
     }
     const shortcut = (event.metaKey || event.ctrlKey) && event.shiftKey &&

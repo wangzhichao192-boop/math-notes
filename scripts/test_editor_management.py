@@ -64,6 +64,38 @@ class ManagementFlow(unittest.TestCase):
                     index = (docs / "abstract-algebra/index.md").read_text(encoding="utf-8")
                     self.assertIn("[Groups](groups.md)", index)
                     self.assertIn("\n\n1. [Groups]", index)
+                    _, outline_status = self.post({"action": "status"})
+                    status, part_result = self.post({
+                        "action": "createPart", "course": "abstract-algebra", "title": "Part I",
+                        "baseRevision": outline_status["structureRevision"],
+                    })
+                    self.assertEqual(status, 201)
+                    moved_outline = part_result["outline"]
+                    groups = next(item for item in moved_outline if item.get("path", "").endswith("groups.md"))
+                    moved_outline.remove(groups)
+                    moved_outline[-1]["children"].append(groups)
+                    status, outline_result = self.post({
+                        "action": "saveCourseOutline", "course": "abstract-algebra",
+                        "outline": moved_outline, "baseRevision": part_result["structureRevision"],
+                    })
+                    self.assertEqual(status, 200, outline_result)
+                    status, rings = self.post({
+                        "action": "createPage", "course": "abstract-algebra", "kind": "chapter",
+                        "partTitle": "Part I", "title": "Rings", "slug": "rings",
+                        "baseRevision": outline_result["structureRevision"],
+                    })
+                    self.assertEqual(status, 201)
+                    status, ideals = self.post({
+                        "action": "createPage", "course": "abstract-algebra", "kind": "subchapter",
+                        "parentPath": "abstract-algebra/rings.md", "title": "Ideals", "slug": "ideals",
+                        "baseRevision": rings["structureRevision"],
+                    })
+                    self.assertEqual(status, 201)
+                    nested_source = config.read_text(encoding="utf-8")
+                    self.assertIn('      - "Part I":', nested_source)
+                    self.assertIn('          - "Rings":', nested_source)
+                    self.assertIn('              - "Rings": abstract-algebra/rings.md', nested_source)
+                    self.assertIn('              - "Ideals": abstract-algebra/ideals.md', nested_source)
                     _, fresh = self.post({"action": "status"})
                     status, _ = self.post({"action": "reorderCourses", "order": ["abstract-algebra", "first"],
                                           "baseRevision": fresh["structureRevision"]})
@@ -93,7 +125,7 @@ class ManagementFlow(unittest.TestCase):
                     _, rename_status = self.post({"action": "status"})
                     abstract = next(course for course in rename_status["courses"]
                                     if course["slug"] == "abstract-algebra")
-                    self.assertEqual(abstract["pageCount"], 1)
+                    self.assertEqual(abstract["pageCount"], 3)
                     status, result = self.post({
                         "action": "renamePage", "course": "abstract-algebra",
                         "path": "abstract-algebra/groups.md", "title": "Group Theory",
@@ -136,7 +168,7 @@ class ManagementFlow(unittest.TestCase):
                         "path": "abstract-algebra/groups.md", "confirmation": "Group Theory",
                         "baseRevision": delete_status["structureRevision"],
                     })
-                    self.assertEqual(status, 200)
+                    self.assertEqual(status, 200, result)
                     self.assertEqual(result["url"], "/math-notes/abstract-algebra/")
                     self.assertFalse((docs / "abstract-algebra/groups.md").exists())
                     self.assertNotIn("abstract-algebra/groups.md", config.read_text(encoding="utf-8"))

@@ -74,12 +74,22 @@ and direct products.
 
 !!! remark "Remark (Universal meaning of a kernel)"
     <a id="rem-kernel-universal"></a>
-    Let $i:\ker f\hookrightarrow G$ be the inclusion. Every homomorphism
-    $u:T\to G$ for which $f\circ u$ is trivial factors uniquely through
-    $i$. Thus $\ker f$ is the universal subgroup on which $f$ vanishes.
+    Let $f:G\to K$ be a homomorphism, let
+    $i:\ker f\hookrightarrow G$ be the inclusion, and write
+    $0:G\to K$ for the trivial homomorphism. For every group $T$ and
+    homomorphism $u:T\to G$ satisfying $f\circ u=0$, there is a unique
+    homomorphism $\widetilde u:T\to\ker f$ such that
+    $i\circ\widetilde u=u$.
 
-!!! example "Example (Cyclic groups)"
-    <a id="ex-cyclic-groups"></a>
+    ![Equalizer diagram for the universal property of a kernel](../assets/abstract-algebra/kernel-universal-property.svg){ .commutative-diagram  style="--mn-diagram-width: 14rem" }
+
+    Thus $(\ker f,i)$ is the equalizer of $f$ and $0$: it is the
+    universal subgroup of $G$ on which $f$ vanishes.
+
+!!! definition "Definition (Cyclic group)"
+    <a id="def-cyclic-group"></a>
+    A group $G$ is **cyclic** if $G=\langle g\rangle$ for some
+    $g\in G$; such an element $g$ is called a **generator** of $G$.
     For $g\in G$, the map $\mathbb Z\to G$, $m\mapsto g^m$, has image
     $\langle g\rangle$. Its kernel is $0$ when $g$ has infinite order and
     $n\mathbb Z$ when $\operatorname{ord}(g)=n$. The
@@ -99,9 +109,14 @@ and direct products.
 
     This is an equivalence relation. The class of $x$ is the **left
     coset** $xH=\{xh\mid h\in H\}$, and
-    $G/H=\{xH\mid x\in G\}$ is the set of left cosets. Its cardinality
-    $|G/H|$ is the **index** of $H$ in $G$. A **right coset** has the form
+    $G/H=\{xH\mid x\in G\}$ is the set of left cosets.
+    
+    A **right coset** has the form
     $Hx=\{hx\mid h\in H\}$.
+    
+    The cardinality of $G/H$
+    is the **index** of $H$ in $G$, written
+    $[G:H]:=|G/H|$.
 
 !!! proposition "Proposition (Coset calculus)"
     <a id="prop-coset-calculus"></a>
@@ -122,11 +137,17 @@ and direct products.
     $y\in xH$ gives $x^{-1}y\in H$. The remaining assertions follow
     immediately.
 
-!!! remark "Remark (Universal property of the coset set)"
+!!! remark "Remark (Universal property of the "coset set" as a quotient set)"
     <a id="rem-coset-universal"></a>
-    Let $q_H:G\to G/H$ be $g\mapsto gH$. A function $F:G\to X$ factors
-    uniquely through $q_H$ if and only if it is constant on every left
-    coset. In that case the factor is $\bar F(gH)=F(g)$.
+    Let $H\leq G$, let $X$ be any set. Write
+    $q_H:G\to G/H$ for $g\mapsto gH$. A function $F:G\to X$ factors
+    uniquely through $q_H$ if and only if
+    $F(x)=F(y)$ whenever $xH=yH$. In that case $\bar F(gH)=F(g)$.
+
+    ![Commutative triangle for the universal property of the coset set](../assets/abstract-algebra/coset-set-universal-property.svg){ .commutative-diagram style="--mn-diagram-width: 9rem" }
+
+    Thus $q_H$ is the quotient map for the equivalence relation
+    $x\sim_H y$ in the category of sets.
 
 ??? proof "Proof"
     Constancy on cosets makes $\bar F(gH)=F(g)$ well-defined, and then
@@ -151,21 +172,44 @@ and direct products.
 
 !!! corollary "Corollary (Groups of prime order)"
     <a id="cor-prime-order-cyclic"></a>
-    Every group of prime order is cyclic.
+    Recall that the [order of a group](integers-groups-and-homomorphisms.md#def-powers-order)
+    is its cardinality $|G|$.
+ 
+
+    Every group of prime order is [cyclic](#def-cyclic-group); in fact,
+    every nonidentity element is a generator.
+
+??? proof "Proof"
+    If $|G|=p$ and $g\neq e$, then $\operatorname{ord}(g)$ divides $p$
+    and is greater than $1$. Hence $\operatorname{ord}(g)=p$, so
+    $G=\langle g\rangle$.
 
 !!! proposition "Proposition (Index-tower formula)"
     <a id="prop-index-tower"></a>
-    If $H\leq K\leq G$ and the indices are finite, then
+    If $H\leq K\leq G$ and $[G:K]$ and
+    $[K:H]$ are finite, then
 
     $$
-    |G/H|=|G/K|\,|K/H|.
+    [G:H]=[G:K][K:H],
     $$
+
+    equivalently $|G/H|=|G/K|\,|K/H|$.
 
 ??? proof "Proof"
-    If $t_i$ represent the left cosets of $K$ in $G$ and $u_j$ represent
-    the left cosets of $H$ in $K$, then the products $t_i u_j$ represent
-    the left cosets of $H$ in $G$. Existence and uniqueness follow first
-    modulo $K$, then modulo $H$.
+    If $G$ is finite, Lagrange gives the immediate calculation
+
+    $$
+    |G/H|=\frac{|G|}{|H|}
+    =\frac{|G|}{|K|}\frac{|K|}{|H|}
+    =|G/K|\,|K/H|.
+    $$
+
+    The stated hypothesis also allows $G$ to be infinite, so cardinality
+    division is not available in general. Choose representatives $t_i$ of
+    the left cosets of $K$ in $G$ and representatives $u_j$ of the left
+    cosets of $H$ in $K$. Then the products $t_i u_j$ represent the left
+    cosets of $H$ in $G$; existence and uniqueness follow first modulo
+    $K$, then modulo $H$.
 
 !!! definition "Definition (Normal subgroup)"
     <a id="def-normal-subgroup"></a>
@@ -192,9 +236,10 @@ and direct products.
 
 !!! proposition "Proposition (Normal subgroups and homomorphisms)"
     <a id="prop-normality-under-maps"></a>
-    Every kernel is normal. If $f:G\to K$ is a homomorphism and
-    $L\trianglelefteq K$, then $f^{-1}(L)\trianglelefteq G$. If $f$ is
-    surjective and $N\trianglelefteq G$, then
+    Let $f:G\to K$ be a group homomorphism. Then
+    $\ker f\trianglelefteq G$. More generally, if
+    $L\trianglelefteq K$, then $f^{-1}(L)\trianglelefteq G$. If, in
+    addition, $f$ is surjective and $N\trianglelefteq G$, then
     $f(N)\trianglelefteq K$.
 
 ??? proof "Proof"
@@ -298,13 +343,7 @@ and direct products.
 
     When it exists, $\bar f(gN)=f(g)$.
 
-$$
-\begin{array}{ccc}
-G & \xrightarrow{q} & G/N \\
-{}_{f}\searrow & & \swarrow_{\exists!\,\bar f} \\
-& K &
-\end{array}
-$$
+    ![Commutative triangle for the universal property of a quotient](../assets/abstract-algebra/quotient-universal-property.svg){ .commutative-diagram style="--mn-diagram-width: 9rem" }
 
 ??? proof "Proof"
     A factorization kills $N$ because $q(N)=\{N\}$. Conversely, if
@@ -509,13 +548,7 @@ $$
     homomorphisms $u:K\to G$, $v:K\to H$, there is a unique homomorphism
     $w:K\to P$ satisfying $p_G\circ w=u$ and $p_H\circ w=v$.
 
-$$
-\begin{array}{ccccc}
-& & K & & \\
-& {}^{u}\swarrow & \downarrow_{\exists!\,w} & \searrow^{v} & \\
-G & \xleftarrow{p_G} & P & \xrightarrow{p_H} & H
-\end{array}
-$$
+    ![Commutative diagram for the universal property of a product](../assets/abstract-algebra/product-universal-property.svg){ .commutative-diagram style="--mn-diagram-width: 13rem" }
 
 !!! proposition "Proposition (Construction of the product)"
     <a id="prop-product-construction"></a>
