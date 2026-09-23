@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 430" role="img" aria-labelledby="title desc">
+  <title id="title">Fundamental polygons for the torus and the Klein bottle</title>
+  <desc id="desc">Opposite sides of a square are identified. For the torus both pairs have matching directions; for the Klein bottle one pair has reversed directions.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.sq{fill:#fff;stroke:#334155;stroke-width:4}.a{stroke:#2563eb;stroke-width:6}.b{stroke:#dc2626;stroke-width:6}.ttl{font:600 25px system-ui,sans-serif;fill:#0f172a}.lbl{font:italic 25px Georgia,serif;fill:#0f172a;text-anchor:middle}.note{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}
+    </style>
+    <marker id="blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2563eb"/></marker>
+    <marker id="red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#dc2626"/></marker>
+  </defs>
+  <rect class="panel" x="15" y="15" width="525" height="400" rx="16"/><rect class="panel" x="580" y="15" width="525" height="400" rx="16"/>
+  <text class="ttl" x="278" y="55" text-anchor="middle">Torus</text><text class="ttl" x="842" y="55" text-anchor="middle">Klein bottle</text>
+  <rect class="sq" x="120" y="95" width="315" height="235"/>
+  <path class="a" marker-end="url(#blue)" d="M170 95H385"/><path class="a" marker-end="url(#blue)" d="M170 330H385"/>
+  <path class="b" marker-end="url(#red)" d="M120 285V140"/><path class="b" marker-end="url(#red)" d="M435 285V140"/>
+  <text class="lbl" x="278" y="88">a</text><text class="lbl" x="278" y="365">a</text><text class="lbl" x="93" y="220">b</text><text class="lbl" x="462" y="220">b</text>
+  <text class="note" x="278" y="400">word aba⁻¹b⁻¹; χ = 0</text>
+  <rect class="sq" x="685" y="95" width="315" height="235"/>
+  <path class="a" marker-end="url(#blue)" d="M735 95H950"/><path class="a" marker-end="url(#blue)" d="M950 330H735"/>
+  <path class="b" marker-end="url(#red)" d="M685 285V140"/><path class="b" marker-end="url(#red)" d="M1000 285V140"/>
+  <text class="lbl" x="842" y="88">a</text><text class="lbl" x="842" y="365">a</text><text class="lbl" x="658" y="220">b</text><text class="lbl" x="1027" y="220">b</text>
+  <text class="note" x="842" y="400">one pair reverses; χ = 0</text>
+</svg>

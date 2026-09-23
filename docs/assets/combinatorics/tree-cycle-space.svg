@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 430" role="img" aria-labelledby="title desc">
+  <title id="title">Fundamental cycles and symmetric difference</title>
+  <desc id="desc">A square with a diagonal is built from a spanning path and two non-tree edges. Each non-tree edge determines one fundamental cycle, and their symmetric difference is the third cycle.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.tree{stroke:#334155;stroke-width:5;fill:none}.chord1{stroke:#dc2626;stroke-width:5;fill:none}.chord2{stroke:#2563eb;stroke-width:5;fill:none}.cycleA{stroke:#dc2626;stroke-width:8;fill:none;opacity:.72}.cycleB{stroke:#2563eb;stroke-width:8;fill:none;opacity:.65}.result{stroke:#0f766e;stroke-width:7;fill:none}.v{fill:#fff;stroke:#0f172a;stroke-width:3}.ttl{font:600 23px system-ui,sans-serif;fill:#0f172a}.lbl{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}.math{font:italic 25px Georgia,serif;fill:#0f172a;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="340" height="400" rx="16"/>
+  <rect class="panel" x="375" y="15" width="730" height="400" rx="16"/>
+  <text class="ttl" x="185" y="48" text-anchor="middle">Spanning tree and chords</text>
+  <path class="tree" d="M90 100H280V300H90"/>
+  <path class="chord1" d="M90 100L280 300"/>
+  <path class="chord2" d="M90 300L90 100"/>
+  <circle class="v" cx="90" cy="100" r="10"/><circle class="v" cx="280" cy="100" r="10"/><circle class="v" cx="280" cy="300" r="10"/><circle class="v" cx="90" cy="300" r="10"/>
+  <text class="lbl" x="72" y="88">a</text><text class="lbl" x="298" y="88">b</text><text class="lbl" x="298" y="325">c</text><text class="lbl" x="72" y="325">d</text>
+  <text class="lbl" x="210" y="220" fill="#dc2626">e = ac</text><text class="lbl" x="48" y="205" fill="#2563eb">f = ad</text>
+  <text class="ttl" x="740" y="48" text-anchor="middle">C_e △ C_f = acd</text>
+  <g transform="translate(0,5)">
+    <path class="cycleA" d="M440 95H580V235Z"/>
+    <circle class="v" cx="440" cy="95" r="8"/><circle class="v" cx="580" cy="95" r="8"/><circle class="v" cx="580" cy="235" r="8"/>
+    <text class="math" x="625" y="175">△</text>
+    <path class="cycleB" d="M675 95H815V235H675Z"/>
+    <path class="cycleB" d="M675 95L815 235"/>
+    <circle class="v" cx="675" cy="95" r="8"/><circle class="v" cx="815" cy="95" r="8"/><circle class="v" cx="815" cy="235" r="8"/><circle class="v" cx="675" cy="235" r="8"/>
+    <text class="math" x="855" y="175">=</text>
+    <path class="result" d="M910 95L1050 235H910Z"/>
+    <circle class="v" cx="910" cy="95" r="8"/><circle class="v" cx="1050" cy="235" r="8"/><circle class="v" cx="910" cy="235" r="8"/>
+  </g>
+  <text class="lbl" x="510" y="300">C_e = abc</text><text class="lbl" x="745" y="300">C_f = abcd</text><text class="lbl" x="980" y="300">acd</text>
+  <text class="lbl" x="740" y="365">Edges used twice cancel in symmetric difference.</text>
+</svg>

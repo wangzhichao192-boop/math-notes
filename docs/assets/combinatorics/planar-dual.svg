@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 440" role="img" aria-labelledby="title desc">
+  <title id="title">A plane graph and its geometric dual</title>
+  <desc id="desc">A square with one diagonal has three faces. One dual vertex is placed in each face. Five dashed dual edges cross the five primal edges once, producing two pairs of parallel dual edges and one edge between the interior face vertices.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.primal{stroke:#334155;stroke-width:5;fill:none}.dual{stroke:#dc2626;stroke-width:4;fill:none;stroke-dasharray:10 7}.pv{fill:#fff;stroke:#0f766e;stroke-width:3}.dv{fill:#fee2e2;stroke:#dc2626;stroke-width:3}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a}.lbl{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}.dlbl{font:italic 20px Georgia,serif;fill:#991b1b;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="1090" height="410" rx="16"/>
+  <path class="primal" d="M330 95H730V345H330Z M330 95L730 345"/>
+  <circle class="pv" cx="330" cy="95" r="11"/><circle class="pv" cx="730" cy="95" r="11"/><circle class="pv" cx="730" cy="345" r="11"/><circle class="pv" cx="330" cy="345" r="11"/>
+  <text class="lbl" x="307" y="88">A</text><text class="lbl" x="753" y="88">B</text><text class="lbl" x="753" y="372">C</text><text class="lbl" x="307" y="372">D</text>
+  <circle class="dv" cx="590" cy="165" r="14"/><circle class="dv" cx="470" cy="275" r="14"/><circle class="dv" cx="130" cy="220" r="14"/>
+  <text class="dlbl" x="590" y="171">f₁</text><text class="dlbl" x="470" y="281">f₂</text><text class="dlbl" x="130" y="226">f₀</text>
+  <path class="dual" d="M590 165L470 275"/>
+  <path class="dual" d="M590 165C590 120 590 90 590 70C420 30 215 55 130 220"/>
+  <path class="dual" d="M590 165C660 160 730 160 760 160C900 150 930 40 600 35C350 25 190 60 130 220"/>
+  <path class="dual" d="M470 275L130 220"/>
+  <path class="dual" d="M470 275C470 320 470 350 470 375C300 410 155 360 130 220"/>
+  <text class="lbl" x="880" y="102">two edges f₀–f₁</text><text class="lbl" x="220" y="405">two edges f₀–f₂</text>
+  <g transform="translate(820,260)">
+    <path class="primal" d="M0 0H120"/><circle class="pv" cx="0" cy="0" r="9"/><circle class="pv" cx="120" cy="0" r="9"/>
+    <circle class="dv" cx="60" cy="-58" r="12"/><path class="dual" d="M60 -46C60 -25 60 -10 60 10C90 45 145 30 145 -15C145 -60 100 -80 60 -46"/>
+    <text class="lbl" x="60" y="60">a bridge gives a dual loop</text>
+  </g>
+</svg>

@@ -157,6 +157,7 @@ nav:
       - "Counting Basics": combinatorics/counting-basics.md
       - "q-Analogues and Partitions": combinatorics/q-analogues-and-partitions.md
       - "Inclusion–Exclusion and Restricted Counting": combinatorics/inclusion-exclusion.md
+      - "Graph Theory": combinatorics/graphy-theorem.md
   - "常微分方程":
       - ode/index.md
       - "Basic Concepts": ode/models-geometry-and-well-posedness.md

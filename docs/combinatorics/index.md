@@ -13,6 +13,10 @@
 + [$q$-Analogues and Partitions](q-analogues-and-partitions.md) — 置换统计、Catalan 结构、Gaussian 系数与整数分拆
 + [Inclusion–Exclusion and Restricted Counting](inclusion-exclusion.md) — 集合分拆、有限差分、容斥、错排与 rook polynomial
 
+## 第二部分：图论
+
++ [Graph Theory](graphy-theorem.md) — 图、树、平面图、对偶，以及 Sperner–KKM–Brouwer 链条
+
 ## 教材
 
 + Richard P. Stanley, *Enumerative Combinatorics*, Volumes 1 and 2.
