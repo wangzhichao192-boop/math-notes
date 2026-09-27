@@ -211,6 +211,20 @@ and direct products.
     cosets of $H$ in $G$; existence and uniqueness follow first modulo
     $K$, then modulo $H$.
 
+!!! definition "Definition (Conjugation)"
+    <a id="def-conjugation"></a>
+    For $g,x\in G$, the element $gxg^{-1}$ is the **conjugate** of $x$
+    by $g$. The map
+
+    $$
+    c_g:G\longrightarrow G,
+    \qquad x\longmapsto gxg^{-1},
+    $$
+
+    is called **conjugation by $g$**; it is an automorphism of $G$.
+    For a subset $S\subseteq G$, write
+    $gSg^{-1}=\{gsg^{-1}:s\in S\}$.
+
 !!! definition "Definition (Normal subgroup)"
     <a id="def-normal-subgroup"></a>
     A subgroup $N\leq G$ is **normal**, written $N\trianglelefteq G$, if
@@ -218,6 +232,9 @@ and direct products.
     $$
     gNg^{-1}=N \qquad (g\in G).
     $$
+
+    Thus a normal subgroup is precisely a subgroup preserved by every
+    conjugation of $G$.
 
 !!! proposition "Proposition (Equivalent forms of normality)"
     <a id="prop-normality-equivalences"></a>
@@ -272,15 +289,16 @@ and direct products.
     $\ker q=H$.
 
 ??? proof "Proof"
-    Suppose $H=N\trianglelefteq G$. If $g'=gn_1$ and $k'=kn_2$, then
+    Suppose $H\trianglelefteq G$. If $g'=gh_1$ and $k'=kh_2$ with
+    $h_1,h_2\in H$, then
 
     $$
-    g'k'=gn_1kn_2=gk(k^{-1}n_1k)n_2\in gkN,
+    g'k'=gh_1kh_2=gk(k^{-1}h_1k)h_2\in gkH,
     $$
 
     so the product is independent of representatives. Associativity
-    descends from $G$, the identity is $N$, and
-    $(gN)^{-1}=g^{-1}N$.
+    descends from $G$, the identity is $H$, and
+    $(gH)^{-1}=g^{-1}H$.
 
     Conversely, if multiplication is well-defined and $h\in H$, then
     $hH=H$. Hence

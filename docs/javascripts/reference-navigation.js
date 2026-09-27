@@ -23,6 +23,7 @@ window.MathNotes = window.MathNotes || {};
   let scrollBaseline = null;
   let activationTimer = 0;
   let jumpToken = 0;
+  let tocJumpToken = 0;
 
   function normalizedPage(url) {
     const parsed = new URL(url, location.href);
@@ -270,6 +271,40 @@ window.MathNotes = window.MathNotes || {};
     showReturnAfterJump(payload);
   }
 
+  function onTocClick(event) {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey
+      || event.shiftKey || event.altKey) return;
+    const link = event.target.closest?.(".md-sidebar--secondary a.md-nav__link[href]");
+    if (!link || link.hasAttribute("download") || link.target) return;
+
+    let destination;
+    try {
+      destination = new URL(link.href, location.href);
+    } catch (_) {
+      return;
+    }
+    if (destination.origin !== location.origin || !destination.hash
+      || normalizedPage(destination) !== normalizedPage(location.href)) return;
+
+    const anchor = anchorFromHash(destination.hash);
+    if (!anchor) return;
+    event.preventDefault();
+    setAddress(destination.href);
+
+    // Material's fixed rem-based :target margin grows with browser zoom and
+    // can place the heading past the TOC's active-section threshold. Measure
+    // the header that is actually visible instead, then correct once more
+    // after the sticky tabs and rendered maths have settled.
+    const token = ++tocJumpToken;
+    alignBelowHeader(anchor);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (token === tocJumpToken && anchor.isConnected) alignBelowHeader(anchor);
+    }));
+    window.setTimeout(() => {
+      if (token === tocJumpToken && anchor.isConnected) alignBelowHeader(anchor);
+    }, 120);
+  }
+
   function restoreSourceIfNeeded() {
     const restore = readStored(RESTORE_KEY);
     if (!restore || normalizedPage(restore.sourceUrl) !== normalizedPage(location.href)) return false;
@@ -299,6 +334,7 @@ window.MathNotes = window.MathNotes || {};
   }
 
   document.addEventListener("click", onReferenceClick, true);
+  document.addEventListener("click", onTocClick, true);
   window.addEventListener("scroll", dismissIfViewportMoved, { passive: true });
   window.addEventListener("resize", dismissIfViewportMoved, { passive: true });
   window.addEventListener("popstate", () => removeReturn());

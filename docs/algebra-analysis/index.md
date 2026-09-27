@@ -1,6 +1,6 @@
 # 代数与分析基础
 
-> 收录 **Huayi Chen** 主讲的 *Fundamental Algebra & Analysis* 课程笔记。
+> 收录 **Huayi Chen** 主讲的 *Fundamental Algebra and Analysis* 课程笔记。
 > 上下两册合并于此，按章节顺序连贯阅读。
 
 ## 课程主线
@@ -10,7 +10,7 @@
 
 ## 目录
 
-### FAA I — Fundamental Algebra & Analysis I
+### Fundamental Algebra and Analysis I
 
 1. [Basic Logic](basic-logic.md) — 命题、否定、蕴含、biconditional、反证法
 2. [Set Theory](set-theory.md) — 子集、差集、量词、并/交、笛卡尔积
@@ -23,7 +23,7 @@
 9. [Differential Calculus](differential-calculus.md) — 可微性、凸性、均值定理、Taylor 展开
 10. [Integral Calculus](integral-calculus.md) — 微分形式、Riesz 空间、测度空间、乘积测度
 
-### FAA II — Fundamental Algebra & Analysis II
+### Fundamental Algebra and Analysis II
 
 1. [Language of Category Theory](category-theory.md) — universe、范畴、函子、Yoneda
 2. [Bilinear Algebra](bilinear-algebra.md) — 双线性型、二次型
@@ -36,6 +36,6 @@
 
 ## 教材
 
-- [FAA I — *Fundamental Algebra & Analysis*](faa-i.pdf)
-- [FAA II — *Fundamental Algebra & Analysis II*](faa-ii.pdf)
+- [Fundamental Algebra and Analysis I](faa-i.pdf)
+- [Fundamental Algebra and Analysis II](faa-ii.pdf)
 

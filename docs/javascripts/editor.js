@@ -2041,7 +2041,11 @@
     const startedAt = performance.now();
     let cancelled = false;
     const cancel = () => { cancelled = true; };
-    const cancelEvents = ["wheel", "touchstart", "pointerdown", "keydown"];
+    // Do not cancel on keydown: Safari can finish dispatching the shortcut's
+    // modifier sequence after the async editor mount, which used to cancel the
+    // restore before its first frame. Wheel/touch/pointer input still hands
+    // control back to the reader immediately.
+    const cancelEvents = ["wheel", "touchstart", "pointerdown"];
     cancelEvents.forEach(type => window.addEventListener(type, cancel, { once: true, passive: true, capture: true }));
     const cleanup = () => cancelEvents.forEach(type => window.removeEventListener(type, cancel, { capture: true }));
     setTimeout(cleanup, 950);
@@ -2314,8 +2318,13 @@
     return best.offset + Math.round(best.raw.length * progress);
   }
 
-  function captureReadingAnchor(article, source, modules) {
-    const visualAnchor = captureRenderedAnchor({ sourcePath: "" }, article);
+  function captureReadingAnchor(article, source, modules, capturedVisualAnchor = null) {
+    // Capture the rendered location before loading CodeMirror. On a cold load,
+    // importing the editor modules can take long enough for fonts, MathJax, or
+    // the browser's scroll anchoring to move the reading page underneath us.
+    // Converting that original visual anchor to a source position afterwards
+    // keeps the shortcut tied to what the reader actually saw when it was hit.
+    const visualAnchor = capturedVisualAnchor || captureRenderedAnchor({ sourcePath: "" }, article);
     const visualPosition = sourcePositionForRenderedAnchor(source, visualAnchor);
     if (Number.isInteger(visualPosition)) {
       return {
@@ -2329,7 +2338,12 @@
     const renderedHeadings = Array.from(article.querySelectorAll("h1, h2, h3, h4"));
     if (!sourceHeadings.length || !renderedHeadings.length) return null;
 
-    const viewportY = Math.min(Math.max(window.innerHeight * 0.38, 120), window.innerHeight - 80);
+    // Keep the same visual anchor height even when the exact paragraph cannot
+    // be matched (for example, a formula-only or image-only block). Falling
+    // back to a different 38% anchor made the page visibly jump on entry.
+    const viewportY = Number.isFinite(visualAnchor?.viewportY)
+      ? visualAnchor.viewportY
+      : Math.max(96, Math.min(window.innerHeight - 72, window.innerHeight / 2));
     const documentY = window.scrollY + viewportY;
     const headingTops = renderedHeadings.map(heading => heading.getBoundingClientRect().top + window.scrollY);
     let renderedIndex = 0;
@@ -2368,23 +2382,25 @@
     state.view.dispatch({ selection: { anchor: selectionPosition }, scrollIntoView: true });
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (state.destroyed) return;
-      if (diagram) {
-        const element = state.surface.querySelector(`.mn-cm-diagram[data-mn-source-from="${line.from}"]`);
-        if (element) {
-          const rectangle = element.getBoundingClientRect();
-          const progress = Math.max(0, Math.min(1, Number(anchor.blockProgress) || 0.5));
-          window.scrollBy(0, rectangle.top + rectangle.height * progress - anchor.viewportY);
-          return;
-        }
-      }
-      const coordinates = state.view.coordsAtPos(position, 1);
-      if (coordinates) window.scrollBy(0, coordinates.top - anchor.viewportY);
+      // The page, rather than `.cm-scroller`, owns scrolling in the seamless
+      // editor. CodeMirror's scroll effect therefore cannot preserve the
+      // viewport in Safari. By this frame the selected source line is mounted;
+      // let the browser align that real line once, without repeatedly moving
+      // the window while CodeMirror is still measuring its virtual viewport.
+      state.view.dom.querySelector(".cm-activeLine")?.scrollIntoView({
+        block: "center",
+        inline: "nearest"
+      });
     }));
   }
 
   async function enterEditor(payload, generation, preserveReadingPosition = false, explicitReadingAnchor = null) {
     if (!LOCAL_HOSTS.has(location.hostname)) return;
     if (activeEditor || openingGeneration === generation) return;
+    const initialArticle = document.querySelector(".md-content article.md-typeset");
+    const initialRenderedAnchor = preserveReadingPosition && !explicitReadingAnchor && initialArticle
+      ? captureRenderedAnchor(payload, initialArticle)
+      : null;
     openingGeneration = generation;
     setOpeningStatus(true);
     let modules;
@@ -2419,7 +2435,7 @@
       source = draft.source;
     }
     const readingAnchor = explicitReadingAnchor || (preserveReadingPosition && source === payload.source
-      ? captureReadingAnchor(article, source, modules)
+      ? captureReadingAnchor(article, source, modules, initialRenderedAnchor)
       : null);
 
     const originalHtml = article.innerHTML;
@@ -2635,7 +2651,13 @@
           // The initial coordinates belong to the pre-expansion layout. Subsequent
           // drag positions belong to the current layout; let CodeMirror own drag,
           // autoscroll, shift-click and selection lifetime.
-          let head = current === event ? start : visualPositionAtEvent(current, view);
+          // CodeMirror does not guarantee that the first event passed to `get` is
+          // the same JavaScript object as the event above (Safari commonly wraps
+          // it). Compare coordinates as well, otherwise the Markdown markers have
+          // already appeared and the same screen x is mapped against a wider line.
+          const atInitialPoint = current === event ||
+            (Math.abs(current.clientX - event.clientX) <= 3 && Math.abs(current.clientY - event.clientY) <= 3);
+          let head = atInitialPoint ? start : visualPositionAtEvent(current, view);
           if (!Number.isInteger(head)) head = view.posAtCoords({ x: current.clientX, y: current.clientY }) ?? start;
           const first = clickRange(start), last = clickRange(head);
           const range = extend ? startSelection.main.extend(last.from, last.to)

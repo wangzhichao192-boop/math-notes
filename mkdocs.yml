@@ -52,8 +52,8 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js
   - javascripts/katex.js
   - javascripts/numbering.js?v=20260920-1
-  - javascripts/reference-navigation.js?v=20260923-2
-  - javascripts/editor.js?v=20260922-4
+  - javascripts/reference-navigation.js?v=20260924-1
+  - javascripts/editor.js?v=20260924-1
   - javascripts/theme-picker.js?v=20260918-3
 
 markdown_extensions:
@@ -136,6 +136,7 @@ nav:
       - "Sets, Cardinality, Choice, and Quotients": abstract-algebra/lesson1.md
       - "Integers, Groups, and Homomorphisms": abstract-algebra/integers-groups-and-homomorphisms.md
       - "Subgroups, Quotients, and Applications": abstract-algebra/subgroups-and-quotients.md
+      - "Group Actions and Applications": abstract-algebra/group-actions-and-applications.md
   - 几何与拓扑:
       - geometry-topology/index.md
       - Invitation: geometry-topology/invitation.md
