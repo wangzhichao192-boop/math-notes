@@ -1,6 +1,6 @@
 # Graph Theory
 
-Graph theory replaces geometric detail by incidence: vertices record objects and edges record which pairs are related. The first part of this chapter develops simple graphs, trees, spanning trees, and the cycle space. The second part studies plane embeddings, Euler characteristic, planar duality, and the combinatorial route from Sperner's lemma to Brouwer's fixed-point theorem. Definitions that were used orally in class are stated explicitly, while descriptive classroom arguments are separated into `Idea` blocks.
+Graph theory replaces geometric detail by incidence: vertices record objects and edges record which pairs are related. The chapter develops simple graphs, trees, spanning trees, and the cycle space; then studies plane embeddings, Euler characteristic, planar duality, and the combinatorial route from Sperner's lemma to Brouwer's fixed-point theorem. Its final sections treat Eulerian and Hamiltonian cycles, graph matrices, and matching theory. Definitions that were used orally in class are stated explicitly, while descriptive classroom arguments are separated into `Idea` blocks.
 
 ## Graphs and Connectivity
 
@@ -76,10 +76,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
     <a id="def-complete-clique-independent"></a>
     The **complete graph** $K_n$ has $n$ vertices and all $\binom n2$ possible edges. A set $S\subseteq V(G)$ is a **clique** if $G[S]$ is complete, and it is **independent** if $G[S]$ has no edges.
 
-<figure markdown="span">
-  ![Complete graphs K3, K4, K5, and a bipartite six-cycle](../assets/combinatorics/basic-graphs.svg)
-  <figcaption>Complete graphs and a bipartite graph. Crossings in the drawings of $K_4$ and $K_5$ are not vertices.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![Complete graphs K3, K4, K5, and a bipartite six-cycle](../assets/combinatorics/basic-graphs.svg)
+      <figcaption>Complete graphs and a bipartite graph. Crossings in the drawings of $K_4$ and $K_5$ are not vertices.</figcaption>
+    </figure>
 
 !!! definition "Definition (Complement)"
     <a id="def-graph-complement"></a>
@@ -244,10 +244,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     A set $S\subseteq E(G)$ is **even** if every vertex has even degree in the spanning subgraph $(V(G),S)$. The empty set and the edge set of every cycle are even. The symmetric difference of two even edge sets is even.
 
-<figure markdown="span">
-  ![Fundamental cycles and their symmetric difference](../assets/combinatorics/tree-cycle-space.svg)
-  <figcaption>Each non-tree edge determines one fundamental cycle; edges occurring twice cancel under symmetric difference.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![Fundamental cycles and their symmetric difference](../assets/combinatorics/tree-cycle-space.svg)
+      <figcaption>Each non-tree edge determines one fundamental cycle; edges occurring twice cancel under symmetric difference.</figcaption>
+    </figure>
 
 !!! theorem "Theorem (Fundamental cycle basis)"
     <a id="thm-fundamental-cycle-basis"></a>
@@ -319,10 +319,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     is a spanning tree, contains $F+a$, and satisfies $w(M')\le w(M)$. Since $M$ was minimum, $M'$ is minimum. The invariant follows by induction, and the final $F$ is therefore minimum.
 
-<figure markdown="span">
-  ![A weighted graph and the tree selected by Kruskal's algorithm](../assets/combinatorics/kruskal.svg)
-  <figcaption>Kruskal selects the edges of weights $1,2,2,3,4$; every rejected edge would close a cycle.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![A weighted graph and the tree selected by Kruskal's algorithm](../assets/combinatorics/kruskal.svg)
+      <figcaption>Kruskal selects the edges of weights $1,2,2,3,4$; every rejected edge would close a cycle.</figcaption>
+    </figure>
 
 **Two structural properties of trees.**
 
@@ -340,7 +340,16 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 ??? proof "Proof"
     Root $T$ at an arbitrary vertex $r$. For each $S\in\mathcal S$, let $x_S$ be the vertex of $S$ closest to $r$, and choose $S_0$ so that $x_{S_0}$ is as far from $r$ as possible. We claim that $x_{S_0}$ belongs to every $S$.
 
+    To justify the closest-vertex construction, recall that a connected subgraph of a tree contains the unique path between each pair of its vertices. If $S$ had two distinct vertices of minimum depth, their paths from $r$ would meet last at a vertex of smaller depth. That vertex lies on the path between them and therefore in $S$, a contradiction. Thus $x_S$ is unique; it is the board's nearest vertex $n(S)$ in the lowest level met by $S$.
+
+    In addition, $x_S$ lies on the path from $r$ to every vertex $y\in S$. Otherwise the last common vertex of the $r$--$x_S$ and $r$--$y$ paths would have smaller depth than $x_S$ and would lie on the $x_S$--$y$ path in $S$, again contradicting minimality. These observations also apply when $T$ is infinite; the finite-tree statement on the board is a special case.
+
     Choose $y\in S\cap S_0$. Because a connected subgraph of a tree contains the unique path between any two of its vertices, both $x_S$ and $x_{S_0}$ lie on the $r$--$y$ path. The choice of $S_0$ puts $x_{S_0}$ no closer to $r$ than $x_S$. Hence $x_{S_0}$ lies on the $x_S$--$y$ path, which is contained in $S$. Thus $x_{S_0}\in S$ for every $S$.
+
+    <figure markdown="span">
+      ![Three intersecting subtrees with one common vertex, found by choosing the deepest closest-to-root vertex](../assets/combinatorics/tree-helly-root.svg)
+      <figcaption>Each subtree has a unique nearest vertex to $r$. The deepest of these vertices, $x_{S_0}$, belongs to every subtree. The coloured edge paths show three subtrees with that common vertex.</figcaption>
+    </figure>
 
 ## Planar and Euler's Formula
 
@@ -358,10 +367,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     Tracing the edge-sides incident with a face gives its **boundary walk**. Its length $\ell(F)$ counts edge occurrences, not merely distinct edges. In particular, a bridge is encountered twice along the boundary of the same face.
 
-<figure markdown="span">
-  ![Faces in a plane K4 and a face boundary that repeats a bridge](../assets/combinatorics/planar-euler.svg)
-  <figcaption>The plane $K_4$ has four faces. In the second graph the bridge $ad$ is traversed twice, so the indicated face has boundary walk $a,b,c,a,d,a$ of length $5$.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![Faces in a plane K4 and a face boundary that repeats a bridge](../assets/combinatorics/planar-euler.svg)
+      <figcaption>The plane $K_4$ has four faces. In the second graph the bridge $ad$ is traversed twice, so the indicated face has boundary walk $a,b,c,a,d,a$ of length $5$.</figcaption>
+    </figure>
 
 !!! theorem "Theorem (Euler's formula)"
     <a id="thm-euler-plane"></a>
@@ -430,10 +439,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     The graph $K_{3,3}$ is bipartite and hence triangle-free. It has $v=6$ and $e=9$, but a triangle-free simple planar graph on six vertices has at most $2v-4=8$ edges.
 
-<figure markdown="span">
-  ![The nonplanar graphs K5 and K3,3](../assets/combinatorics/nonplanar-obstructions.svg)
-  <figcaption>The two edge bounds certify that $K_5$ and $K_{3,3}$ are nonplanar.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![The nonplanar graphs K5 and K3,3](../assets/combinatorics/nonplanar-obstructions.svg)
+      <figcaption>The two edge bounds certify that $K_5$ and $K_{3,3}$ are nonplanar.</figcaption>
+    </figure>
 
 !!! definition "Definition (Subdivision)"
     <a id="def-graph-subdivision"></a>
@@ -489,10 +498,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     The board also gave a triangulation count. Both the torus and the Klein bottle admit flat polygonal models. In a triangulation, $3f=2e$. The total angle around all vertices is $2\pi v$, while the sum of the angles of all triangular faces is $\pi f$, so $f=2v$. These two equalities give $v-e+f=0$. This is an explanatory geometric argument; making it a formal proof requires specifying a compatible triangulation and the flat metric.
 
-<figure markdown="span">
-  ![Fundamental polygons for the torus and Klein bottle](../assets/combinatorics/surface-polygons.svg)
-  <figcaption>Opposite sides are identified according to the arrows. Both surfaces have Euler characteristic $0$.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![Fundamental polygons for the torus and Klein bottle](../assets/combinatorics/surface-polygons.svg)
+      <figcaption>Opposite sides are identified according to the arrows. Both surfaces have Euler characteristic $0$.</figcaption>
+    </figure>
 
 !!! remark "Remark (Why cellularity matters)"
     <a id="rem-cellularity-matters"></a>
@@ -555,10 +564,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     If the same face lies on both sides of $e$, then $e^*$ is a loop. Different primal edges may yield parallel dual edges. Thus $G^*$ is naturally a plane multigraph even when $G$ is simple.
 
-<figure markdown="span">
-  ![A plane graph with its geometric dual](../assets/combinatorics/planar-dual.svg)
-  <figcaption>Every primal edge is crossed exactly once by its dual edge. A bridge has the same face on both sides and therefore produces a dual loop.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![A plane graph with its geometric dual](../assets/combinatorics/planar-dual.svg)
+      <figcaption>Every primal edge is crossed exactly once by its dual edge. A bridge has the same face on both sides and therefore produces a dual loop.</figcaption>
+    </figure>
 
 !!! proposition "Proposition (The dual is connected)"
     <a id="prop-dual-connected"></a>
@@ -621,10 +630,10 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 
     A small triangle is **trichromatic** if its three vertices receive the three different labels.
 
-<figure markdown="span">
-  ![A Sperner coloring with a highlighted trichromatic triangle](../assets/combinatorics/sperner.svg)
-  <figcaption>A valid boundary coloring forces at least one small triangle carrying all three labels.</figcaption>
-</figure>
+    <figure markdown="span">
+      ![A Sperner coloring with a highlighted trichromatic triangle](../assets/combinatorics/sperner.svg)
+      <figcaption>A valid boundary coloring forces at least one small triangle carrying all three labels.</figcaption>
+    </figure>
 
 !!! theorem "Theorem (Sperner's lemma)"
     <a id="thm-sperner"></a>
@@ -701,3 +710,371 @@ Graph theory replaces geometric detail by incidence: vertices record objects and
 !!! remark "Remark (Higher-dimensional form)"
     <a id="rem-brouwer-higher-dimensional"></a>
     The same scheme works for an $n$-simplex: the higher-dimensional Sperner lemma implies the KKM lemma, which in turn implies Brouwer's fixed-point theorem. The triangle case contains the complete mechanism used on the board.
+## Eulerian and Hamiltonian Graphs
+
+Eulerian and Hamiltonian cycles impose two different global requirements. An Eulerian circuit uses every **edge** exactly once, whereas a Hamiltonian cycle visits every **vertex** exactly once.
+
+!!! definition "Definition (Circuit and Eulerian graph)"
+    <a id="def-eulerian-circuit"></a>
+    A **circuit** is a closed trail: it is a closed walk in which no edge is repeated. An **Eulerian circuit** of a graph $G$ is a circuit containing every edge of $G$. A graph is **Eulerian** if it contains an Eulerian circuit.
+
+!!! theorem "Theorem (Euler's circuit criterion)"
+    <a id="thm-eulerian-criterion"></a>
+    A finite connected graph $G$ is Eulerian if and only if every vertex of $G$ has even degree.
+
+??? proof "Proof"
+    Suppose first that $G$ has an Eulerian circuit. Every time the circuit enters a vertex along one edge, it leaves along another. Pairing these entering and leaving edges shows that every vertex has even degree.
+
+    Conversely, assume every vertex has even degree and induct on $|E(G)|$. If $E(G)=\varnothing$, connectedness forces $G$ to have one vertex, and the length-zero closed walk is an Eulerian circuit.
+
+    Now suppose $E(G)\ne\varnothing$. The graph contains a cycle $C$: starting at any vertex and extending a trail as long as possible cannot stop at a different vertex, because every arrival uses one incident edge and leaves an odd number of unused incident edges there. Delete the edges of $C$ and write
+
+    $$
+    H=(V(G),E(G)\setminus E(C)).
+    $$
+
+    Every vertex still has even degree in $H$. Let $H_1,\ldots,H_r$ be the components of $H$ that contain at least one edge. Each $H_i$ has fewer edges than $G$, so induction gives an Eulerian circuit $C_i$ in $H_i$. Because $G$ is connected, every such $H_i$ shares a vertex with $C$.
+
+    Traverse $C$. Whenever a shared vertex of some $H_i$ is reached, traverse the entire circuit $C_i$ and return to that vertex before continuing along $C$. Repeating this insertion for all $i$ produces one closed trail using every edge of $G$ exactly once.
+
+    <figure markdown="span">
+      ![Splicing component circuits into a central cycle](../assets/combinatorics/eulerian-splicing.svg)
+      <figcaption>After deleting the central cycle, the Eulerian circuits of the remaining components can be inserted at their shared vertices.</figcaption>
+    </figure>
+
+!!! definition "Definition (Hamiltonian cycle)"
+    <a id="def-hamiltonian-cycle"></a>
+    A **Hamiltonian cycle** of a graph $G$ is a cycle containing every vertex of $G$. A graph is **Hamiltonian** if it contains a Hamiltonian cycle.
+
+!!! notation "Notation (Minimum degree)"
+    The **minimum degree** of $G$ is
+
+    $$
+    \delta(G)=\min_{v\in V(G)}\deg_G(v).
+    $$
+
+    We continue to write $N_G(v)$, or simply $N(v)$ when the graph is clear, for the neighbourhood of $v$.
+
+!!! theorem "Theorem (Dirac)"
+    <a id="thm-dirac"></a>
+    Let $G$ be a finite simple graph of order $n\ge3$. If
+
+    $$
+    \delta(G)\ge\frac n2,
+    $$
+
+    then $G$ is Hamiltonian.
+
+??? proof "Proof"
+    Let
+
+    $$
+    P=v_1,v_2,\ldots,v_p
+    $$
+
+    be a path of maximum length. By maximality, every neighbour of either endpoint $v_1$ or $v_p$ already lies on $P$.
+
+    We claim that there is an index $j$ with $1\le j<p$ such that
+
+    $$
+    v_j\in N(v_p)
+    \qquad\text{and}\qquad
+    v_{j+1}\in N(v_1).
+    $$
+
+    Otherwise, shifting every neighbour $v_j$ of $v_p$ one position forward on the path would give a set
+
+    $$
+    \{v_{j+1}:v_j\in N(v_p)\}
+    $$
+
+    disjoint from $N(v_1)$. Both sets lie in $\{v_2,\ldots,v_p\}$, so
+
+    $$
+    \deg(v_1)+\deg(v_p)\le p-1\le n-1.
+    $$
+
+    But the minimum-degree hypothesis gives
+
+    $$
+    \deg(v_1)+\deg(v_p)\ge n,
+    $$
+
+    a contradiction. The claimed index therefore exists.
+
+    The two extra edges close all vertices of $P$ into the cycle
+
+    $$
+    C=v_1,v_2,\ldots,v_j,v_p,v_{p-1},\ldots,v_{j+1},v_1.
+    $$
+
+    It remains to show that $C$ contains every vertex of $G$. The degree condition implies that $G$ is connected: if $G$ had two components, each would contain at least $\delta(G)+1\ge n/2+1$ vertices, which is impossible.
+
+    If a vertex $w$ lay outside $C$, connectedness would give an edge from some vertex outside $C$ to some vertex of $C$; choosing the first such edge along a path to $C$, write it as $wu_1$ with $w\notin V(C)$. List the vertices of $C$ in cyclic order as $u_1,u_2,\ldots,u_p$. Then
+
+    $$
+    w,u_1,u_2,\ldots,u_p
+    $$
+
+    is a path longer than $P$, contradicting the choice of $P$. Hence $C$ is Hamiltonian.
+
+    <figure markdown="span">
+      ![The longest-path construction in Dirac's theorem](../assets/combinatorics/dirac-longest-path.svg)
+      <figcaption>The edges $v_jv_p$ and $v_{j+1}v_1$ turn a longest path into a cycle; any adjacent outside vertex would then extend the path.</figcaption>
+    </figure>
+
+!!! remark "Remark (A sufficient, not necessary, condition)"
+    Dirac's condition is not necessary for Hamiltonicity. For example, the cycle graph $C_n$ is Hamiltonian, but for $n\ge5$ it has
+
+    $$
+    \delta(C_n)=2<\frac n2.
+    $$
+
+    The theorem is powerful because a single local inequality guarantees a global spanning cycle, but it does not characterize all Hamiltonian graphs.
+
+## Matrices and Matchings
+
+Matrices translate graph structure into linear algebra, while matchings turn local incidences into a global selection problem. The incidence matrix detects forests, the adjacency matrix counts walks, and augmenting paths control maximum matchings.
+
+!!! definition "Definition (Oriented incidence matrix)"
+    <a id="def-incidence-matrix"></a>
+    Let
+
+    $$
+    G=(V,E),
+    \qquad
+    V=\{v_1,\ldots,v_n\},
+    \qquad
+    E=\{e_1,\ldots,e_m\}.
+    $$
+
+    Choose an arbitrary direction for every edge. The **oriented incidence matrix** is the $n\times m$ matrix $B=(B_{ij})$ defined by
+
+    $$
+    B_{ij}=
+    \begin{cases}
+    1,&v_i\text{ is the target of }e_j,\\
+    -1,&v_i\text{ is the source of }e_j,\\
+    0,&v_i\text{ is not incident with }e_j.
+    \end{cases}
+    $$
+
+    Reversing the chosen direction of an edge multiplies the corresponding column by $-1$; the rank and the linear dependence relations among sets of columns are therefore independent of these choices.
+
+!!! example "Example (An incidence matrix)"
+    <a id="ex-incidence-matrix"></a>
+    Orient the five edges by
+
+    $$
+    e_1:v_1\to v_2,
+    \quad
+    e_2:v_1\to v_4,
+    \quad
+    e_3:v_2\to v_4,
+    \quad
+    e_4:v_2\to v_3,
+    \quad
+    e_5:v_5\to v_6.
+    $$
+
+    In the vertex order $v_1,\ldots,v_6$ and edge order $e_1,\ldots,e_5$, the board example gives
+
+    $$
+    B=
+    \begin{pmatrix}
+    -1&-1& 0& 0& 0\\
+     1& 0&-1&-1& 0\\
+     0& 0& 0& 1& 0\\
+     0& 1& 1& 0& 0\\
+     0& 0& 0& 0&-1\\
+     0& 0& 0& 0& 1
+    \end{pmatrix}.
+    $$
+
+    <figure markdown="span">
+      ![The oriented graph and incidence matrix from the board](../assets/combinatorics/incidence-matrix.svg)
+      <figcaption>Each column has one $-1$ at its source and one $1$ at its target. The example has two connected components.</figcaption>
+    </figure>
+
+!!! theorem "Theorem (Incidence-matrix rank and forests)"
+    <a id="thm-incidence-rank-forest"></a>
+    Let $G=(V,E)$ have $c$ connected components, and let $B$ be an oriented incidence matrix over any field $K$.
+
+    First, the rank of $B$ is
+
+    $$
+    \operatorname{rank}B=|V|-c.
+    $$
+
+    Second, for every $S\subseteq E$, the columns of $B$ indexed by $S$ are linearly independent if and only if $(V,S)$ is a forest.
+
+??? proof "Proof"
+    For $x=(x_q)_{q\in V}\in K^V$ and an oriented edge $e:p\to q$,
+
+    $$
+    (B^{\mathsf T}x)_e=x_q-x_p.
+    $$
+
+    Thus $B^{\mathsf T}x=0$ exactly when $x$ is constant on every connected component of $G$. There is one freely chosen constant per component, so
+
+    $$
+    \dim\ker B^{\mathsf T}=c.
+    $$
+
+    Rank--nullity and $\operatorname{rank}B=\operatorname{rank}B^{\mathsf T}$ give
+
+    $$
+    \operatorname{rank}B=|V|-c.
+    $$
+
+    For the second assertion, suppose $(V,S)$ contains a cycle. Choose a direction around that cycle. Give the column of each cycle edge coefficient $1$ when its chosen orientation agrees with the traversal and $-1$ when it disagrees. At every cycle vertex one contribution enters and one leaves, so this nontrivial linear combination of columns is zero. The columns indexed by $S$ are therefore dependent.
+
+    Conversely, suppose $(V,S)$ is a forest and
+
+    $$
+    \sum_{e\in S}\lambda_e b_e=0,
+    $$
+
+    where $b_e$ is the column belonging to $e$. If $S\ne\varnothing$, some nontrivial tree component of $(V,S)$ has a leaf $v$. Exactly one edge $e\in S$ is incident with $v$, so the $v$-coordinate of the displayed sum is $\pm\lambda_e=0$. Hence $\lambda_e=0$. Delete $e$ and repeat; induction on $|S|$ shows that every coefficient is zero. Thus the columns are independent.
+
+!!! definition "Definition (Adjacency matrix)"
+    <a id="def-adjacency-matrix"></a>
+    For $V(G)=\{v_1,\ldots,v_n\}$, the **adjacency matrix** of $G$ is the $n\times n$ matrix $A=(A_{ij})$ given by
+
+    $$
+    A_{ij}=
+    \begin{cases}
+    1,&v_iv_j\in E(G),\\
+    0,&v_iv_j\notin E(G).
+    \end{cases}
+    $$
+
+    For a simple undirected graph, $A$ is symmetric and has zero diagonal.
+
+!!! proposition "Proposition (Powers of the adjacency matrix)"
+    <a id="prop-adjacency-walks"></a>
+    For every $k\ge0$, the entry $(A^k)_{ij}$ equals the number of walks of length $k$ from $v_i$ to $v_j$. Consequently,
+
+    $$
+    \operatorname{tr}(A^2)=2|E(G)|
+    $$
+
+    and the number of triangles in $G$ is
+
+    $$
+    \frac{\operatorname{tr}(A^3)}6.
+    $$
+
+??? proof "Proof"
+    The walk formula follows by induction on $k$. For the induction step,
+
+    $$
+    (A^{k+1})_{ij}=\sum_{r=1}^n(A^k)_{ir}A_{rj},
+    $$
+
+    and the summand counts the length-$k$ walks from $v_i$ to $v_r$ that can be extended by the edge $v_rv_j$.
+
+    The diagonal entry $(A^2)_{ii}$ is $\deg(v_i)$, so taking the trace gives the handshaking lemma. A closed walk of length $3$ in a simple graph traverses a triangle. Every triangle is counted six times: once for each choice of starting vertex and direction.
+
+!!! definition "Definition (Matching)"
+    <a id="def-matching"></a>
+    A **matching** in a graph $G$ is a set $M\subseteq E(G)$ whose edges have pairwise disjoint endpoint sets. A vertex is **$M$-saturated** if it is incident with an edge of $M$, and **$M$-unsaturated** otherwise.
+
+    A matching is **maximum** if no matching has more edges. It is **maximal** if it is not properly contained in another matching. Every maximum matching is maximal, but a maximal matching need not be maximum.
+
+!!! definition "Definition (Alternating and augmenting paths)"
+    <a id="def-augmenting-path"></a>
+    An **$M$-alternating path** is a path whose edges alternate between $M$ and $E(G)\setminus M$. An **$M$-augmenting path** is an $M$-alternating path whose two endpoints are $M$-unsaturated. Its first and last edges therefore lie outside $M$.
+
+    <figure markdown="span">
+      ![An augmenting path before and after toggling its edges](../assets/combinatorics/augmenting-path.svg)
+      <figcaption>Toggling the five edges of the augmenting path replaces two matched edges by three, increasing the matching size by one.</figcaption>
+    </figure>
+
+!!! theorem "Theorem (Berge)"
+    <a id="thm-berge"></a>
+    A matching $M$ in a finite graph $G$ is maximum if and only if $G$ contains no $M$-augmenting path.
+
+??? proof "Proof"
+    If $P$ is an $M$-augmenting path, define
+
+    $$
+    M'=M\mathbin\triangle E(P).
+    $$
+
+    Along $P$, the edges outside $M$ outnumber the edges in $M$ by one. Alternation ensures that $M'$ is again a matching, and
+
+    $$
+    |M'|=|M|+1.
+    $$
+
+    Thus a maximum matching has no augmenting path.
+
+    Conversely, suppose $M$ is not maximum and choose a matching $M'$ with $|M'|>|M|$. Consider the spanning subgraph
+
+    $$
+    H=(V(G),M\mathbin\triangle M').
+    $$
+
+    Every vertex has degree at most $2$ in $H$, so each nontrivial component is a path or a cycle. Its edges alternate between $M$ and $M'$. A cycle has equally many edges of the two matchings. Since $|M'|>|M|$, some path component contains one more edge of $M'$ than of $M$. Its first and last edges lie in $M'$, so its endpoints are $M$-unsaturated. That component is an $M$-augmenting path.
+
+!!! notation "Notation (Neighbourhood of a set)"
+    For $S\subseteq V(G)$, write
+
+    $$
+    N(S)=\bigcup_{v\in S}N(v).
+    $$
+
+    In a bipartite graph with parts $X$ and $Y$, if $S\subseteq X$, then $N(S)\subseteq Y$.
+
+!!! definition "Definition (System of distinct representatives)"
+    <a id="def-sdr"></a>
+    Let $(A_x)_{x\in X}$ be a finite family of subsets of a set $Y$. A **system of distinct representatives**, or **SDR**, is an injective map
+
+    $$
+    r:X\longrightarrow Y
+    $$
+
+    such that $r(x)\in A_x$ for every $x\in X$.
+
+    Associate to the family the bipartite graph with parts $X$ and $Y$, joining $x$ to every element of $A_x$. An SDR is then exactly a matching that saturates $X$: the matching edge $xr(x)$ records the representative selected for $A_x$.
+
+!!! theorem "Theorem (Hall)"
+    <a id="thm-hall"></a>
+    Let $G=(X,Y;E)$ be a finite bipartite graph. There is a matching that saturates every vertex of $X$ if and only if
+
+    $$
+    |N(S)|\ge|S|
+    \qquad\text{for every }S\subseteq X.
+    $$
+
+??? proof "Proof"
+    If a matching saturates $X$, then the distinct partners of the vertices in any $S\subseteq X$ all lie in $N(S)$. Hence $|N(S)|\ge|S|$.
+
+    Conversely, assume Hall's inequalities and let $M$ be a maximum matching. Suppose that some $x_0\in X$ is $M$-unsaturated. From $x_0$, follow all $M$-alternating paths whose first edge is outside $M$. Let $S\subseteq X$ and $T\subseteq Y$ be the sets of vertices reached in the two parts.
+
+    No vertex of $T$ is $M$-unsaturated, for otherwise the corresponding alternating path would be $M$-augmenting, contrary to Berge's theorem. Therefore every vertex of $T$ is matched by $M$ to a vertex of $S\setminus\{x_0\}$. Conversely, every neighbour of a reached vertex in $S$ lies in $T$, so
+
+    $$
+    N(S)=T.
+    $$
+
+    The matching pairs every vertex of $T$ with a distinct vertex of $S\setminus\{x_0\}$, and every reached vertex of $S\setminus\{x_0\}$ arises in this way. Hence
+
+    $$
+    |N(S)|=|T|=|S|-1,
+    $$
+
+    contradicting Hall's inequality. Thus $M$ saturates $X$.
+
+    <figure markdown="span">
+      ![Hall's neighbourhood condition and a deficient set](../assets/combinatorics/hall-condition.svg)
+      <figcaption>Hall's condition compares every subset $S\subseteq X$ with its available neighbours. A deficient set with $|N(S)|\lt|S|$ cannot be saturated.</figcaption>
+    </figure>
+
+<a id="ramsey-theory"></a>
+<a id="general-ramsey"></a>
+<a id="tree-clique-ramsey-formula"></a>
+<a id="a-probabilistic-lower-bound"></a>
+
+The Ramsey material continues in [Ramsey Theory](ramsey-theory.md): Ramsey numbers, tree–clique Ramsey numbers, probabilistic bounds, and the relation between finite and infinite Ramsey theorems.

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 420" role="img" aria-labelledby="title desc">
+  <title id="title">Splicing Eulerian circuits</title>
+  <desc id="desc">A central cycle shares vertices with three edge-disjoint component circuits. The circuits are inserted one by one into a traversal of the central cycle.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.base{fill:none;stroke:#0f766e;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}.c1{fill:none;stroke:#dc2626;stroke-width:6}.c2{fill:none;stroke:#2563eb;stroke-width:6}.c3{fill:none;stroke:#d97706;stroke-width:6}.v{fill:#fff;stroke:#0f172a;stroke-width:3}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}.lbl{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}.step{font:700 18px system-ui,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:central}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="535" height="390" rx="16"/><rect class="panel" x="570" y="15" width="535" height="390" rx="16"/>
+  <text class="ttl" x="282" y="50">Cycle and remaining components</text><text class="ttl" x="837" y="50">Splice at shared vertices</text>
+  <path class="base" d="M170 125L300 95L415 165L410 285L285 330L165 270Z"/>
+  <path class="c1" d="M170 125L70 105L85 205Z"/>
+  <path class="c2" d="M415 165L470 75L520 155Z"/>
+  <path class="c3" d="M410 285L505 270L470 355Z"/>
+  <g><circle class="v" cx="170" cy="125" r="10"/><circle class="v" cx="300" cy="95" r="10"/><circle class="v" cx="415" cy="165" r="10"/><circle class="v" cx="410" cy="285" r="10"/><circle class="v" cx="285" cy="330" r="10"/><circle class="v" cx="165" cy="270" r="10"/></g>
+  <g><circle class="v" cx="70" cy="105" r="8"/><circle class="v" cx="85" cy="205" r="8"/><circle class="v" cx="470" cy="75" r="8"/><circle class="v" cx="520" cy="155" r="8"/><circle class="v" cx="505" cy="270" r="8"/><circle class="v" cx="470" cy="355" r="8"/></g>
+  <text class="lbl" x="285" y="205">central cycle C</text><text class="lbl" x="72" y="235">C₁</text><text class="lbl" x="490" y="110">C₂</text><text class="lbl" x="515" y="340">C₃</text>
+  <path class="base" d="M680 125L810 95L925 165L920 285L795 330L675 270Z"/>
+  <path class="c1" d="M680 125L580 105L595 205Z"/>
+  <path class="c2" d="M925 165L980 75L1030 155Z"/>
+  <path class="c3" d="M920 285L1015 270L980 355Z"/>
+  <g><circle class="v" cx="680" cy="125" r="10"/><circle class="v" cx="810" cy="95" r="10"/><circle class="v" cx="925" cy="165" r="10"/><circle class="v" cx="920" cy="285" r="10"/><circle class="v" cx="795" cy="330" r="10"/><circle class="v" cx="675" cy="270" r="10"/></g>
+  <g><circle class="v" cx="580" cy="105" r="8"/><circle class="v" cx="595" cy="205" r="8"/><circle class="v" cx="980" cy="75" r="8"/><circle class="v" cx="1030" cy="155" r="8"/><circle class="v" cx="1015" cy="270" r="8"/><circle class="v" cx="980" cy="355" r="8"/></g>
+  <g><circle cx="640" cy="92" r="14" fill="#dc2626"/><text class="step" x="640" y="92">1</text><circle cx="980" cy="112" r="14" fill="#2563eb"/><text class="step" x="980" y="112">2</text><circle cx="974" cy="327" r="14" fill="#d97706"/><text class="step" x="974" y="327">3</text><circle cx="800" cy="220" r="14" fill="#0f766e"/><text class="step" x="800" y="220">4</text></g>
+  <text class="lbl" x="837" y="392">detour around each Cᵢ, then resume C</text>
+</svg>

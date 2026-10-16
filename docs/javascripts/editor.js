@@ -4,7 +4,8 @@
 
   const SOURCE_ID = "mn-editor-source";
   const OPENING_STATUS_ID = "mn-typora-opening-status";
-  const DRAFT_PREFIX = "mn-typora-draft:v1:";
+  const DRAFT_PREFIX = "mn-typora-draft:v2:";
+  const LEGACY_DRAFT_PREFIX = "mn-typora-draft:v1:";
   const PENDING_NAVIGATION_KEY = "mn-typora-pending-navigation";
   const EXIT_ANCHOR_KEY = "mn-typora-exit-anchor:v1";
   const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
@@ -157,10 +158,23 @@
     return DRAFT_PREFIX + path;
   }
 
+  function removeDraft(path) {
+    try { localStorage.removeItem(draftKey(path)); } catch (_) {}
+  }
+
   function readDraft(payload) {
     try {
+      // v1 also stored clean, successfully saved snapshots. They cannot be
+      // distinguished from real recovery data, so retire them instead of
+      // repeatedly offering stale content after the source file changes.
+      localStorage.removeItem(LEGACY_DRAFT_PREFIX + payload.sourcePath);
       const draft = JSON.parse(localStorage.getItem(draftKey(payload.sourcePath)));
-      return draft && typeof draft.source === "string" ? draft : null;
+      if (!draft || draft.dirty !== true || typeof draft.source !== "string") return null;
+      if (draft.source === payload.source) {
+        removeDraft(payload.sourcePath);
+        return null;
+      }
+      return draft;
     } catch (_) {
       return null;
     }
@@ -169,15 +183,25 @@
   function writeDraft(state) {
     if (!state?.view || state.destroyed) return false;
     clearTimeout(state.draftTimer);
+    const source = state.view.state.doc.toString();
     try {
+      // A browser draft is crash recovery for changes that are not on disk.
+      // Once the editor matches the last successful file save, it is no
+      // longer a draft and must not survive into a later editing session.
+      if (source === state.savedSource) {
+        removeDraft(state.payload.sourcePath);
+        if (!state.saving) setStatus(state, "已保存到文件", "saved");
+        return true;
+      }
       localStorage.setItem(draftKey(state.payload.sourcePath), JSON.stringify({
-        source: state.view.state.doc.toString(),
+        dirty: true,
+        source,
         baseRevision: state.baseRevision,
         pendingSource: state.pendingSource,
         selection: state.view.state.selection.main.toJSON(),
         updatedAt: Date.now()
       }));
-      if (!state.saving) setStatus(state, state.view.state.doc.toString() === state.savedSource ? "已保存到文件" : "草稿已保存 · ⌘/Ctrl S 写入文件", "saved");
+      if (!state.saving) setStatus(state, "草稿已保存 · ⌘/Ctrl S 写入文件", "saved");
       return true;
     } catch (_) {
       setStatus(state, "草稿空间不足，请先导出", "error");
@@ -447,7 +471,10 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation?.();
-      view.dispatch({ selection: { anchor: position }, scrollIntoView: true });
+      // The clicked widget is already visible. Asking CodeMirror to scroll its
+      // selection can move the outer page because this editor has no internal
+      // scroller, especially in Safari.
+      view.dispatch({ selection: { anchor: position } });
       view.focus();
     }
 
@@ -484,7 +511,18 @@
         } catch (_) {
           node.textContent = this.tex;
         }
-        const activate = (event) => activateAt(view, event, this.editFrom);
+        const activate = (event) => {
+          let position = this.editFrom;
+          if (!this.display) {
+            const contentTo = Math.max(this.editFrom, this.to - 1);
+            const rect = node.getBoundingClientRect();
+            const ratio = rect.width > 0
+              ? Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
+              : 0;
+            position = Math.round(this.editFrom + (contentTo - this.editFrom) * ratio);
+          }
+          activateAt(view, event, position);
+        };
         node.addEventListener("mousedown", activate);
         return node;
       }
@@ -950,34 +988,6 @@
       scrollIntoView: true,
       userEvent: "input"
     });
-    return true;
-  }
-
-  function handleInlineMathVertical(state, forward) {
-    const selection = state.view.state.selection.main;
-    if (!selection.empty) return false;
-    const activeMath = (state.mathRanges || []).find(range => !range.display &&
-      selection.head >= range.from && selection.head <= range.to);
-    const coordinates = state.view.coordsAtPos(selection.head, forward ? 1 : -1);
-    if (!coordinates) return false;
-    const y = forward
-      ? coordinates.bottom + state.view.defaultLineHeight * 0.55
-      : coordinates.top - state.view.defaultLineHeight * 0.55;
-    const target = document.elementFromPoint(coordinates.left, y);
-    const targetMath = target?.closest?.(".mn-cm-math--inline[data-mn-edit-point]");
-    if (!activeMath && !targetMath) return false;
-    let position;
-    if (targetMath) {
-      const contentFrom = Number(targetMath.dataset.mnEditPoint);
-      const contentTo = Number(targetMath.dataset.mnSourceTo) - 1;
-      const rect = targetMath.getBoundingClientRect();
-      const ratio = rect.width > 0 ? Math.max(0, Math.min(1, (coordinates.left - rect.left) / rect.width)) : 0;
-      position = Math.round(contentFrom + (contentTo - contentFrom) * ratio);
-    } else {
-      position = state.view.posAtCoords({ x: coordinates.left, y }, false);
-    }
-    if (!Number.isInteger(position) || position === selection.head) return false;
-    state.view.dispatch({ selection: { anchor: position }, scrollIntoView: true, userEvent: "select" });
     return true;
   }
 
@@ -1684,7 +1694,7 @@
 
   function clearCurrentEditorDraft(state) {
     clearTimeout(state.draftTimer);
-    try { localStorage.removeItem(draftKey(state.payload.sourcePath)); } catch (_) {}
+    removeDraft(state.payload.sourcePath);
     try { sessionStorage.removeItem(RESUME_KEY); } catch (_) {}
   }
 
@@ -2181,6 +2191,7 @@
       state.cursorUsed = true;
       state.view.dispatch({ selection: { anchor: heading.contentFrom }, scrollIntoView: true });
       state.view.focus();
+      alignActiveEditorLine(state);
       updateOutlineActive(state);
     });
     sidebar.appendChild(outline);
@@ -2380,6 +2391,10 @@
     const diagram = /!\[[^\]]*\]\([^)]*\).*\.commutative-diagram/.test(line.text);
     const selectionPosition = diagram ? Math.min(state.view.state.doc.length, line.to + 1) : position;
     state.view.dispatch({ selection: { anchor: selectionPosition }, scrollIntoView: true });
+    alignActiveEditorLine(state);
+  }
+
+  function alignActiveEditorLine(state) {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (state.destroyed) return;
       // The page, rather than `.cm-scroller`, owns scrolling in the seamless
@@ -2469,6 +2484,7 @@
       structureDialog: null, view: null, outline: null, outlineHeadings: [], outlineTimer: null,
       mathRanges: [], mathPopover: null, mathPopoverFrame: null, mathPopoverListener: null,
       mathPopoverSignature: "", activeMathRange: null,
+      verticalGoalX: null, verticalScrollToken: 0,
       // A restored selection is only historical state. Until the user clicks
       // or types in this editing session, leaving should preserve the viewport
       // center rather than jump to that old caret.
@@ -2592,7 +2608,18 @@
       if (!target) return null;
 
       const pointElement = target.closest("[data-mn-edit-point]");
-      if (pointElement) return Number(pointElement.dataset.mnEditPoint);
+      if (pointElement) {
+        if (pointElement.matches(".mn-cm-math--inline[data-mn-source-to]")) {
+          const contentFrom = Number(pointElement.dataset.mnEditPoint);
+          const contentTo = Number(pointElement.dataset.mnSourceTo) - 1;
+          const rect = pointElement.getBoundingClientRect();
+          const ratio = rect.width > 0
+            ? Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
+            : 0;
+          return Math.round(contentFrom + (contentTo - contentFrom) * ratio);
+        }
+        return Number(pointElement.dataset.mnEditPoint);
+      }
 
       const rangeElement = target.closest("[data-mn-edit-from][data-mn-edit-to]");
       if (rangeElement) {
@@ -2628,6 +2655,92 @@
         position = Math.round(lineFrom + (lineTo - lineFrom) * ratio);
       }
       return position;
+    };
+    const moveVisualVertically = (view, forward) => {
+      if (!state.visual) return false;
+      const selection = view.state.selection.main;
+      if (!selection.empty) return false;
+      // Replaced widgets (especially inline math) do not always give
+      // `coordsAtPos` the same x-coordinate as the cursor the user sees.
+      // Prefer the rendered primary cursor so vertical movement preserves
+      // the visual column rather than the hidden Markdown source column.
+      const renderedCursor = view.dom.querySelector(".cm-cursor-primary")?.getBoundingClientRect();
+      const coordinates = renderedCursor?.height
+        ? renderedCursor
+        : view.coordsAtPos(selection.head, forward ? 1 : -1);
+      if (!coordinates) return false;
+      const x = state.verticalGoalX ?? coordinates.left;
+      state.verticalGoalX = x;
+      const y = (coordinates.top + coordinates.bottom) / 2 +
+        (forward ? view.defaultLineHeight : -view.defaultLineHeight);
+      const activeLine = view.dom.querySelector(".cm-activeLine[data-mn-line-from][data-mn-line-to]");
+      const activeRect = activeLine?.getBoundingClientRect();
+      let target = document.elementFromPoint(x, y);
+      let targetLine = target?.closest?.(".cm-line[data-mn-line-from][data-mn-line-to]");
+      const crossedActiveBoundary = activeRect && (forward ? y >= activeRect.bottom : y <= activeRect.top);
+      if (crossedActiveBoundary && (!targetLine || targetLine === activeLine)) {
+        let adjacent = null;
+        view.dom.querySelectorAll(".cm-line[data-mn-line-from][data-mn-line-to]").forEach(line => {
+          if (line === activeLine) return;
+          const rect = line.getBoundingClientRect();
+          if (rect.height < 1) return;
+          if (forward && rect.top >= activeRect.bottom - 0.5 && (!adjacent || rect.top < adjacent.edge)) {
+            adjacent = { line, edge: rect.top };
+          } else if (!forward && rect.bottom <= activeRect.top + 0.5 && (!adjacent || rect.bottom > adjacent.edge)) {
+            adjacent = { line, edge: rect.bottom };
+          }
+        });
+        if (adjacent) {
+          targetLine = adjacent.line;
+          target = targetLine;
+        }
+      }
+      if (!targetLine || !view.dom.contains(targetLine)) {
+        let closest = null;
+        view.dom.querySelectorAll(".cm-line[data-mn-line-from][data-mn-line-to]").forEach(line => {
+          const rect = line.getBoundingClientRect();
+          if (rect.height < 1) return;
+          const distance = y < rect.top ? rect.top - y : y > rect.bottom ? y - rect.bottom : 0;
+          if (!closest || distance < closest.distance) closest = { line, distance };
+        });
+        targetLine = closest?.line || null;
+        target = targetLine;
+      }
+      if (!targetLine) return false;
+      const position = visualPositionAtEvent({ button: 0, target, clientX: x, clientY: y }, view);
+      if (!Number.isInteger(position) || position === selection.head) return false;
+
+      // CodeMirror assumes its own scroller owns vertical movement. Here the
+      // browser page owns scrolling, so a selection update can otherwise make
+      // the window jump by thousands of pixels while decorations collapse.
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+      view.dispatch({
+        selection: modules.EditorSelection.cursor(position, forward ? 1 : -1),
+        userEvent: "select"
+      });
+      const token = ++state.verticalScrollToken;
+      const startedAt = performance.now();
+      const restoreScroll = () => {
+        if (state.destroyed || state.verticalScrollToken !== token) return;
+        if (Math.abs(window.scrollX - scrollX) > 0.5 || Math.abs(window.scrollY - scrollY) > 0.5) {
+          window.scrollTo(scrollX, scrollY);
+        }
+        if (performance.now() - startedAt < 600) return requestAnimationFrame(restoreScroll);
+        const line = view.dom.querySelector(".cm-activeLine");
+        if (!line) return;
+        const rect = line.getBoundingClientRect();
+        const toolbarBottom = (state.toolbar?.getBoundingClientRect().bottom || 0) + 8;
+        const viewportBottom = window.innerHeight - 8;
+        const adjustment = rect.top < toolbarBottom
+          ? rect.top - toolbarBottom
+          : rect.bottom > viewportBottom
+            ? rect.bottom - viewportBottom
+            : 0;
+        if (Math.abs(adjustment) > 0.5) window.scrollTo(scrollX, scrollY + adjustment);
+      };
+      requestAnimationFrame(restoreScroll);
+      return true;
     };
     let pendingVisualPointer = null;
     const mouseSelection = modules.EditorView.mouseSelectionStyle.of((view, event) => {
@@ -2674,6 +2787,8 @@
     });
     const interactionHandler = modules.EditorView.domEventHandlers({
       pointerdown(event, view) {
+        state.verticalGoalX = null;
+        state.verticalScrollToken += 1;
         const position = visualPositionAtEvent(event, view);
         if (Number.isInteger(position)) state.cursorUsed = true;
         pendingVisualPointer = Number.isInteger(position)
@@ -2683,6 +2798,12 @@
       },
       keydown(event) {
         if (event.isComposing || state.view.composing || event.keyCode === 229) return false;
+        const plainVerticalArrow = (event.key === "ArrowUp" || event.key === "ArrowDown") &&
+          !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey;
+        if (!plainVerticalArrow) {
+          state.verticalGoalX = null;
+          state.verticalScrollToken += 1;
+        }
         if (!event.metaKey && !event.ctrlKey && !event.altKey && !["Shift", "Control", "Alt", "Meta"].includes(event.key)) {
           state.cursorUsed = true;
         }
@@ -2706,9 +2827,7 @@
           event.preventDefault();
           return true;
         }
-        if ((event.key === "ArrowUp" || event.key === "ArrowDown") &&
-            !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey &&
-            handleInlineMathVertical(state, event.key === "ArrowDown")) {
+        if (plainVerticalArrow && moveVisualVertically(state.view, event.key === "ArrowDown")) {
           event.preventDefault();
           return true;
         }
@@ -2735,6 +2854,17 @@
       }
     });
 
+    const captureVerticalArrow = (event) => {
+      if (event.isComposing || state.view.composing || event.keyCode === 229) return;
+      const plainVerticalArrow = (event.key === "ArrowUp" || event.key === "ArrowDown") &&
+        !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey;
+      if (!plainVerticalArrow || (state.menu && !state.menu.hidden)) return;
+      state.cursorUsed = true;
+      if (!moveVisualVertically(state.view, event.key === "ArrowDown")) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    };
+
     state.view = new modules.EditorView({
       state: modules.EditorState.create({
         doc: source,
@@ -2749,6 +2879,11 @@
       parent: surface
     });
     state.menu = makeBlockMenu(state);
+    // CodeMirror's built-in arrow keymap runs on the editor element before
+    // extension DOM handlers. Capture the unmodified vertical arrows on the
+    // surrounding surface so visual-mode movement can map rendered widgets
+    // before the source-oriented keymap sees the event.
+    surface.addEventListener("keydown", captureVerticalArrow, true);
     mountEditorOutline(state);
     mountMathPopover(state);
     activeEditor = state;

@@ -64,6 +64,25 @@
     Each $A_n^c$ belongs to $\mathcal{F}$, so closure under countable unions
     and complements gives the result.
 
+!!! proposition "Proposition (Intersection of sigma-algebras)"
+    <a id="prop-intersection-sigma-algebras"></a>
+    Let $(\mathcal{F}_j)_{j\in J}$ be a nonempty family of sigma-algebras on
+    the same set $\Omega$. Then
+
+    $$
+    \mathcal{F}:=\bigcap_{j\in J}\mathcal{F}_j
+    $$
+
+    is a sigma-algebra on $\Omega$.
+
+??? proof "Proof"
+    Since every $\mathcal{F}_j$ contains $\varnothing$, so does
+    $\mathcal{F}$. If $A\in\mathcal{F}$, then $A\in\mathcal{F}_j$ for every
+    $j$, hence $A^c\in\mathcal{F}_j$ for every $j$ and therefore
+    $A^c\in\mathcal{F}$. Similarly, if $A_1,A_2,\ldots\in\mathcal{F}$, then
+    every $\mathcal{F}_j$ contains $\bigcup_nA_n$, so this union belongs to
+    $\mathcal{F}$.
+
 !!! proposition "Proposition (Cardinality of a finite sigma-algebra)"
     <a id="prop-1-1-6"></a>
     Let $\mathcal{F}$ be a sigma-algebra on a finite sample space $\Omega$.
@@ -111,6 +130,38 @@
     write $A\cup B=A\sqcup(B\setminus A)$ and
     $B=(B\setminus A)\sqcup(A\cap B)$, then eliminate
     $\mathbb{P}(B\setminus A)$ to obtain (3).
+
+!!! proposition "Proposition (Finite inclusion--exclusion)"
+    <a id="prop-finite-inclusion-exclusion"></a>
+    For events $A_1,\ldots,A_n\in\mathcal{F}$,
+
+    $$
+    \mathbb{P}\left(\bigcup_{i=1}^n A_i\right)
+    =
+    \sum_{\varnothing\neq I\subseteq\{1,\ldots,n\}}
+    (-1)^{|I|+1}
+    \mathbb{P}\left(\bigcap_{i\in I}A_i\right).
+    $$
+
+??? proof "Proof"
+    The case $n=1$ is immediate. Suppose the formula holds for $n$ events
+    and put $B=\bigcup_{i=1}^n A_i$. Applying the two-event identity to
+    $B$ and $A_{n+1}$ gives
+
+    $$
+    \mathbb{P}(B\cup A_{n+1})
+    =\mathbb{P}(B)+\mathbb{P}(A_{n+1})
+    -\mathbb{P}(B\cap A_{n+1}).
+    $$
+
+    Since
+    $B\cap A_{n+1}=\bigcup_{i=1}^n(A_i\cap A_{n+1})$, the induction
+    hypothesis applied to both unions expands the first term over subsets
+    not containing $n+1$. In the last term, a nonempty
+    $J\subseteq\{1,\ldots,n\}$ contributes with sign
+    $-(-1)^{|J|+1}=(-1)^{|J|+2}$. Writing
+    $I=J\cup\{n+1\}$ turns this into $(-1)^{|I|+1}$, which proves the formula
+    for $n+1$.
 
 !!! proposition "Proposition (Continuity of probability)"
     <a id="prop-1-2-3"></a>
@@ -773,6 +824,20 @@
     $$
 
 
+!!! definition "Definition (Convex functions)"
+    <a id="def-convex-functions"></a>
+    A function $J:I\to\mathbb{R}$ on an interval $I$ is **convex** if
+
+    $$
+    J((1-t)x+ty)\leq(1-t)J(x)+tJ(y),
+    \qquad x,y\in I,\quad t\in[0,1].
+    $$
+
+    Its graph lies below every chord. For example, $x\mapsto x^2$ and
+    $x\mapsto|x|$ are convex; differentiability is not required.
+    The [convexity section](random-vectors-and-lp-estimates.md#def-convex-functions)
+    develops the derivative criteria and supporting-line argument in detail.
+
 !!! theorem "Theorem (Jensen's inequality)"
     <a id="thm-1-10-4"></a>
     Let $J:\mathbb{R}\to\mathbb{R}$ be convex. Whenever the expectations are
@@ -784,7 +849,8 @@
 
 ??? proof "Proof"
     Set $m=\mathbb{E}X$. Since $J$ is convex on $\mathbb{R}$, it has a
-    supporting line at $m$: there exists $a\in\mathbb{R}$ such that
+    [supporting line](random-vectors-and-lp-estimates.md#lem-convex-supporting-line)
+    at $m$: there exists $a\in\mathbb{R}$ such that
 
     $$
     J(x)\geq J(m)+a(x-m),
@@ -854,4 +920,3 @@
     $$
 
     which is the claimed inequality.
-

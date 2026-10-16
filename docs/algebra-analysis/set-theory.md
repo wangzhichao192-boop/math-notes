@@ -10,6 +10,8 @@ Cartesian product.
 !!! definition "Definition (Set, element, equality)"
     <a id="def-2-1-1"></a>
 
+    <a id="def-set-element-equality"></a>
+
     + A **set** is a well-defined collection of distinct objects.
     + An object belonging to a set is called an **element** of the set.
     + Two sets $A$ and $B$ are **equal**, written $A = B$, if they have
@@ -19,23 +21,37 @@ Cartesian product.
 
 !!! example "Example (Set notation (roster))"
     <a id="ex-2-1-2"></a>
+    <a id="ex-set-notation-roster"></a>
+
     $\{1, 2, 3\} = \{3, 2, 1\} = \{1, 1, 2, 3\}$. More generally, given an
     index set $I$ and objects $x_i$ for $i \in I$, we may form
     $\{x_i \mid i \in I\}$.
 
 !!! example "Example (Set-builder examples)"
     <a id="ex-2-1-3"></a>
+    <a id="ex-set-builder-examples"></a>
+
     $\{2k + 1 \mid k \in \mathbb{Z}\}$ is the set of all odd integers.
 
 ## Set-builder Notation
 
 !!! definition "Definition (Condition on a set)"
     <a id="def-2-2-1"></a>
+    <a id="def-condition-on-a-set"></a>
+
     Let $A$ be a set and let $P(\cdot)$ be a sentence assigning to every
     $x \in A$ a truth value. We say $P(\cdot)$ is a **condition** on $A$.
 
+!!! example "Example (Conditions)"
+    <a id="ex-conditions"></a>
+
+    “$n$ is even” is a condition on $\mathbb N$, and “$x>2$” is a
+    condition on $\mathbb R$.
+
 !!! definition "Definition (Set-builder notation)"
     <a id="def-2-2-2"></a>
+    <a id="def-set-builder-notation"></a>
+
     The set of $x \in A$ satisfying the condition $P(\cdot)$ is denoted
 
     $$
@@ -44,43 +60,74 @@ Cartesian product.
 
 !!! example "Example (Set-builder example)"
     <a id="ex-2-2-3"></a>
+    <a id="ex-set-builder-example"></a>
+
     $\{x \in \mathbb{R} \mid x > 2\}$ is the open half-line $(2, +\infty)$.
 
 ## Subsets and Set Difference
 
 !!! definition "Definition (Subset)"
     <a id="def-2-3-1"></a>
+    <a id="def-subset"></a>
+
     $A$ is a **subset** of $B$, written $A \subseteq B$, if every element of
     $A$ is an element of $B$. We write $A \subsetneq B$ for proper
     inclusion.
 
+!!! example "Example (Empty set and reflexive inclusion)"
+    <a id="ex-empty-set-and-reflexive-inclusion"></a>
+
+    The **empty set** $\varnothing$ has no elements. For every set $A$,
+    $\varnothing\subseteq A$ and $A\subseteq A$.
+
 !!! definition "Definition (Power set)"
     <a id="def-2-3-2"></a>
+    <a id="def-power-set"></a>
+
     The **power set** of $A$ is $\mathscr{P}(A) = \{B \mid B \subseteq A\}$.
 
 !!! example "Example (Power-set example)"
     <a id="ex-2-3-3"></a>
+    <a id="ex-power-set-example"></a>
+
     $\mathscr{P}(\varnothing) = \{\varnothing\}$,
     $\mathscr{P}(\mathscr{P}(\varnothing)) = \{\varnothing, \{\varnothing\}\}$.
 
-!!! definition "Definition (set difference** of $B$ by $A$)"
+!!! definition "Definition (Set difference)"
     <a id="def-2-3-4"></a>
+    <a id="def-set-difference-of-by"></a>
+
     The **set difference** of $B$ by $A$ is
 
     $$
     B \setminus A = \{x \in B \mid x \notin A\}.
     $$
+
     When $A \subseteq B$ this is the **complement** of $A$ in $B$.
+
+!!! example "Example (Complement of a condition)"
+    <a id="ex-complement-of-a-condition"></a>
+
+    $\{x\in A\mid\lnot P(x)\}=A\setminus\{x\in A\mid P(x)\}$.
+
+!!! proposition "Proposition (Empty difference and inclusion)"
+    <a id="prop-empty-difference-inclusion"></a>
+
+    For arbitrary sets $A,B$, $B\setminus A=\varnothing$ if and only if
+    $B\subseteq A$. The following equality criterion is its special case
+    when $A\subseteq B$.
 
 !!! proposition "Proposition (Empty-set criterion for equality)"
     <a id="prop-2-3-5"></a>
+    <a id="prop-empty-set-criterion-for-equality"></a>
+
     Let $A \subseteq B$ be sets. Then
 
     $$
     B \setminus A = \varnothing \iff A = B.
     $$
 
-??? proof "Proof ($(\Rightarrow)$)"
+??? proof "Proof"
     $(\Rightarrow)$ If $B \setminus A = \varnothing$, then no element of $B$
     lies outside $A$, so $B \subseteq A$. Combined with $A \subseteq B$ this
     gives $A = B$.
@@ -90,6 +137,8 @@ Cartesian product.
 
 !!! definition "Definition (Universal and existential quantifiers)"
     <a id="def-2-4-1"></a>
+    <a id="def-universal-and-existential-quantifiers"></a>
+
     Let $A$ be a set and $P(\cdot)$ a condition on $A$.
 
     + $\forall x \in A,\, P(x)$ is the statement $\{x \in A \mid P(x)\} = A$.
@@ -97,11 +146,15 @@ Cartesian product.
 
 !!! example "Example (Quantifier vacuous cases)"
     <a id="ex-2-4-2"></a>
+    <a id="ex-quantifier-vacuous-cases"></a>
+
     $\forall x \in \varnothing,\, P(x)$ is **true** (vacuously), while
     $\exists x \in \varnothing,\, P(x)$ is **false**.
 
 !!! theorem "Theorem (Quantifier duality)"
     <a id="thm-2-4-3"></a>
+    <a id="thm-quantifier-duality"></a>
+
     Let $A$ be a set and $P(\cdot)$ a condition on $A$.
 
     + $\exists x \in A,\, \lnot P(x)$ has the opposite truth value of
@@ -109,7 +162,7 @@ Cartesian product.
     + $\forall x \in A,\, \lnot P(x)$ has the opposite truth value of
       $\exists x \in A,\, P(x)$.
 
-??? proof "Proof ($\{x \in A \mid \lnot P(x)\}$)"
+??? proof "Proof"
     $\{x \in A \mid \lnot P(x)\}$ is the complement of $\{x \in A \mid P(x)\}$
     in $A$, and a set is empty iff its complement in $A$ equals $A$.
 
@@ -117,6 +170,8 @@ Cartesian product.
 
 !!! definition "Definition (Sufficient and necessary conditions)"
     <a id="def-2-5-1"></a>
+    <a id="def-sufficient-and-necessary-conditions"></a>
+
     Let $P(\cdot), Q(\cdot)$ be conditions on a set $A$.
 
     + $P$ is **sufficient** for $Q$ (and $Q$ is **necessary** for $P$) if
@@ -125,17 +180,35 @@ Cartesian product.
 
 !!! proposition "Proposition (Sufficient / necessary reformulations)"
     <a id="prop-2-5-2"></a>
+    <a id="prop-sufficient-necessary-reformulations"></a>
+
     With the notation above:
 
     + $P$ is sufficient for $Q$ iff $\forall x \in A,\, P(x) \Rightarrow Q(x)$.
-    + $Q$ is necessary for $P$ iff $\forall x \in A,\, Q(x) \Rightarrow P(x)$.
+    + $P$ is necessary for $Q$ iff $\forall x \in A,\, Q(x) \Rightarrow P(x)$.
     + $P$ and $Q$ are equivalent iff $\forall x \in A,\, P(x) \Leftrightarrow Q(x)$.
 
-??? proof "Proof (Russell's paradox)"
+??? proof "Proof"
     Direct unfolding of the subset / equality of solutions of two conditions.
+
+    In detail, the sufficiency condition is equivalent to the emptiness of
+    the following set:
+
+    $$
+    \begin{aligned}
+    \{x\in A\mid P(x)\}\setminus\{x\in A\mid Q(x)\}
+      &=\{x\in A\mid P(x)\land\lnot Q(x)\}\\
+      &=A\setminus\{x\in A\mid\lnot P(x)\lor Q(x)\}\\
+      &=A\setminus\{x\in A\mid P(x)\Rightarrow Q(x)\}.
+    \end{aligned}
+    $$
+
+    Exchange $P,Q$ for necessity, and impose both inclusions for equivalence.
 
 !!! remark "Remark (Russell's paradox)"
     <a id="rem-2-5-3"></a>
+    <a id="rem-russell-s-paradox"></a>
+
     The condition $P(A) \equiv (A \notin A)$ on the class of all sets yields
     a contradiction: the "set of all sets" cannot itself be a set. We will
     revisit this when discussing universes in FAA II.
@@ -144,6 +217,8 @@ Cartesian product.
 
 !!! definition "Definition (Union of a family)"
     <a id="def-2-6-1"></a>
+    <a id="def-union-of-a-family"></a>
+
     Let $I$ be a set and $(A_i)_{i \in I}$ a family of sets parametrized by
     $I$. The **union** $\bigcup_{i \in I} A_i$ is the set of all elements of
     the $A_i$'s:
@@ -154,11 +229,15 @@ Cartesian product.
 
 !!! proposition "Proposition (Union is contained in any upper bound)"
     <a id="prop-2-6-2"></a>
+    <a id="prop-union-is-contained-in-any-upper-bound"></a>
+
     $\displaystyle \bigcup_{i \in I} A_i \subseteq B$ if and only if
     $\forall i \in I,\ A_i \subseteq B$.
 
 !!! corollary "Corollary (Union of solutions is the solution set)"
     <a id="cor-2-6-3"></a>
+    <a id="cor-union-of-solutions-is-the-solution-set"></a>
+
     Let $P_i(\cdot)$ be conditions on $B$. Then
 
     $$
@@ -167,12 +246,16 @@ Cartesian product.
 
 !!! proposition "Proposition (Union distributes over set difference)"
     <a id="prop-2-6-4"></a>
+    <a id="prop-union-distributes-over-set-difference"></a>
+
     $\displaystyle \Big(\bigcup_{i \in I} A_i\Big) \setminus B = \bigcup_{i \in I} (A_i \setminus B)$.
 
 ## Intersection
 
 !!! definition "Definition (Intersection of a family)"
     <a id="def-2-7-1"></a>
+    <a id="def-intersection-of-a-family"></a>
+
     Let $I \neq \varnothing$ and $(A_i)_{i \in I}$ a family of sets. The
     **intersection** $\bigcap_{i \in I} A_i$ is the set of common elements:
 
@@ -182,16 +265,20 @@ Cartesian product.
 
 !!! remark "Remark (Why the empty intersection is undefined)"
     <a id="rem-2-7-2"></a>
+    <a id="rem-why-the-empty-intersection-is-undefined"></a>
+
     The intersection of an empty family cannot be defined: it would have to
     contain every mathematical object, contradicting Russell.
 
 !!! proposition "Proposition (Intersection is contained in any lower bound)"
     <a id="prop-2-7-3"></a>
+    <a id="prop-intersection-is-contained-in-any-lower-bound"></a>
+
     Let $I \neq \varnothing$, $(A_i)_{i \in I}$ a family and $B$ a set. Then
     $\displaystyle B \subseteq \bigcap_{i \in I} A_i$ iff
     $\forall i \in I,\ B \subseteq A_i$.
 
-??? proof "Proof ($(\Rightarrow)$ For $x \in B \subseteq \bigcap_i A_i$)"
+??? proof "Proof"
     $(\Rightarrow)$ For $x \in B \subseteq \bigcap_i A_i$ we have
     $x \in A_i$ for every $i$, so $B \subseteq A_i$ for every $i$.
     $(\Leftarrow)$ For $x \in B$ and every $i \in I$ we have $x \in A_i$;
@@ -199,6 +286,8 @@ Cartesian product.
 
 !!! corollary "Corollary (Intersection of solutions is the solution set)"
     <a id="cor-2-7-4"></a>
+    <a id="cor-intersection-of-solutions-is-the-solution-set"></a>
+
     Let $B$ a set, $I \neq \varnothing$ and $P_i(\cdot)$ conditions on $B$.
     Then
 
@@ -208,34 +297,73 @@ Cartesian product.
 
 !!! proposition "Proposition (Intersection distributes over set difference)"
     <a id="prop-2-7-5"></a>
+    <a id="prop-intersection-distributes-over-set-difference"></a>
+
     Let $B$ be a set, $I \neq \varnothing$ and $(A_i)_{i \in I}$ a family.
 
     1. $\displaystyle B \cap \Big(\bigcup_{i \in I} A_i\Big) = \bigcup_{i \in I} (B \cap A_i)$.
-    2. $\displaystyle B \cup \Big(\bigcap_{i \in I} A_i\Big) \subseteq \bigcap_{i \in I} (B \cup A_i)$,
-       with equality when $B \subseteq \bigcap_i A_i$ or $I$ is a singleton.
+    2. $\displaystyle B \cup \Big(\bigcap_{i \in I} A_i\Big) = \bigcap_{i \in I} (B \cup A_i)$.
     3. $\displaystyle B \setminus \Big(\bigcup_{i \in I} A_i\Big) = \bigcap_{i \in I} (B \setminus A_i)$.
     4. $\displaystyle B \setminus \Big(\bigcap_{i \in I} A_i\Big) = \bigcup_{i \in I} (B \setminus A_i)$.
 
-??? proof "Proof ((1) and (3)–(4) follow from [Corollary 2.7.4](#cor-2-7-4) and)"
-    (1) and (3)–(4) follow from [Corollary 2.7.4](#cor-2-7-4) and
-    [Corollary 2.6.3](#cor-2-6-3) after passing to characteristic conditions.
-    (2) is similar, with the additional observation that the reverse
-    inclusion requires $\bigcap_i A_i \subseteq A_i$ for every $i$.
+??? proof "Proof"
+    (1) and (3)–(4) follow from [Corollary](#cor-intersection-of-solutions-is-the-solution-set) and
+    [Corollary](#cor-union-of-solutions-is-the-solution-set) after passing to characteristic conditions.
+    For (2), an element of $B\cup\bigcap_i A_i$ belongs to each
+    $B\cup A_i$. Conversely, if $x$ belongs to every $B\cup A_i$, either
+    $x\in B$, or $x\notin B$ and hence $x\in A_i$ for every $i$.
+    Thus equality holds without any additional hypothesis.
+
+!!! proposition "Proposition (Difference of an intersection)"
+    <a id="prop-difference-of-intersection"></a>
+
+    For a nonempty family $(A_i)_{i\in I}$ and a set $B$,
+
+    $$
+    \left(\bigcap_{i\in I}A_i\right)\setminus B
+    =\bigcap_{i\in I}(A_i\setminus B).
+    $$
+
+??? proof "Proof"
+    If $x$ is on the left, it lies in every $A_i$ and outside $B$, so it
+    lies in every $A_i\setminus B$. If $x$ is on the right, it lies in
+    every $A_i$; choosing any $i\in I$ also shows $x\notin B$.
+
+??? proof "Proof"
+    For the intersection-of-solutions corollary, let
+    $A=\{x\in B\mid\forall i\in I,\ P_i(x)\}$ and
+    $A_i=\{x\in B\mid P_i(x)\}$. Each $A\subseteq A_i$, giving
+    $A\subseteq\bigcap_i A_i$. Conversely, membership in every $A_i$
+    gives membership in $B$ and the truth of every $P_i(x)$.
+
+    For the remaining distribution identities, translate membership into
+    logical connectives. In particular,
+    $x\in B\setminus\bigcup_i A_i$ means $x\in B$ and
+    $\lnot\exists i,\ x\in A_i$, equivalently
+    $\forall i,\ x\in B\setminus A_i$. Likewise
+    $x\in B\setminus\bigcap_i A_i$ means $x\in B$ and
+    $\exists i,\ x\notin A_i$, equivalently membership in
+    $\bigcup_i(B\setminus A_i)$.
 
 ## Cartesian Product
 
 !!! definition "Definition (Cartesian product)"
     <a id="def-2-8-1"></a>
+    <a id="def-cartesian-product"></a>
+
     The **Cartesian product** of $A$ and $B$ is
 
     $$
     A \times B = \{(x, y) \mid x \in A,\, y \in B\}.
     $$
+
     Iterating, $A_1 \times \cdots \times A_n$ is the set of $n$-tuples
     $(x_1, \dots, x_n)$ with $x_i \in A_i$.
 
 !!! proposition "Proposition (Kuratowski encoding of ordered pairs)"
     <a id="prop-2-8-2"></a>
+    <a id="prop-kuratowski-encoding-of-ordered-pairs"></a>
+
     For any objects $x, y, x', y'$,
 
     $$
@@ -243,19 +371,22 @@ Cartesian product.
     \iff x = x' \text{ and } y = y'.
     $$
 
-??? proof "Proof ($(\Leftarrow)$ Trivial)"
+??? proof "Proof"
     $(\Leftarrow)$ Trivial.
-    $(\Rightarrow)$ If $x \neq x'$, then $\{x\} \neq \{x'\}$, so
-    $\{x\} = \{x', y'\}$ and hence $x = x'$, contradiction. So $x = x'$.
-    Suppose $y \neq y'$. Then $\{x, y\} \neq \{x, y'\}$. By the same argument
-    (after observing $x = x'$), the only way $\{\{x\}, \{x, y\}\}$ and
-    $\{\{x\}, \{x, y'\}\}$ can coincide is $\{x, y\} = \{x, y'\}$ and
-    $\{x\} = \{x, y'\}$; the first forces $y = y'$, contradiction. So
-    $y = y'$.
+    $(\Rightarrow)$ The intersection of the nonempty family $\{\{x\},\{x,y\}\}$ is $\{x\}$, including the case $x=y$. Equality of the encoded pairs therefore gives $\{x\}=\{x'\}$, hence $x=x'$. Their unions now give $\{x,y\}=\{x,y'\}$. If $y=x$, the left side is a singleton and forces $y'=x$. If $y\ne x$, membership of $y$ in the right side forces $y=y'$. Thus the second coordinates also agree, without assuming that the two member sets are distinct.
 
-!!! remark "Remark (Kuratowski encoding is implemented by arithmatex)"
+!!! remark "Remark (Kuratowski encoding)"
     <a id="rem-2-8-3"></a>
-    Proposition 2.8.2 shows that ordered pairs can be defined purely in
+    <a id="rem-kuratowski-encoding-is-implemented-by-arithmatex"></a>
+
+    [Proposition](#prop-kuratowski-encoding-of-ordered-pairs) shows that ordered pairs can be defined purely in
     terms of sets, via the **Kuratowski encoding**
     $(x, y) := \{\{x\}, \{x, y\}\}$.
 
+!!! remark "Remark (Empty intersections in a fixed ambient set)"
+    <a id="rem-empty-intersections-in-a-fixed-ambient-set"></a>
+
+    The preceding warning concerns an unrestricted intersection of arbitrary
+    sets. Within $\mathscr P(B)$ one can consistently define the empty
+    intersection to be $B$. This convention does not introduce a set of all
+    mathematical objects.

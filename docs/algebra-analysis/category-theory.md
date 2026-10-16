@@ -11,19 +11,24 @@ the notion of **representable functors**.
 
 !!! definition "Definition (Universe)"
     <a id="def-cat-1-1"></a>
+    <a id="def-universe"></a>
+
     A set $\mathcal{U}$ is a **universe** if its elements are sets and
 
     1. $\varnothing \in \mathcal{U}$.
     2. $A \in \mathcal{U}$ and $B \in A \Rightarrow B \in \mathcal{U}$.
     3. $A \in \mathcal{U} \Rightarrow \mathscr{P}(A) \in \mathcal{U}$.
-    4. $I \in \mathcal{U}$ and $(A_i)_{i \in I} \in \mathcal{U}^I
-       \Rightarrow \bigcup_{i \in I} A_i \in \mathcal{U}$.
+    4. $I \in \mathcal{U}$ and $(A_i)_{i \in I} \in \mathcal{U}^I \Rightarrow \bigcup_{i \in I} A_i \in \mathcal{U}$.
 
 !!! axiom "Axiom (Universe axiom)"
+    <a id="axiom-universe-axiom"></a>
+
     Every set belongs to some universe.
 
 !!! proposition "Proposition (Closure properties of a universe)"
     <a id="prop-cat-1-2"></a>
+    <a id="prop-closure-properties-of-a-universe"></a>
+
     Let $\mathcal{U}$ be a universe.
 
     1. $A \in \mathcal{U}$ and $B \subseteq A \Rightarrow B \in \mathcal{U}$.
@@ -34,60 +39,54 @@ the notion of **representable functors**.
     6. $X, Y \in \mathcal{U} \Rightarrow$ the set of all correspondences
        $X \to Y$ belongs to $\mathcal{U}$; in particular
        $Y^X \in \mathcal{U}$.
-    7. $I \in \mathcal{U}$ non-empty and $(X_i)_{i \in I} \in \mathcal{U}^I
-       \Rightarrow \prod_{i \in I} X_i \in \mathcal{U}$.
+    7. $I \in \mathcal{U}$ non-empty and $(X_i)_{i \in I} \in \mathcal{U}^I \Rightarrow \prod_{i \in I} X_i \in \mathcal{U}$.
 
-??? proof "Proof (Closure properties of a universe)"
-    (1) By axiom (c), $\mathscr{P}(A) \in \mathcal{U}$. Since $B \in
-    \mathscr{P}(A)$, axiom (b) gives $B \in \mathcal{U}$.
+??? proof "Proof"
+    (1) By axiom (c), $\mathscr{P}(A) \in \mathcal{U}$. Since $B \in \mathscr{P}(A)$, axiom (b) gives $B \in \mathcal{U}$.
     (2) $\{A\} \subseteq \mathscr{P}(A) \in \mathcal{U}$ (by (c)),
     so (1) gives $\{A\} \in \mathcal{U}$.
-    (3) By (c), $\mathscr{P}(\mathscr{P}(\varnothing)) =
-    \{\varnothing, \{\varnothing\}\} \in \mathcal{U}$. By (2),
+    (3) By (c), $\mathscr{P}(\mathscr{P}(\varnothing)) = \{\varnothing, \{\varnothing\}\} \in \mathcal{U}$. By (2),
     $\{A\}, \{B\} \in \mathcal{U}$. By axiom (d),
     $\{A, B\} = \{A\} \cup \{B\} \in \mathcal{U}$.
     (4) By (2), $\{A\} \in \mathcal{U}$. By (3), $\{A, B\} \in \mathcal{U}$.
     Apply (3) to $\{A\}, \{A, B\} \in \mathcal{U}$:
     $\{\{A\}, \{A, B\}\} \in \mathcal{U}$.
     (5) For $x \in X$ and $y \in Y$, (b) gives $x, y \in \mathcal{U}$;
-    (4) gives $(x, y) \in \mathcal{U}$; (2) gives $\{(x, y)\} \in
-    \mathcal{U}$. Then $\{x\} \times Y = \bigcup_{y \in Y} \{(x, y)\}
-    \in \mathcal{U}$ by (d) (applied to the family $y \mapsto
-    \{(x, y)\}$ indexed by $Y \in \mathcal{U}$). Finally
+    (4) gives $(x, y) \in \mathcal{U}$; (2) gives $\{(x, y)\} \in \mathcal{U}$. Then $\{x\} \times Y = \bigcup_{y \in Y} \{(x, y)\} \in \mathcal{U}$ by (d) (applied to the family $y \mapsto \{(x, y)\}$ indexed by $Y \in \mathcal{U}$). Finally
     $X \times Y = \bigcup_{x \in X} (\{x\} \times Y) \in \mathcal{U}$.
     (6) A correspondence $X \to Y$ has the form
     $((X, Y), \Gamma)$ with $\Gamma \subseteq X \times Y$. By (5),
-    $X \times Y \in \mathcal{U}$, so $\mathscr{P}(X \times Y) \in
-    \mathcal{U}$ (c), and $\Gamma \in \mathcal{U}$ by (1). The set of
-    all such $\Gamma$ is a union (over $\Gamma \in \mathscr{P}(X
-    \times Y)$) of sets $\{((X, Y), \Gamma)\} \in \mathcal{U}$, so by
+    $X \times Y \in \mathcal{U}$, so $\mathscr{P}(X \times Y) \in \mathcal{U}$ (c), and $\Gamma \in \mathcal{U}$ by (1). The set of
+    all such $\Gamma$ is a union (over $\Gamma \in \mathscr{P}(X \times Y)$) of sets $\{((X, Y), \Gamma)\} \in \mathcal{U}$, so by
     (d) it is in $\mathcal{U}$.
     (7) $Y^X$ is a subset of the set of correspondences $X \to Y$ in
     $\mathcal{U}$ (6), so (1) gives $Y^X \in \mathcal{U}$.
-    (8) The product $\prod_{i \in I} X_i$ is a subset of
+    (8) Set $X=\bigcup_{i\in I}X_i\in\mathcal U$. The product $\prod_{i \in I} X_i$ is a subset of
     $X^I \in \mathcal{U}$ (7), so (1) gives the result.
 
 ## Categories
 
 !!! definition "Definition (Category)"
     <a id="def-cat-2-1"></a>
+    <a id="def-category"></a>
+
     A **$\mathcal{U}$-category** $\mathcal{C}$ is the data of
 
-    1. a class $\mathrm{Obj}(\mathcal{C})$ (the objects);
+    1. a set $\mathrm{Obj}(\mathcal{C})$ (the objects);
     2. for every $(X, Y) \in \mathrm{Obj}(\mathcal{C})^2$, a set
        $\mathcal{C}(X, Y) \in \mathcal{U}$ of **morphisms** $X \to Y$;
     3. for every $(X, Y, Z)$, a composition
        $\mathcal{C}(X, Y) \times \mathcal{C}(Y, Z) \to \mathcal{C}(X, Z)$,
        written $f, g \mapsto g \circ f$ or $gf$,
 
-    such that for every $X$ there is an identity $\mathrm{Id}_X \in
-    \mathcal{C}(X, X)$ with $\mathrm{Id}_X \circ f = f$ and
+    such that for every $X$ there is an identity $\mathrm{Id}_X \in \mathcal{C}(X, X)$ with $\mathrm{Id}_X \circ f = f$ and
     $g \circ \mathrm{Id}_X = g$, and composition is associative.
-    $\mathcal{C}$ is **$\mathcal{U}$-small** if $\mathrm{Obj}(\mathcal{C}) \in
-    \mathcal{U}$, and **finite** if both $\mathrm{Obj}(\mathcal{C})$ and the
+    $\mathcal{C}$ is **$\mathcal{U}$-small** if $\mathrm{Obj}(\mathcal{C}) \in \mathcal{U}$, and **finite** if both $\mathrm{Obj}(\mathcal{C})$ and the
     hom-sets are finite.
 
 !!! example "Example (Common categories)"
+    <a id="ex-common-categories"></a>
+
     + $\mathcal{U}\text{-}\mathrm{Set}$: objects = sets in $\mathcal{U}$, morphisms
       = all set maps.
     + $\mathrm{Top}$: topological spaces + continuous maps.
@@ -99,41 +98,43 @@ the notion of **representable functors**.
 
 !!! proposition "Proposition (Uniqueness of identity)"
     <a id="prop-cat-2-2"></a>
+    <a id="prop-uniqueness-of-identity"></a>
+
     The identity morphism of an object $X$ is unique.
 
-??? proof "Proof (Uniqueness of identity)"
+??? proof "Proof"
     Let $\mathrm{Id}_X$ and $\mathrm{Id}'_X$ both be identity morphisms
     of $X$. By the identity axiom,
     $\mathrm{Id}_X = \mathrm{Id}_X \circ \mathrm{Id}'_X = \mathrm{Id}'_X$.
 
 !!! definition "Definition (Inverse, isomorphism)"
     <a id="def-cat-2-3"></a>
+    <a id="def-inverse-isomorphism"></a>
+
     A morphism $f : X \to Y$ is
 
-    + **left invertible** if $\exists\, g : Y \to X$ with $g \circ f =
-      \mathrm{Id}_X$ (then $g$ is a *left inverse*);
-    + **right invertible** if $\exists\, h : Y \to X$ with $f \circ h =
-      \mathrm{Id}_Y$ (then $h$ is a *right inverse*);
+    + **left invertible** if $\exists\, g : Y \to X$ with $g \circ f = \mathrm{Id}_X$ (then $g$ is a *left inverse*);
+    + **right invertible** if $\exists\, h : Y \to X$ with $f \circ h = \mathrm{Id}_Y$ (then $h$ is a *right inverse*);
     + an **isomorphism** if it is both; the unique common inverse is written
       $f^{-1}$. Two objects are **isomorphic** if some morphism between them
       is an isomorphism.
 
 !!! proposition "Proposition (Composing isomorphisms)"
     <a id="prop-cat-2-4"></a>
+    <a id="prop-composing-isomorphisms"></a>
+
     If $f : X \to Y$ and $g : Y \to Z$ are isomorphisms, so is
     $g \circ f$ and $(g \circ f)^{-1} = f^{-1} \circ g^{-1}$.
 
-??? proof "Proof (Composing isomorphisms)"
-    $(f^{-1} \circ g^{-1}) \circ (g \circ f) = f^{-1} \circ
-    (g^{-1} \circ g) \circ f = f^{-1} \circ \mathrm{Id}_Y \circ f
-    = f^{-1} \circ f = \mathrm{Id}_X$, and
-    $(g \circ f) \circ (f^{-1} \circ g^{-1}) = g \circ
-    (f \circ f^{-1}) \circ g^{-1} = g \circ \mathrm{Id}_Y \circ g^{-1}
-    = g \circ g^{-1} = \mathrm{Id}_Z$. So $g \circ f$ is an
+??? proof "Proof"
+    $(f^{-1} \circ g^{-1}) \circ (g \circ f) = f^{-1} \circ (g^{-1} \circ g) \circ f = f^{-1} \circ \mathrm{Id}_Y \circ f = f^{-1} \circ f = \mathrm{Id}_X$, and
+    $(g \circ f) \circ (f^{-1} \circ g^{-1}) = g \circ (f \circ f^{-1}) \circ g^{-1} = g \circ \mathrm{Id}_Y \circ g^{-1} = g \circ g^{-1} = \mathrm{Id}_Z$. So $g \circ f$ is an
     isomorphism with inverse $f^{-1} \circ g^{-1}$.
 
 !!! definition "Definition (Opposite category)"
     <a id="def-cat-2-5"></a>
+    <a id="def-opposite-category"></a>
+
     The **opposite category** $\mathcal{C}^{\mathrm{op}}$ has the same
     objects as $\mathcal{C}$ and
     $\mathcal{C}^{\mathrm{op}}(X, Y) := \mathcal{C}(Y, X)$. Composition in
@@ -143,21 +144,42 @@ the notion of **representable functors**.
 
 !!! definition "Definition (Commutative diagram)"
     <a id="def-cat-2-6"></a>
+    <a id="def-commutative-diagram"></a>
+
     A **diagram** in a category is a directed graph whose vertices are
     objects and edges are morphisms. A diagram is **commutative** if for
     every pair of vertices the morphisms obtained by composing along any
     two paths between them coincide. In particular, the diagram
 
     $$
-    X \xrightarrow\{\,f\,\} Y \xrightarrow\{\,g\,\} Z
+    X \xrightarrow{f} Y \xrightarrow{g} Z,\qquad X\xrightarrow{h}Z
     $$
 
     is commutative iff $h = g \circ f$.
+
+!!! proposition "Proposition (Left and right inverses coincide)"
+    <a id="prop-left-and-right-inverses-coincide"></a>
+
+    If $gf=I_X$ and $fh=I_Y$, then $g=gI_Y=g(fh)=(gf)h=I_Xh=h$. Thus when both inverses exist they coincide, and repeating this computation with any other inverse proves uniqueness.
+
+!!! example "Example (One-object categories and diagram equations)"
+    <a id="ex-one-object-categories-and-diagram-equations"></a>
+
+    A category with one object has a monoid as its endomorphism set, with identity as neutral element; its isomorphisms are exactly the monoid's units. Conversely any monoid defines such a category.
+
+    A triangle with arrows $f:X\to Y$, $g:Y\to Z$, $h:X\to Z$ commutes when $h=gf$. A square with $a:X\to Y$, $b:X\to Z$, $c:Y\to W$, $d:Z\to W$ commutes when $db=ca$. These equations compare the two complete paths between the same endpoints.
+
+!!! remark "Remark (Algebras and universe notation)"
+    <a id="rem-algebras-and-universe-notation"></a>
+
+    In the algebra categories, $K$ is commutative and an algebra has a bilinear multiplication making it a unital ring. Universe prefixes are usually suppressed after choosing a universe; the object collection may lie in a larger universe than the hom sets. The source's convention takes the objects to form a set, without requiring that set to belong to the chosen universe.
 
 ## Functors
 
 !!! definition "Definition (Functor)"
     <a id="def-cat-3-1"></a>
+    <a id="def-functor"></a>
+
     A **functor** $F : \mathcal{C} \to \mathcal{D}$ is the data of
 
     1. a map $F : \mathrm{Obj}(\mathcal{C}) \to \mathrm{Obj}(\mathcal{D})$;
@@ -168,16 +190,18 @@ the notion of **representable functors**.
     $F(g \circ f) = F(g) \circ F(f)$.
 
 !!! example "Example (Standard functors)"
-    + The identity functor $\mathrm{Id}_{\mathcal{C}} : \mathcal{C} \to
-      \mathcal{C}$.
+    <a id="ex-standard-functors"></a>
+
+    + The identity functor $\mathrm{Id}_{\mathcal{C}} : \mathcal{C} \to \mathcal{C}$.
     + The composition of functors $G \circ F$.
     + The **covariant hom-functor** $h^X : \mathcal{C} \to \mathrm{Set}$,
       $Y \mapsto \mathcal{C}(X, Y)$, $f \mapsto f \circ (\cdot)$.
-    + The **contravariant hom-functor** $h_X : \mathcal{C}^{\mathrm{op}} \to
-      \mathrm{Set}$, $Y \mapsto \mathcal{C}(Y, X)$, $f \mapsto (\cdot) \circ f$.
+    + The **contravariant hom-functor** $h_X : \mathcal{C}^{\mathrm{op}} \to \mathrm{Set}$, $Y \mapsto \mathcal{C}(Y, X)$, $f \mapsto (\cdot) \circ f$.
 
 !!! definition "Definition (Natural transformation)"
     <a id="def-cat-3-2"></a>
+    <a id="def-natural-transformation"></a>
+
     A **natural transformation** $\varphi : F \Rightarrow G$ between two
     functors $F, G : \mathcal{C} \to \mathcal{D}$ is a family
     $(\varphi_X : F(X) \to G(X))_{X \in \mathrm{Obj}(\mathcal{C})}$ such
@@ -197,31 +221,44 @@ the notion of **representable functors**.
 
 !!! proposition "Proposition (Functor category)"
     <a id="prop-cat-3-3"></a>
+    <a id="prop-functor-category"></a>
+
     For $\mathcal{U}$-small $\mathcal{C}$ and $\mathcal{U}$-category
     $\mathcal{D}$, the set
     $\mathrm{Nat}(F, G) \subseteq \prod_{X} \mathcal{D}(F(X), G(X))$
     belongs to $\mathcal{U}$; the category
-    $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$ of functors $\mathcal{C} \to
-    \mathcal{D}$ with natural transformations is itself a
+    $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$ of functors $\mathcal{C} \to \mathcal{D}$ with natural transformations is itself a
     $\mathcal{U}$-category.
 
-??? proof "Proof (Functor category)"
-    The product $\prod_{X \in \mathrm{Obj}(\mathcal{C})}
-    \mathcal{D}(F(X), G(X))$ is a subset of the set of all functions on
+??? proof "Proof"
+    The product $\prod_{X \in \mathrm{Obj}(\mathcal{C})} \mathcal{D}(F(X), G(X))$ is a subset of the set of all functions on
     $\mathrm{Obj}(\mathcal{C})$ (by currying/uncurrying). Since
     $\mathrm{Obj}(\mathcal{C}) \in \mathcal{U}$ ($\mathcal{C}$ is
     $\mathcal{U}$-small) and $\mathcal{D}$ is a $\mathcal{U}$-category,
     each $\mathcal{D}(F(X), G(X)) \in \mathcal{U}$, so the product is
-    in $\mathcal{U}$ (Prop 1.1.3 (8)) and hence so is the subset
-    $\mathrm{Nat}(F, G)$. The category $\mathrm{Fun}(\mathcal{C},
-    \mathcal{D})$ has $\mathrm{Nat}(F, G)$ as its hom-sets, all in
+    in $\mathcal{U}$ ([Proposition](#prop-closure-properties-of-a-universe)) and hence so is the subset
+    $\mathrm{Nat}(F, G)$. The category $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$ has $\mathrm{Nat}(F, G)$ as its hom-sets, all in
     $\mathcal{U}$, and inherits composition and identities from
     $\mathcal{D}$.
+
+!!! example "Example (The Pythagorean equation functor)"
+    <a id="pythagorean-functor"></a>
+
+    The functor $P:\mathrm{CRing}\to\mathrm{Set}$ sends $A$ to $\{(x,y,z)\in A^3:x^2+y^2=z^2\}$ and $f:A\to B$ to coordinatewise application of $f$. Ring homomorphisms preserve the equation, identities and composition, verifying all functor axioms.
+
+!!! proposition "Proposition (Natural composition and natural inverses)"
+    <a id="prop-natural-composition-and-natural-inverses"></a>
+
+    Composition of natural transformations is componentwise, and their identities are the component identities. For $\varphi:F\Rightarrow G$, $\psi:G\Rightarrow H$, naturality follows from $H(f)\psi_X\varphi_X=\psi_YG(f)\varphi_X=\psi_Y\varphi_YF(f)$. Associativity and identity laws follow at every object.
+
+    If every $\varphi_X$ is invertible, its inverse family is natural: rearrange $G(f)\varphi_X=\varphi_YF(f)$ to $F(f)\varphi_X^{-1}=\varphi_Y^{-1}G(f)$. Conversely an inverse natural transformation supplies inverses at each component. Thus natural isomorphisms are precisely the isomorphisms of the functor category. The notation $\widehat{\mathcal C}$ means $\mathrm{Fun}(\mathcal C,\mathrm{Set})$ under the covariant convention used here.
 
 ## Yoneda Lemma
 
 !!! theorem "Theorem (Yoneda)"
     <a id="thm-cat-4-1"></a>
+    <a id="thm-yoneda"></a>
+
     Let $\mathcal{C}$ be a category, $F : \mathcal{C} \to \mathrm{Set}$ a
     functor, and $X \in \mathrm{Obj}(\mathcal{C})$. The map
 
@@ -238,47 +275,43 @@ the notion of **representable functors**.
     f \longmapsto F(f)(x).
     $$
 
-??? proof "Proof (Yoneda)"
+??? proof "Proof"
     **Construction.** Given $x \in F(X)$, define
     $\alpha(x) = (\alpha(x)_Y)_Y$ with
     $\alpha(x)_Y : \mathcal{C}(X, Y) \to F(Y)$, $f \mapsto F(f)(x)$.
     **Naturality.** For any $u : A \to B$ in $\mathcal{C}$ and
     $f \in \mathcal{C}(X, A)$:
-    $F(u) \circ \alpha(x)_A (f) = F(u)(F(f)(x)) = F(u \circ f)(x)
-    = \alpha(x)_B(u \circ f) = \alpha(x)_B \circ h^X(u) (f)$.
+    $F(u) \circ \alpha(x)_A (f) = F(u)(F(f)(x)) = F(u \circ f)(x) = \alpha(x)_B(u \circ f) = \alpha(x)_B \circ h^X(u) (f)$.
     So the diagram commutes and $\alpha(x) \in \mathrm{Nat}(h^X, F)$.
-    **$\alpha \circ \beta = \mathrm{id}$.** For $\psi \in \mathrm{Nat}(h^X,
-    F)$ and $x := \beta(\psi) = \psi_X(\mathrm{Id}_X)$, the naturality
+    **$\alpha \circ \beta = \mathrm{id}$.** For $\psi \in \mathrm{Nat}(h^X, F)$ and $x := \beta(\psi) = \psi_X(\mathrm{Id}_X)$, the naturality
     of $\psi$ applied to $f : X \to Y$ gives
-    $\psi_Y(f \circ \mathrm{Id}_X) = \psi_Y(f) = F(f)(\psi_X(\mathrm{Id}_X))
-    = F(f)(x) = \alpha(x)_Y(f)$. Hence $\alpha(\beta(\psi)) = \psi$.
+    $\psi_Y(f \circ \mathrm{Id}_X) = \psi_Y(f) = F(f)(\psi_X(\mathrm{Id}_X)) = F(f)(x) = \alpha(x)_Y(f)$. Hence $\alpha(\beta(\psi)) = \psi$.
     **$\beta \circ \alpha = \mathrm{id}$.** For $x \in F(X)$,
-    $\beta(\alpha(x)) = \alpha(x)_X(\mathrm{Id}_X) = F(\mathrm{Id}_X)(x)
-    = \mathrm{Id}_{F(X)}(x) = x$.
+    $\beta(\alpha(x)) = \alpha(x)_X(\mathrm{Id}_X) = F(\mathrm{Id}_X)(x) = \mathrm{Id}_{F(X)}(x) = x$.
 
 !!! definition "Definition (Yoneda embedding)"
     <a id="def-cat-4-2"></a>
+    <a id="def-yoneda-embedding"></a>
+
     For a morphism $f : X \to Y$, write $\upsilon(f) : h^Y \Rightarrow h^X$
     for the natural transformation corresponding to $f$ under the Yoneda
     bijection $\mathrm{Nat}(h^Y, h^X) \cong h^X(Y) = \mathcal{C}(X, Y)$. Its
     $W$-component sends $u \in \mathcal{C}(Y, W)$ to $u \circ f$.
 
-??? proof "Proof (Yoneda is fully faithful)"
+??? proof "Proof"
     (1) For any $W \in \mathrm{Obj}(\mathcal{C})$ and $u \in \mathcal{C}(X, W)$,
     $\upsilon(\mathrm{Id}_X)_W(u) = u \circ \mathrm{Id}_X = u$, so
     $\upsilon(\mathrm{Id}_X) = \mathrm{Id}_{h^X}$.
     (2) For $u \in \mathcal{C}(Z, W)$,
-    $\upsilon(g \circ f)_W(u) = u \circ g \circ f = \upsilon(f)_W(u \circ g)
-    = (\upsilon(f)_W \circ \upsilon(g)_W)(u)$.
+    $\upsilon(g \circ f)_W(u) = u \circ g \circ f = \upsilon(f)_W(u \circ g) = (\upsilon(f)_W \circ \upsilon(g)_W)(u)$.
     (3) If $f$ is an isomorphism, by (2) and (1)
-    $\upsilon(f^{-1}) \circ \upsilon(f) = \upsilon(f \circ f^{-1})
-    = \upsilon(\mathrm{Id}_Y) = \mathrm{Id}_{h^Y}$ and
+    $\upsilon(f^{-1}) \circ \upsilon(f) = \upsilon(f \circ f^{-1}) = \upsilon(\mathrm{Id}_Y) = \mathrm{Id}_{h^Y}$ and
     $\upsilon(f) \circ \upsilon(f^{-1}) = \mathrm{Id}_{h^X}$, so
     $\upsilon(f)$ is an isomorphism with inverse $\upsilon(f^{-1})$.
     Conversely, suppose $\upsilon(f)$ is an isomorphism with inverse
     $\upsilon(g)$ for some $g : Y \to X$. Then
     $\upsilon(g) \circ \upsilon(f) = \mathrm{Id}_{h^Y}$ gives
-    $\upsilon(g \circ f) = \mathrm{Id}_{h^Y}$, i.e.
+    $\upsilon(f \circ g) = \mathrm{Id}_{h^Y}$, and the other inverse identity gives $\upsilon(g\circ f)=\mathrm{Id}_{h^X}$; hence
     $g \circ f = \mathrm{Id}_X$ (by Yoneda applied to $X$). Similarly
     $f \circ g = \mathrm{Id}_Y$.
 
@@ -286,10 +319,17 @@ the notion of **representable functors**.
     $X \mapsto h^X$ embeds $\mathcal{C}^{\mathrm{op}}$ into
     $\widehat{\mathcal{C}} := \mathrm{Fun}(\mathcal{C}, \mathrm{Set})$.
 
+!!! proposition "Proposition (Yoneda identities and reflection of isomorphisms)"
+    <a id="yoneda-identities"></a>
+
+    For the covariant hom-functors, $\upsilon(I_X)=I_{h^X}$ and $\upsilon(gf)=\upsilon(f)\upsilon(g)$. A morphism $f$ is invertible exactly when $\upsilon(f)$ is, and then $\upsilon(f^{-1})=\upsilon(f)^{-1}$. These identities make $X\mapsto h^X$ a fully faithful functor from $\mathcal C^{\mathrm{op}}$.
+
 ## Representable Functors
 
 !!! definition "Definition (Representable functor)"
     <a id="def-cat-5-1"></a>
+    <a id="def-representable-functor"></a>
+
     A functor $F : \mathcal{C} \to \mathrm{Set}$ is **representable** if it
     is naturally isomorphic to some $h^X = \mathcal{C}(X, \cdot)$. A choice
     of isomorphism $\varphi : h^X \Rightarrow F$ is a **representation**,
@@ -298,18 +338,19 @@ the notion of **representable functors**.
 
 !!! proposition "Proposition (Universal property)"
     <a id="prop-cat-5-2"></a>
+    <a id="prop-universal-property"></a>
+
     Let $\varphi : h^X \Rightarrow F$ represent $F$. For every object $Y$ and
     every $y \in F(Y)$ there is a unique $f : X \to Y$ with
     $F(f)(u) = y$, namely $f = \varphi_Y^{-1}(y)$. In particular the
     representing object $X$ is unique up to a unique isomorphism sending
     one universal object to the other.
 
-??? proof "Proof (Universal property)"
+??? proof "Proof"
     **Existence.** Set $f := \varphi_Y^{-1}(y) : X \to Y$ (well defined
     since $\varphi$ is an isomorphism). The naturality square
     $\varphi_Y \circ h^X(f) = F(f) \circ \varphi_X$ gives
-    $F(f)(u) = F(f)(\varphi_X(\mathrm{Id}_X))
-    = \varphi_Y(h^X(f)(\mathrm{Id}_X)) = \varphi_Y(f) = y$.
+    $F(f)(u) = F(f)(\varphi_X(\mathrm{Id}_X)) = \varphi_Y(h^X(f)(\mathrm{Id}_X)) = \varphi_Y(f) = y$.
     **Uniqueness.** Suppose $f' : X \to Y$ also satisfies
     $F(f')(u) = y$. Then
     $F(f')(u) = F(f)(u) = y$, so
@@ -317,16 +358,24 @@ the notion of **representable functors**.
     Since $\varphi_Y$ is injective, $f' = f$.
 
 !!! example "Example (Representable functors)"
+    <a id="ex-representable-functors"></a>
+
     + The forgetful functor $U : \mathrm{Mon} \to \mathrm{Set}$ is
       represented by $(\mathbb{N}, +, 0)$: every $x \in M$ comes from a
       unique monoid homomorphism $\mathbb{N} \to M$ sending $1$ to $x$.
-    + Similarly the forgetful functors $\mathrm{Gp} \to \mathrm{Set}$,
-      $\mathrm{Ring} \to \mathrm{Set}$, $\mathrm{CRing} \to \mathrm{Set}$ are
-      represented by $\mathbb{Z}$.
+    + The forgetful functor $\mathrm{Gp}\to\mathrm{Set}$ is represented by $\mathbb Z$; the ring and commutative-ring forgetful functors are represented by $\mathbb Z[T]$, with universal element $T$.
     + The "power" functor $W \mapsto W^I$ on $\mathrm{Mod}_K$ is
       represented by $K^{\oplus I}$ (the direct sum).
-    + The "quotient" functor $W \mapsto \{f \in \mathrm{Hom}_K(V, W) :
-      f|_{V'} = 0\}$ is represented by $V / V'$.
+    + The "quotient" functor $W \mapsto \{f \in \mathrm{Hom}_K(V, W) : f|_{V'} = 0\}$ is represented by $V / V'$.
     + The "torsion" functor $A \mapsto A[n] := \{a : n a = 0\}$ on
       $\mathrm{Ab}$ is represented by $\mathbb{Z} / n\mathbb{Z}$.
 
+??? proof "Proof"
+    For uniqueness of a representing object together with its universal element, let $(X,u)$ and $(Y,v)$ represent $F$. The universal properties supply unique $f:X\to Y$ and $g:Y\to X$ sending $u$ to $v$ and $v$ to $u$. Then $F(gf)(u)=u$, so uniqueness at $(X,u)$ gives $gf=I_X$. Likewise $fg=I_Y$. The same universal property gives uniqueness of this isomorphism compatible with the chosen universal elements.
+
+!!! proposition "Proposition (Explicit free and quotient representations)"
+    <a id="prop-explicit-free-and-quotient-representations"></a>
+
+    For the power functor $W\mapsto W^I$, send a family $(w_i)$ to the linear mapping $K^{\oplus I}\to W$, $(a_i)\mapsto\sum_i a_iw_i$. The sum is finite. The inverse sends a linear mapping to its values on the coordinate basis, verifying bijectivity; composing with a linear mapping of $W$ commutes with both constructions, verifying naturality. The universal element is the coordinate basis family.
+
+    For the functor of right-module mappings $V\to W$ vanishing on $V'$, send a mapping $V/V'\to W$ to its composite with the quotient projection. Conversely define the factored mapping by $[v]\mapsto f(v)$, well defined because $f$ vanishes on $V'$. The two constructions are inverse and natural; the universal element is the quotient projection.

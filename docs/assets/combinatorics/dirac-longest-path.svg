@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 430" role="img" aria-labelledby="title desc">
+  <title id="title">Longest-path construction in Dirac's theorem</title>
+  <desc id="desc">Two chords close a longest path into a cycle containing all path vertices. An outside vertex adjacent to the cycle would extend the path.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.path{fill:none;stroke:#475569;stroke-width:6}.top{fill:none;stroke:#dc2626;stroke-width:6}.bottom{fill:none;stroke:#2563eb;stroke-width:6}.outside{fill:none;stroke:#d97706;stroke-width:6;stroke-dasharray:10 7}.v{fill:#fff;stroke:#0f766e;stroke-width:3}.w{fill:#fffbeb;stroke:#d97706;stroke-width:3}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}.lbl{font:17px system-ui,sans-serif;fill:#334155;text-anchor:middle}.note{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="710" height="400" rx="16"/><rect class="panel" x="745" y="15" width="360" height="400" rx="16"/>
+  <text class="ttl" x="370" y="52">Close a longest path into a cycle</text>
+  <path class="path" d="M75 230H665"/>
+  <path class="top" d="M328 230C395 70 610 70 665 230"/>
+  <path class="bottom" d="M75 230C135 365 330 365 412 230"/>
+  <g>
+    <circle class="v" cx="75" cy="230" r="11"/><circle class="v" cx="159" cy="230" r="11"/><circle class="v" cx="244" cy="230" r="11"/><circle class="v" cx="328" cy="230" r="11"/><circle class="v" cx="412" cy="230" r="11"/><circle class="v" cx="496" cy="230" r="11"/><circle class="v" cx="581" cy="230" r="11"/><circle class="v" cx="665" cy="230" r="11"/>
+  </g>
+  <text class="lbl" x="75" y="260">v₁</text><text class="lbl" x="159" y="260">v₂</text><text class="lbl" x="244" y="260">v₃</text><text class="lbl" x="328" y="260">vⱼ</text><text class="lbl" x="412" y="260">vⱼ₊₁</text><text class="lbl" x="496" y="260">…</text><text class="lbl" x="581" y="260">vₚ₋₁</text><text class="lbl" x="665" y="260">vₚ</text>
+  <text class="note" x="505" y="95">vⱼvₚ</text><text class="note" x="235" y="360">vⱼ₊₁v₁</text>
+  <text class="ttl" x="925" y="52">An outside vertex</text>
+  <ellipse cx="925" cy="220" rx="125" ry="115" fill="none" stroke="#0f766e" stroke-width="6"/>
+  <circle class="v" cx="830" cy="165" r="11"/><circle class="v" cx="925" cy="105" r="11"/><circle class="v" cx="1020" cy="165" r="11"/><circle class="v" cx="1000" cy="285" r="11"/><circle class="v" cx="850" cy="285" r="11"/>
+  <circle class="w" cx="790" cy="350" r="13"/><path class="outside" d="M790 350L850 285"/>
+  <text class="lbl" x="765" y="375">w</text><text class="lbl" x="925" y="390">w starts a longer path</text>
+</svg>

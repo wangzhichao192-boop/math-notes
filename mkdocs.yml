@@ -123,7 +123,7 @@ nav:
           - Differential Calculus: algebra-analysis/differential-calculus.md
           - Integral Calculus: algebra-analysis/integral-calculus.md
       - FAA II:
-          - Category Theory: algebra-analysis/category-theory.md
+          - Language of Category Theory: algebra-analysis/category-theory.md
           - Bilinear Algebra: algebra-analysis/bilinear-algebra.md
           - Self-adjoint Operators: algebra-analysis/self-adjoint-operators.md
           - Multilinear Algebra: algebra-analysis/multilinear-algebra.md
@@ -147,11 +147,14 @@ nav:
       - Hyperbolic Geometry: geometry-topology/hyperbolic-geometry.md
   - "测度论与实分析":
       - measure-theory-and-real-anaysis/index.md
-      - "Kurzweil–Henstock Integral": measure-theory-and-real-anaysis/countable-sets-and-number-series.md
+      - "Countable Sets and Number Series": measure-theory-and-real-anaysis/countable-sets-and-number-series.md
+      - "Kurzweil–Henstock Integration": measure-theory-and-real-anaysis/kurzweil-henstock-integration.md
+      - "Monotone Convergence and Lebesgue Measure": measure-theory-and-real-anaysis/monotone-convergence-and-lebesgue-measure.md
   - 概率论:
       - probability/index.md
       - Foundations of Probability: probability/lesson1.md
       - "Random Vectors and Lp Estimates": probability/random-vectors-and-lp-estimates.md
+      - "Convergence and Limit Theorems": probability/convergence-and-limit-theorems.md
   - 数理逻辑:
       - mathematical-logic/index.md
       - Counting to Infinity: mathematical-logic/counting-to-infinity.md
@@ -167,10 +170,12 @@ nav:
       - "q-Analogues and Partitions": combinatorics/q-analogues-and-partitions.md
       - "Inclusion–Exclusion and Restricted Counting": combinatorics/inclusion-exclusion.md
       - "Graph Theory": combinatorics/graphy-theorem.md
+      - "Ramsey Theory": combinatorics/ramsey-theory.md
   - "常微分方程":
       - ode/index.md
       - "Basic Concepts": ode/models-geometry-and-well-posedness.md
       - "First-Order Equations": ode/first-order-equations.md
       - "Local Theory": ode/local-theory.md
+      - "* Models and Invariants": ode/models-and-invariants.md
   - 参考:
       - 写作指南: WRITING_GUIDE.md

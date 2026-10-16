@@ -297,16 +297,56 @@ Jacobian determinant.
 
 ## Covariance and Multivariate Normal Laws
 
-!!! definition "Definition (Covariance matrix)"
+!!! definition "Definition (Covariance and covariance matrix)"
     <a id="def-covariance-matrix"></a>
-    Let $X=(X_1,\ldots,X_n)$ be square-integrable and put
-    $\mu_i=\mathbb{E}X_i$. The **covariance matrix** of $X$ is
+    For square-integrable random variables $X$ and $Y$, their
+    **covariance** is
+
+    $$
+    \operatorname{Cov}(X,Y)
+    :=\mathbb{E}\bigl[(X-\mathbb{E}X)(Y-\mathbb{E}Y)\bigr]
+    =\mathbb{E}[XY]-\mathbb{E}X\,\mathbb{E}Y.
+    $$
+
+    If $X=(X_1,\ldots,X_n)$ and $\mu_i=\mathbb{E}X_i$, the
+    **covariance matrix** of $X$ is
     $\Sigma=(\Sigma_{ij})_{1\leq i,j\leq n}$, where
 
     $$
     \Sigma_{ij}
-    :=\mathbb{E}\bigl[(X_i-\mu_i)(X_j-\mu_j)\bigr].
+    :=\operatorname{Cov}(X_i,X_j)
+    =\mathbb{E}\bigl[(X_i-\mu_i)(X_j-\mu_j)\bigr].
     $$
+
+!!! proposition "Proposition (Variance of a sum)"
+    <a id="prop-variance-sum-independent"></a>
+    If $X_1,\ldots,X_n$ are square-integrable, then
+
+    $$
+    \operatorname{Var}\left(\sum_{i=1}^nX_i\right)
+    =\sum_{i=1}^n\operatorname{Var}(X_i)
+    +2\sum_{1\leq i<j\leq n}\operatorname{Cov}(X_i,X_j).
+    $$
+
+    In particular, if $X_1,\ldots,X_n$ are independent, then
+
+    $$
+    \operatorname{Var}\left(\sum_{i=1}^nX_i\right)
+    =\sum_{i=1}^n\operatorname{Var}(X_i).
+    $$
+
+??? proof "Proof"
+    Put $Y_i=X_i-\mathbb{E}X_i$. Expanding the square gives
+
+    $$
+    \mathbb{E}\left(\sum_{i=1}^nY_i\right)^2
+    =\sum_{i=1}^n\mathbb{E}Y_i^2
+    +2\sum_{i<j}\mathbb{E}[Y_iY_j],
+    $$
+
+    which is the first identity. If the variables are independent, then so
+    are $Y_i$ and $Y_j$, and
+    $\mathbb{E}[Y_iY_j]=\mathbb{E}Y_i\,\mathbb{E}Y_j=0$ for $i\neq j$.
 
 !!! proposition "Proposition (Positivity of covariance matrices)"
     <a id="prop-covariance-positive-semidefinite"></a>
@@ -361,6 +401,29 @@ Jacobian determinant.
     \qquad x\in\mathbb{R}^n.
     $$
 
+!!! proposition "Proposition (Independence of Gaussian coordinates)"
+    <a id="prop-gaussian-coordinate-independence"></a>
+    Let $X\sim\mathcal{N}(\mu,\Sigma)$ be nondegenerate. Its coordinates
+    $X_1,\ldots,X_n$ are independent if and only if $\Sigma$ is diagonal.
+    When $\Sigma=\operatorname{diag}(\sigma_1^2,\ldots,\sigma_n^2)$,
+
+    $$
+    f_X(x)
+    =\prod_{i=1}^n
+      \frac{1}{\sqrt{2\pi}\,\sigma_i}
+      \exp\left(-\frac{(x_i-\mu_i)^2}{2\sigma_i^2}\right).
+    $$
+
+??? proof "Proof"
+    If $\Sigma$ is diagonal, then
+    $\det\Sigma=\prod_i\sigma_i^2$ and
+    $(x-\mu)^\mathsf{T}\Sigma^{-1}(x-\mu)
+    =\sum_i(x_i-\mu_i)^2/\sigma_i^2$. The joint density therefore factors
+    into the product of the marginal Gaussian densities, so the coordinates
+    are independent. Conversely, independence gives
+    $\operatorname{Cov}(X_i,X_j)=0$ whenever $i\neq j$, hence $\Sigma$ is
+    diagonal.
+
 !!! proposition "Proposition (Normalization of the Gaussian density)"
     <a id="prop-multivariate-normal-normalization"></a>
     For every symmetric positive-definite matrix $\Sigma$,
@@ -412,12 +475,96 @@ Jacobian determinant.
 
 ## Convexity and $L^p$ Estimates
 
-The following results recast expectations as integrals over the probability
-space. For $1\leq p<\infty$, write
+Convexity gives bounds on moments, while Hölder's and Minkowski's inequalities
+control products and integrals in $L^p$ spaces.
 
-$$
-\lVert X\rVert_p:=\bigl(\mathbb{E}|X|^p\bigr)^{1/p}.
-$$
+### Convexity and moments
+
+!!! definition "Definition (Convex and concave functions)"
+    <a id="def-convex-functions"></a>
+    Let $I\subseteq\mathbb{R}$ be an interval. A function
+    $J:I\to\mathbb{R}$ is **convex** if, for every $x,y\in I$ and
+    $t\in[0,1]$,
+
+    $$
+    J((1-t)x+ty)\leq(1-t)J(x)+tJ(y).
+    $$
+
+    Thus the graph lies below each chord joining two of its points.
+    It is **strictly convex** if the inequality is strict whenever
+    $x\ne y$ and $0<t<1$, and **concave** if $-J$ is convex.
+
+!!! proposition "Proposition (Differentiable convexity criteria)"
+    <a id="prop-convexity-derivatives"></a>
+    For a differentiable function $J$ on an open interval $I$, convexity
+    is equivalent to $J'$ being nondecreasing, and also to
+
+    $$
+    J(x)\geq J(a)+J'(a)(x-a),\qquad a,x\in I.
+    $$
+
+    If $J$ is twice differentiable, these conditions are equivalent to
+    $J''\geq0$ on $I$.
+
+??? proof "Proof"
+    For $x<y<z$, the defining convexity inequality, with
+    $t=(y-x)/(z-x)$, rearranges to
+
+    $$
+    \frac{J(y)-J(x)}{y-x}
+    \leq\frac{J(z)-J(x)}{z-x}
+    \leq\frac{J(z)-J(y)}{z-y}.
+    $$
+
+    Taking one-sided limits gives the tangent inequality and
+    $J'(x)\leq J'(y)$ for $x<y$. Conversely, if $J'$ is nondecreasing,
+    the mean value theorem gives the tangent inequality. Apply that
+    inequality at $a=(1-t)x+ty$ to $x$ and $y$, multiply by $1-t$ and $t$,
+    and add; the derivative terms cancel, proving convexity. Finally,
+    for twice differentiable $J$, the mean value theorem and difference
+    quotients show that $J'$ is nondecreasing exactly when $J''\geq0$.
+
+!!! example "Example (Convexity without smoothness)"
+    <a id="ex-convex-functions"></a>
+    The functions $x\mapsto e^{\lambda x}$, for $\lambda\in\mathbb{R}$,
+    and $x\mapsto x^2$ are convex by the second-derivative criterion.
+    The function $x\mapsto|x|$ is convex by the triangle inequality,
+    although it is not differentiable at $0$.
+
+    More generally, $x\mapsto|x|^p$ is convex for $p\geq1$: for $p>1$
+    its derivative $p\,\operatorname{sgn}(x)|x|^{p-1}$ (equal to $0$ at
+    $x=0$) is nondecreasing. For $0<p<1$ it is not convex, since
+    $(1/2)^p>1/2$, contrary to the midpoint inequality for $0$ and $1$.
+
+!!! lemma "Lemma (Supporting lines)"
+    <a id="lem-convex-supporting-line"></a>
+    Let $J:I\to\mathbb{R}$ be convex and let $a$ be an interior point
+    of $I$. There exists $m\in\mathbb{R}$ such that
+
+    $$
+    J(x)\geq J(a)+m(x-a),\qquad x\in I.
+    $$
+
+    The affine function on the right is a **supporting line** at $a$:
+    it lies below the graph and meets it at $a$. If $J$ is differentiable
+    at $a$, its slope is necessarily $m=J'(a)$.
+
+??? proof "Proof"
+    The secant-slope inequalities in the preceding
+    [Proposition](#prop-convexity-derivatives) use only convexity. They give
+
+    $$
+    L:=\sup_{y<a}\frac{J(a)-J(y)}{a-y}
+    \leq
+    R:=\inf_{x>a}\frac{J(x)-J(a)}{x-a},
+    \qquad x,y\in I.
+    $$
+
+    Fixed points on either side of $a$ bound these slopes, so $L$ and $R$
+    are finite. Choose $m\in[L,R]$. For $x>a$ the right secant slope is
+    at least $m$; for $x<a$ the left secant slope is at most $m$.
+    Rearranging gives the asserted inequality on both sides. If the
+    derivative exists, letting $x\to a$ forces $m=J'(a)$.
 
 !!! theorem "Theorem (Jensen's inequality)"
     <a id="thm-jensen-random-vectors"></a>
@@ -438,7 +585,8 @@ $$
     \liminf_{x\downarrow a}\frac{J(x)-J(a)}{x-a}.
     $$
 
-    Choose a number $m$ between these one-sided slopes. Then
+    By the [supporting-line lemma](#lem-convex-supporting-line), choose a
+    finite number $m$ between these one-sided slopes. Then
     $J(x)\geq J(a)+m(x-a)$ for every $x\in\mathbb{R}$. Applying this supporting
     line inequality to $X$ and taking expectations gives
 
@@ -476,7 +624,8 @@ $$
 
 !!! proposition "Proposition (Monotonicity of moments)"
     <a id="prop-moment-monotonicity"></a>
-    Let $0<p\leq r<\infty$. If $X\in L^r$, then $X\in L^p$ and
+    Let $0<p\leq r<\infty$. If $\mathbb{E}|X|^r<\infty$, then
+    $\mathbb{E}|X|^p<\infty$ and
 
     $$
     \bigl(\mathbb{E}|X|^p\bigr)^{1/p}
@@ -485,18 +634,84 @@ $$
     $$
 
 ??? proof "Proof"
-    The case $p=r$ is immediate. If $p<r$, apply Hölder's inequality to
-    $|X|^p\cdot1$ with conjugate exponents $r/p$ and $r/(r-p)$:
+    The case $p=r$ is immediate. If $p<r$, the bound
+    $|X|^p\leq1+|X|^r$ first ensures integrability. Apply Jensen's inequality to the
+    nonnegative random variable $Z=|X|^p$ and the convex function
+    $t\mapsto|t|^{r/p}$:
 
     $$
-    \mathbb{E}|X|^p
-    \leq
-    \bigl(\mathbb{E}|X|^r\bigr)^{p/r}
-    \bigl(\mathbb{E}1\bigr)^{(r-p)/r}
-    =\bigl(\mathbb{E}|X|^r\bigr)^{p/r}.
+    \bigl(\mathbb{E}|X|^p\bigr)^{r/p}
+    \leq\mathbb{E}|X|^r.
     $$
 
-    Taking the $p$-th root proves the claim.
+    Taking the $r$-th root proves the claim.
+
+### $L^p$ inequalities
+
+The preceding moment bounds compare the sizes of a single random variable.
+Norms provide the notation for estimating products and integrals; their
+$p=\infty$ endpoint measures bounds outside null sets.
+
+!!! definition "Definition ($L^p$ spaces and norms)"
+    <a id="def-lp-spaces-and-norms"></a>
+    Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space and
+    $1\leq p<\infty$. For a real-valued random variable $X$, set
+
+    $$
+    \lVert X\rVert_p:=\bigl(\mathbb{E}|X|^p\bigr)^{1/p}.
+    $$
+
+    The **space $L^p$** consists of the random variables with
+    $\mathbb{E}|X|^p<\infty$, identifying variables that are equal almost
+    surely. On this space, $\lVert\cdot\rVert_p$ is the **$L^p$ norm**.
+    More generally, on a measure space $(S,\mathcal{S},\mu)$, replace
+    expectation by integration and write
+    $\lVert g\rVert_{L^p(\mu)}=(\int_S|g|^p\,d\mu)^{1/p}$.
+
+!!! definition "Definition (Essential supremum and the $L^\infty$ norm)"
+    <a id="def-essential-supremum-l-infinity"></a>
+    The **essential supremum** of $|X|$ is
+
+    $$
+    \operatorname*{ess\,sup}|X|
+    :=\inf\{M\geq0:\mathbb{P}(|X|>M)=0\}.
+    $$
+
+    The **$L^\infty$ norm** is
+    $\lVert X\rVert_\infty:=\operatorname*{ess\,sup}|X|$.
+    The space **$L^\infty$** consists of random variables for which this
+    quantity is finite, identifying variables that are equal almost surely.
+
+    More generally, for a measurable function $g$ on
+    $(S,\mathcal{S},\mu)$,
+
+    $$
+    \lVert g\rVert_{L^\infty(\mu)}
+    =\operatorname*{ess\,sup}_{x\in S}|g(x)|
+    :=\inf\{M\geq0:\mu(\{x:|g(x)|>M\})=0\}.
+    $$
+
+    Thus the essential supremum is the smallest upper bound that holds
+    almost everywhere; the infimum is $+\infty$ if there is no finite bound.
+    For a finite infimum $K$, the bounds $|g|\leq K+1/n$ hold almost
+    everywhere for every $n\geq1$; removing the union of their null
+    exceptional sets gives $|g|\leq K$ almost everywhere.
+
+!!! example "Example (Ignoring a null set)"
+    <a id="ex-essential-supremum-null-set"></a>
+    On $[0,1]$ with Lebesgue probability measure, let $X(0)=100$ and
+    $X(\omega)=1$ for $\omega>0$. Then $\sup X=100$ but
+    $\lVert X\rVert_\infty=1$: changing a value on a null set changes no
+    integral. In particular, for integrable $Y$,
+    $\mathbb{E}|XY|\leq\lVert X\rVert_\infty\mathbb{E}|Y|$.
+    This is the endpoint case of [Hölder's inequality](#thm-holder-lp)
+    used below; the same almost-everywhere bound handles $p=\infty$ in
+    [Minkowski's inequality](#thm-minkowski-integral).
+
+For $1\leq p\leq r<\infty$, [moment monotonicity](#prop-moment-monotonicity)
+now reads $L^r\subseteq L^p$ and $\lVert X\rVert_p\leq\lVert X\rVert_r$.
+The same bound holds for $r=\infty$, since
+$|X|\leq\lVert X\rVert_\infty$ almost surely and $\mathbb{P}(\Omega)=1$.
 
 !!! lemma "Lemma (Young's inequality)"
     <a id="lem-young-product"></a>
@@ -507,14 +722,19 @@ $$
     $$
 
 ??? proof "Proof"
-    The convex function $t\mapsto t^p/p$ has convex conjugate
-    $s\mapsto s^q/q$. Therefore
-    $ab\leq a^p/p+b^q/q$. Equivalently, the difference between the right-hand
-    side and $ab$ is minimized when $b=a^{p-1}$, where it is zero.
+    For fixed $a\geq0$, the derivative with respect to $b$ of
+    $a^p/p+b^q/q-ab$ is $b^{q-1}-a$. Hence the minimum on $[0,\infty)$
+    occurs at $b=a^{p-1}$, where it is zero, since $1/p+1/q=1$.
+
+    Equivalently, the **convex conjugate** of $\phi(t)=t^p/p$ on
+    $[0,\infty)$, defined by $\phi^*(s)=\sup_{t\geq0}(st-\phi(t))$,
+    is $\phi^*(s)=s^q/q$ for $s\geq0$. The defining supremum gives
+    $ab\leq\phi(a)+\phi^*(b)$.
 
 !!! theorem "Theorem (Hölder's inequality)"
     <a id="thm-holder-lp"></a>
-    Let $p,q\in(1,\infty)$ satisfy $1/p+1/q=1$. Then
+    Let $p,q\in[1,\infty]$ satisfy $1/p+1/q=1$, with
+    $1/\infty:=0$, and let $X\in L^p$, $Y\in L^q$. Then
 
     $$
     \mathbb{E}|XY|
@@ -525,6 +745,17 @@ $$
     $|\mathbb{E}[XY]|\leq\lVert X\rVert_p\lVert Y\rVert_q$.
 
 ??? proof "Proof"
+    If $(p,q)=(1,\infty)$, then
+
+    $$
+    \mathbb{E}|XY|
+    \leq\lVert Y\rVert_\infty\mathbb{E}|X|
+    =\lVert X\rVert_1\lVert Y\rVert_\infty.
+    $$
+
+    The case $(p,q)=(\infty,1)$ is symmetric. It remains to consider
+    $p,q\in(1,\infty)$.
+
     Young's inequality remains valid after replacing $a$ and $b$ by
     $\lambda a$ and $b/\lambda$. Thus, for every $\lambda>0$,
 
@@ -556,9 +787,13 @@ $$
     $(1/p+1/q)\lVert X\rVert_p\lVert Y\rVert_q$, which is the desired product.
     If either norm vanishes, the result is immediate.
 
+    The same proof works on an arbitrary measure space with expectations
+    replaced by integrals; this form is used in Minkowski's inequality.
+
 !!! corollary "Corollary (Subconjugate exponents)"
     <a id="cor-subconjugate-holder"></a>
-    If $p,q\in(1,\infty)$ satisfy $1/p+1/q\leq1$, then
+    If $p,q\in(1,\infty)$ satisfy $1/p+1/q\leq1$ and
+    $X\in L^p$, $Y\in L^q$, then
 
     $$
     \mathbb{E}|XY|
@@ -574,6 +809,64 @@ $$
     \leq\lVert X\rVert_p\lVert Y\rVert_{p'}
     \leq\lVert X\rVert_p\lVert Y\rVert_q.
     $$
+
+!!! theorem "Theorem (Minkowski's integral inequality)"
+    <a id="thm-minkowski-integral"></a>
+    Let $(S,\mathcal{S},\mu)$ and $(T,\mathcal{T},\nu)$ be sigma-finite measure spaces,
+    let $f:T\times S\to\mathbb{R}$ be measurable, and let
+    $1\leq p\leq\infty$. Then
+
+    $$
+    \left\lVert\int_T |f(t,\cdot)|\,d\nu(t)\right\rVert_{L^p(\mu)}
+    \leq
+    \int_T\lVert f(t,\cdot)\rVert_{L^p(\mu)}\,d\nu(t).
+    $$
+
+??? proof "Proof"
+    Set $H(x)=\int_T|f(t,x)|\,d\nu(t)$. For $p=1$, Tonelli's theorem gives
+    equality after interchanging the two integrals. Suppose
+    $1<p<\infty$ and let $q=p/(p-1)$. Write
+    $A=\int_T\lVert f(t,\cdot)\rVert_p\,d\nu(t)$ and assume $A<\infty$;
+    otherwise there is nothing to prove. If $0<\lVert H\rVert_p<\infty$,
+    Tonelli's theorem and Hölder's inequality yield
+
+    $$
+    \begin{aligned}
+    \lVert H\rVert_p^p
+    &=\int_S H(x)^{p-1}\int_T|f(t,x)|\,d\nu(t)\,d\mu(x)\\
+    &=\int_T\int_S |f(t,x)|H(x)^{p-1}\,d\mu(x)\,d\nu(t)\\
+    &\leq\int_T\lVert f(t,\cdot)\rVert_p
+       \lVert H^{p-1}\rVert_q\,d\nu(t)\\
+    &=\lVert H\rVert_p^{p-1}
+      \int_T\lVert f(t,\cdot)\rVert_p\,d\nu(t).
+    \end{aligned}
+    $$
+
+    Division by $\lVert H\rVert_p^{p-1}$ proves the claim; the zero case is
+    immediate. To avoid assuming in advance that $H\in L^p$, choose
+    $E_m\uparrow S$ with $\mu(E_m)<\infty$ and set
+    $H_m=\min(H,m)\mathbf{1}_{E_m}$. Since $H_m\leq H$, the same calculation
+    gives
+
+    $$
+    \lVert H_m\rVert_p^p
+    \leq\int_S H_m^{p-1}H\,d\mu
+    \leq A\lVert H_m\rVert_p^{p-1}.
+    $$
+
+    Thus $\lVert H_m\rVert_p\leq A$, and monotone convergence yields
+    $\lVert H\rVert_p\leq A$. Finally, for $p=\infty$, put
+    $g(t)=\lVert f(t,\cdot)\rVert_\infty$. For each $t$ the set
+    $\{x:|f(t,x)|>g(t)\}$ is $\mu$-null. Tonelli's theorem then gives
+    $|f(t,x)|\leq g(t)$ for $\nu$-almost every $t$, for $\mu$-almost every
+    $x$. Consequently,
+
+    $$
+    H(x)
+    \leq\int_T\lVert f(t,\cdot)\rVert_\infty\,d\nu(t),
+    $$
+
+    and taking the essential supremum completes the proof.
 
 !!! remark "Remark (Scaling and the conjugacy relation)"
     <a id="rem-holder-scaling"></a>
