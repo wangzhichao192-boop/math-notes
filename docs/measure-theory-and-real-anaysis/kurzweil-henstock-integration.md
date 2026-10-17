@@ -1746,25 +1746,31 @@ integral on general intervals.
     $$
 
 ??? proof "Proof"
-    Let $K_1,\ldots,K_m$ be the compact-cell components of
-    $I\setminus\operatorname{body}(\Pi)$. On each nonempty $K_j$, Cousin's
-    lemma gives a $\delta|_{K_j}$-fine tagged division $\Pi_j$. Then
+    Complete the underlying partial division of $\Pi$ by compact cells
+    $K_1,\ldots,K_m$ with disjoint interiors (the closures of its nonempty
+    complementary gaps). Fix $\eta>0$. On each $K_j$, choose an
+    $\eta$-adapted gauge for $f|_{K_j}$ and take its minimum with
+    $\delta|_{K_j}$. Cousin's lemma supplies a fine tagged division
+    $\Pi_j$ for this smaller gauge. Then
 
     $$
     \widehat\Pi:=\Pi\cup\Pi_1\cup\cdots\cup\Pi_m
     $$
 
-    is a full $\delta$-fine tagged division of $I$. Finite additivity of the
-    integral shows that the contributions from the complementary cells
-    cancel:
+    is a full $\delta$-fine tagged division of $I$. Finite additivity gives
 
     $$
     \int_I f-S(\widehat\Pi,f)
     =\sum_{(J,x)\in\Pi}
-    \left(\int_J f-f(x)\lambda(J)\right).
+    \left(\int_J f-f(x)\lambda(J)\right)
+    +\sum_{j=1}^m\left(\int_{K_j}f-S(\Pi_j,f|_{K_j})\right).
     $$
 
-    The adaptedness of $\delta$ proves (3).
+    The last sum has absolute value at most $m\eta$, and the left-hand
+    side has absolute value less than $\varepsilon$. The expression in
+    (3) is therefore at most $\varepsilon+m\eta$. Letting $\eta\downarrow0$
+    proves (3). If there are no complementary gaps, adaptedness proves it
+    directly.
 
     For (4), split $\Pi$ into the two partial divisions
 

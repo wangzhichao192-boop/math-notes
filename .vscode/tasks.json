@@ -3,22 +3,24 @@
   "tasks": [
     {
       "label": "mkdocs preview (serve + browser)",
-      "type": "shell",
-      "command": "lsof -ti:8765 | xargs kill 2>/dev/null; ./.venv/bin/mkdocs serve --dev-addr 127.0.0.1:8765 --open",
+      "type": "process",
+      "command": "/bin/bash",
+      "args": ["${workspaceFolder}/启动数学笔记.command"],
       "options": {
         "cwd": "${workspaceFolder}"
       },
       "presentation": {
-        "reveal": "never",
-        "panel": "new",
+        "reveal": "always",
+        "panel": "dedicated",
         "showReuseMessage": false
       },
       "problemMatcher": []
     },
     {
       "label": "stop mkdocs serve",
-      "type": "shell",
-      "command": "pkill -f 'mkdocs serve'",
+      "type": "process",
+      "command": "pkill",
+      "args": ["-f", "mkdocs serve --config-file ${workspaceFolder}/mkdocs.yml --dev-addr"],
       "problemMatcher": []
     }
   ]
