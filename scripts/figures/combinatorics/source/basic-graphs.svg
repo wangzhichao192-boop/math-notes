@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 360" role="img" aria-labelledby="title desc">
+  <title id="title">Complete graphs and a bipartite graph</title>
+  <desc id="desc">Drawings of K3, K4, K5, and a six-cycle with its two bipartition classes colored differently.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.edge{stroke:#475569;stroke-width:3;fill:none}.v{fill:#fff;stroke:#0f766e;stroke-width:3}.x{fill:#dbeafe;stroke:#2563eb;stroke-width:3}.y{fill:#fee2e2;stroke:#dc2626;stroke-width:3}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a}.lbl{font:18px system-ui,sans-serif;fill:#334155;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="250" height="330" rx="16"/>
+  <rect class="panel" x="285" y="15" width="250" height="330" rx="16"/>
+  <rect class="panel" x="555" y="15" width="250" height="330" rx="16"/>
+  <rect class="panel" x="825" y="15" width="280" height="330" rx="16"/>
+  <text class="ttl" x="140" y="50" text-anchor="middle">K₃</text>
+  <path class="edge" d="M140 92L65 250L215 250Z"/>
+  <circle class="v" cx="140" cy="92" r="10"/><circle class="v" cx="65" cy="250" r="10"/><circle class="v" cx="215" cy="250" r="10"/>
+  <text class="ttl" x="410" y="50" text-anchor="middle">K₄</text>
+  <path class="edge" d="M340 105H480V255H340Z M340 105L480 255M480 105L340 255"/>
+  <circle class="v" cx="340" cy="105" r="10"/><circle class="v" cx="480" cy="105" r="10"/><circle class="v" cx="480" cy="255" r="10"/><circle class="v" cx="340" cy="255" r="10"/>
+  <text class="ttl" x="680" y="50" text-anchor="middle">K₅</text>
+  <path class="edge" d="M680 82L760 142L730 245L630 245L600 142Z M680 82L730 245L600 142L760 142L630 245Z"/>
+  <circle class="v" cx="680" cy="82" r="10"/><circle class="v" cx="760" cy="142" r="10"/><circle class="v" cx="730" cy="245" r="10"/><circle class="v" cx="630" cy="245" r="10"/><circle class="v" cx="600" cy="142" r="10"/>
+  <text class="ttl" x="965" y="50" text-anchor="middle">A bipartite C₆</text>
+  <path class="edge" d="M965 82L1040 125L1040 225L965 270L890 225L890 125Z"/>
+  <circle class="x" cx="965" cy="82" r="12"/><circle class="y" cx="1040" cy="125" r="12"/><circle class="x" cx="1040" cy="225" r="12"/><circle class="y" cx="965" cy="270" r="12"/><circle class="x" cx="890" cy="225" r="12"/><circle class="y" cx="890" cy="125" r="12"/>
+  <text class="lbl" x="915" y="315">X</text><circle class="x" cx="940" cy="310" r="8"/><text class="lbl" x="990" y="315">Y</text><circle class="y" cx="1015" cy="310" r="8"/>
+</svg>

@@ -2,9 +2,13 @@
 
 Ramsey theory asks how large a structure must be before every colouring contains a prescribed monochromatic pattern. For example, whenever the edges joining six vertices are coloured red or blue, some three vertices form a triangle whose edges all have the same colour. The colouring is arbitrary; the size of the graph forces the pattern to appear. We study both the size needed to force such patterns and the corresponding questions for infinite sets.
 
+The chapter develops finite Ramsey numbers and their bounds, then infinite Ramsey theorems and the compactness arguments connecting the infinite and finite settings. Applications to arithmetic, order, convergence, and geometry follow. The final section treats the halting problem, with a supplementary application to homogeneous sets.
+
 ## Ramsey Numbers
 
-An edge colouring partitions the edges of a complete graph into colour classes. Ramsey numbers measure the point at which one class must contain the desired graph.
+An edge colouring partitions the edges of a complete graph into colour classes. Ramsey numbers measure the point at which one class must contain the desired graph. The section develops bounds for complete graphs, an exact tree–clique formula, and probabilistic lower bounds.
+
+<a id="complete-graphs"></a>
 
 !!! definition "Definition (Edge colouring)"
     <a id="def-edge-colouring"></a>
@@ -129,7 +133,9 @@ An edge colouring partitions the edges of a complete graph into colour classes. 
     N_3=R\bigl(m,R(m,m)\bigr).
     $$
 
-**Tree–clique Ramsey numbers.** Complete graphs are only one possible target. When one target is a tree, a minimum-degree embedding argument gives an exact answer.
+### Trees and Cliques
+
+Complete graphs are only one possible target. When one target is a tree, a minimum-degree embedding argument gives an exact answer.
 
 !!! definition "Definition (Graph Ramsey number)"
     <a id="def-graph-ramsey-number"></a>
@@ -189,7 +195,9 @@ An edge colouring partitions the edges of a complete graph into colour classes. 
       <figcaption>The lower-bound example uses $m=4,n=3$: two red $K_3$ components with all cross-edges blue. The right panel illustrates the unused-neighbour step in the tree-embedding lemma.</figcaption>
     </figure>
 
-## Random Colourings
+<a id="random-colourings"></a>
+
+### Probabilistic Lower Bounds
 
 An upper bound must control every colouring. For a lower bound it is enough to find one colouring avoiding the targets. The probabilistic method proves such a colouring exists by showing that a random colouring has positive probability of avoiding every bad event.
 
@@ -258,41 +266,9 @@ An upper bound must control every colouring. For a lower bound it is enough to f
 
     To check the final inequality for every $k\ge3$, it holds at $k=3$ since $2^{5/2}<6$, and the ratio of successive terms $2^{1+k/2}/k!$ is $\sqrt2/(k+1)<1$. The [Theorem](#thm-erdos-probabilistic) gives $R(k,k)>n$. Since $R(k,k)$ is an integer, it exceeds $2^{k/2}$ as well.
 
-## Ramsey and Compactness
+## Infinite Ramsey Theory
 
-Monochromatic triangles encode an arithmetic equation, giving Schur's theorem. Infinite Ramsey theory uses repeated thinning to keep an infinite supply of vertices. König's lemma provides a different infinite construction: compatible finite colourings form a tree, and an infinite path turns them into one colouring of a countably infinite graph.
-
-!!! theorem "Theorem (Schur)"
-    <a id="thm-schur-colouring"></a>
-    For every integer $k\ge1$, there is an integer $N\ge1$ such that every $k$-colouring of $[N]=\{1,\ldots,N\}$ contains numbers $x,y,z$ of the same colour with
-
-    $$
-    x+y=z.
-    $$
-
-    The numbers need not be pairwise distinct; in particular, $x=y$ is allowed.
-
-??? proof "Proof"
-    Choose $M$ so that every $k$-colouring of $E(K_M)$ contains a monochromatic triangle, using the [Corollary](#cor-multicolour-ramsey), and put $N=M-1$.
-
-    Given $c:[N]\to\{1,\ldots,k\}$, use $[M]$ as the vertex set of $K_M$ and colour its edges by
-
-    $$
-    \widetilde c(\{a,b\})=c(|a-b|).
-    $$
-
-    All differences lie in $[N]$. Let $a<b<d$ be the vertices of a monochromatic triangle. Then
-
-    $$
-    x=b-a,\qquad y=d-b,\qquad z=d-a
-    $$
-
-    have the same colour, and $x+y=z$.
-
-    <figure markdown="span">
-      ![A monochromatic triangle with edge labels b-a, d-b, and d-a yields Schur's equation](../assets/combinatorics/ramsey-schur.svg)
-      <figcaption>Edge colours come from the colours of the differences. The triangle forces $c(b-a)=c(d-b)=c(d-a)$, and $(b-a)+(d-b)=d-a$.</figcaption>
-    </figure>
+Infinite Ramsey theory uses repeated thinning to keep an infinite supply of vertices. We first establish the graph theorem and then pass from pairs to subsets of arbitrary fixed finite size. Compactness connects these infinite results to their finite counterparts.
 
 !!! lemma "Lemma (Infinite pigeonhole principle)"
     <a id="lem-infinite-pigeonhole"></a>
@@ -300,21 +276,6 @@ Monochromatic triangles encode an arithmetic equation, giving Schur's theorem. I
 
 ??? proof "Proof"
     If every fibre were finite, then $P=\bigcup_{h\in H}f^{-1}(h)$ would be a finite union of finite sets and therefore finite.
-
-!!! definition "Definition (Rooted tree and levels)"
-    <a id="def-rooted-tree"></a>
-    A **rooted tree** is a tree with a chosen vertex $r$, its **root**. The **level** $L_\ell$ consists of vertices at distance $\ell$ from $r$. Each vertex other than $r$ has a unique **parent**, the preceding vertex on its path from $r$; its neighbours one level farther from $r$ are its **children**.
-
-    An **infinite path from the root**, or **ray**, is a sequence $r=v_0,v_1,v_2,\ldots$ of distinct vertices with each $v_{i+1}$ a child of $v_i$.
-
-!!! theorem "Theorem (König's infinity lemma)"
-    <a id="thm-konig-infinity"></a>
-    If a rooted tree is infinite and every level is finite, then it contains an infinite path from the root.
-
-??? proof "Proof"
-    Call a vertex's descendants the vertices whose path from the root passes through it, including the vertex itself. The root has infinitely many descendants. If $v_i$ has infinitely many descendants, its children form a finite set because they belong to the finite next level. All descendants other than $v_i$ lie below these children. At least one child therefore has infinitely many descendants, by the infinite pigeonhole principle. Choose it as $v_{i+1}$.
-
-    Continuing gives $r=v_0,v_1,v_2,\ldots$. Each chosen vertex is in the next level, so the vertices are distinct and consecutive vertices are adjacent. This is the required infinite path.
 
 !!! theorem "Theorem (Infinite Ramsey)"
     <a id="thm-infinite-ramsey"></a>
@@ -341,41 +302,9 @@ Monochromatic triangles encode an arithmetic equation, giving Schur's theorem. I
       <figcaption>Every later selected vertex remains in the earlier reservoir $V_i$, so the colour of $w_iw_j$ for $i\lt j$ depends only on $i$. An infinite subsequence with one base colour is monochromatic.</figcaption>
     </figure>
 
-!!! theorem "Theorem (Finite Ramsey from infinite Ramsey)"
-    <a id="thm-ramsey-compactness"></a>
-    Fix a finite integer $k\ge2$. For every $n\ge1$, there is an integer $m\ge1$ such that every $k$-colouring of $E(K_m)$ contains a monochromatic $K_n$.
+<a id="homogeneous-sets"></a>
 
-??? proof "Proof"
-    The case $n=1$ is immediate, so assume $n\ge2$. Suppose the conclusion fails for this $n$. Then for every $m$ there is a $k$-colouring of $K_m$ with no monochromatic $K_n$.
-
-    Let $G$ be the complete graph on $V=\{v_0,v_1,\ldots\}$, and enumerate its edges as $E=\{e_1,e_2,\ldots\}$. Construct a rooted tree $T$ of partial colourings. A vertex at level $\ell$ is a sequence
-
-    $$
-    (a_1,\ldots,a_\ell)\in\{1,\ldots,k\}^\ell
-    $$
-
-    such that colouring $e_i$ with $a_i$ for $1\le i\le\ell$ creates no monochromatic $K_n$ using only these coloured edges. Here a clique is counted only if all its edges have been coloured. The root is the empty sequence, and the parent of a nonempty sequence is obtained by deleting its last entry.
-
-    Removing a coloured edge cannot create a forbidden clique, so parents are valid vertices. The prefix relation makes $T$ connected and acyclic: every sequence has a unique path to the empty sequence. Thus it is a rooted tree. Level $\ell$ has at most $k^\ell$ vertices.
-
-    Every level is nonempty. The endpoints of $e_1,\ldots,e_\ell$ form a finite vertex set; a sufficiently large finite complete graph has, by the assumed failure, a colouring with no monochromatic $K_n$. Restrict it to these first $\ell$ edges. Hence $T$ has vertices at arbitrarily large levels and is infinite.
-
-    By [Theorem](#thm-konig-infinity), $T$ has an infinite path. The successive prefixes on this path are compatible, so they define a colouring of every edge of $G$.
-
-    This full colouring still has no monochromatic $K_n$: any such clique has finitely many edges, all of which occur among $e_1,\ldots,e_\ell$ for some $\ell$, contradicting the validity of the corresponding prefix. But [Theorem](#thm-infinite-ramsey) gives an infinite monochromatic clique, which contains a $K_n$. This contradiction proves the finite statement.
-
-    <figure markdown="span">
-      ![A prefix tree of finite colourings and an infinite compatible path](../assets/combinatorics/ramsey-compactness-tree.svg)
-      <figcaption>A node records the colours of the first $\ell$ edges; its parent forgets the last colour. Only admissible prefixes are retained. König's lemma chooses compatible prefixes at all levels, yielding one colouring of the infinite graph.</figcaption>
-    </figure>
-
-!!! remark "Remark (Two proofs of finite Ramsey)"
-    <a id="rem-ramsey-two-proofs"></a>
-    The recurrence proves existence directly and gives an explicit numerical upper bound. The infinite-Ramsey proof uses a tree of compatible finite choices and gives existence without a numerical bound. Both arguments are retained because they explain different mechanisms: a finite neighbourhood split and an infinite compatibility construction.
-
-## Homogeneous Sets
-
-Edges are two-element subsets. Replacing pairs by $k$-element subsets gives the general Ramsey theorem. Its applications use a colouring to record a local relation, so that a homogeneous set has one consistent global structure.
+Edges are two-element subsets. Replacing pairs by $k$-element subsets gives the general Ramsey theorem.
 
 !!! notation "Notation (Partition arrows)"
     <a id="notation-partition-arrow"></a>
@@ -440,6 +369,59 @@ Edges are two-element subsets. Replacing pairs by $k$-element subsets gives the 
       <figcaption>Fixing $x_i$ turns a colouring of $(k+1)$-element sets into a colouring of $k$-element sets. After thinning, the colour of a selected $(k+1)$-set depends only on its first index. The dashed spokes group one tuple; they are not independently coloured graph edges.</figcaption>
     </figure>
 
+<a id="ramsey-and-compactness"></a>
+
+### Compactness
+
+König's lemma provides a different infinite construction: compatible finite colourings form a tree, and an infinite path turns them into one colouring of a countably infinite graph. This compactness argument recovers finite Ramsey from infinite Ramsey, first for pairs and then for subsets of any fixed finite size.
+
+!!! definition "Definition (Rooted tree and levels)"
+    <a id="def-rooted-tree"></a>
+    A **rooted tree** is a tree with a chosen vertex $r$, its **root**. The **level** $L_\ell$ consists of vertices at distance $\ell$ from $r$. Each vertex other than $r$ has a unique **parent**, the preceding vertex on its path from $r$; its neighbours one level farther from $r$ are its **children**.
+
+    An **infinite path from the root**, or **ray**, is a sequence $r=v_0,v_1,v_2,\ldots$ of distinct vertices with each $v_{i+1}$ a child of $v_i$.
+
+!!! theorem "Theorem (König's infinity lemma)"
+    <a id="thm-konig-infinity"></a>
+    If a rooted tree is infinite and every level is finite, then it contains an infinite path from the root.
+
+??? proof "Proof"
+    Call a vertex's descendants the vertices whose path from the root passes through it, including the vertex itself. The root has infinitely many descendants. If $v_i$ has infinitely many descendants, its children form a finite set because they belong to the finite next level. All descendants other than $v_i$ lie below these children. At least one child therefore has infinitely many descendants, by the infinite pigeonhole principle. Choose it as $v_{i+1}$.
+
+    Continuing gives $r=v_0,v_1,v_2,\ldots$. Each chosen vertex is in the next level, so the vertices are distinct and consecutive vertices are adjacent. This is the required infinite path.
+
+!!! theorem "Theorem (Finite Ramsey from infinite Ramsey)"
+    <a id="thm-ramsey-compactness"></a>
+    Fix a finite integer $k\ge2$. For every $n\ge1$, there is an integer $m\ge1$ such that every $k$-colouring of $E(K_m)$ contains a monochromatic $K_n$.
+
+??? proof "Proof"
+    The case $n=1$ is immediate, so assume $n\ge2$. Suppose the conclusion fails for this $n$. Then for every $m$ there is a $k$-colouring of $K_m$ with no monochromatic $K_n$.
+
+    Let $G$ be the complete graph on $V=\{v_0,v_1,\ldots\}$, and enumerate its edges as $E=\{e_1,e_2,\ldots\}$. Construct a rooted tree $T$ of partial colourings. A vertex at level $\ell$ is a sequence
+
+    $$
+    (a_1,\ldots,a_\ell)\in\{1,\ldots,k\}^\ell
+    $$
+
+    such that colouring $e_i$ with $a_i$ for $1\le i\le\ell$ creates no monochromatic $K_n$ using only these coloured edges. Here a clique is counted only if all its edges have been coloured. The root is the empty sequence, and the parent of a nonempty sequence is obtained by deleting its last entry.
+
+    Removing a coloured edge cannot create a forbidden clique, so parents are valid vertices. The prefix relation makes $T$ connected and acyclic: every sequence has a unique path to the empty sequence. Thus it is a rooted tree. Level $\ell$ has at most $k^\ell$ vertices.
+
+    Every level is nonempty. The endpoints of $e_1,\ldots,e_\ell$ form a finite vertex set; a sufficiently large finite complete graph has, by the assumed failure, a colouring with no monochromatic $K_n$. Restrict it to these first $\ell$ edges. Hence $T$ has vertices at arbitrarily large levels and is infinite.
+
+    By [Theorem](#thm-konig-infinity), $T$ has an infinite path. The successive prefixes on this path are compatible, so they define a colouring of every edge of $G$.
+
+    This full colouring still has no monochromatic $K_n$: any such clique has finitely many edges, all of which occur among $e_1,\ldots,e_\ell$ for some $\ell$, contradicting the validity of the corresponding prefix. But [Theorem](#thm-infinite-ramsey) gives an infinite monochromatic clique, which contains a $K_n$. This contradiction proves the finite statement.
+
+    <figure markdown="span">
+      ![A prefix tree of finite colourings and an infinite compatible path](../assets/combinatorics/ramsey-compactness-tree.svg)
+      <figcaption>A node records the colours of the first $\ell$ edges; its parent forgets the last colour. Only admissible prefixes are retained. König's lemma chooses compatible prefixes at all levels, yielding one colouring of the infinite graph.</figcaption>
+    </figure>
+
+!!! remark "Remark (Two proofs of finite Ramsey)"
+    <a id="rem-ramsey-two-proofs"></a>
+    The recurrence proves existence directly and gives an explicit numerical upper bound. The infinite-Ramsey proof uses a tree of compatible finite choices and gives existence without a numerical bound. Both arguments are retained because they explain different mechanisms: a finite neighbourhood split and an infinite compatibility construction.
+
 !!! theorem "Theorem (Finite Ramsey for subsets)"
     <a id="thm-finite-ramsey-subsets"></a>
     For all positive integers $k,n,c$, there is a positive integer $m$ such that
@@ -460,6 +442,50 @@ Edges are two-element subsets. Replacing pairs by $k$-element subsets gives the 
 
     Their union defines $f:[\mathbb N]^k\to[c]$, because each finite $k$-set is contained in some initial segment. By [Theorem](#thm-infinite-ramsey-subsets), $f$ has an infinite homogeneous set and therefore a homogeneous $n$-element set. This finite set lies in some initial segment, contradicting the validity of the corresponding node of the path.
 
+## Applications
+
+The applications use a colouring to record a local relation, so that a homogeneous set has one consistent global structure. The relevant relations arise from differences of integers, comparisons in orders and sequences, and orientations of planar triples.
+
+<a id="schurs-theorem"></a>
+
+Monochromatic triangles encode an arithmetic equation, giving Schur's theorem.
+
+!!! theorem "Theorem (Schur)"
+    <a id="thm-schur-colouring"></a>
+    For every integer $k\ge1$, there is an integer $N\ge1$ such that every $k$-colouring of $[N]=\{1,\ldots,N\}$ contains numbers $x,y,z$ of the same colour with
+
+    $$
+    x+y=z.
+    $$
+
+    The numbers need not be pairwise distinct; in particular, $x=y$ is allowed.
+
+??? proof "Proof"
+    Choose $M$ so that every $k$-colouring of $E(K_M)$ contains a monochromatic triangle, using the [Corollary](#cor-multicolour-ramsey), and put $N=M-1$.
+
+    Given $c:[N]\to\{1,\ldots,k\}$, use $[M]$ as the vertex set of $K_M$ and colour its edges by
+
+    $$
+    \widetilde c(\{a,b\})=c(|a-b|).
+    $$
+
+    All differences lie in $[N]$. Let $a<b<d$ be the vertices of a monochromatic triangle. Then
+
+    $$
+    x=b-a,\qquad y=d-b,\qquad z=d-a
+    $$
+
+    have the same colour, and $x+y=z$.
+
+    <figure markdown="span">
+      ![A monochromatic triangle with edge labels b-a, d-b, and d-a yields Schur's equation](../assets/combinatorics/ramsey-schur.svg)
+      <figcaption>Edge colours come from the colours of the differences. The triangle forces $c(b-a)=c(d-b)=c(d-a)$, and $(b-a)+(d-b)=d-a$.</figcaption>
+    </figure>
+
+<a id="order-and-convergence"></a>
+
+For orders and sequences, colour pairs by their comparison relation. Homogeneity then gives a chain, an antichain, or a monotone subsequence.
+
 !!! example "Example (Chains and antichains)"
     <a id="ex-infinite-chain-antichain"></a>
     Every countably infinite partially ordered set contains an infinite chain or an infinite antichain. Here a **chain** is a subset in which every pair of elements is comparable, and an **antichain** is a subset in which no two distinct elements are comparable.
@@ -467,7 +493,26 @@ Edges are two-element subsets. Replacing pairs by $k$-element subsets gives the 
 ??? proof "Proof"
     Colour each two-element subset red if its elements are comparable and blue otherwise. An infinite homogeneous set exists by [Theorem](#thm-infinite-ramsey-subsets) with $k=2$. A red one is a chain; a blue one is an antichain.
 
-**Convex position.** For planar points, the local relation is the orientation of a triple. A homogeneous set for this relation forms a convex polygon.
+!!! example "Example (Infinite monotone subsequences)"
+    <a id="ex-infinite-monotone-subsequence"></a>
+    Every real sequence has an infinite monotone subsequence, where monotone means nondecreasing or nonincreasing, allowing equality.
+
+??? proof "Proof"
+    Given $(a_n)$, colour every pair $\{i,j\}$ with $i<j$ according as
+
+    $$
+    a_i<a_j,\qquad a_i=a_j,\qquad a_i>a_j.
+    $$
+
+    An infinite homogeneous set of indices $n_0<n_1<\cdots$ gives a strictly increasing, constant, or strictly decreasing subsequence, respectively. Each is monotone.
+
+!!! remark "Remark (Bolzano–Weierstrass)"
+    <a id="rem-ramsey-bolzano-weierstrass"></a>
+    For a bounded real sequence, its infinite monotone subsequence is bounded and therefore convergent. This gives the Bolzano–Weierstrass theorem from infinite Ramsey together with monotone convergence for real sequences.
+
+<a id="convex-position"></a>
+
+For planar points, the local relation is the orientation of a triple. A homogeneous set for this relation forms a convex polygon.
 
 !!! definition "Definition (General and convex position)"
     <a id="def-convex-position"></a>
@@ -545,26 +590,11 @@ Edges are two-element subsets. Replacing pairs by $k$-element subsets gives the 
       <figcaption>All ordered triples have the same sign. Every selected point is a vertex of the convex hull; the dashed segment closes the polygon between the endpoints.</figcaption>
     </figure>
 
-!!! example "Example (Infinite monotone subsequences)"
-    <a id="ex-infinite-monotone-subsequence"></a>
-    Every real sequence has an infinite monotone subsequence, where monotone means nondecreasing or nonincreasing, allowing equality.
+<a id="effective-colourings"></a>
 
-??? proof "Proof"
-    Given $(a_n)$, colour every pair $\{i,j\}$ with $i<j$ according as
+## The Halting Problem
 
-    $$
-    a_i<a_j,\qquad a_i=a_j,\qquad a_i>a_j.
-    $$
-
-    An infinite homogeneous set of indices $n_0<n_1<\cdots$ gives a strictly increasing, constant, or strictly decreasing subsequence, respectively. Each is monotone.
-
-!!! remark "Remark (Bolzano–Weierstrass)"
-    <a id="rem-ramsey-bolzano-weierstrass"></a>
-    For a bounded real sequence, its infinite monotone subsequence is bounded and therefore convergent. This gives the Bolzano–Weierstrass theorem from infinite Ramsey together with monotone convergence for real sequences.
-
-## Effective Colourings
-
-The existence arguments repeatedly select an infinite colour class. They do not provide an algorithm for finding one. The next construction shows that this limitation can be intrinsic: a computable colouring of triples can force every infinite homogeneous set to be noncomputable.
+The halting problem asks whether program termination can be decided algorithmically. We introduce effective program codes and use diagonalisation to exhibit a noncomputable set of halting computations. A supplementary application then connects this obstruction to homogeneous sets in Ramsey theory.
 
 !!! definition "Definition (Computable functions and sets)"
     <a id="def-computable-function"></a>
@@ -607,6 +637,12 @@ The existence arguments repeatedly select an infinite colour class. They do not 
     $$
 
     a contradiction.
+
+If termination could be decided for arbitrary programs and inputs, one could decide membership in $H$: first decide whether $P_n(n)$ halts, and, if it does, run it and check whether its output is $0$. The noncomputability of $H$ therefore rules out such a procedure.
+
+### Noncomputable Homogeneous Sets
+
+The existence arguments repeatedly select an infinite colour class. They do not provide an algorithm for finding one. The next construction shows that this limitation can be intrinsic: a computable colouring of triples can force every infinite homogeneous set to be noncomputable.
 
 Does every computable colouring have an infinite homogeneous set that can itself be computed? The following construction gives a negative answer, already for two colours on triples.
 

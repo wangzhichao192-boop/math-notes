@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title"><title id="title">The board convention for membership arrows</title><style>
+.panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.node{fill:white;stroke:#334155;stroke-width:2.5}
+.edge{fill:none;stroke:#345d78;stroke-width:3;marker-end:url(#arrow)}
+.title{font:600 23px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}
+.label{font:italic 25px Georgia,serif;fill:#0f172a;text-anchor:middle;dominant-baseline:middle}
+.text{font:20px system-ui,sans-serif;fill:#334155;text-anchor:middle}
+.small{font:17px system-ui,sans-serif;fill:#475569;text-anchor:middle}
+.warn{fill:#9a5c13}.soft{fill:#e8f3f1;stroke:#4f8b83;stroke-width:2}
+</style><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#345d78"/></marker></defs><rect class="panel" x="10" y="10" width="880" height="340" rx="12"/><text class="title" x="450" y="48">A set points to its elements</text><path class="edge" d="M 144.390891189312 234.80115501113335 L 224.22404515430858 151.64161963092855"/><path class="edge" d="M 345.60910881068804 234.80115501113335 L 265.7759548456914 151.64161963092855"/><circle class="node" cx="245" cy="130" r="25"/><text class="label" x="245" y="131">a</text><circle class="node" cx="125" cy="255" r="25"/><text class="label" x="125" y="256">b</text><circle class="node" cx="365" cy="255" r="25"/><text class="label" x="365" y="256">c</text><text class="text" x="650" y="125">b → a means a ∈ b</text><text class="text" x="650" y="170">c → a means a ∈ c</text><text class="text" x="650" y="235">El(b) = El(c) = {a}meta</text><text class="small" x="650" y="278">Two vertices, one element collection</text></svg>

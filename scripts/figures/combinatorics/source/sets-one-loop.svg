@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" role="img" aria-labelledby="title"><title id="title">The one-loop counterexample to empty-set existence</title><style>
+.panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.node{fill:white;stroke:#334155;stroke-width:2.5}
+.edge{fill:none;stroke:#345d78;stroke-width:3;marker-end:url(#arrow)}
+.title{font:600 23px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}
+.label{font:italic 25px Georgia,serif;fill:#0f172a;text-anchor:middle;dominant-baseline:middle}
+.text{font:20px system-ui,sans-serif;fill:#334155;text-anchor:middle}
+.small{font:17px system-ui,sans-serif;fill:#475569;text-anchor:middle}
+.warn{fill:#9a5c13}.soft{fill:#e8f3f1;stroke:#4f8b83;stroke-width:2}
+</style><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#345d78"/></marker></defs><rect class="panel" x="10" y="10" width="740" height="270" rx="12"/><text class="title" x="380" y="49">A structure with no empty set</text><path class="edge" d="M 156 141 C 80 54 275 54 201 141"/><circle class="node" cx="180" cy="160" r="25"/><text class="label" x="180" y="161">q</text><text class="small" x="180" y="225">q ∈ q</text><text class="text" x="495" y="125">M has one vertex: q</text><text class="text" x="495" y="170">⋃q = q       P(q) = q</text><text class="small" x="495" y="220">No vertex has zero outgoing neighbours.</text></svg>

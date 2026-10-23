@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 420" role="img" aria-labelledby="title desc">
+  <title id="title">Toggling an augmenting path</title>
+  <desc id="desc">Before toggling, two blue matching edges alternate with three red unmatched edges along a path. After toggling, the three formerly unmatched edges form a larger matching.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.m{stroke:#2563eb;stroke-width:8}.u{stroke:#dc2626;stroke-width:6;stroke-dasharray:11 7}.new{stroke:#16a34a;stroke-width:8}.v{fill:#fff;stroke:#0f172a;stroke-width:3}.free{fill:#fef2f2;stroke:#dc2626;stroke-width:4}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}.lbl{font:18px system-ui,sans-serif;fill:#334155;text-anchor:middle}.legend{font:17px system-ui,sans-serif;fill:#334155}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="510" height="390" rx="16"/><rect class="panel" x="595" y="15" width="510" height="390" rx="16"/>
+  <text class="ttl" x="270" y="50">Before: |M| = 2</text><text class="ttl" x="850" y="50">After toggling: |M △ E(P)| = 3</text>
+  <g>
+    <line class="u" x1="125" y1="105" x2="410" y2="105"/><line class="m" x1="410" y1="105" x2="125" y2="210"/><line class="u" x1="125" y1="210" x2="410" y2="210"/><line class="m" x1="410" y1="210" x2="125" y2="315"/><line class="u" x1="125" y1="315" x2="410" y2="315"/>
+    <circle class="free" cx="125" cy="105" r="12"/><circle class="v" cx="125" cy="210" r="12"/><circle class="v" cx="125" cy="315" r="12"/><circle class="v" cx="410" cy="105" r="12"/><circle class="v" cx="410" cy="210" r="12"/><circle class="free" cx="410" cy="315" r="12"/>
+    <text class="lbl" x="92" y="111">x₁</text><text class="lbl" x="92" y="216">x₂</text><text class="lbl" x="92" y="321">x₃</text><text class="lbl" x="443" y="111">y₁</text><text class="lbl" x="443" y="216">y₂</text><text class="lbl" x="443" y="321">y₃</text>
+  </g>
+  <g>
+    <line class="new" x1="705" y1="105" x2="990" y2="105"/><line stroke="#cbd5e1" stroke-width="4" x1="990" y1="105" x2="705" y2="210"/><line class="new" x1="705" y1="210" x2="990" y2="210"/><line stroke="#cbd5e1" stroke-width="4" x1="990" y1="210" x2="705" y2="315"/><line class="new" x1="705" y1="315" x2="990" y2="315"/>
+    <circle class="v" cx="705" cy="105" r="12"/><circle class="v" cx="705" cy="210" r="12"/><circle class="v" cx="705" cy="315" r="12"/><circle class="v" cx="990" cy="105" r="12"/><circle class="v" cx="990" cy="210" r="12"/><circle class="v" cx="990" cy="315" r="12"/>
+    <text class="lbl" x="672" y="111">x₁</text><text class="lbl" x="672" y="216">x₂</text><text class="lbl" x="672" y="321">x₃</text><text class="lbl" x="1023" y="111">y₁</text><text class="lbl" x="1023" y="216">y₂</text><text class="lbl" x="1023" y="321">y₃</text>
+  </g>
+  <text class="legend" x="115" y="380">blue = M</text><text class="legend" x="300" y="380">red dashed = E(P) \ M</text><text class="legend" x="760" y="380">green = enlarged matching</text>
+</svg>

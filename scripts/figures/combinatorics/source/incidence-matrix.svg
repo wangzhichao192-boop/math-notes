@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" role="img" aria-labelledby="title desc">
+  <title id="title">An oriented graph and its incidence matrix</title>
+  <desc id="desc">The graph has a four-vertex component with four directed edges and a two-vertex component with one directed edge. The corresponding six by five incidence matrix is shown.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#475569"/></marker>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.edge{fill:none;stroke:#475569;stroke-width:4;marker-end:url(#arrow)}.v{fill:#fff;stroke:#0f766e;stroke-width:3}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}.lbl{font:18px system-ui,sans-serif;fill:#334155;text-anchor:middle}.elbl{font:italic 18px Georgia,serif;fill:#be123c;text-anchor:middle}.cell{fill:#fff;stroke:#cbd5e1}.num{font:19px ui-monospace,monospace;fill:#0f172a;text-anchor:middle;dominant-baseline:central}.head{font:italic 18px Georgia,serif;fill:#334155;text-anchor:middle;dominant-baseline:central}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="420" height="440" rx="16"/><rect class="panel" x="455" y="15" width="650" height="440" rx="16"/>
+  <text class="ttl" x="225" y="52">Chosen edge directions</text><text class="ttl" x="780" y="52">Incidence matrix B</text>
+  <path class="edge" d="M210 90L100 225"/><path class="edge" d="M210 90L325 225"/><path class="edge" d="M100 225L325 225"/><path class="edge" d="M100 225L210 330"/><path class="edge" d="M105 395L320 395"/>
+  <g><circle class="v" cx="210" cy="90" r="11"/><circle class="v" cx="100" cy="225" r="11"/><circle class="v" cx="210" cy="330" r="11"/><circle class="v" cx="325" cy="225" r="11"/><circle class="v" cx="105" cy="395" r="11"/><circle class="v" cx="320" cy="395" r="11"/></g>
+  <text class="lbl" x="210" y="78">v₁</text><text class="lbl" x="75" y="230">v₂</text><text class="lbl" x="210" y="360">v₃</text><text class="lbl" x="350" y="230">v₄</text><text class="lbl" x="105" y="430">v₅</text><text class="lbl" x="320" y="430">v₆</text>
+  <text class="elbl" x="137" y="135">e₁</text><text class="elbl" x="283" y="135">e₂</text><text class="elbl" x="210" y="212">e₃</text><text class="elbl" x="138" y="302">e₄</text><text class="elbl" x="213" y="385">e₅</text>
+  <g transform="translate(565,85)">
+    <text class="head" x="55" y="-22"></text><text class="head" x="115" y="-22">e₁</text><text class="head" x="175" y="-22">e₂</text><text class="head" x="235" y="-22">e₃</text><text class="head" x="295" y="-22">e₄</text><text class="head" x="355" y="-22">e₅</text>
+    <text class="head" x="35" y="30">v₁</text><text class="head" x="35" y="82">v₂</text><text class="head" x="35" y="134">v₃</text><text class="head" x="35" y="186">v₄</text><text class="head" x="35" y="238">v₅</text><text class="head" x="35" y="290">v₆</text>
+    <g>
+      <path class="cell" d="M85 4H385V316H85Z M145 4V316M205 4V316M265 4V316M325 4V316 M85 56H385M85 108H385M85 160H385M85 212H385M85 264H385"/>
+      <text class="num" x="115" y="30">−1</text><text class="num" x="175" y="30">−1</text><text class="num" x="235" y="30">0</text><text class="num" x="295" y="30">0</text><text class="num" x="355" y="30">0</text>
+      <text class="num" x="115" y="82">1</text><text class="num" x="175" y="82">0</text><text class="num" x="235" y="82">−1</text><text class="num" x="295" y="82">−1</text><text class="num" x="355" y="82">0</text>
+      <text class="num" x="115" y="134">0</text><text class="num" x="175" y="134">0</text><text class="num" x="235" y="134">0</text><text class="num" x="295" y="134">1</text><text class="num" x="355" y="134">0</text>
+      <text class="num" x="115" y="186">0</text><text class="num" x="175" y="186">1</text><text class="num" x="235" y="186">1</text><text class="num" x="295" y="186">0</text><text class="num" x="355" y="186">0</text>
+      <text class="num" x="115" y="238">0</text><text class="num" x="175" y="238">0</text><text class="num" x="235" y="238">0</text><text class="num" x="295" y="238">0</text><text class="num" x="355" y="238">−1</text>
+      <text class="num" x="115" y="290">0</text><text class="num" x="175" y="290">0</text><text class="num" x="235" y="290">0</text><text class="num" x="295" y="290">0</text><text class="num" x="355" y="290">1</text>
+    </g>
+  </g>
+</svg>

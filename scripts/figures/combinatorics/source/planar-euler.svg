@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 430" role="img" aria-labelledby="title desc">
+  <title id="title">Faces of a plane K4 and a face boundary that traverses a bridge twice</title>
+  <desc id="desc">The left panel is a crossing-free embedding of K4 with four faces. The right panel is a triangle with a bridge drawn into its interior face; that face has boundary length five because the bridge is traversed in both directions.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.edge{stroke:#334155;stroke-width:4;fill:none}.bridge{stroke:#be123c;stroke-width:6}.v{fill:#fff;stroke:#0f766e;stroke-width:3}.face1{fill:#dbeafe}.face2{fill:#dcfce7}.face3{fill:#fef3c7}.ttl{font:600 23px system-ui,sans-serif;fill:#0f172a}.lbl{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}.walk{stroke:#7c3aed;stroke-width:3;fill:none;stroke-dasharray:8 6}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#7c3aed"/></marker>
+  </defs>
+  <rect class="panel" x="15" y="15" width="525" height="400" rx="16"/><rect class="panel" x="580" y="15" width="525" height="400" rx="16"/>
+  <text class="ttl" x="278" y="50" text-anchor="middle">A plane embedding of K₄</text>
+  <path class="face1" d="M275 80L100 320L275 225Z"/><path class="face2" d="M275 80L450 320L275 225Z"/><path class="face3" d="M100 320L450 320L275 225Z"/>
+  <path class="edge" d="M275 80L100 320H450Z M275 80L275 225M100 320L275 225L450 320"/>
+  <circle class="v" cx="275" cy="80" r="11"/><circle class="v" cx="100" cy="320" r="11"/><circle class="v" cx="450" cy="320" r="11"/><circle class="v" cx="275" cy="225" r="11"/>
+  <text class="lbl" x="205" y="190">F₁</text><text class="lbl" x="345" y="190">F₂</text><text class="lbl" x="275" y="300">F₃</text><text class="lbl" x="470" y="105">F₀</text>
+  <text class="lbl" x="278" y="380">v = 4, e = 6, f = 4</text>
+  <text class="ttl" x="842" y="50" text-anchor="middle">A boundary walk may repeat an edge</text>
+  <path class="edge" d="M720 105L650 285H900Z"/><path class="bridge" d="M720 105L750 215"/>
+  <circle class="v" cx="720" cy="105" r="11"/><circle class="v" cx="650" cy="285" r="11"/><circle class="v" cx="900" cy="285" r="11"/><circle class="v" cx="750" cy="215" r="11"/>
+  <text class="lbl" x="710" y="82">a</text><text class="lbl" x="625" y="310">b</text><text class="lbl" x="925" y="310">c</text><text class="lbl" x="775" y="220">d</text>
+  <path class="walk" marker-end="url(#arrow)" d="M711 119C680 155 655 220 654 274C720 300 835 300 893 277C850 205 790 135 729 111C730 145 740 180 749 207C740 175 730 140 716 115"/>
+  <text class="lbl" x="842" y="350">a,b,c,a,d,a</text><text class="lbl" x="842" y="382">ℓ(F) = 5</text>
+</svg>

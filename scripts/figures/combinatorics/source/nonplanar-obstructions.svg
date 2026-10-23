@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 430" role="img" aria-labelledby="title desc">
+  <title id="title">The Kuratowski obstruction graphs K5 and K3,3</title>
+  <desc id="desc">K5 has ten edges, violating the planar simple graph bound three v minus six. K3,3 has nine edges and no triangles, violating the triangle-free planar bound two v minus four.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.edge{stroke:#475569;stroke-width:3;fill:none}.v{fill:#fff;stroke:#0f766e;stroke-width:3}.x{fill:#dbeafe;stroke:#2563eb;stroke-width:3}.y{fill:#fee2e2;stroke:#dc2626;stroke-width:3}.ttl{font:600 25px system-ui,sans-serif;fill:#0f172a}.note{font:21px system-ui,sans-serif;fill:#334155;text-anchor:middle}.bad{font:600 23px system-ui,sans-serif;fill:#be123c;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="525" height="400" rx="16"/><rect class="panel" x="580" y="15" width="525" height="400" rx="16"/>
+  <text class="ttl" x="278" y="52" text-anchor="middle">K₅</text>
+  <path class="edge" d="M278 78L415 178L362 335L194 335L141 178Z M278 78L362 335L141 178L415 178L194 335Z"/>
+  <circle class="v" cx="278" cy="78" r="11"/><circle class="v" cx="415" cy="178" r="11"/><circle class="v" cx="362" cy="335" r="11"/><circle class="v" cx="194" cy="335" r="11"/><circle class="v" cx="141" cy="178" r="11"/>
+  <text class="note" x="278" y="375">v = 5, e = 10</text><text class="bad" x="278" y="407">10 &gt; 3·5 − 6</text>
+  <text class="ttl" x="842" y="52" text-anchor="middle">K₃,₃</text>
+  <path class="edge" d="M690 110L990 110M690 110L990 210M690 110L990 310M690 210L990 110M690 210L990 210M690 210L990 310M690 310L990 110M690 310L990 210M690 310L990 310"/>
+  <circle class="x" cx="690" cy="110" r="12"/><circle class="x" cx="690" cy="210" r="12"/><circle class="x" cx="690" cy="310" r="12"/><circle class="y" cx="990" cy="110" r="12"/><circle class="y" cx="990" cy="210" r="12"/><circle class="y" cx="990" cy="310" r="12"/>
+  <text class="note" x="842" y="360">v = 6, e = 9; triangle-free</text><text class="bad" x="842" y="402">9 &gt; 2·6 − 4</text>
+</svg>

@@ -171,6 +171,7 @@ nav:
       - "Inclusion–Exclusion and Restricted Counting": combinatorics/inclusion-exclusion.md
       - "Graph Theory": combinatorics/graphy-theorem.md
       - "Ramsey Theory": combinatorics/ramsey-theory.md
+      - "Axiomatic Set Theory": combinatorics/axiomatic-set-theory.md
   - "常微分方程":
       - ode/index.md
       - "Basic Concepts": ode/models-geometry-and-well-posedness.md

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 420" role="img" aria-labelledby="title desc">
+  <title id="title">Hall's neighbourhood condition</title>
+  <desc id="desc">One bipartite graph has three selected vertices and four available neighbours, allowing three disjoint matches. Another has three selected vertices but only two neighbours, so saturation is impossible.</desc>
+  <defs>
+    <style>
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}.edge{stroke:#94a3b8;stroke-width:3}.match{stroke:#16a34a;stroke-width:7}.v{fill:#fff;stroke:#334155;stroke-width:3}.sel{fill:#dbeafe;stroke:#2563eb;stroke-width:3}.nei{fill:#dcfce7;stroke:#16a34a;stroke-width:3}.bad{fill:#fee2e2;stroke:#dc2626;stroke-width:3}.zone{fill:none;stroke:#2563eb;stroke-width:3;stroke-dasharray:10 7}.ttl{font:600 24px system-ui,sans-serif;fill:#0f172a;text-anchor:middle}.lbl{font:19px system-ui,sans-serif;fill:#334155;text-anchor:middle}.goodtxt{font:600 20px system-ui,sans-serif;fill:#15803d;text-anchor:middle}.badtxt{font:600 20px system-ui,sans-serif;fill:#be123c;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="panel" x="15" y="15" width="535" height="390" rx="16"/><rect class="panel" x="570" y="15" width="535" height="390" rx="16"/>
+  <text class="ttl" x="282" y="50">Enough neighbours</text><text class="ttl" x="837" y="50">A deficient set</text>
+  <ellipse class="zone" cx="140" cy="220" rx="70" ry="145"/><ellipse class="zone" cx="420" cy="220" rx="70" ry="165"/>
+  <g>
+    <line class="edge" x1="140" y1="120" x2="420" y2="90"/><line class="edge" x1="140" y1="120" x2="420" y2="175"/><line class="edge" x1="140" y1="220" x2="420" y2="175"/><line class="edge" x1="140" y1="220" x2="420" y2="265"/><line class="edge" x1="140" y1="320" x2="420" y2="265"/><line class="edge" x1="140" y1="320" x2="420" y2="350"/>
+    <line class="match" x1="140" y1="120" x2="420" y2="90"/><line class="match" x1="140" y1="220" x2="420" y2="175"/><line class="match" x1="140" y1="320" x2="420" y2="265"/>
+    <circle class="sel" cx="140" cy="120" r="12"/><circle class="sel" cx="140" cy="220" r="12"/><circle class="sel" cx="140" cy="320" r="12"/><circle class="nei" cx="420" cy="90" r="12"/><circle class="nei" cx="420" cy="175" r="12"/><circle class="nei" cx="420" cy="265" r="12"/><circle class="nei" cx="420" cy="350" r="12"/>
+  </g>
+  <text class="lbl" x="140" y="390">S ⊆ X</text><text class="lbl" x="420" y="390">N(S) ⊆ Y</text><text class="goodtxt" x="282" y="82">|N(S)| = 4 ≥ 3 = |S|</text>
+  <ellipse class="zone" cx="695" cy="220" rx="70" ry="145"/><ellipse fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="10 7" cx="980" cy="220" rx="65" ry="105"/>
+  <g>
+    <line class="edge" x1="695" y1="120" x2="980" y2="170"/><line class="edge" x1="695" y1="120" x2="980" y2="270"/><line class="edge" x1="695" y1="220" x2="980" y2="170"/><line class="edge" x1="695" y1="220" x2="980" y2="270"/><line class="edge" x1="695" y1="320" x2="980" y2="170"/><line class="edge" x1="695" y1="320" x2="980" y2="270"/>
+    <circle class="sel" cx="695" cy="120" r="12"/><circle class="sel" cx="695" cy="220" r="12"/><circle class="sel" cx="695" cy="320" r="12"/><circle class="bad" cx="980" cy="170" r="12"/><circle class="bad" cx="980" cy="270" r="12"/>
+  </g>
+  <text class="lbl" x="695" y="390">S ⊆ X</text><text class="lbl" x="980" y="350">N(S)</text><text class="badtxt" x="837" y="82">|N(S)| = 2 &lt; 3 = |S|</text>
+</svg>
