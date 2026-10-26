@@ -3,8 +3,11 @@
 Absolute integrability controls the total size of local integrals, whereas
 ordinary KH-integrability can depend on cancellation. We develop a criterion
 for absolute integrability, prove that integration commutes with monotone
-limits when the integrals are bounded, and use indicator functions to define Lebesgue measure for
-integrable sets. Countable additivity follows from monotone convergence.
+limits when the integrals are bounded, and use indicator functions to define
+Lebesgue measure. The passage from integrable sets to locally integrable
+indicators permits infinite measure while retaining countable additivity.
+Translation invariance then leads to the construction of nonmeasurable
+Vitali sets.
 
 Throughout, $I$ denotes a compact cell unless another interval is specified,
 and $\lambda(J)$ denotes the length of a compact cell $J$.
@@ -675,12 +678,16 @@ integrals and a finite pointwise limit, also suffices.
     The two suprema commute because both sides are the supremum of the
     same family indexed by $(K,n)$. Add back the integrable function $f_0$.
 
-## Lebesgue Measure
+## Integrable Sets
+
+<a id="lebesgue-measure"></a>
 
 Indicator functions translate set operations into operations on functions.
 Their integrals define the measure of integrable sets; monotone convergence
 then turns finite additivity into countable additivity when the total measure
-is finite. At this stage, “integrable set” is a finite-measure notion.
+is finite. Limit properties, elementary examples, and translation invariance
+are first established for these finite-measure sets; the next section removes
+the finiteness restriction.
 
 !!! definition "Definition (Monotone and disjoint sequences of sets)"
     <a id="def-monotone-sets"></a>
@@ -792,8 +799,7 @@ is finite. At this stage, “integrable set” is a finite-measure notion.
     **Positivity and differences.** Since $\mathbf1_A\geq0$, (2) follows
     from positivity. For $A\subseteq B$, the indicator identity and linearity
     give
-    $\int_{\mathbb R}\mathbf1_{B\setminus A}
-      =\mathcal L^1(B)-\mathcal L^1(A)$.
+    $\int_{\mathbb R}\mathbf1_{B\setminus A} =\mathcal L^1(B)-\mathcal L^1(A)$.
     The left side is nonnegative, proving (3).
 
     **Unions and intersections.** An integrable indicator is absolutely
@@ -815,6 +821,31 @@ is finite. At this stage, “integrable set” is a finite-measure notion.
 
     The finite sum is integrable by linearity, proving (5).
 
+!!! theorem "Theorem (Continuity from below for integrable sets)"
+    <a id="thm-continuity-below-integrable"></a>
+    Let $(A_n)$ be an increasing sequence of integrable sets. If
+    $\sup_n\mathcal L^1(A_n)<\infty$, then $A=\bigcup_nA_n$ is integrable and
+
+    $$
+    \mathcal L^1(A)=\lim_{n\to\infty}\mathcal L^1(A_n)
+       =\sup_n\mathcal L^1(A_n).
+    $$
+
+??? proof "Proof"
+    The functions $\mathbf1_{A_n}$ are KH-integrable on $\mathbb R$,
+    satisfy $\mathbf1_{A_n}\leq\mathbf1_{A_{n+1}}$, and converge pointwise
+    to $\mathbf1_A$. Their integrals are bounded above by hypothesis.
+    [Monotone convergence](#cor-monotone-convergence-general) therefore gives
+
+    $$
+    \mathbf1_A\in\operatorname{KH}(\mathbb R),\qquad
+    \int_{\mathbb R}\mathbf1_A
+       =\lim_{n\to\infty}\int_{\mathbb R}\mathbf1_{A_n}
+       =\lim_{n\to\infty}\mathcal L^1(A_n).
+    $$
+
+    The limit is the supremum because the measures form an increasing sequence.
+
 !!! theorem "Theorem (Countable additivity for integrable sets)"
     <a id="thm-countable-additivity"></a>
     Let $(A_n)_{n\geq1}$ be a pairwise disjoint sequence of integrable
@@ -827,10 +858,11 @@ is finite. At this stage, “integrable set” is a finite-measure notion.
     $$
 
 ??? proof "Proof"
+    ![Successive finite unions of pairwise disjoint sets](figures/disjoint-partial-unions.svg)
+
     Put $B_N=\bigcup_{n=1}^NA_n$ and $A=\bigcup_{n=1}^\infty A_n$.
     Finite additivity gives $B_N$ integrable and
-    $\int_{\mathbb R}\mathbf1_{B_N}
-       =\sum_{n=1}^N\mathcal L^1(A_n)$.
+    $\int_{\mathbb R}\mathbf1_{B_N} =\sum_{n=1}^N\mathcal L^1(A_n)$.
     Also $B_N\uparrow A$, so $\mathbf1_{B_N}\uparrow\mathbf1_A$ pointwise.
     The partial sums of measures are bounded by the assumed convergent
     series. Apply [Corollary](#cor-monotone-convergence-general) on
@@ -841,3 +873,802 @@ is finite. At this stage, “integrable set” is a finite-measure notion.
     =\lim_{N\to\infty}\int_{\mathbb R}\mathbf1_{B_N}
     =\sum_{n=1}^{\infty}\mathcal L^1(A_n).
     $$
+
+!!! theorem "Theorem (Countable subadditivity for integrable sets)"
+    <a id="thm-subadditivity-integrable"></a>
+    Let $A$ and $A_n$, $n\geq1$, be integrable sets such that
+    $A\subseteq\bigcup_{n\geq1}A_n$. Then
+
+    $$
+    \mathcal L^1(A)\leq\sum_{n=1}^{\infty}\mathcal L^1(A_n).
+    $$
+
+??? proof "Proof"
+    If the series on the right diverges to $+\infty$, the inequality is
+    immediate. Otherwise put
+
+    $$
+    E_1=A\cap A_1,\qquad
+    E_n=A\cap\left(A_n\setminus\bigcup_{k=1}^{n-1}A_k\right)
+       \quad(n\geq2).
+    $$
+
+    Finite unions, intersections, and differences of integrable sets are
+    integrable. Thus each $E_n$ is integrable, the $E_n$ are pairwise
+    disjoint, and $A=\bigcup_nE_n$. Also $E_n\subseteq A_n$, so
+    $\sum_n\mathcal L^1(E_n)\leq\sum_n\mathcal L^1(A_n)<\infty$.
+    [Countable additivity](#thm-countable-additivity) gives
+
+    $$
+    \mathcal L^1(A)=\sum_{n=1}^{\infty}\mathcal L^1(E_n)
+       \leq\sum_{n=1}^{\infty}\mathcal L^1(A_n).
+    $$
+
+!!! corollary "Corollary (Countable unions inside an integrable set)"
+    <a id="cor-union-integrable-bound"></a>
+    If each $A_n$ is integrable and $A_n\subseteq B$ for an integrable
+    set $B$, then $\bigcup_nA_n$ is integrable.
+
+??? proof "Proof"
+    The finite unions $C_N=\bigcup_{n=1}^NA_n$ are integrable, increase
+    to $\bigcup_nA_n$, and satisfy $\mathcal L^1(C_N)\leq\mathcal L^1(B)$.
+    Apply [continuity from below](#thm-continuity-below-integrable).
+
+!!! theorem "Theorem (Continuity from above for integrable sets)"
+    <a id="thm-continuity-above-integrable"></a>
+    If $(A_n)_{n\geq1}$ is a decreasing sequence of integrable sets, then
+    $A=\bigcap_{n\geq1}A_n$ is integrable and
+
+    $$
+    \mathcal L^1(A)=\lim_{n\to\infty}\mathcal L^1(A_n)
+       =\inf_n\mathcal L^1(A_n).
+    $$
+
+??? proof "Proof"
+    **Local complements.** Fix a compact cell $I$. Although
+    $A_n^c=\mathbb R\setminus A_n$ need not be integrable, the sets
+    $I\cap A_n^c=I\setminus A_n$ are integrable and increase with $n$.
+    Their measures are bounded by $\mathcal L^1(I)$, and
+
+    $$
+    \bigcup_n(I\cap A_n^c)=I\setminus\bigcap_nA_n=I\setminus A.
+    $$
+
+    Continuity from below makes $I\setminus A$ integrable. Its complement
+    within $I$ is $I\cap A$, which is therefore integrable as well.
+    Since $I\cap A\subseteq I\cap A_1$,
+
+    $$
+    0\leq\int_I\mathbf1_A
+       =\mathcal L^1(I\cap A)\leq\mathcal L^1(A_1).
+    $$
+
+    The [nonnegative integrability criterion](#lem-nonnegative-general-interval)
+    now gives $\mathbf1_A\in\operatorname{KH}(\mathbb R)$.
+
+    **The limit of the measures.** The integrable sets
+    $C_n=A_1\setminus A_n$ increase to $A_1\setminus A$, and their
+    measures are bounded by $\mathcal L^1(A_1)$. Applying continuity
+    from below once more yields
+
+    $$
+    \begin{aligned}
+    \mathcal L^1(A_1)-\mathcal L^1(A)
+    &=\mathcal L^1(A_1\setminus A)\\
+    &=\lim_{n\to\infty}\mathcal L^1(A_1\setminus A_n)\\
+    &=\mathcal L^1(A_1)-\lim_{n\to\infty}\mathcal L^1(A_n).
+    \end{aligned}
+    $$
+
+    Subtracting the finite number $\mathcal L^1(A_1)$ proves the formula.
+
+!!! theorem "Theorem (Elementary integrable sets)"
+    <a id="thm-elementary-integrable-sets"></a>
+    Every countable subset of $\mathbb R$ is integrable with measure zero.
+    Every bounded open subset of $\mathbb R$ and every compact subset of
+    $\mathbb R$ is integrable.
+
+??? proof "Proof"
+    **Countable sets.** Let $A$ be countable. On every compact cell $I$,
+    $\mathbf1_A|_I$ differs from the zero function on a countable set.
+    [Invariance under countable modification](kurzweil-henstock-integration.md#thm-1-10-2)
+    gives $\mathbf1_A|_I\in\operatorname{KH}(I)$ and
+    $\int_I\mathbf1_A=0$. The
+    [nonnegative integrability criterion](#lem-nonnegative-general-interval)
+    then gives $\mathbf1_A\in\operatorname{KH}(\mathbb R)$ with integral zero.
+
+    **Bounded open sets.** Let $O$ be bounded and open, and choose a
+    compact cell $I$ with $O\subseteq\operatorname{int}(I)$.
+    Write $O$ as the union of its pairwise disjoint open interval components:
+
+    $$
+    O=\bigcup_{n\in N}J_n,\qquad N\subseteq\mathbb N_+.
+    $$
+
+    To obtain these components, for each $x\in O$ take the union of all
+    open intervals containing $x$ and contained in $O$. This union is an
+    open interval; two such intervals are either equal or disjoint.
+    Each contains a rational number, and assigning its first rational in
+    a fixed enumeration of $\mathbb Q$ shows that the family is countable.
+    Boundedness of $O$ makes each $J_n$ a bounded interval and hence an
+    integrable set. For every finite $F\subseteq N$, finite additivity
+    and monotonicity give
+
+    $$
+    \sum_{n\in F}\mathcal L^1(J_n)
+       =\mathcal L^1\!\left(\bigcup_{n\in F}J_n\right)
+       \leq\mathcal L^1(I).
+    $$
+
+    Thus $\sum_{n\in N}\mathcal L^1(J_n)\leq\mathcal L^1(I)<\infty$.
+    [Countable additivity](#thm-countable-additivity) proves integrability
+    of $O$; the empty and finite families are included.
+
+    **Compact sets.** Let $K$ be compact and choose a bounded open interval
+    $J$ containing $K$. Since $K$ is closed, $J\setminus K$ is bounded and
+    open, hence integrable by the preceding part. Therefore
+
+    $$
+    K=J\setminus(J\setminus K)
+    $$
+
+    is integrable by the difference property.
+
+!!! definition "Definition (Translation)"
+    <a id="def-translation"></a>
+    For $h\in\mathbb R$, the **translation by $h$** is the bijection
+
+    $$
+    \tau_h:\mathbb R\to\mathbb R,\qquad x\mapsto x+h,
+    \qquad \tau_h^{-1}=\tau_{-h}.
+    $$
+
+    For $A\subseteq\mathbb R$, its direct image is
+    $\tau_h(A)=h+A=\{h+x:x\in A\}$. The indicator satisfies
+
+    $$
+    \mathbf1_{\tau_h(A)}=\mathbf1_A\circ\tau_{-h}.
+    $$
+
+!!! theorem "Theorem (Translation invariance for integrable sets)"
+    <a id="thm-translation-integrable"></a>
+    If $A$ is integrable and $h\in\mathbb R$, then $\tau_h(A)$ is
+    integrable and $\mathcal L^1(\tau_h(A))=\mathcal L^1(A)$.
+
+??? proof "Proof"
+    For every compact cell $I$, the
+    [change-of-variables theorem](kurzweil-henstock-integration.md#thm-1-14-2)
+    applied to $x\mapsto x-h$ gives
+
+    $$
+    \int_I\mathbf1_{\tau_h(A)}
+       =\int_I\mathbf1_A(x-h)\,dx
+       =\int_{I-h}\mathbf1_A
+       \leq\mathcal L^1(A).
+    $$
+
+    The indicator on $I-h$ is integrable by restriction of $\mathbf1_A$;
+    change of variables then gives integrability of the translated indicator
+    on $I$.
+    The [nonnegative integrability criterion](#lem-nonnegative-general-interval)
+    proves global integrability and identifies the integral with the
+    supremum over compact cells. Since $I\mapsto I-h$ is a bijection
+    on compact cells,
+
+    $$
+    \mathcal L^1(\tau_h(A))
+       =\sup_I\int_I\mathbf1_{\tau_h(A)}
+       =\sup_I\int_{I-h}\mathbf1_A
+       =\mathcal L^1(A).
+    $$
+
+## Measurable Sets
+
+Local integrability of an indicator is meaningful even when its integral
+over the whole line is infinite. This leads to measurable sets and extends
+Lebesgue measure to values in the nonnegative extended real numbers.
+
+!!! definition "Definition (Nonnegative extended real numbers)"
+    <a id="def-nonnegative-extended-reals"></a>
+    Write $\mathbb R^+:=\mathbb R_{\geq0}=\{s\in\mathbb R:s\geq0\}$ and
+    $[0,+\infty]:=\mathbb R_{\geq0}\cup\{+\infty\}$. Extend addition by
+
+    $$
+    s+t=
+    \begin{cases}
+    \text{the usual real sum},&s,t\in\mathbb R_{\geq0},\\
+    +\infty,&\text{otherwise}.
+    \end{cases}
+    $$
+
+    The resulting operation is associative and commutative, with identity
+    $0$; thus $([0,+\infty],+)$ is a commutative monoid. Extend the usual
+    order by declaring that every element is at most $+\infty$:
+
+    $$
+    s\leq t
+    \quad\Longleftrightarrow\quad
+    \bigl(s,t\in\mathbb R_{\geq0}\text{ and }s\leq t\text{ in }\mathbb R\bigr)
+    \ \text{or}\ t=+\infty.
+    $$
+
+!!! definition "Definition (Sums of nonnegative terms)"
+    <a id="def-nonnegative-sums"></a>
+    Finite sums in $[0,+\infty]$ are defined by repeated addition, starting
+    from the **empty sum** $\sum_{n\in\varnothing}a_n=0$.
+    For a sequence $(a_n)_{n\geq1}$ in $[0,+\infty]$ and a set
+    $E\subseteq\mathbb N_{\geq1}$, define
+
+    $$
+    \sum_{n\in E}a_n
+    :=\sup_{\substack{F\subseteq E\\F\text{ finite}}}\sum_{n\in F}a_n.
+    $$
+
+    In particular,
+
+    $$
+    \sum_{n=1}^{\infty}a_n
+    =\sup_{N\geq1}\sum_{n=1}^Na_n
+    =\lim_{N\to\infty}\sum_{n=1}^Na_n
+    \quad\text{in }[0,+\infty].
+    $$
+
+    The supremum and limit are $+\infty$ when the partial sums are
+    unbounded. Since the terms are nonnegative, this definition does not
+    depend on the order of enumeration of a countable family.
+
+!!! proposition "Proposition (Monotonicity of nonnegative sums)"
+    <a id="prop-nonnegative-sum-monotonicity"></a>
+    If $a_n,b_n\in[0,+\infty]$ and $a_n\leq b_n$ for every $n$, then
+    $\sum_{n\in E}a_n\leq\sum_{n\in E}b_n$ for every $E$.
+
+??? proof "Proof"
+    Addition preserves order, so induction gives the inequality for every
+    finite $F\subseteq E$. Taking the suprema of the finite sums gives
+    the result.
+
+!!! definition "Definition (Measurable set and Lebesgue measure)"
+    <a id="def-measurable-set"></a>
+    A set $A\subseteq\mathbb R$ is **Lebesgue measurable**, or simply
+    **measurable**, if $A\cap I$ is integrable for every compact cell
+    $I\subseteq\mathbb R$. Write $\mathcal M_0(\mathbb R)$ for the family
+    of measurable subsets of $\mathbb R$.
+
+    Extend Lebesgue measure to this family by
+
+    $$
+    \mathcal L^1:\mathcal M_0(\mathbb R)\longrightarrow[0,+\infty],
+    \qquad
+    \mathcal L^1(A):=
+    \begin{cases}
+    \displaystyle\int_{\mathbb R}\mathbf1_A,&A\text{ is integrable},\\
+    +\infty,&A\text{ is not integrable}.
+    \end{cases}
+    $$
+
+    This agrees with the earlier definition on integrable sets.
+
+!!! proposition "Proposition (Integrable sets are measurable)"
+    <a id="prop-integrable-implies-measurable"></a>
+    Every integrable subset of $\mathbb R$ is measurable. In particular,
+    $\varnothing\in\mathcal M_0(\mathbb R)$ and
+    $\mathcal L^1(\varnothing)=0$.
+
+??? proof "Proof"
+    Every compact cell $I$ is integrable, so the intersection property in
+    [Proposition](#prop-measure-basic) shows that $A\cap I$ is integrable
+    whenever $A$ is integrable.
+
+!!! lemma "Lemma (Compact exhaustion)"
+    <a id="lem-measurable-exhaustion"></a>
+    A set $A\subseteq\mathbb R$ is measurable if and only if
+    $A\cap[-k,k]$ is integrable for every integer $k\geq1$.
+
+??? proof "Proof"
+    Necessity follows from the definition. Conversely, any compact cell
+    $I$ is contained in $[-k,k]$ for some $k$. The set $I$ is integrable,
+    so $A\cap I=(A\cap[-k,k])\cap I$ is an intersection of integrable
+    sets and is therefore integrable.
+
+!!! definition "Definition (Sigma-algebra)"
+    <a id="def-sigma-algebra"></a>
+    Let $X$ be a set. A family $\mathcal A\subseteq\mathcal P(X)$ is a
+    **$\sigma$-algebra** (also called a **tribe**) on $X$ if it satisfies the following conditions.
+
+    1. $\varnothing\in\mathcal A$.
+    2. If $A\in\mathcal A$, then $X\setminus A\in\mathcal A$.
+    3. If $A_n\in\mathcal A$ for every $n\geq1$, then
+       $\bigcup_{n\geq1}A_n\in\mathcal A$.
+
+    In particular, $X\in\mathcal A$. De Morgan's identity
+
+    $$
+    \bigcap_{n\geq1}A_n
+    =X\setminus\bigcup_{n\geq1}(X\setminus A_n)
+    $$
+
+    shows that a $\sigma$-algebra is also closed under countable
+    intersections, and hence under finite unions and intersections.
+
+!!! theorem "Theorem (The sigma-algebra of measurable sets)"
+    <a id="thm-measurable-sigma-algebra"></a>
+    The family $\mathcal M_0(\mathbb R)$ is a $\sigma$-algebra on
+    $\mathbb R$. Thus complements, countable unions, and countable
+    intersections of measurable sets are measurable.
+
+??? proof "Proof"
+    The empty set is integrable and hence measurable. If $A$ is measurable
+    and $I$ is a compact cell, both $I$ and $A\cap I$ are integrable.
+    Therefore
+
+    $$
+    (\mathbb R\setminus A)\cap I=I\setminus(A\cap I)
+    $$
+
+    is integrable by the difference property for integrable sets. This
+    proves closure under complements.
+
+    Let $(A_n)$ be a sequence of measurable sets and fix a compact cell
+    $I$. Every $A_n\cap I$ is integrable and is contained in $I$.
+    By [Corollary](#cor-union-integrable-bound),
+
+    $$
+    \left(\bigcup_{n\geq1}A_n\right)\cap I
+    =\bigcup_{n\geq1}(A_n\cap I)
+    $$
+
+    is integrable. Thus the union is measurable. Finally, De Morgan's
+    identity gives closure under countable intersections.
+
+!!! proposition "Proposition (Measure by compact exhaustion)"
+    <a id="prop-measure-exhaustion"></a>
+    For every measurable set $A$,
+
+    $$
+    \mathcal L^1(A)
+    =\lim_{k\to\infty}\mathcal L^1(A\cap[-k,k])
+    =\sup_{k\geq1}\mathcal L^1(A\cap[-k,k]).
+    $$
+
+    In particular, a measurable set is integrable if and only if its
+    measure is finite. The whole line is measurable and
+    $\mathcal L^1(\mathbb R)=+\infty$.
+
+??? proof "Proof"
+    Put $A_k=A\cap[-k,k]$ and $r=\sup_k\mathcal L^1(A_k)$.
+    These sets are integrable and $A_k\uparrow A$. If $r<\infty$,
+    [Theorem](#thm-continuity-below-integrable) shows that $A$ is
+    integrable and $\mathcal L^1(A)=r$.
+    If $r=+\infty$, then $A$ cannot be integrable: otherwise monotonicity
+    for integrable sets would bound every $\mathcal L^1(A_k)$ by the
+    finite number $\mathcal L^1(A)$. Its measure is consequently
+    $+\infty$ by definition.
+
+    For $A=\mathbb R$, the compact intersections are the cells $[-k,k]$,
+    which have measure $2k$. They are integrable, so $\mathbb R$ is
+    measurable and the displayed formula gives its infinite measure.
+
+!!! theorem "Theorem (Properties of Lebesgue measure)"
+    <a id="thm-lebesgue-measure-properties"></a>
+    Lebesgue measure on $\mathcal M_0(\mathbb R)$ has the following
+    properties, with values and sums taken in $[0,+\infty]$.
+
+    1. **Monotonicity.** If $A\subseteq B$ are measurable, then
+       $\mathcal L^1(A)\leq\mathcal L^1(B)$.
+    2. **Continuity from below.** If $(A_n)$ is an increasing sequence of
+       measurable sets, then its union is measurable and its measure is
+       the increasing limit of the measures of the $A_n$.
+    3. **Countable additivity.** If $(A_n)_{n\geq1}$ is a pairwise disjoint
+       sequence of measurable sets, then the measure of its union is the
+       sum of its measures.
+    4. **Countable subadditivity.** If $A$ and all the $A_n$ are measurable
+       and $A\subseteq\bigcup_{n\geq1}A_n$, then
+       $\mathcal L^1(A)\leq\sum_{n\geq1}\mathcal L^1(A_n)$.
+
+    Explicitly, the identities in (2) and (3) are
+
+    $$
+    \mathcal L^1\!\left(\bigcup_{n\geq1}A_n\right)
+    =\lim_{n\to\infty}\mathcal L^1(A_n)
+    =\sup_{n\geq1}\mathcal L^1(A_n)
+    \qquad(A_n\uparrow),
+    $$
+
+    $$
+    \mathcal L^1\!\left(\bigcup_{n\geq1}A_n\right)
+    =\sum_{n=1}^{\infty}\mathcal L^1(A_n)
+    \qquad(A_n\text{ pairwise disjoint}).
+    $$
+
+??? proof "Proof"
+    Write $C_k=[-k,k]$.
+
+    **Monotonicity.** The integrable sets $A\cap C_k$ and $B\cap C_k$
+    satisfy $A\cap C_k\subseteq B\cap C_k$. Apply finite-measure
+    monotonicity and take the supremum over $k$, using
+    [Proposition](#prop-measure-exhaustion).
+
+    **Continuity from below.** Put $A=\bigcup_nA_n$. For a fixed $k$,
+    the integrable sets $A_n\cap C_k$ increase to $A\cap C_k$, and their
+    measures are bounded by $2k$. Thus
+
+    $$
+    \mathcal L^1(A\cap C_k)
+    =\sup_n\mathcal L^1(A_n\cap C_k).
+    $$
+
+    Exhaustion now gives
+
+    $$
+    \begin{aligned}
+    \mathcal L^1(A)
+    &=\sup_k\sup_n\mathcal L^1(A_n\cap C_k)\\
+    &=\sup_n\sup_k\mathcal L^1(A_n\cap C_k)
+    =\sup_n\mathcal L^1(A_n).
+    \end{aligned}
+    $$
+
+    The two suprema commute because both are the supremum of the same
+    family indexed by $(n,k)$.
+
+    **Countable additivity.** First let $E_1,\ldots,E_N$ be pairwise
+    disjoint measurable sets. Their intersections with $C_k$ are
+    integrable and pairwise disjoint, so finite additivity gives
+
+    $$
+    \mathcal L^1\!\left(\left(\bigcup_{n=1}^NE_n\right)\cap C_k\right)
+    =\sum_{n=1}^N\mathcal L^1(E_n\cap C_k).
+    $$
+
+    Let $k\to\infty$. A finite sum of increasing sequences in
+    $[0,+\infty]$ increases to the sum of their limits: when every limit
+    is finite this is the usual finite-sum limit rule, and when one limit
+    is infinite both sides are infinite. The exhaustion formula therefore
+    proves finite additivity for measurable sets.
+
+    Now put $B_N=\bigcup_{n=1}^NA_n$ for the disjoint sequence in (3).
+    The sets $B_N$ increase to $\bigcup_{n\geq1}A_n$. Continuity from
+    below and finite additivity give
+
+    $$
+    \mathcal L^1\!\left(\bigcup_{n\geq1}A_n\right)
+    =\lim_{N\to\infty}\mathcal L^1(B_N)
+    =\lim_{N\to\infty}\sum_{n=1}^N\mathcal L^1(A_n)
+    =\sum_{n=1}^{\infty}\mathcal L^1(A_n).
+    $$
+
+    **Countable subadditivity.** Define
+    $D_1=A_1$ and $D_n=A_n\setminus\bigcup_{j<n}A_j$ for $n\geq2$.
+    These sets are measurable and pairwise disjoint, with
+    $D_n\subseteq A_n$ and $\bigcup_nD_n=\bigcup_nA_n$. Hence
+
+    $$
+    \mathcal L^1(A)
+    \leq\mathcal L^1\!\left(\bigcup_nA_n\right)
+    =\sum_n\mathcal L^1(D_n)
+    \leq\sum_n\mathcal L^1(A_n).
+    $$
+
+!!! proposition "Proposition (Measurable differences)"
+    <a id="prop-measurable-difference"></a>
+    If $A,B$ are measurable and $B\subseteq A$, then $A\setminus B$ is
+    measurable and
+
+    $$
+    \mathcal L^1(A\setminus B)+\mathcal L^1(B)=\mathcal L^1(A).
+    $$
+
+    If $A$ and $B$ are integrable, this is equivalently
+
+    $$
+    \mathcal L^1(A\setminus B)=\mathcal L^1(A)-\mathcal L^1(B).
+    $$
+
+    The additive identity remains valid for infinite measures; the
+    subtraction $+\infty-(+\infty)$ is undefined.
+
+??? proof "Proof"
+    Closure under complements and intersections shows that
+    $A\setminus B=A\cap(\mathbb R\setminus B)$ is measurable.
+    Apply finite additivity to the disjoint decomposition
+    $A=(A\setminus B)\cup B$. When $A$ and $B$ are integrable, both
+    measures are finite, so ordinary subtraction is valid.
+
+!!! example "Example (Continuity from above can fail)"
+    <a id="ex-continuity-above-infinite"></a>
+    Does every decreasing sequence of measurable sets satisfy
+
+    $$
+    \mathcal L^1\!\left(\bigcap_{n\geq1}A_n\right)
+    =\lim_{n\to\infty}\mathcal L^1(A_n)
+    =\inf_{n\geq1}\mathcal L^1(A_n)?
+    $$
+
+    In general the answer is no. Take $A_n=[n,+\infty)$.
+    Each $A_n$ is measurable, since $A_n\cap[-k,k]$ is an interval or
+    the empty set. Each has infinite measure, since it contains intervals
+    of arbitrarily large length. But $\bigcap_{n\geq1}A_n=\varnothing$:
+    every real number is less than some positive integer. Consequently
+
+    $$
+    \mathcal L^1\!\left(\bigcap_{n\geq1}A_n\right)=0,
+    \qquad
+    \inf_{n\geq1}\mathcal L^1(A_n)=+\infty.
+    $$
+
+!!! theorem "Theorem (Continuity from above with finite measure)"
+    <a id="thm-continuity-above-measurable"></a>
+    Let $(A_n)_{n\geq1}$ be a decreasing sequence of measurable sets.
+    If $\mathcal L^1(A_1)<\infty$, then
+
+    $$
+    \mathcal L^1\!\left(\bigcap_{n\geq1}A_n\right)
+    =\lim_{n\to\infty}\mathcal L^1(A_n)
+    =\inf_{n\geq1}\mathcal L^1(A_n).
+    $$
+
+    The same conclusion holds if any one of the $A_n$ has finite measure,
+    by applying the result to the tail beginning with that set.
+
+??? proof "Proof"
+    Put $A=\bigcap_nA_n$ and $B_n=A_1\setminus A_n$.
+    Then $B_n\uparrow A_1\setminus A$. Every set under consideration is
+    a measurable subset of $A_1$ and therefore has finite measure.
+    The difference formula and continuity from below give
+
+    $$
+    \begin{aligned}
+    \mathcal L^1(A_1)-\mathcal L^1(A)
+    &=\mathcal L^1(A_1\setminus A)\\
+    &=\lim_n\mathcal L^1(B_n)
+    =\mathcal L^1(A_1)-\lim_n\mathcal L^1(A_n).
+    \end{aligned}
+    $$
+
+    All quantities here are finite, so cancellation proves the result.
+
+!!! theorem "Theorem (Open and closed sets are measurable)"
+    <a id="thm-open-closed-measurable"></a>
+    Every open subset and every closed subset of $\mathbb R$ is measurable.
+
+??? proof "Proof"
+    If $O$ is open, then
+    $O=\bigcup_{k\geq1}(O\cap(-k,k))$.
+    Each $O\cap(-k,k)$ is a bounded open set and is integrable by
+    [Theorem](#thm-elementary-integrable-sets), so each is measurable.
+    Closure under countable unions proves that $O$ is measurable.
+    Every closed set is the complement of an open set and is therefore
+    measurable as well.
+
+!!! theorem "Theorem (Translation invariance for measurable sets)"
+    <a id="thm-translation-measurable"></a>
+    If $A\in\mathcal M_0(\mathbb R)$ and $h\in\mathbb R$, then
+    $\tau_h(A)=h+A$ is measurable and
+
+    $$
+    \mathcal L^1(\tau_h(A))=\mathcal L^1(A).
+    $$
+
+??? proof "Proof"
+    For a compact cell $I$, its translate $I-h$ is again a compact cell,
+    and
+
+    $$
+    (h+A)\cap I=h+\bigl(A\cap(I-h)\bigr).
+    $$
+
+    The set inside parentheses is integrable by measurability of $A$.
+    Its translate is integrable by [Theorem](#thm-translation-integrable).
+    Hence $h+A$ is measurable.
+
+    If $A$ is integrable, the same theorem gives equality of the measures.
+    If $A$ is not integrable, neither is $h+A$: otherwise translating it
+    by $-h$ would make $A$ integrable. Thus in this case both measures
+    equal $+\infty$.
+
+## Vitali Sets
+
+Translation invariance and countable additivity impose restrictions on which
+subsets of the real line can be measurable. A Vitali set selects one point
+from each class of real numbers that differ by a rational number. Its
+rational translates partition the line, but every measurable subset of the
+selected set has measure zero.
+
+!!! definition "Definition (Rational equivalence)"
+    <a id="def-rational-equivalence"></a>
+    Define a relation $\sim$ on $\mathbb R$ by
+
+    $$
+    x\sim y\quad\Longleftrightarrow\quad x-y\in\mathbb Q.
+    $$
+
+!!! lemma "Lemma (Equivalence classes modulo the rationals)"
+    <a id="lem-rational-equivalence"></a>
+    The relation $\sim$ is an equivalence relation on $\mathbb R$.
+    For $x\in\mathbb R$, its equivalence class is
+
+    $$
+    [x]:=\{y\in\mathbb R:x\sim y\}=x+\mathbb Q.
+    $$
+
+    Consequently $\mathcal P:=\{[x]:x\in\mathbb R\}$ is a partition of
+    $\mathbb R$.
+
+??? proof "Proof"
+    Reflexivity follows from $x-x=0\in\mathbb Q$. For symmetry,
+    $x-y\in\mathbb Q$ if and only if $y-x\in\mathbb Q$, since $\mathbb Q$
+    is closed under negation. If $x\sim y$ and $y\sim z$, then
+
+    $$
+    x-z=(x-y)+(y-z)\in\mathbb Q,
+    $$
+
+    proving transitivity. Thus $\sim$ is an equivalence relation.
+    Finally, $y\sim x$ holds exactly when $y=x+q$ for some
+    $q\in\mathbb Q$, so $[x]=x+\mathbb Q$. The equivalence classes of
+    an equivalence relation partition its domain.
+
+!!! lemma "Lemma (Density of the equivalence classes)"
+    <a id="lem-rational-classes-dense"></a>
+    Every class $[x]$ is dense in $\mathbb R$.
+
+??? proof "Proof"
+    Let $(a,b)$ be a nonempty open interval. Density of $\mathbb Q$
+    supplies $q\in\mathbb Q$ with $a-x<q<b-x$.
+    Then $x+q\in[x]\cap(a,b)$, so every nonempty open interval meets
+    $[x]$.
+
+!!! definition "Definition (Vitali set)"
+    <a id="def-vitali-set"></a>
+    A **Vitali set** is a subset $V\subseteq\mathbb R$ such that
+    $V\cap[x]$ contains exactly one point for every $x\in\mathbb R$.
+    Thus $V$ selects one representative from every member of the
+    partition $\mathcal P$.
+
+!!! proposition "Proposition (Rational translates of a Vitali set)"
+    <a id="prop-vitali-rational-translates"></a>
+    Let $V$ be a Vitali set and, for $q\in\mathbb Q$, put
+    $V_q:=q+V=\tau_q(V)$. Then each $V_q$ is a Vitali set, and
+    $(V_q)_{q\in\mathbb Q}$ is a partition of $\mathbb R$:
+
+    $$
+    \mathbb R=\bigcup_{q\in\mathbb Q}V_q,
+    \qquad
+    V_q\cap V_r=\varnothing\quad(q,r\in\mathbb Q,\ q\ne r).
+    $$
+
+??? proof "Proof"
+    If $q\in\mathbb Q$, then $q+[x]=[x]$ for every $x\in\mathbb R$:
+    adding or subtracting a rational number does not change a class.
+    Since translation is a bijection,
+
+    $$
+    (q+V)\cap[x]
+    =(q+V)\cap(q+[x])
+    =q+(V\cap[x]).
+    $$
+
+    The last set is a singleton. Hence $q+V$ is a Vitali set.
+
+    **Covering the line.** Let $x\in\mathbb R$. The definition of $V$
+    gives $v\in V\cap[x]$, so $q:=x-v\in\mathbb Q$.
+    Therefore $x=v+q\in V_q$, proving the union identity.
+
+    **Disjointness.** Argue contrapositively. Suppose that
+    $x\in V_q\cap V_r$. There are $v,w\in V$ such that
+    $x=v+q=w+r$. It follows that
+
+    $$
+    v-w=r-q\in\mathbb Q,
+    \qquad [v]=[w].
+    $$
+
+    Both $v$ and $w$ lie in the intersection of $V$ with this class,
+    which contains only one point. Thus $v=w$ and
+    $q=x-v=x-w=r$. This proves pairwise disjointness.
+
+!!! theorem "Theorem (Existence of a Vitali set)"
+    <a id="thm-vitali-set-exists"></a>
+    Assuming the axiom of choice, there exists a Vitali set.
+
+??? proof "Proof"
+    The family $\mathcal P=\{[x]:x\in\mathbb R\}$ is a partition of
+    $\mathbb R$ into nonempty sets. By the axiom of choice, there is a
+    selector
+
+    $$
+    \Gamma:\mathcal P\longrightarrow\mathbb R,
+    \qquad \Gamma(C)\in C\quad(C\in\mathcal P).
+    $$
+
+    Define its image
+
+    $$
+    V:=\operatorname{im}\Gamma
+      =\{\Gamma(C):C\in\mathcal P\}.
+    $$
+
+    For every $x\in\mathbb R$, the point $\Gamma([x])$ belongs to
+    $V\cap[x]$, so this intersection is nonempty.
+    To prove uniqueness, let $y_1,y_2\in V\cap[x]$.
+    For $j=1,2$, choose $C_j\in\mathcal P$ such that
+    $y_j=\Gamma(C_j)\in C_j$. Since $y_j$ also lies in $[x]$, the
+    classes $C_j$ and $[x]$ intersect and must coincide. Hence
+    $C_1=[x]=C_2$ and
+
+    $$
+    y_1=\Gamma(C_1)=\Gamma(C_2)=y_2.
+    $$
+
+    Therefore $V$ is a Vitali set.
+
+!!! theorem "Theorem (Measurable subsets of a Vitali set)"
+    <a id="thm-vitali-measurable-subsets"></a>
+    Let $V$ be a Vitali set. If $A\subseteq V$ is measurable, then
+    $\mathcal L^1(A)=0$.
+
+??? proof "Proof"
+    For each integer $n\geq1$, put $A_n:=A\cap[-n,n]$.
+    Measurability of $A$ implies that $A_n$ is integrable.
+    For every $q\in\mathbb Q$, define
+
+    $$
+    B_{n,q}:=q+A_n\subseteq q+V=V_q.
+    $$
+
+    [Translation invariance](#thm-translation-integrable) shows that
+    $B_{n,q}$ is integrable and that
+    $\mathcal L^1(B_{n,q})=\mathcal L^1(A_n)$.
+    The sets $(B_{n,q})_{q\in\mathbb Q}$ are pairwise disjoint because
+    the containing sets $(V_q)_{q\in\mathbb Q}$ are pairwise disjoint.
+    Every subfamily is therefore pairwise disjoint as well.
+
+    Restrict the translation parameters to the infinite set
+    $Q':=\mathbb Q\cap[-1,1]$. For $q\in Q'$,
+
+    $$
+    B_{n,q}\subseteq[-n-1,n+1].
+    $$
+
+    Thus, for every finite subset $F\subseteq Q'$, finite additivity
+    and monotonicity give
+
+    $$
+    \begin{aligned}
+    (\#F)\,\mathcal L^1(A_n)
+    &=\sum_{q\in F}\mathcal L^1(B_{n,q})\\
+    &=\mathcal L^1\!\left(\bigcup_{q\in F}B_{n,q}\right)\\
+    &\leq\mathcal L^1([-n-1,n+1])=2n+2.
+    \end{aligned}
+    $$
+
+    Since $Q'$ has finite subsets of arbitrarily large cardinality,
+    this inequality forces $\mathcal L^1(A_n)=0$.
+    Finally, $A_n\uparrow A$, so
+    [continuity from below](#thm-lebesgue-measure-properties) yields
+
+    $$
+    \mathcal L^1(A)
+    =\lim_{n\to\infty}\mathcal L^1(A_n)=0.
+    $$
+
+!!! theorem "Theorem (Nonmeasurability of Vitali sets)"
+    <a id="thm-vitali-nonmeasurable"></a>
+    Every Vitali set is nonmeasurable.
+
+??? proof "Proof"
+    Suppose, for a contradiction, that a Vitali set $V$ is measurable.
+    Applying [Theorem](#thm-vitali-measurable-subsets) with $A=V$
+    gives $\mathcal L^1(V)=0$. By
+    [translation invariance](#thm-translation-measurable), every
+    $V_q=q+V$ is measurable and has measure zero.
+    By [Proposition](#prop-vitali-rational-translates), these sets are
+    pairwise disjoint and their union is $\mathbb R$. Since $\mathbb Q$
+    is countable, [countable additivity](#thm-lebesgue-measure-properties) gives
+
+    $$
+    \mathcal L^1(\mathbb R)
+    =\sum_{q\in\mathbb Q}\mathcal L^1(V_q)=0,
+    $$
+
+    contradicting $\mathcal L^1(\mathbb R)=+\infty$.

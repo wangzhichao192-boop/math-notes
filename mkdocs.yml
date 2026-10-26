@@ -137,6 +137,8 @@ nav:
       - "Integers, Groups, and Homomorphisms": abstract-algebra/integers-groups-and-homomorphisms.md
       - "Subgroups, Quotients, and Applications": abstract-algebra/subgroups-and-quotients.md
       - "Group Actions and Applications": abstract-algebra/group-actions-and-applications.md
+      - "Cauchy's Theorem and Sylow Theory": abstract-algebra/cauchy-and-sylow.md
+      - "Generators, Relations, and Semidirect Products": abstract-algebra/generators-relations-and-semidirect-products.md
   - 几何与拓扑:
       - geometry-topology/index.md
       - Invitation: geometry-topology/invitation.md
