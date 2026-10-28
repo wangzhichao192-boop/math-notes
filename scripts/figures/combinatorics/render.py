@@ -23,6 +23,13 @@ OUT.mkdir(parents=True,exist_ok=True)
 NS='http://www.w3.org/2000/svg'
 def tag(s):return '{'+NS+'}'+s
 LABELS={
+ 'ω':r'$\omega$', 'ω + ω':r'$\omega+\omega$', 'ω · ω':r'$\omega\cdot\omega$',
+ 'ωω':r'$\omega^\omega$',
+ '0 < 1 < 2 < 3 < ···':r'$0<1<2<3<\cdots$',
+ '0 < 1 < 2 < ···':r'$0<1<2<\cdots$',
+ 'ω < ω+1 < ω+2 < ···':r'$\omega<\omega+1<\omega+2<\cdots$',
+ '1 < ω < ω² < ω³ < ···':r'$1<\omega<\omega^2<\omega^3<\cdots$',
+
  'Before: |M| = 2':r'Before: $|M|=2$',
  'After toggling: |M △ E(P)| = 3':r'After toggling: $|M\,\triangle\,E(P)|=3$',
  'blue = M':r'blue: $M$',

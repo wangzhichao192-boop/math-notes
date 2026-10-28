@@ -1,9 +1,23 @@
 #!/bin/bash
 # Double-click to keep the local editor available in a visible Terminal window.
 cd -- "$(dirname -- "$0")" || exit 1
-if [[ ! -x ./.venv/bin/python ]]; then
-  echo '找不到项目的 Python 环境，请先安装 requirements.txt 中的依赖。' >&2
-  exit 1
+# Keep dependencies outside Documents, where iCloud can evict them between runs.
+runtime_dir="${XDG_CACHE_HOME:-$HOME/Library/Caches}/math-notes"
+runtime_python="$runtime_dir/bin/python"
+if [[ ! -x "$runtime_python" ]] || ! "$runtime_python" -c 'import mkdocs, material, mkdocs_git_revision_date_localized_plugin' >/dev/null 2>&1; then
+  base_python='./.venv/bin/python'
+  if [[ ! -x "$base_python" ]]; then
+    base_python=$(command -v python3) || {
+      echo '找不到 Python 3，请先安装 Python 后再启动。' >&2
+      exit 1
+    }
+  fi
+  echo '正在准备本机运行环境，首次启动需要安装依赖，请稍候。'
+  "$base_python" -m venv "$runtime_dir" &&
+    "$runtime_python" -m pip install -r "$PWD/requirements.txt" || {
+      echo '运行环境准备失败，请检查网络后重新双击启动。' >&2
+      exit 1
+    }
 fi
 
 for ((port = 8765; port <= 8784; port++)); do
@@ -22,7 +36,7 @@ for ((port = 8765; port <= 8784; port++)); do
 
   echo "正在启动数学笔记：$url"
   echo '请保留这个终端窗口。按 Control+C 停止网站。'
-  exec ./.venv/bin/python -m mkdocs serve --config-file "$PWD/mkdocs.yml" --dev-addr "127.0.0.1:$port" --open
+  exec "$runtime_python" -m mkdocs serve --config-file "$PWD/mkdocs.yml" --dev-addr "127.0.0.1:$port" --open
 done
 
 echo '8765–8784 端口均被占用，无法启动数学笔记。' >&2

@@ -1,6 +1,6 @@
 # Combinatorics figures
 
-All 32 course diagrams use pre-rendered SVG paths for mathematical and prose labels. They work in an HTML `<img>`, offline, and in print without MathJax, web fonts, or system-font fallback.
+The course diagrams use pre-rendered SVG paths for mathematical and prose labels. They work in an HTML `<img>`, offline, and in print without MathJax, web fonts, or system-font fallback.
 
 ## Edit and regenerate
 

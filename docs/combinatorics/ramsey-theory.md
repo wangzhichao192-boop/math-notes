@@ -2,7 +2,7 @@
 
 Ramsey theory asks how large a structure must be before every colouring contains a prescribed monochromatic pattern. For example, whenever the edges joining six vertices are coloured red or blue, some three vertices form a triangle whose edges all have the same colour. The colouring is arbitrary; the size of the graph forces the pattern to appear. We study both the size needed to force such patterns and the corresponding questions for infinite sets.
 
-The chapter develops finite Ramsey numbers and their bounds, then infinite Ramsey theorems and the compactness arguments connecting the infinite and finite settings. Applications to arithmetic, order, convergence, and geometry follow. The final section treats the halting problem, with a supplementary application to homogeneous sets.
+The chapter develops finite Ramsey numbers and their bounds, then infinite Ramsey theorems and the compactness arguments connecting the infinite and finite settings. Applications to arithmetic, order, convergence, and geometry follow. Sierpiński’s colouring then shows why the countable partition relation does not extend to successor cardinals. The final section treats the halting problem, with a supplementary application to homogeneous sets.
 
 ## Ramsey Numbers
 
@@ -589,6 +589,97 @@ For planar points, the local relation is the orientation of a triple. A homogene
       ![Homogeneous positive and negative triples forming a cup and a cap closed by an endpoint chord](../assets/combinatorics/ramsey-convex-cup-cap.svg)
       <figcaption>All ordered triples have the same sign. Every selected point is a vertex of the convex hull; the dashed segment closes the polygon between the endpoints.</figcaption>
     </figure>
+
+
+## Uncountable Partition Relations
+
+The countable theorem gives $\aleph_0\to(\aleph_0)^2_2$. Does there exist an ordinal $\alpha>0$ such that $\aleph_\alpha\to(\aleph_\alpha)^2_2$? This is the uncountable analogue posed in the lecture. Sierpiński's construction gives an obstruction at every successor cardinal; it does not settle the question for all uncountable cardinals.
+
+This section uses Choice, [cardinal arithmetic](axiomatic-set-theory.md#def-cardinal-arithmetic), and [regularity of successor cardinals](axiomatic-set-theory.md#thm-successor-cardinal-regular). The notation $\mu\nrightarrow(\lambda)^2_2$ means that some two-colouring of the pairs of a set of cardinality $\mu$ has no homogeneous subset of cardinality $\lambda$.
+
+!!! theorem "Theorem (Sierpiński)"
+    <a id="thm-sierpinski-partition"></a>
+    For every infinite cardinal $\kappa$,
+
+    $$
+    2^\kappa=|\mathcal P(\kappa)|
+    \nrightarrow(\kappa^+)^2_2.
+    $$
+
+Identify subsets of $\kappa$ with their characteristic functions. The construction compares two orders on the set of these functions: its lexicographic order and a well-order supplied by Choice.
+
+!!! definition "Definition (Lexicographic order on binary functions)"
+    <a id="def-binary-lexicographic-order"></a>
+    Let $S={}^\kappa2=\{x:x:\kappa\to\{0,1\}\}$. For distinct $x,y\in S$, put
+
+    $$
+    d(x,y)=\min\{\xi<\kappa:x(\xi)\ne y(\xi)\}.
+    $$
+
+    Define
+
+    $$
+    x<_{\mathrm{lex}}y
+    \quad\Longleftrightarrow\quad
+    x(d(x,y))=0\text{ and }y(d(x,y))=1.
+    $$
+
+    This is a strict total order. For transitivity, if $x<_{\mathrm{lex}}y<_{\mathrm{lex}}z$, the two first-difference coordinates $d(x,y)$ and $d(y,z)$ cannot be equal, since equality would require the same value of $y$ to be both $1$ and $0$. At the smaller of the two coordinates, $x$ has value $0$ and $z$ has value $1$, and they agree before it. Thus $x<_{\mathrm{lex}}z$.
+
+!!! lemma "Lemma (No long monotone sequence)"
+    <a id="lem-lexicographic-no-long-monotone"></a>
+    In $(S,<_{\mathrm{lex}})$, there is no strictly increasing or strictly decreasing sequence indexed by $\kappa^+$.
+
+??? proof "Proof"
+    Suppose $(x_\alpha)_{\alpha<\kappa^+}$ is strictly increasing. We prove by transfinite induction on $\xi\le\kappa$ that the sequence of restrictions
+
+    $$
+    (x_\alpha\mathbin{\upharpoonright}\xi)_{\alpha<\kappa^+}
+    $$
+
+    is eventually constant. Explicitly, there is $\beta_\xi<\kappa^+$ such that all the restrictions agree for $\alpha\ge\beta_\xi$.
+
+    **Zero.** For $\xi=0$, every restriction is empty.
+
+    **Successor.** Suppose the restrictions to $\xi<\kappa$ agree on a tail. On that tail, $x_\alpha(\xi)$ is nondecreasing: a change from $1$ to $0$ would make the later function lexicographically smaller, since all earlier coordinates agree. A nondecreasing sequence in $\{0,1\}$ is eventually constant. Combining this with the fixed earlier restriction proves the claim for $\xi+1$.
+
+    **Limit.** Let $\lambda\le\kappa$ be a nonzero limit ordinal, and suppose the claim holds for every $\xi<\lambda$. For each such $\xi$, let $\beta_\xi<\kappa^+$ be the least stage after which the restrictions to $\xi$ are constant. Since $|\lambda|\le\kappa<\operatorname{cf}(\kappa^+)=\kappa^+$, regularity gives
+
+    $$
+    \beta:=\sup_{\xi<\lambda}\beta_\xi<\kappa^+.
+    $$
+
+    For any $\alpha,\alpha'\ge\beta$, their restrictions to every $\xi<\lambda$ agree. Each coordinate below $\lambda$ is included in one such restriction, so $x_\alpha\mathbin{\upharpoonright}\lambda=x_{\alpha'}\mathbin{\upharpoonright}\lambda$. This proves the limit step.
+
+    Taking $\xi=\kappa$ shows that the original sequence is eventually constant, contradicting strict increase. For a strictly decreasing sequence, the successor step uses a nonincreasing binary sequence instead. Equivalently, replacing every bit $b$ by $1-b$ reverses the lexicographic order and reduces that case to the increasing case.
+
+??? proof "Proof of Sierpiński's theorem"
+    By Choice, fix a well-order $\prec$ on $S$. For $x\prec y$, define
+
+    $$
+    c(\{x,y\})=
+    \begin{cases}
+    0,&x<_{\mathrm{lex}}y,\\
+    1,&y<_{\mathrm{lex}}x.
+    \end{cases}
+    $$
+
+    Totality makes this a two-colouring of $[S]^2$. Suppose $H\subseteq S$ is homogeneous and $|H|=\kappa^+$. Its order type under $\prec$ is at least $\kappa^+$; take its first $\kappa^+$ elements and enumerate them in that order as $(x_\alpha)_{\alpha<\kappa^+}$.
+
+    If the common colour is $0$, this sequence is strictly increasing for $<_{\mathrm{lex}}$. If it is $1$, the sequence is strictly decreasing. Both possibilities contradict [Lemma](#lem-lexicographic-no-long-monotone). Thus no such $H$ exists. Since $|S|=2^\kappa$, this is the asserted negative partition relation.
+
+!!! corollary "Corollary (Failure at successor cardinals)"
+    <a id="cor-successor-negative-partition"></a>
+    For every infinite cardinal $\kappa$,
+
+    $$
+    \kappa^+\nrightarrow(\kappa^+)^2_2.
+    $$
+
+    In particular, $\aleph_1\nrightarrow(\aleph_1)^2_2$.
+
+??? proof "Proof"
+    Cantor's theorem gives $\kappa^+\le2^\kappa$. Restrict the colouring in [Theorem](#thm-sierpinski-partition) to a subset of $S$ of size $\kappa^+$. A homogeneous set of size $\kappa^+$ for the restricted colouring would also be one for the original colouring.
 
 <a id="effective-colourings"></a>
 

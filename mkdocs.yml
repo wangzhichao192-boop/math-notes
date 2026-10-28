@@ -178,7 +178,8 @@ nav:
       - ode/index.md
       - "Basic Concepts": ode/models-geometry-and-well-posedness.md
       - "First-Order Equations": ode/first-order-equations.md
-      - "Local Theory": ode/local-theory.md
+      - "General Theory": ode/local-theory.md
+      - "Linear Systems": ode/linear-systems.md
       - "* Models and Invariants": ode/models-and-invariants.md
   - 参考:
       - 写作指南: WRITING_GUIDE.md

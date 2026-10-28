@@ -1,8 +1,8 @@
 # Axiomatic Set Theory
 
-Familiar notation such as $\varnothing$, $\{a,b\}$, and $a\times b$ hides existence claims. An axiomatic treatment makes these claims explicit: it specifies a membership relation, states the properties it must satisfy, and proves that the objects needed for further mathematics exist. This chapter develops these foundations using directed graphs, first-order formulas, and the replacement schema, then studies well-orders, ordinals, transfinite recursion, and Choice.
+Familiar notation such as $\varnothing$, $\{a,b\}$, and $a\times b$ hides existence claims. An axiomatic treatment makes these claims explicit: it specifies a membership relation, states the properties it must satisfy, and proves that the objects needed for further mathematics exist. This chapter develops these foundations using directed graphs, first-order formulas, and the replacement schema, then studies well-orders, ordinals, transfinite recursion, and Choice. Infinity supplies the natural-number ordinal; cardinal arithmetic and cofinality describe the sizes of infinite sets and the unions that preserve them.
 
-The main distinction is between an external description of some vertices and a vertex representing exactly those vertices as its elements. The early examples keep these two levels separate; the later existence proofs explain when they coincide. Only the axioms stated below are assumed, and Choice enters only in its own section. In particular, an infinite set and the foundation axiom have not yet been introduced. The later discussion of standard and nonstandard finite ordinals returns to the distinction between internal sets and external descriptions.
+The main distinction is between an external description of some vertices and a vertex representing exactly those vertices as its elements. The early examples keep these two levels separate; the later existence proofs explain when they coincide. Only the axioms stated below are assumed, and Choice enters only in its own section. Infinity is introduced in the section on finite ordinals; the axiom of Foundation is not assumed. The later discussion of standard and nonstandard finite ordinals returns to the distinction between internal sets and external descriptions.
 
 ## Set-Theoretic Axioms
 
@@ -604,7 +604,7 @@ A formula can describe a functional relation before its graph has been shown to 
 
 <a id="well-orders"></a>
 
-Well-orders and initial segments provide the language for ordinal representation. After constructing ordinals and comparing their order types, the section examines what finiteness means inside a membership structure.
+Well-orders and initial segments provide the language for ordinal representation. The section constructs ordinals and compares their order types; the following section examines finiteness inside a membership structure.
 
 An order tells how elements are arranged. A well-order strengthens this by giving every nonempty subset a first element. Initial segments describe everything preceding a position; they are the link between an ordered set and its ordinal representation.
 
@@ -872,6 +872,8 @@ An ordinal represents the entire order structure of a well-ordered set. The proo
 
     Uniqueness of the ordinal follows again from rigidity. The construction is determined by unique ordinal labels; it makes no simultaneous arbitrary choices of isomorphisms.
 
+## Finite Ordinals {#finite-ordinals-section}
+
 <a id="finite-ordinals"></a>
 
 The finite ordinals provide a useful test of the distinction between internal statements and external descriptions. The definition below is internal; the phrase “standard finite ordinal” also refers to the external natural numbers used to construct the numerals.
@@ -908,8 +910,80 @@ The finite ordinals provide a useful test of the distinction between internal st
 
 !!! remark "Remark (What has not yet been assumed about infinity)"
     <a id="rem-infinity-not-yet-assumed"></a>
-    The ability to construct each $\bar n$ separately does not by itself produce a set of all of them. The supplied lecture stops at this distinction and has not yet stated an axiom of Infinity. The existence of an internal infinite ordinal is therefore not being assumed here. The nonstandard example is conditional, and is distinct from the question whether the structure contains a set of all its internally finite ordinals.
+    The ability to construct each $\bar n$ separately does not by itself produce a set of all of them. The results up to this point have not used an axiom of Infinity. The existence of an internal infinite ordinal is an additional assertion, introduced below. The nonstandard example is conditional, and is distinct from the question whether the structure contains a set of all its internally finite ordinals.
 
+
+
+!!! definition "Definition (Finite set)"
+    <a id="def-finite-set"></a>
+    A set is **finite** if it admits a bijection with a finite ordinal. Finiteness here is internal to the membership structure; it must not be identified with external meta-finiteness without further assumptions on that structure.
+
+!!! theorem "Theorem (Induction on finite ordinals)"
+    <a id="thm-finite-ordinal-induction"></a>
+    Let $F(\alpha)$ be a formula, with parameters allowed. Suppose $F(\bar0)$ and, for every finite ordinal $\alpha$,
+
+    $$
+    F(\alpha)\Longrightarrow F(\alpha+\bar1).
+    $$
+
+    Then $F(\alpha)$ holds for every finite ordinal $\alpha$.
+
+??? proof "Proof"
+    Otherwise the definable collection of finite counterexamples has a least member $\beta$. Since $F(\bar0)$ holds, $\beta\ne\bar0$. Finiteness gives $\beta=\gamma+\bar1$, where $\gamma$ is finite. Minimality gives $F(\gamma)$, and the successor implication gives $F(\beta)$, a contradiction.
+
+!!! remark "Remark (Why induction does not prove standardness)"
+    <a id="rem-standardness-not-definable"></a>
+    Is the following argument valid: $\bar0$ is standard, and the successor of a standard finite ordinal is standard, so every finite ordinal is standard? Its induction step is correct, but the induction theorem applies only to a property expressed by an internal formula. In a structure with nonstandard finite ordinals, standardness is not such a property.
+
+    More strongly, in that case the standard finite ordinals do not even form a **definable collection**, with or without parameters.
+
+??? proof "Proof"
+    Suppose a formula $C(\alpha)$ defined exactly the standard finite ordinals. Then $C(\bar0)$ holds, and $C(\alpha)\Rightarrow C(\alpha+\bar1)$ holds for every finite $\alpha$. By [Theorem](#thm-finite-ordinal-induction), $C(\alpha)$ holds for every finite ordinal, contradicting the existence of a nonstandard one. This complements the earlier proof that the standard part is not an internal set.
+
+The separate existence questions are whether all internally finite ordinals form a set and whether any limit ordinal exists. The next axiom answers both.
+
+!!! definition "Definition (Axiom of Infinity)"
+    <a id="def-axiom-infinity"></a>
+    The **Axiom of Infinity** asserts that there exists an ordinal which is not finite. Equivalently, the collection of all finite ordinals is a set.
+
+!!! proposition "Proposition (The first infinite ordinal)"
+    <a id="prop-first-infinite-ordinal"></a>
+    Assuming Infinity, there is a least infinite ordinal, denoted by $\omega$. It is a limit ordinal and consists exactly of all finite ordinals:
+
+    $$
+    \omega=\{\alpha:\alpha\text{ is a finite ordinal}\}.
+    $$
+
+??? proof "Proof"
+    Choose the least infinite ordinal $\omega$. Every smaller ordinal is finite. The successor of a finite ordinal is finite, directly from the definition, so $\omega$ is neither zero nor a successor. Every finite ordinal is smaller than $\omega$: otherwise its predecessors would include the nonzero limit ordinal $\omega$. Thus $\omega$ has exactly the stated elements.
+
+    Conversely, suppose the finite ordinals form a set $w$. This set is transitive and consists of ordinals, so it is an ordinal. It contains $\bar0$ and contains $\alpha+\bar1$ whenever it contains $\alpha$. Hence it is nonzero and has no greatest element, so it is a limit ordinal and is not finite. This proves the equivalence in the axiom.
+
+!!! proposition "Proposition (Limit ordinals as suprema)"
+    <a id="prop-limit-ordinal-union"></a>
+    For every nonzero limit ordinal $\lambda$,
+
+    $$
+    \lambda=\sup_{\beta<\lambda}\beta=\bigcup\lambda.
+    $$
+
+??? proof "Proof"
+    Transitivity gives $\bigcup\lambda\subseteq\lambda$. For each $\beta<\lambda$, one has $\beta+\bar1<\lambda$, since $\lambda$ is not a successor. Thus $\beta\in\beta+\bar1\in\lambda$, giving the reverse inclusion.
+
+!!! example "Example (Successive infinite order types)"
+    <a id="ex-omega-order-types"></a>
+    The order type $\omega$ is one increasing sequence of finite ordinals. Concatenating two such sequences gives $\omega+\omega$. Concatenating $\omega$ copies gives $\omega\cdot\omega=\omega^2$. Continuing with finite powers and taking their supremum gives
+
+    $$
+    \omega^\omega=\sup_{n<\omega}\omega^n.
+    $$
+
+    These are **ordinal** operations: $\alpha+\beta$ is the order type obtained by placing a copy of $\beta$ after a copy of $\alpha$, and $\alpha\cdot\beta$ consists of $\beta$ successive copies of $\alpha$. Here $\omega^0=1$ and $\omega^{n+1}=\omega^n\cdot\omega$; the displayed supremum defines the limit power in this example. All these order types are distinct even though, as sets, they are countably infinite.
+
+    <figure markdown="span">
+      ![One omega sequence, two omega sequences, omega many omega sequences, and the supremum of finite powers](../assets/combinatorics/sets-omega-orders.svg)
+      <figcaption>Each row records the order of the blocks. The ellipses indicate continuing sequences, not additional elements.</figcaption>
+    </figure>
 
 ## Transfinite Recursion
 
@@ -1022,7 +1096,7 @@ A well-order supports two related operations. Induction proves a statement at ev
 
 ## The Axiom of Choice
 
-The earlier results construct sets and uniquely determined functions. Choice adds a different assertion: a family of nonempty sets admits a simultaneous selection even when no rule for choosing a particular element has been specified. The lecture introduces it as the next axiom, after Extensionality, Union, Power Set, and Replacement.
+The earlier results construct sets and uniquely determined functions. Choice adds a different assertion: a family of nonempty sets admits a simultaneous selection even when no rule for choosing a particular element has been specified. Its role is separate from Extensionality, Union, Power Set, Replacement, and Infinity: those axioms alone do not supply arbitrary simultaneous choices.
 
 !!! definition "Definition (Axiom of Choice)"
     <a id="def-axiom-choice"></a>
@@ -1106,6 +1180,263 @@ The earlier results construct sets and uniquely determined functions. Choice add
 
     Let $u\in P$ be an upper bound for $C$. It is comparable with every member of $C$, so maximality of the chain gives $u\in C$. If $u<v$ for some $v\in P$, then $v$ too is comparable with every member of $C$ and must belong to $C$. This contradicts that $u$ is an upper bound. Thus $u$ is a maximal element of $P$.
 
+
+
+## Cardinals
+
+Assume Infinity and Choice throughout the rest of the chapter. Well-ordering lets every set be assigned a least ordinal of its size. Cardinal operations measure size rather than order type; cofinality will measure how many stages are needed to approach an ordinal.
+
+!!! definition "Definition (Equipotence and cardinality)"
+    <a id="def-cardinal"></a>
+    Sets $a,b$ are **equipotent** if there is a bijection between them. An ordinal $\kappa$ is a **cardinal** if it is not equipotent to any smaller ordinal. The **cardinality** of a set $a$, written $|a|$ or $\operatorname{card}(a)$, is the unique cardinal equipotent to $a$.
+
+    Existence follows by well-ordering $a$ and taking the least ordinal equipotent to its order type. Uniqueness follows because two distinct cardinals cannot be equipotent. For cardinals, $\kappa\le\lambda$ is equivalent to the existence of an injection $\kappa\to\lambda$.
+
+!!! proposition "Proposition (Finite and infinite cardinals)"
+    <a id="prop-cardinals-limit-ordinals"></a>
+    Every $n<\omega$ is a cardinal. Every infinite cardinal is a limit ordinal.
+
+??? proof "Proof"
+    Finite induction proves that there is no injection $n+1\to n$. For the induction step, an injection $n+2\to n+1$ can be rearranged by a permutation of the target to send the last input to the last target; restricting then gives an injection $n+1\to n$. Consequently no finite ordinal is equipotent to a smaller one.
+
+    If $\alpha\ge\omega$, a bijection $\alpha+1\to\alpha$ sends the extra point $\alpha$ to $0$, sends each $n<\omega$ to $n+1$, and fixes every $\xi$ with $\omega\le\xi<\alpha$. Thus an infinite successor ordinal cannot be a cardinal. An infinite cardinal is nonzero, so it is a limit ordinal.
+
+!!! theorem "Theorem (Cantor)"
+    <a id="thm-cantor-cardinals"></a>
+    For every set $a$, no function $a\to\mathcal P(a)$ is surjective. Consequently,
+
+    $$
+    |a|<|\mathcal P(a)|.
+    $$
+
+??? proof "Proof"
+    For $f:a\to\mathcal P(a)$, Separation gives $d=\{x\in a:x\notin f(x)\}$. If $f(y)=d$, then $y\in d\Longleftrightarrow y\notin d$, a contradiction. The singleton map injects $a$ into $\mathcal P(a)$, while a bijection would be a surjection, so their cardinals satisfy strict inequality.
+
+!!! definition "Definition (Successor and limit cardinals)"
+    <a id="def-successor-cardinal"></a>
+    The **successor cardinal** $\kappa^+$ is the least cardinal strictly greater than $\kappa$. It exists by Cantor's theorem and well-ordering of the ordinals. An infinite cardinal is a **limit cardinal** if it is not the successor of any cardinal.
+
+    A successor cardinal is different from a successor ordinal. For infinite $\kappa$, the ordinal $\kappa+1$ still has cardinality $\kappa$, whereas $\kappa^+>\kappa$ is itself a limit ordinal.
+
+!!! proposition "Proposition (Suprema of cardinals)"
+    <a id="prop-supremum-cardinals"></a>
+    If $a$ is a set of cardinals, then $\sup a=\bigcup a$ is a cardinal and is their least upper bound among cardinals.
+
+??? proof "Proof"
+    Put $\delta=\sup a$. If $\delta$ were equipotent to some ordinal $\beta<\delta$, there would be $\kappa\in a$ with $\beta<\kappa$. Restricting a bijection $\delta\to\beta$ to $\kappa$ would inject the cardinal $\kappa$ into a smaller ordinal, a contradiction. Hence $\delta$ is a cardinal. For $a=\varnothing$, it is $0$.
+
+!!! definition "Definition (Alephs and countability)"
+    <a id="def-alephs"></a>
+    By transfinite recursion, define the functional relation $\alpha\mapsto\aleph_\alpha$ on $\mathrm{Ord}$ by
+
+    $$
+    \begin{aligned}
+    \aleph_0&=\omega,\\
+    \aleph_{\alpha+1}&=(\aleph_\alpha)^+,\\
+    \aleph_\lambda&=\sup_{\alpha<\lambda}\aleph_\alpha
+    \quad(\lambda\text{ a nonzero limit}).
+    \end{aligned}
+    $$
+
+    A set $a$ is **countable** if $|a|\le\aleph_0$, and **countably infinite** if $|a|=\aleph_0$. The least uncountable ordinal is
+
+    $$
+    \omega_1=\aleph_1=\aleph_0^+.
+    $$
+
+    As a set, $\omega_1$ consists exactly of all countable ordinals.
+
+!!! proposition "Proposition (The increasing enumeration of infinite cardinals)"
+    <a id="prop-aleph-enumeration"></a>
+    For all ordinals $\alpha,\beta$,
+
+    $$
+    \alpha<\beta\quad\Longleftrightarrow\quad\aleph_\alpha<\aleph_\beta.
+    $$
+
+    Every infinite cardinal is $\aleph_\alpha$ for a unique ordinal $\alpha$. For $\alpha>0$, $\aleph_\alpha$ is a limit cardinal exactly when $\alpha$ is a limit ordinal. In addition, $\aleph_0$ is a limit cardinal, although $0$ is not a limit ordinal under our convention.
+
+??? proof "Proof"
+    Each successor stage strictly increases. At a limit stage $\lambda$, every earlier value $\aleph_\alpha$ is strictly below $\aleph_{\alpha+1}\le\aleph_\lambda$. Transfinite induction proves strict increase; ordinal comparison gives the converse implication.
+
+    There are values exceeding any given cardinal $\kappa$. Indeed, induction gives $\alpha\le\aleph_\alpha$, so $\aleph_{\kappa+1}>\kappa$. Given an infinite cardinal $\kappa$, take the least $\alpha$ with $\kappa\le\aleph_\alpha$. If $\alpha=0$, equality follows. If $\alpha=\beta+1$, minimality gives $\aleph_\beta<\kappa\le(\aleph_\beta)^+$, again forcing equality. If $\alpha$ is a limit, all earlier alephs are below $\kappa$, so their supremum is at most $\kappa$, also forcing equality. Strict increase proves uniqueness.
+
+    A positive successor index gives a successor cardinal. At a nonzero limit index, the earlier alephs are cofinal in its value and have no largest member, so the value cannot be a successor cardinal. Finally, no finite cardinal has successor $\aleph_0$.
+
+### Cardinal Arithmetic
+
+!!! definition "Definition (Cardinal operations)"
+    <a id="def-cardinal-arithmetic"></a>
+    The **disjoint union** of sets $a,b$ is
+
+    $$
+    a\sqcup b=(\{0\}\times a)\cup(\{1\}\times b).
+    $$
+
+    For cardinals $\kappa,\lambda$, define
+
+    $$
+    \begin{aligned}
+    \kappa+\lambda&=|\kappa\sqcup\lambda|,\\
+    \kappa\cdot\lambda&=|\kappa\times\lambda|,\\
+    \kappa^\lambda&=|{}^\lambda\kappa|,
+    \end{aligned}
+    $$
+
+    where ${}^\lambda\kappa$ is the set of functions $\lambda\to\kappa$. In this subsection $+$ and $\cdot$ denote cardinal operations. Characteristic functions identify $\mathcal P(\lambda)$ with ${}^\lambda 2$, giving $|\mathcal P(\lambda)|=2^\lambda$.
+
+!!! theorem "Theorem (The square of an infinite cardinal)"
+    <a id="thm-infinite-cardinal-square"></a>
+    For every infinite cardinal $\kappa$,
+
+    $$
+    |\kappa\times\kappa|=\kappa.
+    $$
+
+??? proof "Proof"
+    Suppose $\kappa$ is the least infinite cardinal for which the assertion fails. Well-order $\kappa\times\kappa$ by comparing the triples
+
+    $$
+    (\max\{\alpha,\beta\},\alpha,\beta)
+    $$
+
+    lexicographically. This is a well-order: in any nonempty subset first minimise the maximum, then the first coordinate, then the second. The predecessors of $(\alpha,\beta)$ all lie in $(\gamma+1)\times(\gamma+1)$, where $\gamma=\max\{\alpha,\beta\}<\kappa$.
+
+    Since $\kappa$ is a limit ordinal, $\gamma+1<\kappa$, and $\mu=|\gamma+1|<\kappa$. If $\mu$ is finite, that square is finite. If $\mu$ is infinite, minimality of $\kappa$ gives $\mu^2=\mu<\kappa$. Thus every predecessor set has cardinality less than $\kappa$.
+
+    Let $\theta$ be the order type of this well-order. If $\theta>\kappa$, the element in position $\kappa$ would have $\kappa$ predecessors, a contradiction. Hence $\theta\le\kappa$, yielding $|\kappa\times\kappa|\le\kappa$. The map $\alpha\mapsto(\alpha,0)$ gives the reverse inequality. This contradicts the assumed counterexample.
+
+!!! corollary "Corollary (Infinite sums and products)"
+    <a id="cor-infinite-cardinal-operations"></a>
+    If at least one of $\kappa,\lambda$ is infinite, then
+
+    $$
+    \kappa+\lambda=\max\{\kappa,\lambda\}.
+    $$
+
+    If both are also nonzero, then
+
+    $$
+    \kappa\cdot\lambda=\max\{\kappa,\lambda\}.
+    $$
+
+??? proof "Proof"
+    Put $\mu=\max\{\kappa,\lambda\}$. The disjoint union injects into $\mu\times\mu$ and contains a copy of $\mu$, proving the first identity. The product also injects into $\mu\times\mu$; when both factors are nonempty it contains a copy of the larger factor, proving the second.
+
+!!! corollary "Corollary (Size of an indexed union)"
+    <a id="cor-cardinal-union-bound"></a>
+    Let $\kappa$ be an infinite cardinal and $(a_i)_{i\in I}$ a family of sets. If $|I|\le\kappa$ and $|a_i|\le\kappa$ for every $i\in I$, then
+
+    $$
+    \left|\bigcup_{i\in I}a_i\right|\le\kappa.
+    $$
+
+    In particular, a countable union of countable sets is countable.
+
+??? proof "Proof"
+    By Choice, select injections $e_i:a_i\to\kappa$ and well-order $I$. For each $x$ in the union, let $i(x)$ be the least index with $x\in a_{i(x)}$. Then $x\mapsto(i(x),e_{i(x)}(x))$ injects the union into $I\times\kappa$, of cardinality at most $\kappa$. Apply this with $\kappa=\aleph_0$ for the last assertion.
+
+## Cofinality
+
+Cardinality alone does not determine how an ordinal can be approached from below. Cofinality supplies the threshold for unions of smaller sets and for a pigeonhole principle at an infinite cardinal.
+
+!!! definition "Definition (Cofinal subset and cofinality)"
+    <a id="def-cofinality"></a>
+    A subset $C\subseteq\alpha$ is **cofinal in $\alpha$** if for every $\beta<\alpha$ there is $\gamma\in C$ with $\beta\le\gamma$. Define
+
+    $$
+    \operatorname{cf}(\alpha)
+    =\min\{|C|:C\subseteq\alpha\text{ is cofinal in }\alpha\}.
+    $$
+
+    The minimum exists since $\alpha$ itself is cofinal. In particular, $\operatorname{cf}(\alpha)\le|\alpha|$.
+
+!!! example "Example (Zero, successors, and limits)"
+    <a id="ex-cofinality-elementary"></a>
+    One has $\operatorname{cf}(0)=0$ and $\operatorname{cf}(\alpha+1)=1$: the singleton $\{\alpha\}$ is cofinal in $\alpha+1$.
+
+    If $\beta$ is a nonzero limit ordinal, then $C\subseteq\beta$ is cofinal exactly when $\sup C=\beta$. No finite subset is cofinal, since a nonempty finite subset has a greatest element and is bounded below $\beta$. Thus $\operatorname{cf}(\beta)\ge\aleph_0$, and in particular $\operatorname{cf}(\omega)=\aleph_0$.
+
+!!! example "Example (The first uncountable ordinal)"
+    <a id="ex-cofinality-omega-one"></a>
+    The first uncountable ordinal satisfies $\operatorname{cf}(\omega_1)=\aleph_1$. In contrast, $\operatorname{cf}(\omega_1+1)=1$, since $\{\omega_1\}$ is cofinal in its successor. Both ordinals have cardinality $\aleph_1$.
+
+??? proof "Proof"
+    If $C\subseteq\omega_1$ is countable, each $\alpha\in C$ is countable, so $\sup C=\bigcup C$ is countable by [Corollary](#cor-cardinal-union-bound). It is therefore below $\omega_1$ and $C$ is not cofinal. Since $\omega_1$ itself is cofinal, its cofinality is $\aleph_1$.
+
+!!! example "Example (Equal cardinalities, different cofinalities)"
+    <a id="ex-ordinal-cardinality-cofinality"></a>
+    Well-order $\omega\times\omega_1$ by
+
+    $$
+    (n,\alpha)\prec(m,\beta)
+    \quad\Longleftrightarrow\quad
+    n<m\ \text{ or }\ (n=m\text{ and }\alpha<\beta).
+    $$
+
+    Let $\eta$ be its order type. It consists of $\omega$ successive blocks of type $\omega_1$, so $\eta=\omega_1\cdot\omega$ in ordinal arithmetic. Cardinal arithmetic gives $|\eta|=\aleph_1$. However, $\{(n,0):n<\omega\}$ is cofinal: $(m+1,0)$ lies above every $(m,\beta)$. No finite set is cofinal, so $\operatorname{cf}(\eta)=\aleph_0$. Hence $\eta$ and $\omega_1$ have the same cardinality and different cofinalities.
+
+!!! definition "Definition (Regular and singular cardinals)"
+    <a id="def-regular-cardinal"></a>
+    An infinite cardinal $\kappa$ is **regular** if $\operatorname{cf}(\kappa)=\kappa$, and **singular** if $\operatorname{cf}(\kappa)<\kappa$.
+
+!!! example "Example (A singular limit cardinal)"
+    <a id="ex-aleph-omega-singular"></a>
+    Since
+
+    $$
+    \aleph_\omega=\sup_{n<\omega}\aleph_n,
+    $$
+
+    the set $\{\aleph_n:n<\omega\}$ is countable and cofinal in $\aleph_\omega$. No finite subset is cofinal in this limit ordinal. Therefore $\operatorname{cf}(\aleph_\omega)=\aleph_0<\aleph_\omega$, so $\aleph_\omega$ is singular.
+
+!!! theorem "Theorem (Regularity of successor cardinals)"
+    <a id="thm-successor-cardinal-regular"></a>
+    For every infinite cardinal $\kappa$, its successor cardinal $\kappa^+$ is regular.
+
+??? proof "Proof"
+    Suppose $C\subseteq\kappa^+$ is cofinal and $|C|<\kappa^+$. Then $|C|\le\kappa$, and each $\alpha\in C$ has cardinality at most $\kappa$. Since $\kappa^+$ is a limit ordinal, cofinality and [Corollary](#cor-cardinal-union-bound) give
+
+    $$
+    \kappa^+=\sup C=\bigcup C,\qquad
+    \left|\bigcup C\right|\le\kappa,
+    $$
+
+    a contradiction. Hence $\operatorname{cf}(\kappa^+)=\kappa^+$.
+
+!!! theorem "Theorem (Unions below cofinality)"
+    <a id="thm-union-below-cofinality"></a>
+    Let $\kappa$ be an infinite cardinal and $(a_i)_{i\in I}$ a family with $|I|<\operatorname{cf}(\kappa)$ and $|a_i|<\kappa$ for every $i\in I$. Then
+
+    $$
+    \left|\bigcup_{i\in I}a_i\right|<\kappa.
+    $$
+
+??? proof "Proof"
+    If $\kappa=\aleph_0$, the assertion is that a finite union of finite sets is finite, proved by finite induction.
+
+    Suppose $\kappa>\aleph_0$. The set $B=\{|a_i|:i\in I\}$ has cardinality at most $|I|<\operatorname{cf}(\kappa)$, so it is not cofinal in $\kappa$. Choose $\beta<\kappa$ bounding all its members. The infinite cardinal
+
+    $$
+    \mu=\max\{\aleph_0,|I|,|\beta|\}
+    $$
+
+    is less than $\kappa$ and bounds every $|a_i|$ as well as $|I|$. By [Corollary](#cor-cardinal-union-bound), the union has size at most $\mu<\kappa$.
+
+!!! theorem "Theorem (Infinite pigeonhole principle)"
+    <a id="thm-infinite-cardinal-pigeonhole"></a>
+    Let $|a|=\kappa\ge\aleph_0$ and $|I|<\operatorname{cf}(\kappa)$. For every function $f:a\to I$, some $i\in I$ satisfies
+
+    $$
+    |f^{-1}(\{i\})|=\kappa.
+    $$
+
+??? proof "Proof"
+    If every fibre had cardinality less than $\kappa$, [Theorem](#thm-union-below-cofinality) applied to $a=\bigcup_{i\in I}f^{-1}(\{i\})$ would give $|a|<\kappa$, a contradiction. Every fibre is a subset of $a$, so a fibre not smaller than $\kappa$ has size exactly $\kappa$.
+
+!!! remark "Remark (Why the cofinality bound matters)"
+    <a id="rem-pigeonhole-singular"></a>
+    At a regular cardinal, fewer than $\kappa$ classes suffice. At $\aleph_\omega$, countably many smaller classes can cover the entire cardinal: use $\aleph_0$ and the intervals $[\aleph_n,\aleph_{n+1})$ for $n<\omega$. Thus replacing the hypothesis by $|I|<\kappa$ would be false for singular cardinals.
 
 !!! note "Further reading"
     Tim Button's [*Set Theory: An Open Introduction*](https://builds.openlogicproject.org/courses/set-theory/) provides supplementary explanations of set-theoretic axioms, Separation, and Replacement. The present chapter follows the board's arrow direction, its partial-functional replacement schema, and its proof of Pairing from two power sets of the empty set. These conventions should be checked when comparing textbook axiom lists.

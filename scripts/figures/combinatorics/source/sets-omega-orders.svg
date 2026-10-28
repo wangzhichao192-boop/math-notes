@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" role="img" aria-labelledby="title desc">
+<title id="title">Infinite ordinal order types</title><desc id="desc">Rows show one increasing omega sequence, two successive copies, omega many copies, and the supremum of the finite powers of omega.</desc>
+<rect width="900" height="300" rx="12" fill="#f8fafc"/>
+<g fill="#172b3a" font-family="Georgia, serif" font-size="22">
+<text style="font:20px sans-serif;fill:#172b3a" x="25" y="53">ω</text><text style="font:20px sans-serif;fill:#172b3a" x="25" y="118">ω + ω</text><text style="font:20px sans-serif;fill:#172b3a" x="25" y="183">ω · ω</text><text style="font:20px sans-serif;fill:#172b3a" x="25" y="262">ω<tspan dy="-10" font-size="15">ω</tspan></text>
+<text style="font:20px sans-serif;fill:#172b3a" x="165" y="53">0 &lt; 1 &lt; 2 &lt; 3 &lt; ···</text>
+<text style="font:20px sans-serif;fill:#172b3a" x="165" y="118">0 &lt; 1 &lt; 2 &lt; ···</text><text style="font:20px sans-serif;fill:#172b3a" x="420" y="118">ω &lt; ω+1 &lt; ω+2 &lt; ···</text>
+<text style="font:20px sans-serif;fill:#172b3a" x="165" y="183">• • • ···</text><text style="font:20px sans-serif;fill:#172b3a" x="345" y="183">• • • ···</text><text style="font:20px sans-serif;fill:#172b3a" x="525" y="183">• • • ···</text><text style="font:20px sans-serif;fill:#172b3a" x="705" y="183">···</text>
+<text style="font:20px sans-serif;fill:#172b3a" x="165" y="262">1 &lt; ω &lt; ω² &lt; ω³ &lt; ···</text><text style="font:20px sans-serif;fill:#172b3a" x="490" y="262" font-size="18">supremum of these order types</text>
+</g>
+<g stroke="#14847e" fill="none" stroke-width="2"><path d="M160 129h214m42 0h295M160 195h119m61 0h119m61 0h119"/></g>
+<g fill="#146b66" font-size="15" font-family="sans-serif"><text style="font:20px sans-serif;fill:#172b3a" x="210" y="149">first copy of ω</text><text style="font:20px sans-serif;fill:#172b3a" x="500" y="149">second copy of ω</text><text style="font:20px sans-serif;fill:#172b3a" x="200" y="215">ω</text><text style="font:20px sans-serif;fill:#172b3a" x="380" y="215">ω</text><text style="font:20px sans-serif;fill:#172b3a" x="560" y="215">ω</text></g>
+</svg>
